@@ -16,24 +16,37 @@
 
 package config
 
-import javax.inject.{Inject, Singleton}
-
-import play.api.{Configuration, Environment}
+import com.google.inject.Inject
+import javax.inject.Singleton
 import play.api.Mode.Mode
+import play.api.i18n.Lang
+import play.api.{Configuration, Environment}
 import uk.gov.hmrc.play.config.ServicesConfig
 
 @Singleton
-class AppConfig @Inject()(val runModeConfiguration: Configuration, environment: Environment) extends ServicesConfig {
+class meh @Inject()(val environment: Environment,
+                    val conf: Configuration) extends ServicesConfig {
+
   override protected def mode: Mode = environment.mode
 
   private def loadConfig(key: String) = runModeConfiguration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
 
   private val contactHost = runModeConfiguration.getString(s"contact-frontend.host").getOrElse("")
   private val contactFormServiceIdentifier = "MyService"
-
   lazy val assetsPrefix = loadConfig(s"assets.url") + loadConfig(s"assets.version")
   lazy val analyticsToken = loadConfig(s"google-analytics.token")
   lazy val analyticsHost = loadConfig(s"google-analytics.host")
   lazy val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   lazy val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
+
+  override protected def runModeConfiguration: Configuration = conf
+
+  //Translation
+  def languageMap: Map[String, Lang] = Map(
+      "english" -> Lang("en"),
+      "cymraeg" -> Lang("cy")
+  )
+
+  def routeToSwitchLanguage = (lang: String) => controllers.routes.LanguageController.switchToLanguage(lang)
+
 }
