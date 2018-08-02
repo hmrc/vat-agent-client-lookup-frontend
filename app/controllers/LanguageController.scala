@@ -28,7 +28,7 @@ class LanguageController @Inject()(val appConfig: meh,
 
   def langToCall: String => Call = appConfig.routeToSwitchLanguage
 
-  protected[controllers] def fallbackURL: String = controllers.routes.HelloWorld.helloWorld().url
+  protected[controllers] def fallbackURL: String = controllers.routes.HelloWorldController.helloWorld().url
 
   def languageMap: Map[String, Lang] = appConfig.languageMap
 

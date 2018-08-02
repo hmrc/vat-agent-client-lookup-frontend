@@ -31,6 +31,6 @@ trait BaseController extends FrontendController with I18nSupport {
       case _ => super.hc
     }
   }
-  def redirectToHome: Result = Redirect(controllers.routes.HelloWorld.helloWorld())
+  def redirectToHome: Result = Redirect(controllers.routes.HelloWorldController.helloWorld())
   def fRedirectToHome: Future[Result] = Future.successful(redirectToHome)
 }

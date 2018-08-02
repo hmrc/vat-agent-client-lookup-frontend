@@ -47,6 +47,30 @@ def test(scope: String = "test,it") = Seq(
   "com.github.tomakehurst" % "wiremock" % wiremockVersion % scope
 )
 
+lazy val coverageSettings: Seq[Setting[_]] = {
+  import scoverage.ScoverageKeys
+
+  val excludedPackages = Seq(
+    "<empty>",
+    "Reverse.*",
+    ".*standardError*.*",
+    ".*govuk_wrapper*.*",
+    ".*main_template*.*",
+    "uk.gov.hmrc.BuildInfo",
+    "app.*",
+    "prod.*",
+    "config.*",
+    "testOnlyDoNotUseInAppConf.*",
+    "testOnly.*")
+
+  Seq(
+    ScoverageKeys.coverageExcludedPackages := excludedPackages.mkString(";"),
+    ScoverageKeys.coverageMinimum := 90,
+    ScoverageKeys.coverageFailOnMinimum := false,
+    ScoverageKeys.coverageHighlighting := true
+  )
+}
+
 lazy val appDependencies: Seq[ModuleID] = compile ++ test()
 
 lazy val plugins : Seq[Plugins] = Seq.empty
