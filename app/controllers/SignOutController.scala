@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.vatagentclientlookupfrontend.config
+package controllers
 
-import javax.inject.{Inject, Singleton}
+import com.google.inject.{Inject, Singleton}
+import config.AppConfig
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
-import play.api.i18n.MessagesApi
-import play.api.mvc.Request
-import play.twirl.api.Html
-import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
-import uk.gov.hmrc.vatagentclientlookupfrontend.views
+import scala.concurrent.Future
 
 @Singleton
-class ErrorHandler @Inject()(val messagesApi: MessagesApi, implicit val appConfig: AppConfig) extends FrontendErrorHandler {
-  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit request: Request[_]): Html =
-    views.html.error_template(pageTitle, heading, message)
+class SignOutController @Inject()(val messagesApi: MessagesApi, implicit val appConfig: AppConfig)
+  extends BaseController with I18nSupport {
+
+  def signOut: Action[AnyContent] = Action.async { implicit request =>
+    Future.successful(Redirect(appConfig.unauthorisedSignOutUrl))
+  }
 }
