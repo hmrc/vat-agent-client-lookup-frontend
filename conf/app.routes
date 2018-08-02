@@ -1,3 +1,4 @@
 # microservice specific routes
 
-GET        /hello-world             uk.gov.hmrc.vatagentclientlookupfrontend.controllers.HelloWorld.helloWorld
+GET        /hello-world             controllers.HelloWorldController.helloWorld
+GET        /sign-out                controllers.SignOutController.signOut
