@@ -69,6 +69,11 @@
 }
 
 @mainContentHeader = {
+    <div class="float--right">@views.html.language_selection(
+        appConfig.languageMap,
+        appConfig.routeToSwitchLanguage,
+        customClass = None
+    )</div>
     @if(contentHeader.isDefined) {
         @uiLayouts.main_content_header(contentHeader = contentHeader.get)
     }
