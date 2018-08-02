@@ -18,6 +18,7 @@ package mocks
 
 import config.AppConfig
 import play.api.{Configuration, Mode}
+import play.api.mvc.Call
 import play.api.Mode.Mode
 import play.api.i18n.Lang
 import play.api.mvc.Call
@@ -31,9 +32,15 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val reportAProblemNonJSUrl = ""
   override val agentServicesGovUkGuidance = "/setup-agent-services-account"
   override val unauthorisedSignOutUrl = "/sign-out"
+
   override def routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchToLanguage(lang)
   override def languageMap: Map[String, Lang] = Map(
     "english" -> Lang("en"),
     "cymraeg" -> Lang("cy")
   )
+
+  override val whitelistEnabled: Boolean = false
+  override val whitelistedIps: Seq[String] = Seq("")
+  override val whitelistExcludedPaths: Seq[Call] = Nil
+  override val shutterPage: String = "https://www.tax.service.gov.uk/shutter/vat-through-software"
 }
