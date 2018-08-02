@@ -19,6 +19,8 @@ package mocks
 import config.AppConfig
 import play.api.{Configuration, Mode}
 import play.api.Mode.Mode
+import play.api.i18n.Lang
+import play.api.mvc.Call
 
 class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mode.Test) extends AppConfig {
   override val contactHost = ""
@@ -29,4 +31,9 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val reportAProblemNonJSUrl = ""
   override val agentServicesGovUkGuidance = "/setup-agent-services-account"
   override val unauthorisedSignOutUrl = "/sign-out"
+  override def routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchToLanguage(lang)
+  override def languageMap: Map[String, Lang] = Map(
+    "english" -> Lang("en"),
+    "cymraeg" -> Lang("cy")
+  )
 }

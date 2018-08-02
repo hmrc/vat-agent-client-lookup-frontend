@@ -17,35 +17,60 @@
 package controllers
 
 import play.api.http.Status
-import play.api.i18n.{DefaultLangs, DefaultMessagesApi}
-import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.api.{Configuration, Environment}
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import config.FrontendAppConfig
+import services.EnrolmentsAuthService
+import uk.gov.hmrc.auth.core.{AuthConnector, Enrolment, EnrolmentIdentifier, Enrolments}
+import uk.gov.hmrc.auth.core.authorise.Predicate
+import uk.gov.hmrc.auth.core.retrieve.Retrieval
+import uk.gov.hmrc.http.HeaderCarrier
 
-class HelloWorldControllerSpec extends UnitSpec with WithFakeApplication {
-  val fakeRequest = FakeRequest("GET", "/")
+import scala.concurrent.{ExecutionContext, Future}
 
-  val env = Environment.simple()
-  val configuration = Configuration.load(env)
+class HelloWorldControllerSpec extends ControllerBaseSpec {
 
-  val messageApi = new DefaultMessagesApi(env, configuration, new DefaultLangs(configuration))
-  val appConfig = new FrontendAppConfig(env, configuration)
+  private trait Test {
+    val mockAuthConnector: AuthConnector = mock[AuthConnector]
+    val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
+    val enrolment = Enrolment("HMRC-AS-AGENT", Seq(EnrolmentIdentifier("AgentReferenceNumber", "ABCD12345678901")), "")
+    val authResult: Future[_] = Future.successful(Enrolments(Set(enrolment)))
 
-  val controller = new HelloWorldController(messageApi, appConfig)
+    (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
+      .stubs(*, *, *, *)
+      .returns(authResult)
 
-  "GET /" should {
-    "return 200" in {
-      val result = controller.helloWorld(fakeRequest)
-      status(result) shouldBe Status.OK
+    val controller = new HelloWorldController(messages, mockEnrolmentsAuthService, mockAppConfig)
+  }
+
+  "Calling the helloWorld action" when {
+
+    "a user is enrolled with a valid Agent enrolment" should {
+
+      "return 200" in new Test {
+        val result = controller.helloWorld(fakeRequest)
+        status(result) shouldBe Status.OK
+      }
+
+      "return HTML" in new Test {
+        val result = controller.helloWorld(fakeRequest)
+        contentType(result) shouldBe Some("text/html")
+        charset(result) shouldBe Some("utf-8")
+      }
     }
 
-    "return HTML" in {
-      val result = controller.helloWorld(fakeRequest)
-      contentType(result) shouldBe Some("text/html")
-      charset(result) shouldBe Some("utf-8")
-    }
+    "a user is not enrolled with a valid Agent enrolment" should {
 
+      "return 401" in new Test {
+        override val enrolment = Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VRN", "123456789")), "")
+        val result = controller.helloWorld(fakeRequest)
+        status(result) shouldBe Status.UNAUTHORIZED
+      }
+
+      "return HTML" in new Test {
+        override val enrolment = Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VRN", "123456789")), "")
+        val result = controller.helloWorld(fakeRequest)
+        contentType(result) shouldBe Some("text/html")
+        charset(result) shouldBe Some("utf-8")
+      }
+    }
   }
 }

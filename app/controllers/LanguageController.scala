@@ -16,26 +16,22 @@
 
 package controllers
 
-import play.api.i18n.MessagesApi
-import javax.inject.{Inject, Singleton}
-import config.meh
+import javax.inject.Inject
+import config.AppConfig
 import play.api.i18n.{I18nSupport, Lang, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Call, Controller}
+import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.play.language.LanguageUtils
 
-class LanguageController @Inject()(val appConfig: meh,
-                                   override val messagesApi: MessagesApi) extends BaseController {
-
-  def langToCall: String => Call = appConfig.routeToSwitchLanguage
-
-  protected[controllers] def fallbackURL: String = controllers.routes.HelloWorldController.helloWorld().url
+class LanguageController @Inject()(val appConfig: AppConfig, implicit val messagesApi: MessagesApi) extends FrontendController with I18nSupport {
 
   def languageMap: Map[String, Lang] = appConfig.languageMap
 
   def switchToLanguage(language: String): Action[AnyContent] = Action { implicit request =>
      val lang = languageMap.getOrElse(language, LanguageUtils.getCurrentLang)
-     val redirectURL = request.headers.get(REFERER).getOrElse(fallbackURL)
- 
+     val redirectURL = request.headers.get(REFERER).getOrElse(controllers.routes.HelloWorldController.helloWorld().url)
+
      Redirect(redirectURL).withLang(Lang.apply(lang.code)).flashing(LanguageUtils.FlashWithSwitchIndicator)
   }
+
 }

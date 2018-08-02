@@ -22,7 +22,7 @@ import uk.gov.hmrc.auth.core.AuthorisedFunctions
 
 class DIModule extends AbstractModule {
   def configure(): Unit = {
-    bind(classOf[AppConfig]).to(classOf[meh]).asEagerSingleton()
+    bind(classOf[AppConfig]).to(classOf[FrontendAppConfig]).asEagerSingleton()
     bindServices()
   }
 
