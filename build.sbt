@@ -1,27 +1,114 @@
-import TestPhases.oneForkedJvmPerTest
-import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption}
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
+import sbt._
+import uk.gov.hmrc.DefaultBuildSettings._
+import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
+import uk.gov.hmrc.versioning.SbtGitVersioning
+import uk.gov.hmrc.SbtAutoBuildPlugin
+import play.core.PlayVersion
+import sbt.Tests.{Group, SubProcess}
 
 val appName = "vat-agent-client-lookup-frontend"
 
+val bootstrapPlayVersion      = "1.6.0"
+val govTemplateVersion        = "5.14.0"
+val playPartialsVersion       = "6.1.0"
+val authClientVersion         = "2.6.0"
+val playUiVersion             = "7.17.0"
+val playLanguageVersion       = "3.4.0"
+
+val scalaTestPlusVersion      = "2.0.0"
+val hmrcTestVersion           = "3.0.0"
+val scalatestVersion          = "3.0.0"
+val pegdownVersion            = "1.6.0"
+val jsoupVersion              = "1.10.2"
+val mockitoVersion            = "2.7.17"
+val scalaMockVersion          = "3.5.0"
+val wiremockVersion           = "2.5.1"
+
+val compile = Seq(
+  ws,
+  "uk.gov.hmrc" %% "bootstrap-play-25" % bootstrapPlayVersion,
+  "uk.gov.hmrc" %% "govuk-template" % govTemplateVersion,
+  "uk.gov.hmrc" %% "play-ui" % playUiVersion,
+  "uk.gov.hmrc" %% "play-partials" % playPartialsVersion,
+  "uk.gov.hmrc" %% "auth-client" % authClientVersion,
+  "uk.gov.hmrc" %% "play-language" % playLanguageVersion
+
+)
+
+def test(scope: String = "test,it") = Seq(
+  "uk.gov.hmrc" %% "hmrctest" % hmrcTestVersion % scope,
+  "org.scalatest" %% "scalatest" % scalatestVersion % scope,
+  "org.scalatestplus.play" %% "scalatestplus-play" % scalaTestPlusVersion % scope,
+  "org.scalamock" %% "scalamock-scalatest-support" % scalaMockVersion % scope,
+  "org.pegdown" % "pegdown" % pegdownVersion % scope,
+  "org.jsoup" % "jsoup" % jsoupVersion % scope,
+  "com.typesafe.play" %% "play-test" % PlayVersion.current % scope,
+  "org.mockito" % "mockito-core" % mockitoVersion % scope,
+  "com.github.tomakehurst" % "wiremock" % wiremockVersion % scope
+)
+
+lazy val coverageSettings: Seq[Setting[_]] = {
+  import scoverage.ScoverageKeys
+
+  val excludedPackages = Seq(
+    "<empty>",
+    "Reverse.*",
+    ".*standardError*.*",
+    ".*govuk_wrapper*.*",
+    ".*main_template*.*",
+    "uk.gov.hmrc.BuildInfo",
+    "app.*",
+    "prod.*",
+    "config.*",
+    "testOnlyDoNotUseInAppConf.*",
+    "testOnly.*")
+
+  Seq(
+    ScoverageKeys.coverageExcludedPackages := excludedPackages.mkString(";"),
+    ScoverageKeys.coverageMinimum := 95,
+    ScoverageKeys.coverageFailOnMinimum := true,
+    ScoverageKeys.coverageHighlighting := true
+  )
+}
+
+lazy val appDependencies: Seq[ModuleID] = compile ++ test()
+
+lazy val plugins : Seq[Plugins] = Seq.empty
+lazy val playSettings : Seq[Setting[_]] = Seq.empty
+
+def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] =
+  tests map {
+    test => new Group(test.name, Seq(test), SubProcess(ForkOptions(runJVMOptions = Seq("-Dtest.name=" + test.name, "-Dlogger.resource=logback-test.xml"))))
+  }
+
+
 lazy val microservice = Project(appName, file("."))
-  .enablePlugins(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin)
+  .enablePlugins(Seq(play.sbt.PlayScala,SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins : _*)
+  .settings(playSettings : _*)
+  .settings(coverageSettings: _*)
+  .settings(scalaSettings: _*)
+  .settings(publishingSettings: _*)
+  .settings(defaultSettings(): _*)
   .settings(
-    libraryDependencies              ++= AppDependencies.compile ++ AppDependencies.test(),
-    evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false)
+    Keys.fork in Test := true,
+    javaOptions in Test += "-Dlogger.resource=logback-test.xml",
+    scalaVersion := "2.11.11"
   )
   .settings(
-    publishingSettings: _*
+    libraryDependencies ++= appDependencies,
+    retrieveManaged := true,
+    evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
+    routesGenerator := InjectedRoutesGenerator
   )
   .configs(IntegrationTest)
   .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
   .settings(
-    Keys.fork in IntegrationTest                  := false,
-    unmanagedSourceDirectories in IntegrationTest := (baseDirectory in IntegrationTest) (base => Seq(base / "it")).value,
-    testGrouping in IntegrationTest               := oneForkedJvmPerTest((definedTests in IntegrationTest).value),
-    parallelExecution in IntegrationTest          := false,
-    addTestReportOption(IntegrationTest, "int-test-reports")
-  )
-  .settings(
-    resolvers += Resolver.jcenterRepo
-  )
+    Keys.fork in IntegrationTest := false,
+    unmanagedSourceDirectories in IntegrationTest <<= (baseDirectory in IntegrationTest)(base => Seq(base / "it")),
+    addTestReportOption(IntegrationTest, "int-test-reports"),
+    testGrouping in IntegrationTest := oneForkedJvmPerTest((definedTests in IntegrationTest).value),
+    parallelExecution in IntegrationTest := false)
+  .settings(resolvers ++= Seq(
+    Resolver.bintrayRepo("hmrc", "releases"),
+    Resolver.jcenterRepo
+  ))

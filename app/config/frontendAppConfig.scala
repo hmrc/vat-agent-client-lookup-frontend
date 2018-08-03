@@ -17,10 +17,11 @@
 package config
 
 import javax.inject.{Inject, Singleton}
-
 import config.{ConfigKeys => Keys}
 import play.api.{Configuration, Environment}
 import play.api.Mode.Mode
+import play.api.i18n.Lang
+import play.api.mvc.Call
 import uk.gov.hmrc.play.binders.ContinueUrl
 import uk.gov.hmrc.play.config.ServicesConfig
 
@@ -33,6 +34,8 @@ trait AppConfig extends ServicesConfig {
   val reportAProblemNonJSUrl: String
   val agentServicesGovUkGuidance: String
   val unauthorisedSignOutUrl: String
+  def routeToSwitchLanguage: String => Call
+  def languageMap: Map[String, Lang]
 }
 
 @Singleton
@@ -57,4 +60,14 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   private lazy val signInContinueBaseUrl: String = getString(Keys.signInContinueBaseUrl)
   private lazy val signInContinueUrl: String = ContinueUrl(signInContinueBaseUrl + controllers.routes.HelloWorldController.helloWorld().url).encodedUrl
   override lazy val unauthorisedSignOutUrl: String = s"$governmentGatewayHost/gg/sign-out?continue=$signInContinueUrl"
+
+  override def languageMap: Map[String, Lang] = Map(
+    "english" -> Lang("en"),
+    "cymraeg" -> Lang("cy")
+  )
+
+  override def routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchToLanguage(lang)
+
 }
+
+
