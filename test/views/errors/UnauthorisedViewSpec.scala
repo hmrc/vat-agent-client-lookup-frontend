@@ -59,7 +59,7 @@ class UnauthorisedViewSpec extends ViewBaseSpec {
     }
 
     "have the correct sign out link destination" in {
-      element(Selectors.signOutLink).attr("href") shouldBe "/vat-through-software/sign-out"
+      element(Selectors.signOutLink).attr("href") shouldBe "/vat-through-software/agent-lookup/sign-out"
     }
   }
 }
