@@ -8,21 +8,21 @@ import sbt.Tests.{Group, SubProcess}
 
 val appName = "vat-agent-client-lookup-frontend"
 
-val bootstrapPlayVersion      = "1.6.0"
-val govTemplateVersion        = "5.14.0"
-val playPartialsVersion       = "6.1.0"
-val authClientVersion         = "2.6.0"
-val playUiVersion             = "7.17.0"
-val playLanguageVersion       = "3.4.0"
-
-val scalaTestPlusVersion      = "2.0.0"
-val hmrcTestVersion           = "3.0.0"
-val scalatestVersion          = "3.0.0"
-val pegdownVersion            = "1.6.0"
-val jsoupVersion              = "1.10.2"
-val mockitoVersion            = "2.7.17"
-val scalaMockVersion          = "3.5.0"
-val wiremockVersion           = "2.5.1"
+val bootstrapPlayVersion       = "1.6.0"
+val govTemplateVersion         = "5.14.0"
+val playPartialsVersion        = "6.1.0"
+val authClientVersion          = "2.6.0"
+val playUiVersion              = "7.17.0"
+val playLanguageVersion        = "3.4.0"
+val playWhiteListFilterVersion = "2.0.0"
+val scalaTestPlusVersion       = "2.0.0"
+val hmrcTestVersion            = "3.0.0"
+val scalatestVersion           = "3.0.0"
+val pegdownVersion             = "1.6.0"
+val jsoupVersion               = "1.10.2"
+val mockitoVersion             = "2.7.17"
+val scalaMockVersion           = "3.5.0"
+val wiremockVersion            = "2.5.1"
 
 val compile = Seq(
   ws,
@@ -31,8 +31,8 @@ val compile = Seq(
   "uk.gov.hmrc" %% "play-ui" % playUiVersion,
   "uk.gov.hmrc" %% "play-partials" % playPartialsVersion,
   "uk.gov.hmrc" %% "auth-client" % authClientVersion,
-  "uk.gov.hmrc" %% "play-language" % playLanguageVersion
-
+  "uk.gov.hmrc" %% "play-language" % playLanguageVersion,
+  "uk.gov.hmrc" %% "play-whitelist-filter" % playWhiteListFilterVersion
 )
 
 def test(scope: String = "test,it") = Seq(

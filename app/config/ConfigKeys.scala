@@ -30,4 +30,10 @@ object ConfigKeys {
   val governmentGatewayHost: String = "government-gateway.host"
 
   val signInContinueBaseUrl: String = "signIn.continueBaseUrl"
+
+  val whitelistEnabled: String = "whitelist.enabled"
+  val whitelistedIps: String = "whitelist.allowedIps"
+  val whitelistExcludedPaths: String = "whitelist.excludedPaths"
+  val whitelistShutterPage: String = "whitelist.shutter-page-url"
+
 }
