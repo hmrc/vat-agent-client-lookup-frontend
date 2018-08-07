@@ -13,3 +13,6 @@ GET        /unauthorised-for-client                     controllers.agent.AgentU
 GET        /change-client-vat-number                    controllers.agent.ConfirmClientVrnController.changeClient
 
 GET        /confirm-client-vat-number                   controllers.agent.ConfirmClientVrnController.show
+
+# NOCSRF
+POST       /journey-setup          controllers.JourneySetupController.journeySetup

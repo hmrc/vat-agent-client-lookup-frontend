@@ -24,7 +24,7 @@ import play.api.test.Helpers.{INTERNAL_SERVER_ERROR, UNAUTHORIZED}
 
 trait BasePageISpec extends IntegrationBaseSpec {
 
-  def formatSessionVrn: Option[String] => Map[String, String] = _.fold(Map.empty[String, String])(x => Map(SessionKeys.CLIENT_VRN -> x))
+  def formatSessionVrn: Option[String] => Map[String, String] = _.fold(Map.empty[String, String])(x => Map(SessionKeys.clientVRN -> x))
 
   def httpPostAuthenticationTests(path: String, sessionVrn: Option[String] = None)(formData: Map[String, Seq[String]]): Unit =
     authenticationTests(path, post(path, formatSessionVrn(sessionVrn))(formData))

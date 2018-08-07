@@ -77,7 +77,7 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth {
         }
 
         "contain the Clients VRN in the session" in {
-          session(result).get(SessionKeys.CLIENT_VRN) shouldBe Some("123456789")
+          session(result).get(SessionKeys.clientVRN) shouldBe Some("123456789")
         }
       }
 

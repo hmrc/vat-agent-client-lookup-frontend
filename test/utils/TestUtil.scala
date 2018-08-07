@@ -24,7 +24,8 @@ import models.User
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
-import play.api.mvc.AnyContentAsEmpty
+import play.api.libs.json.{JsValue, Json}
+import play.api.mvc.{AnyContentAsEmpty, AnyContentAsJson}
 import play.api.test.FakeRequest
 import play.filters.csrf.CSRF.Token
 import play.filters.csrf.{CSRFConfigProvider, CSRFFilter}
@@ -43,13 +44,18 @@ trait TestUtil extends UnitSpec with GuiceOneAppPerSuite with MaterializerSuppor
   implicit lazy val serviceErrorHandler: ErrorHandler = injector.instanceOf[ErrorHandler]
 
   implicit lazy val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+
+  implicit lazy val fakeRequestWithJson: FakeRequest[AnyContentAsJson] =
+    FakeRequest().withJsonBody(Json.parse("""{"redirectUrl":"http://localhost:/www.test.com"}"""))
+
   implicit lazy val fakeRequestWithClientsVRN: FakeRequest[AnyContentAsEmpty.type] =
-    FakeRequest().withSession(SessionKeys.CLIENT_VRN -> vrn)
+    FakeRequest().withSession(common.SessionKeys.clientVRN -> vrn)
+
   implicit lazy val fakeRequestWithVrnAndReturnFreq: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest().withSession(
-      SessionKeys.CLIENT_VRN -> vrn,
-      SessionKeys.NEW_RETURN_FREQUENCY -> "Jan",
-      SessionKeys.CURRENT_RETURN_FREQUENCY -> "Monthly"
+      SessionKeys.clientVRN -> vrn,
+      SessionKeys.newReturnFrequency -> "Jan",
+      SessionKeys.currentReturnFrequency -> "Monthly"
   )
 
   implicit lazy val user: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn, active = true)(request)

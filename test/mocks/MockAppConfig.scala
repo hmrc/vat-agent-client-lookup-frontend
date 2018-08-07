@@ -30,7 +30,6 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val reportAProblemPartialUrl = ""
   override val reportAProblemNonJSUrl = ""
   override val agentServicesGovUkGuidance = "guidance/get-an-hmrc-agent-services-account"
-
   override val surveyUrl: String = "/survey"
 
   override val signInUrl: String = "/sign-in"
@@ -38,6 +37,8 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
 
   override val signOutUrl: String = "/sign-out"
   override val unauthorisedSignOutUrl = "/unauthorised-sign-out"
+
+  override val environmentBase: String = ""
 
   override def routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchToLanguage(lang)
   override def languageMap: Map[String, Lang] = Map(

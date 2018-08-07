@@ -37,7 +37,7 @@ class AgentUnauthorisedForClientController @Inject()(val authenticate: Authorise
 
   val show: Action[AnyContent] = authenticate.async {
     implicit agent =>
-      agent.session.get(SessionKeys.CLIENT_VRN) match {
+      agent.session.get(SessionKeys.clientVRN) match {
         case Some(vrn) =>
           auditService.extendedAudit(
             AuthenticateAgentAuditModel(agent.arn, vrn, isAuthorisedForClient = false),
