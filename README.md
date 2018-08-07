@@ -1,6 +1,8 @@
 # VAT Agent Client Lookup Frontend
 
-[![Build Status](https://travis-ci.org/hmrc/vat-agent-client-lookup-frontend.svg)](https://travis-ci.org/hmrc/vat-agent-client-lookup-frontend) [ ![Download](https://api.bintray.com/packages/hmrc/releases/vat-agent-client-lookup-frontend/images/download.svg) ](https://bintray.com/hmrc/releases/vat-agent-client-lookup-frontend/_latestVersion)
+[![Apache-2.0 license](http://img.shields.io/badge/license-Apache-brightgreen.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
+[![Build Status](https://travis-ci.org/hmrc/vat-agent-client-lookup-frontend.svg)](https://travis-ci.org/hmrc/vat-agent-client-lookup-frontend)
+[![Download](https://api.bintray.com/packages/hmrc/releases/vat-agent-client-lookup-frontend/images/download.svg)](https://bintray.com/hmrc/releases/vat-agent-client-lookup-frontend/_latestVersion)
 
 ## Summary
 
@@ -20,9 +22,9 @@ In order to run this microservice, you must have SBT installed. You should then 
 
 ## Testing
 
-Use the following command to run unit and integration tests:
+Use the following command to run unit and integration tests and to get a coverage report:
 
-`sbt test it:test`
+`sbt clean coverage test it:test coverageReport`
 
 ## License
 
