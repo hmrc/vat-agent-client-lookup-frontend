@@ -28,7 +28,12 @@ import scala.concurrent.Future
 class SignOutController @Inject()(val messagesApi: MessagesApi, implicit val appConfig: AppConfig)
   extends BaseController with I18nSupport {
 
-  def signOut: Action[AnyContent] = Action.async { implicit request =>
+  def signOut(authorised: Boolean): Action[AnyContent] = Action.async { implicit request =>
+    val redirectUrl: String = if (authorised) appConfig.signOutUrl else appConfig.unauthorisedSignOutUrl
+    Future.successful(Redirect(redirectUrl))
+  }
+
+  val timeout: Action[AnyContent] = Action.async { implicit request =>
     Future.successful(Redirect(appConfig.unauthorisedSignOutUrl))
   }
 }

@@ -28,7 +28,23 @@
   contentHeader: Option[Html] = None,
   mainContent: Html = HtmlFormat.empty,
   serviceInfoContent: Html = HtmlFormat.empty,
-  scriptElem: Option[Html] = None)(implicit request: Request[_], messages: Messages)
+  scriptElem: Option[Html] = None,
+  showSignOut: Boolean = true)(implicit request: Request[_], messages: Messages)
+
+@scriptElement = {
+    <script>
+        @if(showSignOut) {
+            window.GOVUK.timeoutDialog({
+              timeout: @appConfig.timeoutPeriod,
+              countdown: @appConfig.timeoutCountdown,
+              keepAliveUrl: '/vat-through-software/agent-lookup/client-vat-number
+              signOutUrl: '/vat-through-software/agent-lookup/time-out'
+            });
+            var dialogOpen;
+        }
+    </script>
+    @scriptElem.map(x => x)
+}
 
 @head = {
     @uiLayouts.head(
@@ -41,7 +57,7 @@
 
 @insideHeader = {
     @uiLayouts.header_nav(
-      navTitle = Some("vat-agent-client-lookup-frontend"),
+      navTitle = Some(messages("common.agentService")),
       navTitleLink = None,
       showBetaLink = false,
       navLinks = Some(headerNavLinks))
@@ -54,7 +70,7 @@
       analyticsToken = Some(appConfig.analyticsToken),
       analyticsHost = appConfig.analyticsHost,
       ssoUrl = None,
-      scriptElem = scriptElem,
+      scriptElem = Some(scriptElement),
       gaCalls = None)
 }
 

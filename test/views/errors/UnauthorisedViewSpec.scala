@@ -19,47 +19,30 @@ package views.errors
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
+import assets.messages.{UnauthorisedPageMessages => Messages}
 
 class UnauthorisedViewSpec extends ViewBaseSpec {
 
   "Rendering the unauthorised page" should {
 
     object Selectors {
-      val heading = "h1"
-      val paragraph = "#content p"
-      val setupAccountLink = "#content p > a"
-      val signOutLink = "#content .button"
+      val pageHeading = "#content h1"
+      val instructions = "#content p"
     }
 
-    lazy val view = views.html.errors.unauthorised()
+    lazy val view = views.html.errors.unauthorised()(request, messages, mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    "have the correct document title" in {
-      document.title shouldBe "You can’t use this service yet"
+    s"have the correct document title" in {
+      document.title shouldBe Messages.title
     }
 
-    "have a the correct page heading" in {
-      elementText(Selectors.heading) shouldBe "You can’t use this service yet"
+    s"have a the correct page heading" in {
+      elementText(Selectors.pageHeading) shouldBe Messages.pageHeading
     }
 
-    "have the correct lede paragraph" in {
-      elementText(Selectors.paragraph) shouldBe "To use this service, you need to set up an agent services account."
-    }
-
-    "have the correct link text to set up an agent services account" in {
-      elementText(Selectors.setupAccountLink) shouldBe "set up an agent services account"
-    }
-
-    "have the correct link destination to set up an agent services account" in {
-      element(Selectors.setupAccountLink).attr("href") shouldBe "/setup-agent-services-account"
-    }
-
-    "have the correct sign out link text" in {
-      elementText(Selectors.signOutLink) shouldBe "Sign out"
-    }
-
-    "have the correct sign out link destination" in {
-      element(Selectors.signOutLink).attr("href") shouldBe "/vat-through-software/agent-lookup/sign-out"
+    s"have the correct instructions on the page" in {
+      elementText(Selectors.instructions) shouldBe Messages.instructions
     }
   }
 }

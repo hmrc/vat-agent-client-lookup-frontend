@@ -1,5 +1,15 @@
 # microservice specific routes
 
-GET        /hello-world            controllers.HelloWorldController.helloWorld
-GET        /sign-out               controllers.SignOutController.signOut
-GET        /language/:lang         controllers.LanguageController.switchToLanguage(lang: String)
+GET        /language/:lang                              controllers.LanguageController.switchToLanguage(lang: String)
+
+GET        /sign-out                                    controllers.SignOutController.signOut(authorised: Boolean)
+GET        /time-out                                    controllers.SignOutController.timeout
+
+GET        /client-vat-number                           controllers.agent.SelectClientVrnController.show
+POST       /client-vat-number                           controllers.agent.SelectClientVrnController.submit
+
+GET        /unauthorised-for-client                     controllers.agent.AgentUnauthorisedForClientController.show
+
+GET        /change-client-vat-number                    controllers.agent.ConfirmClientVrnController.changeClient
+
+GET        /confirm-client-vat-number                   controllers.agent.ConfirmClientVrnController.show

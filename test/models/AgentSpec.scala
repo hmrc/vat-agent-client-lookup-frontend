@@ -16,14 +16,14 @@
 
 package models
 
+import utils.TestUtil
 import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolment, EnrolmentIdentifier, Enrolments}
-import uk.gov.hmrc.play.test.UnitSpec
 
-class AgentSpec extends UnitSpec {
+class AgentSpec extends TestUtil {
 
   "Creating an Agent with only an ARN" should {
 
-    val agent = Agent("ABCD12345678901")
+    val agent = Agent("ABCD12345678901")(request)
 
     "construct an Agent correctly" in {
       agent.arn shouldBe "ABCD12345678901"
@@ -35,7 +35,7 @@ class AgentSpec extends UnitSpec {
     val enrolments = Enrolments(Set(
       Enrolment("HMRC-AS-AGENT", Seq(EnrolmentIdentifier("ARN", "ZYXW10987654321")), "")
     ))
-    val agent = Agent(enrolments)
+    val agent = Agent(enrolments)(request)
 
     "construct an Agent correctly" in {
       agent.arn shouldBe "ZYXW10987654321"
@@ -49,11 +49,11 @@ class AgentSpec extends UnitSpec {
     ))
 
     "throw an InternalError exception" in {
-      intercept[AuthorisationException](Agent(enrolments))
+      intercept[AuthorisationException](Agent(enrolments)(request))
     }
 
     "have the correct message in the exception" in {
-      intercept[AuthorisationException](Agent(enrolments)).reason shouldBe "Agent Service Enrolment Missing"
+      intercept[AuthorisationException](Agent(enrolments)(request)).reason shouldBe "Agent Service Enrolment Missing"
     }
   }
 }

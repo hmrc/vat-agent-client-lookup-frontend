@@ -1,3 +1,19 @@
+/*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import sbt._
 import uk.gov.hmrc.DefaultBuildSettings._
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
@@ -8,11 +24,11 @@ import sbt.Tests.{Group, SubProcess}
 
 val appName = "vat-agent-client-lookup-frontend"
 
-val bootstrapPlayVersion       = "1.6.0"
-val govTemplateVersion         = "5.14.0"
+val bootstrapPlayVersion       = "1.7.0"
+val govTemplateVersion         = "5.22.0"
 val playPartialsVersion        = "6.1.0"
 val authClientVersion          = "2.6.0"
-val playUiVersion              = "7.17.0"
+val playUiVersion              = "7.19.0"
 val playLanguageVersion        = "3.4.0"
 val playWhiteListFilterVersion = "2.0.0"
 val scalaTestPlusVersion       = "2.0.0"
@@ -20,9 +36,9 @@ val hmrcTestVersion            = "3.0.0"
 val scalatestVersion           = "3.0.0"
 val pegdownVersion             = "1.6.0"
 val jsoupVersion               = "1.10.2"
-val mockitoVersion             = "2.7.17"
+val mockitoVersion             = "2.13.0"
 val scalaMockVersion           = "3.5.0"
-val wiremockVersion            = "2.5.1"
+val wiremockVersion            = "2.6.0"
 
 val compile = Seq(
   ws,
@@ -35,7 +51,7 @@ val compile = Seq(
   "uk.gov.hmrc" %% "play-whitelist-filter" % playWhiteListFilterVersion
 )
 
-def test(scope: String = "test,it") = Seq(
+def test(scope: String = "test,it"): Seq[ModuleID] = Seq(
   "uk.gov.hmrc" %% "hmrctest" % hmrcTestVersion % scope,
   "org.scalatest" %% "scalatest" % scalatestVersion % scope,
   "org.scalatestplus.play" %% "scalatestplus-play" % scalaTestPlusVersion % scope,
@@ -76,10 +92,14 @@ lazy val appDependencies: Seq[ModuleID] = compile ++ test()
 lazy val plugins : Seq[Plugins] = Seq.empty
 lazy val playSettings : Seq[Setting[_]] = Seq.empty
 
-def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] =
-  tests map {
-    test => new Group(test.name, Seq(test), SubProcess(ForkOptions(runJVMOptions = Seq("-Dtest.name=" + test.name, "-Dlogger.resource=logback-test.xml"))))
-  }
+def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] = tests map {
+  test =>
+    Group(
+      test.name,
+      Seq(test),
+      SubProcess(ForkOptions(runJVMOptions = Seq("-Dtest.name=" + test.name, "-Dlogger.resource=logback-test.xml")))
+    )
+}
 
 
 lazy val microservice = Project(appName, file("."))
@@ -92,9 +112,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     Keys.fork in Test := true,
     javaOptions in Test += "-Dlogger.resource=logback-test.xml",
-    scalaVersion := "2.11.11"
-  )
-  .settings(
+    scalaVersion := "2.11.11",
     libraryDependencies ++= appDependencies,
     retrieveManaged := true,
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
@@ -104,7 +122,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
   .settings(
     Keys.fork in IntegrationTest := false,
-    unmanagedSourceDirectories in IntegrationTest <<= (baseDirectory in IntegrationTest)(base => Seq(base / "it")),
+    unmanagedSourceDirectories in IntegrationTest := (baseDirectory in IntegrationTest) (base => Seq(base / "it")).value,
     addTestReportOption(IntegrationTest, "int-test-reports"),
     testGrouping in IntegrationTest := oneForkedJvmPerTest((definedTests in IntegrationTest).value),
     parallelExecution in IntegrationTest := false)

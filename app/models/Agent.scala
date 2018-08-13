@@ -16,13 +16,15 @@
 
 package models
 
+import common.EnrolmentKeys
+import play.api.mvc.{Request, WrappedRequest}
 import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments, InternalError}
 
-case class Agent(arn: String)
+case class Agent[A](arn: String)(implicit request: Request[A]) extends WrappedRequest[A](request)
 
 object Agent {
-  def apply[A](enrolments: Enrolments): Agent =
+  def apply[A](enrolments: Enrolments)(implicit request: Request[A]): Agent[A] =
     enrolments.enrolments.collectFirst {
-      case Enrolment("HMRC-AS-AGENT", EnrolmentIdentifier(_, arn) :: _, _, _) => Agent(arn)
+      case Enrolment(EnrolmentKeys.agentEnrolmentId, EnrolmentIdentifier(_, arn) :: _, _, _) => Agent(arn)
     }.getOrElse(throw InternalError("Agent Service Enrolment Missing"))
 }
