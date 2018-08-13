@@ -16,24 +16,43 @@
 
 package controllers
 
-import play.api.http.Status
+import play.api.mvc.Result
 import play.api.test.Helpers._
 
+import scala.concurrent.Future
 
 class SignOutControllerSpec extends ControllerBaseSpec {
 
-  val controller = new SignOutController(messages, mockAppConfig)
 
-  "Navigating to the sign out page" should {
+  object TestSignOutController extends SignOutController(messagesApi, mockConfig)
 
-    "return 303" in {
-      val result = controller.signOut(fakeRequest)
-      status(result) shouldBe Status.SEE_OTHER
+  "navigating to signout page" when {
+
+    "authorised" should {
+      "return 303 and navigate to the survey url" in {
+        lazy val result: Future[Result] = TestSignOutController.signOut(authorised = true)(request)
+
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some(mockConfig.signOutUrl)
+      }
     }
 
-    "redirect to the correct location" in {
-      val result = controller.signOut(fakeRequest)
-      redirectLocation(result) shouldBe Some(mockAppConfig.unauthorisedSignOutUrl)
+    "unauthorised" should {
+      "return 303 and navigate to sign out url" in {
+        lazy val result: Future[Result] = TestSignOutController.signOut(authorised = false)(request)
+
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some(mockConfig.unauthorisedSignOutUrl)
+      }
+    }
+  }
+
+  "signing out on timeout" should {
+    "return 303 and navigate to the expected sign out url" in {
+      lazy val result: Future[Result] = TestSignOutController.timeout(request)
+
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result) shouldBe Some(mockConfig.unauthorisedSignOutUrl)
     }
   }
 }

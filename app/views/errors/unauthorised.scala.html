@@ -17,13 +17,7 @@
 @()(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(title = messages("unauthorised.title"), bodyClasses = None) {
-
   <h1>@messages("unauthorised.title")</h1>
-  <p>
-    @messages("unauthorised.useThisService")
-    <a href="@appConfig.agentServicesGovUkGuidance">@messages("unauthorised.setUpAccount")</a>.
-  </p>
-  <a class="button" href="@controllers.routes.SignOutController.signOut">
-    @messages("base.signOut")
-  </a>
+
+  <p>@messages("unauthorised.instructions")</p>
 }

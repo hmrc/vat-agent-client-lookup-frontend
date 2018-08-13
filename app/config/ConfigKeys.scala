@@ -29,6 +29,9 @@ object ConfigKeys {
 
   val governmentGatewayHost: String = "government-gateway.host"
 
+  val appName: String = "appName"
+
+  val signInBaseUrl: String = "signIn.url"
   val signInContinueBaseUrl: String = "signIn.continueBaseUrl"
 
   val whitelistEnabled: String = "whitelist.enabled"
@@ -36,4 +39,16 @@ object ConfigKeys {
   val whitelistExcludedPaths: String = "whitelist.excludedPaths"
   val whitelistShutterPage: String = "whitelist.shutter-page-url"
 
+  val vatSubscription: String = "vat-subscription"
+
+  val surveyFrontend: String = "feedback-survey-frontend"
+  val surveyContext: String = "microservice.services.feedback-survey-frontend.endpoints.survey"
+
+  val manageVatBase: String = "manage-vat-subscription-frontend"
+  val manageVatContext: String = "microservice.services.manage-vat-subscription-frontend.endpoints.customer-details"
+
+  val timeoutPeriod: String = "timeout.period"
+  val timeoutCountdown: String = "timeout.countdown"
+
+  val agentInvitationsFastTrack: String = "agent-invitations-fast-track.url"
 }

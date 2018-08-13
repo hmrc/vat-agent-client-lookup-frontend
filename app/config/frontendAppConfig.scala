@@ -35,13 +35,25 @@ trait AppConfig extends ServicesConfig {
   val reportAProblemPartialUrl: String
   val reportAProblemNonJSUrl: String
   val agentServicesGovUkGuidance: String
+  val signOutUrl: String
+  val surveyUrl: String
   val unauthorisedSignOutUrl: String
+  val signInUrl: String
+  val signInContinueBaseUrl: String
+
   def routeToSwitchLanguage: String => Call
+
   def languageMap: Map[String, Lang]
+
   val whitelistEnabled: Boolean
   val whitelistedIps: Seq[String]
   val whitelistExcludedPaths: Seq[Call]
   val shutterPage: String
+  val vatSubscriptionUrl: String
+  val manageVatCustomerDetailsUrl: String
+  val timeoutPeriod: Int
+  val timeoutCountdown: Int
+  val agentInvitationsFastTrack: String
 }
 
 @Singleton
@@ -63,8 +75,16 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
 
   private lazy val governmentGatewayHost: String = getString(Keys.governmentGatewayHost)
 
-  private lazy val signInContinueBaseUrl: String = getString(Keys.signInContinueBaseUrl)
-  private lazy val signInContinueUrl: String = ContinueUrl(signInContinueBaseUrl + controllers.routes.HelloWorldController.helloWorld().url).encodedUrl
+  private lazy val surveyBaseUrl = baseUrl(Keys.surveyFrontend) + getString(Keys.surveyContext)
+  override lazy val surveyUrl = s"$surveyBaseUrl/?origin=$contactFormServiceIdentifier"
+
+  private lazy val signInOrigin: String = getString(Keys.appName)
+  private lazy val signInBaseUrl: String = getString(Keys.signInBaseUrl)
+  override lazy val signInContinueBaseUrl: String = getString(Keys.signInContinueBaseUrl)
+  override lazy val signInUrl: String = s"$signInBaseUrl?continue=$signInContinueUrl&origin=$signInOrigin"
+  private lazy val signInContinueUrl: String = ContinueUrl(signInContinueBaseUrl + controllers.agent.routes.SelectClientVrnController.show().url).encodedUrl
+
+  override lazy val signOutUrl: String = s"$governmentGatewayHost/gg/sign-out?continue=$surveyUrl"
   override lazy val unauthorisedSignOutUrl: String = s"$governmentGatewayHost/gg/sign-out?continue=$signInContinueUrl"
 
   override def routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchToLanguage(lang)
@@ -82,4 +102,13 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override lazy val whitelistExcludedPaths: Seq[Call] = whitelistConfig(Keys.whitelistExcludedPaths).map(path => Call("GET", path))
   override lazy val shutterPage: String = getString(Keys.whitelistShutterPage)
 
+  override lazy val vatSubscriptionUrl: String = baseUrl(Keys.vatSubscription)
+
+  private lazy val manageVatBase: String = baseUrl(Keys.manageVatBase)
+  override lazy val manageVatCustomerDetailsUrl: String = manageVatBase + getString(Keys.manageVatContext)
+
+  override lazy val timeoutPeriod: Int = getInt(Keys.timeoutPeriod)
+  override lazy val timeoutCountdown: Int = getInt(Keys.timeoutCountdown)
+
+  override lazy val agentInvitationsFastTrack: String = getString(Keys.agentInvitationsFastTrack)
 }

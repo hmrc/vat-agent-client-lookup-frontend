@@ -17,11 +17,10 @@
 package mocks
 
 import config.AppConfig
-import play.api.{Configuration, Mode}
-import play.api.mvc.Call
 import play.api.Mode.Mode
 import play.api.i18n.Lang
 import play.api.mvc.Call
+import play.api.{Configuration, Mode}
 
 class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mode.Test) extends AppConfig {
   override val contactHost = ""
@@ -30,8 +29,15 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val analyticsHost = ""
   override val reportAProblemPartialUrl = ""
   override val reportAProblemNonJSUrl = ""
-  override val agentServicesGovUkGuidance = "/setup-agent-services-account"
-  override val unauthorisedSignOutUrl = "/sign-out"
+  override val agentServicesGovUkGuidance = "guidance/get-an-hmrc-agent-services-account"
+
+  override val surveyUrl: String = "/survey"
+
+  override val signInUrl: String = "/sign-in"
+  override val signInContinueBaseUrl: String = "/agent-client-lookup-frontend"
+
+  override val signOutUrl: String = "/sign-out"
+  override val unauthorisedSignOutUrl = "/unauthorised-sign-out"
 
   override def routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchToLanguage(lang)
   override def languageMap: Map[String, Lang] = Map(
@@ -43,4 +49,12 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val whitelistedIps: Seq[String] = Seq("")
   override val whitelistExcludedPaths: Seq[Call] = Nil
   override val shutterPage: String = "https://www.tax.service.gov.uk/shutter/vat-through-software"
+
+  override val vatSubscriptionUrl: String = "/vat-subscription"
+  override val manageVatCustomerDetailsUrl: String = "/customer-details"
+
+  override val timeoutPeriod: Int = 1800
+  override val timeoutCountdown: Int = 20
+
+  override val agentInvitationsFastTrack: String = "/agent-invitations-frontend"
 }

@@ -14,26 +14,20 @@
  * limitations under the License.
  */
 
-package controllers
+package services
 
+import connectors.SubscriptionConnector
 import javax.inject.{Inject, Singleton}
+import models.CustomerDetails
+import models.core.ErrorModel
+import uk.gov.hmrc.http.HeaderCarrier
 
-import play.api.mvc._
-
-import scala.concurrent.Future
-import play.api.i18n.{I18nSupport, MessagesApi}
-import config.AppConfig
-import services.EnrolmentsAuthService
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class HelloWorldController @Inject()(val messagesApi: MessagesApi,
-                                     val enrolmentsAuthService: EnrolmentsAuthService,
-                                     implicit val appConfig: AppConfig)
-  extends AuthorisedController with I18nSupport {
+class CustomerDetailsService @Inject()(val subscriptionConnector: SubscriptionConnector) {
 
-  def helloWorld: Action[AnyContent] = authorisedAction {
-    implicit request =>
-      _ =>
-        Future.successful(Ok(views.html.hello_world()))
-  }
+  def getCustomerDetails(vrn: String)(implicit headerCarrier: HeaderCarrier, ec: ExecutionContext)
+  : Future[Either[ErrorModel, CustomerDetails]] =
+    subscriptionConnector.getCustomerDetails(vrn)
 }
