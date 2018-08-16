@@ -55,8 +55,8 @@ class JourneySetupController @Inject()(val messagesApi: MessagesApi,
           }
 
         }catch{
-          case iae : IllegalArgumentException =>
-            Logger.warn("[JourneySetupController][journeySetup] couldn't create ContinueUrl from url provided.", iae)
+          case e: Exception =>
+            Logger.warn("[JourneySetupController][journeySetup] couldn't create ContinueUrl from what was provided.", e)
             Future.successful(BadRequest)
         }
 
@@ -74,8 +74,8 @@ class JourneySetupController @Inject()(val messagesApi: MessagesApi,
         Logger.warn("[JourneySetupController][extractRedirectUrl] Couldn't find redirectUrl key in json provided", jsEx)
         None
 
-      case _:Throwable =>
-        Logger.warn("[JourneySetupController][extractRedirectUrl] Encountered an unknown error")
+      case e: Exception =>
+        Logger.warn("[JourneySetupController][extractRedirectUrl] Encountered an unknown error", e)
         None
     }
 
