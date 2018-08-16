@@ -10,4 +10,7 @@
 # Failing to follow this rule may result in test routes deployed in production.
 
 # Add all the application routes to the prod.routes file
-->         /                          prod.Routes
+
+GET        /vat-through-software/test-only/agent-lookup/journey-setup       @testOnly.controllers.JourneySetupController.journeySetup
+
+->         /                                                                prod.Routes

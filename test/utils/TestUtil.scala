@@ -34,7 +34,7 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.ExecutionContext
 
-trait TestUtil extends UnitSpec with GuiceOneAppPerSuite with MaterializerSupport {
+trait TestUtil extends UnitSpec with GuiceOneAppPerSuite {
 
   lazy val injector: Injector = app.injector
   lazy val messagesApi: MessagesApi = injector.instanceOf[MessagesApi]
@@ -49,6 +49,7 @@ trait TestUtil extends UnitSpec with GuiceOneAppPerSuite with MaterializerSuppor
     FakeRequest().withJsonBody(Json.parse("""{"redirectUrl":"http://localhost:/www.test.com"}"""))
 
   implicit lazy val fakeRequestWithClientsVRN: FakeRequest[AnyContentAsEmpty.type] =
+
     FakeRequest().withSession(common.SessionKeys.clientVRN -> vrn)
 
   implicit lazy val fakeRequestWithVrnAndReturnFreq: FakeRequest[AnyContentAsEmpty.type] =
