@@ -54,6 +54,7 @@ trait AppConfig extends ServicesConfig {
   val timeoutPeriod: Int
   val timeoutCountdown: Int
   val agentInvitationsFastTrack: String
+  val environmentBase: String
 }
 
 @Singleton
@@ -111,4 +112,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override lazy val timeoutCountdown: Int = getInt(Keys.timeoutCountdown)
 
   override lazy val agentInvitationsFastTrack: String = getString(Keys.agentInvitationsFastTrack)
+  override lazy val environmentBase: String = getString(Keys.environmentBase)
+
 }

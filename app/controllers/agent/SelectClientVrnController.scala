@@ -51,7 +51,7 @@ class SelectClientVrnController @Inject()(val messagesApi: MessagesApi,
         data => { // success path
           Logger.debug(s"[SelectClientVrnController][submit] Success")
           Future.successful(Redirect(controllers.agent.routes.ConfirmClientVrnController.show())
-            .addingToSession(SessionKeys.CLIENT_VRN -> data.vrn))
+            .addingToSession(SessionKeys.clientVRN -> data.vrn))
         }
       )
   }

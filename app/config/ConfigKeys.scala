@@ -51,4 +51,7 @@ object ConfigKeys {
   val timeoutCountdown: String = "timeout.countdown"
 
   val agentInvitationsFastTrack: String = "agent-invitations-fast-track.url"
+
+  val environmentBase:String = "environment-base.url"
+
 }
