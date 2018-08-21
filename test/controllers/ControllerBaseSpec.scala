@@ -16,11 +16,12 @@
 
 package controllers
 
-import mocks.MockAuth
+import mocks.{MockAuth, MockHttp}
 import play.api.http.Status
 import play.api.mvc.{Action, AnyContent}
+import utils.MaterializerSupport
 
-trait ControllerBaseSpec extends MockAuth {
+trait ControllerBaseSpec extends MockAuth with MockHttp with MaterializerSupport{
 
   def unauthenticatedCheck(controllerAction: Action[AnyContent]): Unit = {
 
