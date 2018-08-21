@@ -54,5 +54,4 @@ object ConfigKeys {
 
   val environmentBase:String = "environment-base.url"
 
-  val selfLookup:String = "microservice.services.selfLookup"
 }

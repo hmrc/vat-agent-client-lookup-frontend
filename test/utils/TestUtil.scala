@@ -24,7 +24,7 @@ import models.User
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsJson}
 import play.api.test.FakeRequest
 import play.filters.csrf.CSRF.Token
@@ -43,24 +43,24 @@ trait TestUtil extends UnitSpec with GuiceOneAppPerSuite {
   implicit lazy val mockConfig: MockAppConfig = new MockAppConfig(app.configuration)
   implicit lazy val serviceErrorHandler: ErrorHandler = injector.instanceOf[ErrorHandler]
 
-  implicit lazy val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+  lazy val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
-  implicit lazy val fakeRequestWithJson: FakeRequest[AnyContentAsJson] =
+  lazy val fakeRequestWithJson: FakeRequest[AnyContentAsJson] =
     FakeRequest().withJsonBody(Json.parse("""{"redirectUrl":"http://localhost:/www.test.com"}"""))
 
-  implicit lazy val fakeRequestWithClientsVRN: FakeRequest[AnyContentAsEmpty.type] =
+  lazy val fakeRequestWithClientsVRN: FakeRequest[AnyContentAsEmpty.type] =
 
     FakeRequest().withSession(common.SessionKeys.clientVRN -> vrn)
 
-  implicit lazy val fakeRequestWithVrnAndReturnFreq: FakeRequest[AnyContentAsEmpty.type] =
+  lazy val fakeRequestWithVrnAndReturnFreq: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest().withSession(
       SessionKeys.clientVRN -> vrn,
       SessionKeys.newReturnFrequency -> "Jan",
       SessionKeys.currentReturnFrequency -> "Monthly"
   )
 
-  implicit lazy val user: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn, active = true)(request)
-  implicit lazy val agent: User[AnyContentAsEmpty.type] =
+  lazy val user: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn, active = true)(request)
+  lazy val agent: User[AnyContentAsEmpty.type] =
     User[AnyContentAsEmpty.type](vrn, active = true, Some(arn))(fakeRequestWithClientsVRN)
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
   implicit lazy val ec: ExecutionContext = injector.instanceOf[ExecutionContext]

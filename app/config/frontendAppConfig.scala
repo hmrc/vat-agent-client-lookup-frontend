@@ -40,18 +40,13 @@ trait AppConfig extends ServicesConfig {
   val unauthorisedSignOutUrl: String
   val signInUrl: String
   val signInContinueBaseUrl: String
-  val selfLookup: String
-
   def routeToSwitchLanguage: String => Call
-
   def languageMap: Map[String, Lang]
-
   val whitelistEnabled: Boolean
   val whitelistedIps: Seq[String]
   val whitelistExcludedPaths: Seq[Call]
   val shutterPage: String
   val vatSubscriptionUrl: String
-  val manageVatBase: String
   val manageVatCustomerDetailsUrl: String
   val timeoutPeriod: Int
   val timeoutCountdown: Int
@@ -107,13 +102,11 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
 
   override lazy val vatSubscriptionUrl: String = baseUrl(Keys.vatSubscription)
 
-  override lazy val manageVatBase: String = baseUrl(Keys.manageVatBase)
+  private lazy val manageVatBase: String = baseUrl(Keys.manageVatBase)
   override lazy val manageVatCustomerDetailsUrl: String = manageVatBase + getString(Keys.manageVatContext)
   override lazy val timeoutPeriod: Int = getInt(Keys.timeoutPeriod)
   override lazy val timeoutCountdown: Int = getInt(Keys.timeoutCountdown)
   override lazy val agentInvitationsFastTrack: String = getString(Keys.agentInvitationsFastTrack)
 
   override lazy val environmentBase: String = getString(Keys.environmentBase)
-  override lazy val selfLookup: String = baseUrl(Keys.selfLookup)
-
 }

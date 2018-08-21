@@ -16,24 +16,12 @@
 
 package controllers
 
-import config.AppConfig
-import mocks.{MockAppConfig, MockAuth}
+import mocks.{MockAuth, MockHttp}
 import play.api.http.Status
-import play.api.i18n.MessagesApi
-import play.api.inject.Injector
-import play.api.mvc.{Action, AnyContent, AnyContentAsEmpty}
-import play.api.test.FakeRequest
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import play.api.mvc.{Action, AnyContent}
 import utils.MaterializerSupport
 
-trait ControllerBaseSpec extends MockAuth with MaterializerSupport{
-
-  override lazy val injector: Injector = app.injector
-  override lazy val messagesApi: MessagesApi = injector.instanceOf[MessagesApi]
-  lazy val http: HttpClient = injector.instanceOf[HttpClient]
-  implicit val mockAppConfig: AppConfig = new MockAppConfig(app.configuration)
-
-  implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+trait ControllerBaseSpec extends MockAuth with MockHttp with MaterializerSupport{
 
   def unauthenticatedCheck(controllerAction: Action[AnyContent]): Unit = {
 

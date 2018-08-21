@@ -32,7 +32,6 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val reportAProblemNonJSUrl = ""
   override val agentServicesGovUkGuidance = "guidance/get-an-hmrc-agent-services-account"
   override val surveyUrl: String = "/survey"
-  override lazy val selfLookup: String = baseUrl("selfLookup")
 
   override val signInUrl: String = "/sign-in"
   override val signInContinueBaseUrl: String = "/agent-client-lookup-frontend"
@@ -54,7 +53,6 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val shutterPage: String = "https://www.tax.service.gov.uk/shutter/vat-through-software"
 
   override val vatSubscriptionUrl: String = "/vat-subscription"
-  override val manageVatBase: String = baseUrl(ConfigKeys.manageVatBase)
   override val manageVatCustomerDetailsUrl: String = "/customer-details"
 
   override val timeoutPeriod: Int = 1800

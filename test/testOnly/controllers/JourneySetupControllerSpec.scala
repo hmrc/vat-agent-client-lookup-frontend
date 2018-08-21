@@ -18,16 +18,17 @@ package testOnly.controllers
 
 import controllers.ControllerBaseSpec
 import play.api.http.Status
-import play.api.test.FakeRequest
+import play.api.mvc.Result
+
+import scala.concurrent.Future
 
 class JourneySetupControllerSpec extends ControllerBaseSpec {
 
-  private lazy val controller = new JourneySetupController(messagesApi, mockAppConfig, http)
+  private lazy val controller = new JourneySetupController(messagesApi, mockConfig, mockHttp)
 
   "Calling the journeySetup action" should {
 
-    lazy val request = FakeRequest("GET", "/")
-    lazy val result = controller.journeySetup()(request)
+    lazy val result: Future[Result] = controller.journeySetup()(request)
 
     "return a 200" in {
       status(result) shouldBe Status.OK
@@ -36,16 +37,12 @@ class JourneySetupControllerSpec extends ControllerBaseSpec {
     "result in a redirectUrl being stored in session to access manage-vat-subscription-frontend" in {
 
         val sessionUrl = await(result map {
-
           res => {
-            res.session.get(common.SessionKeys.redirectUrl).fold("")(_.self)
+            res.session(agent).get(common.SessionKeys.redirectUrl).fold("")(_.self)
           }
-
         })
 
-      sessionUrl shouldEqual mockAppConfig.manageVatBase
+      sessionUrl shouldEqual mockConfig.manageVatCustomerDetailsUrl
     }
-
   }
-
 }

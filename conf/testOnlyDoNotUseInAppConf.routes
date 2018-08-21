@@ -11,6 +11,6 @@
 
 # Add all the application routes to the prod.routes file
 
-GET        /vat-through-software/test-only/agent-lookup/journey-setup       @testOnly.controllers.JourneySetupController.journeySetup
+GET        /vat-through-software/agent-lookup/test-only/journey-setup       @testOnly.controllers.JourneySetupController.journeySetup
 
 ->         /                                                                prod.Routes

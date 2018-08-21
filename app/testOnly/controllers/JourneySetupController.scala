@@ -35,7 +35,7 @@ class JourneySetupController @Inject()(val messagesApi: MessagesApi, implicit va
     implicit request =>
       Future.successful(Ok("Received and stored the redirect url")) map {
         res => {
-          res.addingToSession(SessionKeys.redirectUrl -> appConfig.manageVatBase)
+          res.addingToSession(SessionKeys.redirectUrl -> appConfig.manageVatCustomerDetailsUrl)
         }
       }
   }
