@@ -16,7 +16,7 @@
 
 package mocks
 
-import config.{AppConfig, ConfigKeys}
+import config.AppConfig
 import play.api.Mode.Mode
 import play.api.i18n.Lang
 import play.api.mvc.Call
