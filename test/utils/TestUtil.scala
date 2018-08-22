@@ -24,8 +24,7 @@ import models.User
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
-import play.api.libs.json.Json
-import play.api.mvc.{AnyContentAsEmpty, AnyContentAsJson}
+import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.filters.csrf.CSRF.Token
 import play.filters.csrf.{CSRFConfigProvider, CSRFFilter}
@@ -45,12 +44,11 @@ trait TestUtil extends UnitSpec with GuiceOneAppPerSuite {
 
   lazy val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
-  lazy val fakeRequestWithJson: FakeRequest[AnyContentAsJson] =
-    FakeRequest().withJsonBody(Json.parse("""{"redirectUrl":"http://localhost:/www.test.com"}"""))
-
   lazy val fakeRequestWithClientsVRN: FakeRequest[AnyContentAsEmpty.type] =
-
-    FakeRequest().withSession(common.SessionKeys.clientVRN -> vrn)
+    FakeRequest().withSession(
+      common.SessionKeys.clientVRN -> vrn,
+      common.SessionKeys.redirectUrl -> "/homepage"
+    )
 
   lazy val fakeRequestWithVrnAndReturnFreq: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest().withSession(

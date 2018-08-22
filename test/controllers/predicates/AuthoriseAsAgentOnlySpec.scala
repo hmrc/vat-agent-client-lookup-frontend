@@ -18,7 +18,6 @@ package controllers.predicates
 
 import assets.messages.AgentUnauthorisedPageMessages
 import controllers.ControllerBaseSpec
-import mocks.MockAuth
 import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.mvc.Results.Ok
@@ -26,7 +25,7 @@ import play.api.mvc.{Action, AnyContent}
 
 import scala.concurrent.Future
 
-class AuthoriseAsAgentOnlySpec extends MockAuth with ControllerBaseSpec {
+class AuthoriseAsAgentOnlySpec extends ControllerBaseSpec {
 
   def target: Action[AnyContent] = {
     mockAgentOnlyAuthPredicate.async {
@@ -44,7 +43,12 @@ class AuthoriseAsAgentOnlySpec extends MockAuth with ControllerBaseSpec {
           mockAgentAuthorised()
           val result = target(request)
           status(result) shouldBe Status.OK
-          await(bodyOf(result)) shouldBe "test"
+        }
+
+        "return a body" in {
+          mockAgentAuthorised()
+          val result = await(bodyOf(target(request)))
+          result shouldBe "test"
         }
       }
 
@@ -65,16 +69,16 @@ class AuthoriseAsAgentOnlySpec extends MockAuth with ControllerBaseSpec {
 
     "the user is not an Agent" should {
 
-      "redirect to the Customer Details Home Page SEE_OTHER (303)" in {
+      "return 403 (Forbidden)" in {
         mockIndividualAuthorised()
         val result = target(request)
-        status(result) shouldBe Status.SEE_OTHER
+        status(result) shouldBe Status.FORBIDDEN
       }
     }
 
     "the user does not have an affinity group" should {
 
-      "render an ISE (500)" in {
+      "return 500 (Internal server error)" in {
         mockUserWithoutAffinity()
         val result = target(request)
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR

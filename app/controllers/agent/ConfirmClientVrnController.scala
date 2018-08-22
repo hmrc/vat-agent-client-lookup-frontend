@@ -22,6 +22,8 @@ import common.SessionKeys
 import config.{AppConfig, ErrorHandler}
 import controllers.predicates.AuthoriseAsAgentWithClient
 import javax.inject.{Inject, Singleton}
+
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import services.CustomerDetailsService
@@ -49,7 +51,12 @@ class ConfirmClientVrnController @Inject()(val messagesApi: MessagesApi,
             GetClientBusinessNameAuditModel(user.arn.get, user.vrn, customerDetails.clientName),
             Some(controllers.agent.routes.ConfirmClientVrnController.show().url)
           )
-          Ok(views.html.agent.confirmClientVrn(user.vrn, customerDetails))
+          user.session.get(SessionKeys.redirectUrl) match {
+            case Some(redirectUrl) => Ok(views.html.agent.confirmClientVrn(user.vrn, customerDetails, redirectUrl))
+            case None =>
+              Logger.debug("[ConfirmClientVrnController][show] - No redirect URL was found in session")
+              errorHandler.showInternalServerError
+          }
         case _ => errorHandler.showInternalServerError
       }
   }

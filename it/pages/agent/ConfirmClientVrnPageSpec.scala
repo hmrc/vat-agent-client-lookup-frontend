@@ -29,7 +29,7 @@ class ConfirmClientVrnPageSpec extends BasePageISpec {
 
   "Calling the .show action" when {
 
-    def show(sessionVrn: Option[String] = None): WSResponse = get(path, formatSessionVrn(sessionVrn))
+    def show(sessionVrn: Option[String] = None): WSResponse = get(path, formatSessionVrn(sessionVrn) ++ formatReturnUrl)
 
     "the user is an Agent" when {
 

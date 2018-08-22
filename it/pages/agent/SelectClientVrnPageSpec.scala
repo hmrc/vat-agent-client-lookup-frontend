@@ -72,7 +72,7 @@ class SelectClientVrnPageSpec extends BasePageISpec {
 
     "the user is a Principle Entity and not an Agent" should {
 
-      "Redirect to the Customer Details page" in {
+      "render the Unauthorised page" in {
 
         given.user.isAuthenticated
 
@@ -80,8 +80,8 @@ class SelectClientVrnPageSpec extends BasePageISpec {
         val res = show
 
         res should have(
-          httpStatus(SEE_OTHER),
-          redirectURI("http://localhost:11111/customer-details?isAgent=true")
+          httpStatus(FORBIDDEN),
+          pageTitle(Messages("unauthorised.title"))
         )
       }
     }
@@ -160,7 +160,7 @@ class SelectClientVrnPageSpec extends BasePageISpec {
 
     "the user is a Principle Entity and not an Agent" should {
 
-      "redirect to the Customer Details home page" in {
+      "render the Unauthorised page" in {
 
         given.user.isAuthenticated
 
@@ -168,8 +168,8 @@ class SelectClientVrnPageSpec extends BasePageISpec {
         val res = submit(validData)
 
         res should have(
-          httpStatus(SEE_OTHER),
-          redirectURI("http://localhost:11111/customer-details?isAgent=true")
+          httpStatus(FORBIDDEN),
+          pageTitle(Messages("unauthorised.title"))
         )
       }
     }
