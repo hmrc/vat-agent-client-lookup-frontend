@@ -20,7 +20,6 @@ import common.SessionKeys
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
 
-import controllers.predicates.AuthoriseAsAgentOnly
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -29,10 +28,12 @@ import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import scala.concurrent.Future
 
 @Singleton
-class JourneySetupController @Inject()(val messagesApi: MessagesApi, val authenticate: AuthoriseAsAgentOnly, implicit val appConfig: AppConfig, http: HttpClient)
+class JourneySetupController @Inject()(val messagesApi: MessagesApi,
+                                       implicit val appConfig: AppConfig,
+                                       http: HttpClient)
   extends FrontendController {
 
-  def journeySetup(): Action[AnyContent] = authenticate.async {
+  def journeySetup(): Action[AnyContent] = Action.async {
 
     implicit request =>
       Future.successful(Ok("Received and stored the redirect url")) map {
