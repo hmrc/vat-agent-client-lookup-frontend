@@ -39,7 +39,7 @@ class AuthoriseAsAgentOnly @Inject()(enrolmentsAuthService: EnrolmentsAuthServic
 
   override def invokeBlock[A](request: Request[A], block: Agent[A] => Future[Result]): Future[Result] = {
 
-  implicit val req: Request[A] = request // potentially losing session due to this
+  implicit val req: Request[A] = request
 
     enrolmentsAuthService.authorised().retrieve(Retrievals.affinityGroup and Retrievals.allEnrolments) {
       case Some(affinityGroup) ~ allEnrolments =>
