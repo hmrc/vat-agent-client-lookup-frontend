@@ -39,13 +39,13 @@ class JourneySetupControllerSpec extends ControllerBaseSpec {
 
     "the user has a valid Agent enrolment" should {
 
-      "return 303 when the url is relative to the host" in {
+      "return 200 when the url is relative to the host" in {
 
         val js: JsValue = Json.obj(common.SessionKeys.redirectUrl -> goodRedirectUrl)
         lazy val request = postRequestWithJson(js)
         lazy val result = TestJourneySetupControllerSpec.journeySetup()(request)
         mockAgentAuthorised()
-        status(result) shouldBe Status.SEE_OTHER
+        status(result) shouldBe Status.OK
       }
 
       "return 400 when the url is empty" in {
