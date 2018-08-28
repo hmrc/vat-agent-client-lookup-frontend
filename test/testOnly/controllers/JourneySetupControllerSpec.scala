@@ -24,7 +24,11 @@ import scala.concurrent.Future
 
 class JourneySetupControllerSpec extends ControllerBaseSpec {
 
-  private lazy val controller = new JourneySetupController(messagesApi, mockConfig, mockHttp)
+  private lazy val controller = new JourneySetupController(
+    messagesApi,
+    mockConfig,
+    mockHttp
+  )
 
   "Calling the journeySetup action" should {
 

@@ -17,7 +17,7 @@
 @import models.CustomerDetails
 @import uk.gov.hmrc.play.views.html.helpers.form
 
-@(vrn: String, customerDetails: CustomerDetails)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+@(vrn: String, customerDetails: CustomerDetails, redirectUrl: String)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
     title = messages("confirmClientVrn.title"),
@@ -37,7 +37,7 @@
     <p>@vrn</p>
 
     <a data-journey-click="select-client:confirm:confirm-client-vat-number" 
-       href="@appConfig.manageVatCustomerDetailsUrl"
+       href="@redirectUrl"
        class="button form-group">
         @messages("common.confirmAndContinue")
     </a>

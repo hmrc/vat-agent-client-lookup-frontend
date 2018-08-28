@@ -31,9 +31,9 @@ import scala.concurrent.Future
 
 @Singleton
 class JourneySetupController @Inject()(val messagesApi: MessagesApi,
-                                          val authenticate: AuthoriseAsAgentOnly,
-                                          val serviceErrorHandler: ErrorHandler,
-                                          implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                       val authenticate: AuthoriseAsAgentOnly,
+                                       val serviceErrorHandler: ErrorHandler,
+                                       implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   def journeySetup():Action[AnyContent] = authenticate.async {
     implicit request =>
@@ -41,20 +41,16 @@ class JourneySetupController @Inject()(val messagesApi: MessagesApi,
 
       case Some(json) =>
         val url = extractRedirectUrl(json).fold("")(_.self)
-        try{
+        try {
           val cUrl = ContinueUrl(url)
           if (cUrl.isRelativeUrl || url.startsWith(appConfig.environmentBase)) {
-            Future.successful(Ok("Received and stored the redirect url: " + extractRedirectUrl(json))).map {
-              result => {
-                result.addingToSession(SessionKeys.redirectUrl -> url)
-              }
-            }
-          }else{
+            Future.successful(Redirect(controllers.agent.routes.SelectClientVrnController.show())
+              .addingToSession(SessionKeys.redirectUrl -> url))
+          } else {
             Logger.warn("[JourneySetupController][journeySetup] redirectUrl was empty or an invalid absolute url")
             Future.successful(BadRequest)
           }
-
-        }catch{
+        } catch {
           case e: Exception =>
             Logger.warn("[JourneySetupController][journeySetup] couldn't create ContinueUrl from what was provided.", e)
             Future.successful(BadRequest)
@@ -67,9 +63,9 @@ class JourneySetupController @Inject()(val messagesApi: MessagesApi,
   }
 
   private[controllers] def extractRedirectUrl(json: JsValue): Option[String] = {
-    try{
+    try {
       Some((json \ "redirectUrl").as[String])
-    }catch{
+    } catch {
       case jsEx:JsResultException =>
         Logger.warn("[JourneySetupController][extractRedirectUrl] Couldn't find redirectUrl key in json provided", jsEx)
         None

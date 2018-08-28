@@ -22,9 +22,7 @@ import assets.messages.{ConfirmClientVrnPageMessages => Messages}
 import audit.mocks.MockAuditingService
 import audit.models.{AuthenticateAgentAuditModel, GetClientBusinessNameAuditModel}
 import common.SessionKeys
-import config.ErrorHandler
 import controllers.ControllerBaseSpec
-import mocks.MockAuth
 import mocks.services.MockCustomerDetailsService
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
@@ -35,13 +33,13 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext
 
-class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockAuth with MockCustomerDetailsService with MockAuditingService {
+class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustomerDetailsService with MockAuditingService {
 
-  object TestConfirmClientVrnControllerSpec extends ConfirmClientVrnController(
+  object TestConfirmClientVrnController extends ConfirmClientVrnController(
     messagesApi,
     mockAuthAsAgentWithClient,
     mockCustomerDetailsService,
-    app.injector.instanceOf[ErrorHandler],
+    serviceErrorHandler,
     mockAuditingService,
     mockConfig
   )
@@ -52,9 +50,9 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wi
 
       "the Agent is authorised and signed up to HMRC-AS-AGENT" when {
 
-        "a Clients VRN is held in Session and details are successfully retrieved" should {
+        "a Client's VRN is held in Session and details are successfully retrieved" should {
 
-          lazy val result = TestConfirmClientVrnControllerSpec.show(fakeRequestWithClientsVRN)
+          lazy val result = TestConfirmClientVrnController.show(fakeRequestWithClientsVRN)
           lazy val document = Jsoup.parse(bodyOf(result))
 
           "return 200" in {
@@ -91,13 +89,29 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wi
           }
         }
 
-        "a Clients VRN is held in Session and NO details are retrieved" should {
+        "a clients VRN is held in session but no details are retrieved" should {
 
-          lazy val result = TestConfirmClientVrnControllerSpec.show(fakeRequestWithClientsVRN)
+          lazy val result = TestConfirmClientVrnController.show(fakeRequestWithClientsVRN)
 
-          "return 200" in {
+          "return 500" in {
             mockAgentAuthorised()
             mockCustomerDetailsError()
+            status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+          }
+
+          "return HTML" in {
+            contentType(result) shouldBe Some("text/html")
+            charset(result) shouldBe Some("utf-8")
+          }
+        }
+
+        "a client's VRN is held in session but no redirect URL is found" should {
+
+          lazy val result = TestConfirmClientVrnController.show(request.withSession(common.SessionKeys.clientVRN -> vrn))
+
+          "return 500" in {
+            mockAgentAuthorised()
+            mockCustomerDetailsSuccess(customerDetailsOrganisation)
             status(result) shouldBe Status.INTERNAL_SERVER_ERROR
           }
 
@@ -113,7 +127,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wi
 
       "return 401 (Unauthorised)" in {
         mockMissingBearerToken()
-        val result = TestConfirmClientVrnControllerSpec.show(fakeRequestWithClientsVRN)
+        val result = TestConfirmClientVrnController.show(fakeRequestWithClientsVRN)
         status(result) shouldBe Status.UNAUTHORIZED
       }
     }
@@ -127,7 +141,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wi
 
         "a Clients VRN is held in Session" should {
 
-          lazy val result = TestConfirmClientVrnControllerSpec.changeClient(fakeRequestWithVrnAndReturnFreq)
+          lazy val result = TestConfirmClientVrnController.changeClient(fakeRequestWithVrnAndReturnFreq)
 
           "return status redirect SEE_OTHER (303)" in {
             mockAgentAuthorised()
@@ -157,7 +171,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wi
 
       "return 401 (Unauthorised)" in {
         mockMissingBearerToken()
-        val result = TestConfirmClientVrnControllerSpec.changeClient(fakeRequestWithClientsVRN)
+        val result = TestConfirmClientVrnController.changeClient(fakeRequestWithClientsVRN)
         status(result) shouldBe Status.UNAUTHORIZED
       }
     }

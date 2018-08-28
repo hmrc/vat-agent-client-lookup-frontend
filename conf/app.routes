@@ -15,4 +15,4 @@ GET        /change-client-vat-number                    controllers.agent.Confir
 GET        /confirm-client-vat-number                   controllers.agent.ConfirmClientVrnController.show
 
 # NOCSRF
-POST       /journey-setup          controllers.JourneySetupController.journeySetup
+POST       /journey-setup                               controllers.JourneySetupController.journeySetup

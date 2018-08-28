@@ -54,10 +54,8 @@ class AuthoriseAsAgentWithClient @Inject()(enrolmentsAuthService: EnrolmentsAuth
           case None ~ _ =>
             Future.successful(serviceErrorHandler.showInternalServerError)
           case _ ~ allEnrolments =>
-
             val agent = Agent(allEnrolments)
             val user = User(vrn, active = true, Some(agent.arn))
-
             block(user)
         } recover {
           case _: NoActiveSession =>

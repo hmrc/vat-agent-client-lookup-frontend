@@ -26,9 +26,16 @@ class ConfirmClientVrnViewSpec extends ViewBaseSpec {
 
   "The Confirm Change Client VRN page" when {
 
+    val exampleRedirectUrl = "/homepage"
+
     "given an individual with no trading name" should {
 
-      lazy val view = views.html.agent.confirmClientVrn(BaseTestConstants.vrn, CustomerDetailsTestConstants.customerDetailsIndividual)(request, messages, mockConfig)
+      lazy val view = views.html.agent.confirmClientVrn(
+        BaseTestConstants.vrn,
+        CustomerDetailsTestConstants.customerDetailsIndividual,
+        exampleRedirectUrl
+      )(request, messages, mockConfig)
+
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct document title of '${viewMessages.title}'" in {
@@ -39,24 +46,24 @@ class ConfirmClientVrnViewSpec extends ViewBaseSpec {
         elementText("h1") shouldBe viewMessages.heading
       }
 
-      s"have the correct heading and text for the business name section" in {
+      "have the correct heading and text for the business name section" in {
         elementText("h2") shouldBe viewMessages.name
         elementText("article > p:nth-of-type(1)") shouldBe CustomerDetailsTestConstants.customerDetailsIndividual.userName.get
       }
 
-      s"have the correct heading and text for the VAT number section" in {
+      "have the correct heading and text for the VAT number section" in {
         elementText("h3") shouldBe viewMessages.vrn
         elementText("article > p:nth-of-type(2)") shouldBe BaseTestConstants.vrn
       }
 
-      s"have a confirm button" which {
+      "have a confirm button" which {
 
         s"has the text '${BaseMessages.confirm}'" in {
           elementText("a.button") shouldBe BaseMessages.confirmAndContinue
         }
 
-        s"has a link to the manage-vat service" in {
-          element("a.button").attr("href") shouldBe mockConfig.manageVatCustomerDetailsUrl
+        "has a link to the redirect URL" in {
+          element("a.button").attr("href") shouldBe exampleRedirectUrl
         }
       }
 
@@ -75,7 +82,12 @@ class ConfirmClientVrnViewSpec extends ViewBaseSpec {
 
     "given an individual with a trading name" should {
 
-      lazy val view = views.html.agent.confirmClientVrn(BaseTestConstants.vrn, CustomerDetailsTestConstants.customerDetailsAllInfo)(request, messages, mockConfig)
+      lazy val view = views.html.agent.confirmClientVrn(
+        BaseTestConstants.vrn,
+        CustomerDetailsTestConstants.customerDetailsAllInfo,
+        exampleRedirectUrl
+      )(request, messages, mockConfig)
+
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct document title of '${viewMessages.title}'" in {
@@ -86,7 +98,7 @@ class ConfirmClientVrnViewSpec extends ViewBaseSpec {
         elementText("h1") shouldBe viewMessages.heading
       }
 
-      s"have the correct heading and text for the client name section" in {
+      "have the correct heading and text for the client name section" in {
         elementText("h2") shouldBe viewMessages.name
         elementText("article > p:nth-of-type(1)") shouldBe CustomerDetailsTestConstants.customerDetailsAllInfo.tradingName.get
       }
