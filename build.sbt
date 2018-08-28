@@ -76,7 +76,6 @@ lazy val coverageSettings: Seq[Setting[_]] = {
     "app.*",
     "prod.*",
     "config.*",
-    "testOnlyDoNotUseInAppConf.*",
     "testOnly.*")
 
   Seq(
@@ -104,6 +103,7 @@ def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] = tests map {
 
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(Seq(play.sbt.PlayScala,SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins : _*)
+  .settings(PlayKeys.playDefaultPort := 9149)
   .settings(playSettings : _*)
   .settings(coverageSettings: _*)
   .settings(scalaSettings: _*)
