@@ -102,7 +102,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
 
   override lazy val vatSubscriptionUrl: String = baseUrl(Keys.vatSubscription)
 
-  private lazy val manageVatBase: String = baseUrl(Keys.manageVatBase)
+  private lazy val manageVatBase: String = getString(Keys.manageVatBase)
   override lazy val manageVatCustomerDetailsUrl: String = manageVatBase + getString(Keys.manageVatContext)
   override lazy val timeoutPeriod: Int = getInt(Keys.timeoutPeriod)
   override lazy val timeoutCountdown: Int = getInt(Keys.timeoutCountdown)
