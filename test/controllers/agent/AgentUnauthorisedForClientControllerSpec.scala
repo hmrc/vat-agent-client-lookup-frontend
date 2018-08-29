@@ -46,7 +46,7 @@ class AgentUnauthorisedForClientControllerSpec extends ControllerBaseSpec with M
 
     "A Clients VRN is in session" should {
 
-      lazy val result = TestUnauthorisedForClientController.show(fakeRequestWithClientsVRN)
+      lazy val result = TestUnauthorisedForClientController.show(fakeRequestWithVrnAndRedirectUrl)
       lazy val document = Jsoup.parse(bodyOf(result))
 
       "return 200" in {

@@ -44,22 +44,15 @@ trait TestUtil extends UnitSpec with GuiceOneAppPerSuite {
 
   lazy val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
-  lazy val fakeRequestWithClientsVRN: FakeRequest[AnyContentAsEmpty.type] =
-    FakeRequest().withSession(
-      common.SessionKeys.clientVRN -> vrn,
-      common.SessionKeys.redirectUrl -> "/homepage"
-    )
-
-  lazy val fakeRequestWithVrnAndReturnFreq: FakeRequest[AnyContentAsEmpty.type] =
+  lazy val fakeRequestWithVrnAndRedirectUrl: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest().withSession(
       SessionKeys.clientVRN -> vrn,
-      SessionKeys.newReturnFrequency -> "Jan",
-      SessionKeys.currentReturnFrequency -> "Monthly"
-  )
+      SessionKeys.redirectUrl -> "/homepage"
+    )
 
   lazy val user: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn, active = true)(request)
   lazy val agent: User[AnyContentAsEmpty.type] =
-    User[AnyContentAsEmpty.type](vrn, active = true, Some(arn))(fakeRequestWithClientsVRN)
+    User[AnyContentAsEmpty.type](vrn, active = true, Some(arn))(fakeRequestWithVrnAndRedirectUrl)
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
   implicit lazy val ec: ExecutionContext = injector.instanceOf[ExecutionContext]
 

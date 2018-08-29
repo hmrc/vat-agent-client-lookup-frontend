@@ -18,9 +18,7 @@ package common
 
 object SessionKeys {
 
-  val currentReturnFrequency: String = "currentReturnFrequency"
-  val newReturnFrequency: String = "returnFrequency"
-  val clientVRN: String = "clientVRN"
+  val clientVRN: String = "CLIENT_VRN"
   val redirectUrl: String = "redirectUrl"
 
 }

@@ -38,7 +38,7 @@ class AuthoriseAsAgentWithClientSpec extends MockAuth {
 
       "return 200" in {
         mockAgentAuthorised()
-        val result = target(fakeRequestWithClientsVRN)
+        val result = target(fakeRequestWithVrnAndRedirectUrl)
         status(result) shouldBe Status.OK
       }
     }
@@ -61,14 +61,14 @@ class AuthoriseAsAgentWithClientSpec extends MockAuth {
 
       "return 401 (Unauthorised)" in {
         mockMissingBearerToken()
-        val result = target(fakeRequestWithClientsVRN)
+        val result = target(fakeRequestWithVrnAndRedirectUrl)
         status(result) shouldBe Status.UNAUTHORIZED
       }
     }
 
     "the agent is not authorised" should {
 
-      lazy val result = target(fakeRequestWithClientsVRN)
+      lazy val result = target(fakeRequestWithVrnAndRedirectUrl)
 
       "return 303 (SEE_OTHER)" in {
         mockUnauthorised()
