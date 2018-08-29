@@ -41,11 +41,11 @@ object ConfigKeys {
 
   val vatSubscription: String = "vat-subscription"
 
-  val surveyFrontend: String = "feedback-survey-frontend"
-  val surveyContext: String = "microservice.services.feedback-survey-frontend.endpoints.survey"
+  val surveyFrontend: String = "feedback-survey-frontend.host"
+  val surveyContext: String = "feedback-survey-frontend.endpoints.survey"
 
-  val manageVatBase: String = "manage-vat-subscription-frontend"
-  val manageVatContext: String = "microservice.services.manage-vat-subscription-frontend.endpoints.customer-details"
+  val manageVatBase: String = "manage-vat-subscription-frontend.host"
+  val manageVatContext: String = "manage-vat-subscription-frontend.endpoints.customer-details"
 
   val timeoutPeriod: String = "timeout.period"
   val timeoutCountdown: String = "timeout.countdown"

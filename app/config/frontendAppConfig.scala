@@ -73,7 +73,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
 
   private lazy val governmentGatewayHost: String = getString(Keys.governmentGatewayHost)
 
-  private lazy val surveyBaseUrl = baseUrl(Keys.surveyFrontend) + getString(Keys.surveyContext)
+  private lazy val surveyBaseUrl = getString(Keys.surveyFrontend) + getString(Keys.surveyContext)
   override lazy val surveyUrl = s"$surveyBaseUrl/?origin=$contactFormServiceIdentifier"
 
   private lazy val signInOrigin: String = getString(Keys.appName)
@@ -102,7 +102,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
 
   override lazy val vatSubscriptionUrl: String = baseUrl(Keys.vatSubscription)
 
-  private lazy val manageVatBase: String = baseUrl(Keys.manageVatBase)
+  private lazy val manageVatBase: String = getString(Keys.manageVatBase)
   override lazy val manageVatCustomerDetailsUrl: String = manageVatBase + getString(Keys.manageVatContext)
   override lazy val timeoutPeriod: Int = getInt(Keys.timeoutPeriod)
   override lazy val timeoutCountdown: Int = getInt(Keys.timeoutCountdown)
