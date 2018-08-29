@@ -52,7 +52,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
 
         "a Client's VRN is held in Session and details are successfully retrieved" should {
 
-          lazy val result = TestConfirmClientVrnController.show(fakeRequestWithClientsVRN)
+          lazy val result = TestConfirmClientVrnController.show(fakeRequestWithVrnAndRedirectUrl)
           lazy val document = Jsoup.parse(bodyOf(result))
 
           "return 200" in {
@@ -91,7 +91,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
 
         "a clients VRN is held in session but no details are retrieved" should {
 
-          lazy val result = TestConfirmClientVrnController.show(fakeRequestWithClientsVRN)
+          lazy val result = TestConfirmClientVrnController.show(fakeRequestWithVrnAndRedirectUrl)
 
           "return 500" in {
             mockAgentAuthorised()
@@ -120,6 +120,19 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
             charset(result) shouldBe Some("utf-8")
           }
         }
+
+        "there is a redirect URL in session but no client VRN is found" should {
+
+          lazy val result = TestConfirmClientVrnController.show(request.withSession(common.SessionKeys.redirectUrl -> "/homepage"))
+          "return 303" in {
+            mockAgentAuthorised()
+            status(result) shouldBe Status.SEE_OTHER
+          }
+
+          "redirect to Select Client VRN" in {
+            redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show().url)
+          }
+        }
       }
     }
 
@@ -127,7 +140,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
 
       "return 401 (Unauthorised)" in {
         mockMissingBearerToken()
-        val result = TestConfirmClientVrnController.show(fakeRequestWithClientsVRN)
+        val result = TestConfirmClientVrnController.show(fakeRequestWithVrnAndRedirectUrl)
         status(result) shouldBe Status.UNAUTHORIZED
       }
     }
@@ -141,7 +154,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
 
         "a Clients VRN is held in Session" should {
 
-          lazy val result = TestConfirmClientVrnController.changeClient(fakeRequestWithVrnAndReturnFreq)
+          lazy val result = TestConfirmClientVrnController.changeClient(fakeRequestWithVrnAndRedirectUrl)
 
           "return status redirect SEE_OTHER (303)" in {
             mockAgentAuthorised()
@@ -155,14 +168,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           "have removed the Clients VRN from session" in {
             session(result).get(SessionKeys.clientVRN) shouldBe None
           }
-
-          "have removed the ReturnFrequency from session" in {
-            session(result).get(SessionKeys.newReturnFrequency) shouldBe None
-          }
-
-          "have removed the CurrentReturnFrequency from session" in {
-            session(result).get(SessionKeys.currentReturnFrequency) shouldBe None
-          }
         }
       }
     }
@@ -171,7 +176,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
 
       "return 401 (Unauthorised)" in {
         mockMissingBearerToken()
-        val result = TestConfirmClientVrnController.changeClient(fakeRequestWithClientsVRN)
+        val result = TestConfirmClientVrnController.changeClient(fakeRequestWithVrnAndRedirectUrl)
         status(result) shouldBe Status.UNAUTHORIZED
       }
     }
