@@ -44,7 +44,7 @@ class JourneySetupController @Inject()(val messagesApi: MessagesApi,
         try {
           val cUrl = ContinueUrl(url)
           if (cUrl.isRelativeUrl || url.startsWith(appConfig.environmentBase)) {
-            Future.successful(Redirect(controllers.agent.routes.SelectClientVrnController.show())
+            Future.successful(Ok(controllers.agent.routes.SelectClientVrnController.show().url)
               .addingToSession(SessionKeys.redirectUrl -> url))
           } else {
             Logger.warn("[JourneySetupController][journeySetup] redirectUrl was empty or an invalid absolute url")
