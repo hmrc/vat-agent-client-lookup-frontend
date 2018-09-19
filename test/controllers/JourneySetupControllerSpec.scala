@@ -18,11 +18,18 @@ package controllers
 
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.AnyContentAsJson
+import play.api.mvc.{AnyContentAsJson, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
 class JourneySetupControllerSpec extends ControllerBaseSpec {
+
+  private trait SuccessScenario {
+    val js: JsValue = Json.obj(common.SessionKeys.redirectUrl -> goodRedirectUrl)
+    lazy val request: FakeRequest[AnyContentAsJson] = postRequestWithJson(js)
+    lazy val result: Result = await(TestJourneySetupControllerSpec.journeySetup()(request))
+    mockAgentAuthorised()
+  }
 
   object TestJourneySetupControllerSpec extends JourneySetupController(
     messagesApi,
@@ -37,46 +44,49 @@ class JourneySetupControllerSpec extends ControllerBaseSpec {
 
   "Posting a valid url to the journeySetup action" when {
 
-    "the user has a valid Agent enrolment" should {
+    "the user has a valid Agent enrolment" when {
 
-      "return 303 when the url is relative to the host" in {
+      "the url is valid" should {
 
-        val js: JsValue = Json.obj(common.SessionKeys.redirectUrl -> goodRedirectUrl)
-        lazy val request = postRequestWithJson(js)
-        lazy val result = TestJourneySetupControllerSpec.journeySetup()(request)
-        mockAgentAuthorised()
-        status(result) shouldBe Status.SEE_OTHER
+        "return 200" in new SuccessScenario {
+          status(result) shouldBe Status.OK
+        }
+
+        "return the continue URL" in new SuccessScenario {
+          bodyOf(result) shouldBe controllers.agent.routes.SelectClientVrnController.show().url
+        }
+
+        "store the redirect url in session" in new SuccessScenario {
+          lazy val sessionUrl: String = result.flatMap { res =>
+            session(res).get(common.SessionKeys.redirectUrl).get
+          }
+
+          sessionUrl shouldBe goodRedirectUrl
+        }
       }
 
-      "return 400 when the url is empty" in {
+      "the url is empty" should {
 
-        val js: JsValue = Json.obj(common.SessionKeys.redirectUrl -> "")
-        lazy val request = postRequestWithJson(js)
-        lazy val result = TestJourneySetupControllerSpec.journeySetup()(request)
-        mockAgentAuthorised()
-        status(result) shouldBe Status.BAD_REQUEST
+        "return 400" in {
+          val js: JsValue = Json.obj(common.SessionKeys.redirectUrl -> "")
+          lazy val request = postRequestWithJson(js)
+          lazy val result = TestJourneySetupControllerSpec.journeySetup()(request)
+          mockAgentAuthorised()
+
+          status(result) shouldBe Status.BAD_REQUEST
+        }
       }
 
-      "return 400 when the url is not valid" in {
+      "the url is invalid" should {
 
-        val js: JsValue = Json.obj(common.SessionKeys.redirectUrl -> "www.google.com")
-        lazy val request = postRequestWithJson(js)
-        lazy val result = TestJourneySetupControllerSpec.journeySetup()(request)
-        mockAgentAuthorised()
-        status(result) shouldBe Status.BAD_REQUEST
-      }
+        "return 400" in {
+          val js: JsValue = Json.obj(common.SessionKeys.redirectUrl -> "www.google.com")
+          lazy val request = postRequestWithJson(js)
+          lazy val result = TestJourneySetupControllerSpec.journeySetup()(request)
+          mockAgentAuthorised()
 
-      "store the redirect url in session" in {
-
-        val js: JsValue = Json.obj(common.SessionKeys.redirectUrl -> goodRedirectUrl)
-        lazy val request = postRequestWithJson(js)
-        lazy val result = await(TestJourneySetupControllerSpec.journeySetup()(request))
-        mockAgentAuthorised()
-        lazy val sessionUrl = await(result.flatMap { res =>
-          session(res).get(common.SessionKeys.redirectUrl).get
-        })
-
-        sessionUrl shouldEqual goodRedirectUrl
+          status(result) shouldBe Status.BAD_REQUEST
+        }
       }
     }
 
