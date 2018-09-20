@@ -46,7 +46,7 @@ class AgentUnauthorisedForClientController @Inject()(val authenticate: Authorise
           Future.successful(Ok(views.html.errors.agent.notAuthorisedForClient(vrn)))
 
         case _ =>
-          Future.successful(Redirect(controllers.agent.routes.SelectClientVrnController.show()))
+          Future.successful(Redirect(controllers.agent.routes.SelectClientVrnController.show("")))
       }
   }
 }

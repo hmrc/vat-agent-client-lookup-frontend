@@ -84,46 +84,14 @@ class ConfirmClientVrnPageSpec extends BasePageISpec {
             given.agent.isSignedUpToAgentServices
 
             When("I call the Confirm Client VRN page with NO client VRN held in the session")
-            val res = show(None)
+            val res = show()
 
             res should have(
               httpStatus(SEE_OTHER),
-              redirectURI(controllers.agent.routes.SelectClientVrnController.show().url)
+              redirectURI(controllers.agent.routes.SelectClientVrnController.show("").url)
             )
           }
         }
-      }
-
-      "the Agent is not signed up for HMRC-AS-AGENT (not authorised)" should {
-
-        "Render the Internal Server Error page" in {
-
-          given.agent.isNotSignedUpToAgentServices
-
-          When("I call the Confirm Client VRN page with the clients VRN in the session")
-          val res = show(Some(clientVRN))
-
-          res should have(
-            httpStatus(SEE_OTHER),
-            redirectURI(controllers.agent.routes.AgentUnauthorisedForClientController.show().url)
-          )
-        }
-      }
-    }
-
-    "the user is a Principle Entity and not an Agent" should {
-
-      "Redirect to the Select Client Details page (this bounces them to Customer Details after)" in {
-
-        given.user.isAuthenticated
-
-        When("I call the Confirm Client VRN page")
-        val res = show()
-
-        res should have(
-          httpStatus(SEE_OTHER),
-          redirectURI(controllers.agent.routes.SelectClientVrnController.show().url)
-        )
       }
     }
 

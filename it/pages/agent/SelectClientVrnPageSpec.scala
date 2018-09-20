@@ -28,9 +28,9 @@ import play.api.test.Helpers._
 
 class SelectClientVrnPageSpec extends BasePageISpec {
 
-  val path = "/client-vat-number"
+  val path = "/client-vat-number?redirectUrl=/homepage"
 
-  "Calling the .show action" when {
+  "Calling the .show() action" when {
 
     def show: WSResponse = get(path)
 

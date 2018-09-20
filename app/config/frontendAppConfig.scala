@@ -80,7 +80,10 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   private lazy val signInBaseUrl: String = getString(Keys.signInBaseUrl)
   override lazy val signInContinueBaseUrl: String = getString(Keys.signInContinueBaseUrl)
   override lazy val signInUrl: String = s"$signInBaseUrl?continue=$signInContinueUrl&origin=$signInOrigin"
-  private lazy val signInContinueUrl: String = ContinueUrl(signInContinueBaseUrl + controllers.agent.routes.SelectClientVrnController.show().url).encodedUrl
+  private lazy val signInContinueUrl: String =
+    ContinueUrl(
+      signInContinueBaseUrl + controllers.agent.routes.SelectClientVrnController.show(manageVatCustomerDetailsUrl).url
+    ).encodedUrl
 
   override lazy val signOutUrl: String = s"$governmentGatewayHost/gg/sign-out?continue=$surveyUrl"
   override lazy val unauthorisedSignOutUrl: String = s"$governmentGatewayHost/gg/sign-out?continue=$signInContinueUrl"
