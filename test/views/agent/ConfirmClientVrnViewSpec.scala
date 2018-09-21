@@ -32,8 +32,7 @@ class ConfirmClientVrnViewSpec extends ViewBaseSpec {
 
       lazy val view = views.html.agent.confirmClientVrn(
         BaseTestConstants.vrn,
-        CustomerDetailsTestConstants.customerDetailsIndividual,
-        exampleRedirectUrl
+        CustomerDetailsTestConstants.customerDetailsIndividual
       )(request, messages, mockConfig)
 
       lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -63,7 +62,7 @@ class ConfirmClientVrnViewSpec extends ViewBaseSpec {
         }
 
         "has a link to the redirect URL" in {
-          element("a.button").attr("href") shouldBe exampleRedirectUrl
+          element("a.button").attr("href") shouldBe controllers.agent.routes.ConfirmClientVrnController.redirectToSessionUrl().url
         }
       }
 
@@ -84,8 +83,7 @@ class ConfirmClientVrnViewSpec extends ViewBaseSpec {
 
       lazy val view = views.html.agent.confirmClientVrn(
         BaseTestConstants.vrn,
-        CustomerDetailsTestConstants.customerDetailsAllInfo,
-        exampleRedirectUrl
+        CustomerDetailsTestConstants.customerDetailsAllInfo
       )(request, messages, mockConfig)
 
       lazy implicit val document: Document = Jsoup.parse(view.body)

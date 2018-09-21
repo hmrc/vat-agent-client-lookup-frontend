@@ -38,7 +38,7 @@ class SelectClientVrnController @Inject()(val messagesApi: MessagesApi,
 
   def show(redirectUrl: String): Action[AnyContent] = authenticate.async {
     implicit agent =>
-      agent.session.get("redirectUrl") match {
+      agent.session.get(SessionKeys.redirectUrl) match {
         case Some(_) =>
           Future.successful(Ok(views.html.agent.selectClientVrn(ClientVrnForm.form)))
         case None =>

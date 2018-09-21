@@ -32,15 +32,17 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth {
     mockConfig
   )
 
-  val redirectUrl = "/manage-vat-account"
-
   "Calling the .show() action" when {
 
     "a valid redirect URL is provided" when {
 
+      val redirectUrl = "/manage-vat-account"
+
       "there is a redirect URL currently in session" should {
 
-        lazy val result = TestClientVrnController.show(redirectUrl)(request.withSession("redirectUrl" -> "/homepage"))
+        lazy val result = TestClientVrnController.show(redirectUrl)(request.withSession(
+          SessionKeys.redirectUrl -> "/homepage"
+        ))
 
         "return 200" in {
           mockAgentAuthorised()
@@ -53,7 +55,7 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth {
         }
 
         "not add the requested redirect URL to the session" in {
-          session(result).get("redirectUrl") shouldBe None
+          session(result).get(SessionKeys.redirectUrl) shouldBe None
         }
       }
 
@@ -72,7 +74,7 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth {
         }
 
         "add the redirect URL to the session" in {
-          session(result).get("redirectUrl") shouldBe Some(redirectUrl)
+          session(result).get(SessionKeys.redirectUrl) shouldBe Some(redirectUrl)
         }
       }
     }
@@ -81,7 +83,9 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth {
 
       "there is a redirect URL currently in session" should {
 
-        lazy val result = TestClientVrnController.show("www.google.com")(request.withSession("redirectUrl" -> "/homepage"))
+        lazy val result = TestClientVrnController.show("www.google.com")(request.withSession(
+          SessionKeys.redirectUrl -> "/homepage"
+        ))
 
         "return 200" in {
           mockAgentAuthorised()
@@ -94,7 +98,7 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth {
         }
 
         "not add the requested redirect URL to the session" in {
-          session(result).get("redirectUrl") shouldBe None
+          session(result).get(SessionKeys.redirectUrl) shouldBe None
         }
       }
 
@@ -113,7 +117,7 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth {
         }
 
         "not add the requested redirect URL to the session" in {
-          session(result).get("redirectUrl") shouldBe None
+          session(result).get(SessionKeys.redirectUrl) shouldBe None
         }
       }
     }

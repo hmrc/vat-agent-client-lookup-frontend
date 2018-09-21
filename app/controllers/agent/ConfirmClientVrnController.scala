@@ -16,20 +16,19 @@
 
 package controllers.agent
 
+import scala.concurrent.Future
+
 import audit.AuditService
 import audit.models.{AuthenticateAgentAuditModel, GetClientBusinessNameAuditModel}
 import common.SessionKeys
 import config.{AppConfig, ErrorHandler}
 import controllers.predicates.AuthoriseAsAgentWithClient
 import javax.inject.{Inject, Singleton}
-
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import services.CustomerDetailsService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-
-import scala.concurrent.Future
 
 @Singleton
 class ConfirmClientVrnController @Inject()(val messagesApi: MessagesApi,
@@ -51,21 +50,32 @@ class ConfirmClientVrnController @Inject()(val messagesApi: MessagesApi,
             GetClientBusinessNameAuditModel(user.arn.get, user.vrn, customerDetails.clientName),
             Some(controllers.agent.routes.ConfirmClientVrnController.show().url)
           )
-          user.session.get(SessionKeys.redirectUrl) match {
-            case Some(redirectUrl) => Ok(views.html.agent.confirmClientVrn(user.vrn, customerDetails, redirectUrl))
-            case None =>
-              Logger.debug("[ConfirmClientVrnController][show] - No redirect URL was found in session")
-              errorHandler.showInternalServerError
-          }
+
+          Ok(views.html.agent.confirmClientVrn(user.vrn, customerDetails))
+
         case _ => errorHandler.showInternalServerError
       }
   }
 
-    def changeClient: Action[AnyContent] = authenticate.async {
-      implicit user =>
-        Future.successful(
-          Redirect(controllers.agent.routes.SelectClientVrnController.show(""))
-            .removingFromSession(SessionKeys.clientVRN)
-        )
-    }
+  def changeClient: Action[AnyContent] = authenticate.async {
+    implicit user =>
+      Future.successful(
+        Redirect(controllers.agent.routes.SelectClientVrnController.show(""))
+          .removingFromSession(SessionKeys.clientVRN)
+      )
+  }
+
+  def redirectToSessionUrl: Action[AnyContent] = authenticate.async {
+    implicit user =>
+      Future.successful(
+        user.session.get(SessionKeys.redirectUrl) match {
+          case Some(redirectUrl) => Redirect(redirectUrl)
+            .removingFromSession(SessionKeys.redirectUrl)
+
+          case _ =>
+            Logger.debug("[ConfirmClientVrnController][show] - No redirect URL was found in session")
+            errorHandler.showInternalServerError
+        }
+      )
+  }
 }
