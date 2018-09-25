@@ -105,22 +105,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           }
         }
 
-        "a client's VRN is held in session but no redirect URL is found" should {
-
-          lazy val result = TestConfirmClientVrnController.show(request.withSession(common.SessionKeys.clientVRN -> vrn))
-
-          "return 500" in {
-            mockAgentAuthorised()
-            mockCustomerDetailsSuccess(customerDetailsOrganisation)
-            status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-          }
-
-          "return HTML" in {
-            contentType(result) shouldBe Some("text/html")
-            charset(result) shouldBe Some("utf-8")
-          }
-        }
-
         "there is a redirect URL in session but no client VRN is found" should {
 
           lazy val result = TestConfirmClientVrnController.show(request.withSession(common.SessionKeys.redirectUrl -> "/homepage"))
@@ -130,7 +114,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           }
 
           "redirect to Select Client VRN" in {
-            redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show().url)
+            redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show("").url)
           }
         }
       }
@@ -162,7 +146,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           }
 
           "redirect to the Select Your Client show action" in {
-            redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show().url)
+            redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show("").url)
           }
 
           "have removed the Clients VRN from session" in {
@@ -178,6 +162,47 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
         mockMissingBearerToken()
         val result = TestConfirmClientVrnController.changeClient(fakeRequestWithVrnAndRedirectUrl)
         status(result) shouldBe Status.UNAUTHORIZED
+      }
+    }
+  }
+
+  "Calling the .redirectToSessionUrl action" when {
+
+    "the user is an Agent" when {
+
+      "a clients VRN is held in session and a redirect URL is found" should {
+
+        lazy val result = TestConfirmClientVrnController.redirectToSessionUrl(fakeRequestWithVrnAndRedirectUrl)
+
+        "return status SEE_OTHER (303)" in {
+          mockAgentAuthorised()
+          mockCustomerDetailsSuccess(customerDetailsOrganisation)
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        "redirect to the Select Your Client show action" in {
+          redirectLocation(result) shouldBe Some("/homepage")
+        }
+
+        "have removed the Clients redirect URL from session" in {
+          session(result).get(SessionKeys.redirectUrl) shouldBe None
+        }
+      }
+
+      "a client's VRN is held in session but no redirect URL is found" should {
+
+        lazy val result = TestConfirmClientVrnController.redirectToSessionUrl(request.withSession(common.SessionKeys.clientVRN -> vrn))
+
+        "return status INTERNAL_SERVER_ERROR (500)" in {
+          mockAgentAuthorised()
+          mockCustomerDetailsSuccess(customerDetailsOrganisation)
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+        }
+
+        "return HTML" in {
+          contentType(result) shouldBe Some("text/html")
+          charset(result) shouldBe Some("utf-8")
+        }
       }
     }
   }

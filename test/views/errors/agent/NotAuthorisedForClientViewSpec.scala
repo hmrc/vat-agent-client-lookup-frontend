@@ -67,8 +67,8 @@ class NotAuthorisedForClientViewSpec extends ViewBaseSpec {
       elementText(Selectors.tryAgain) shouldBe Messages.tryAgain
     }
 
-    s"have a link to '${controllers.agent.routes.SelectClientVrnController.show().url}'" in {
-      element(Selectors.tryAgainLink).attr("href") shouldBe controllers.agent.routes.SelectClientVrnController.show().url
+    s"have a link to '${controllers.agent.routes.SelectClientVrnController.show("").url}'" in {
+      element(Selectors.tryAgainLink).attr("href") shouldBe controllers.agent.routes.SelectClientVrnController.show("").url
     }
 
     "have a form" which {

@@ -16,44 +16,109 @@
 
 package controllers.agent
 
-import assets.messages.{ClientVrnPageMessages => Messages}
 import common.SessionKeys
-import config.ErrorHandler
 import controllers.ControllerBaseSpec
 import mocks.MockAuth
-import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
 class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth {
 
-  object TestClientVrnControllerSpec extends SelectClientVrnController(
+  object TestClientVrnController extends SelectClientVrnController(
     messagesApi,
     mockAgentOnlyAuthPredicate,
-    app.injector.instanceOf[ErrorHandler],
+    serviceErrorHandler,
     mockConfig
   )
 
-  "Calling the .show action" when {
+  "Calling the .show() action" when {
 
-    "the user is an authorised Agent" should {
+    "a valid redirect URL is provided" when {
 
-      lazy val result = TestClientVrnControllerSpec.show(request)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      val redirectUrl = "/manage-vat-account"
 
-      "return 200" in {
-        mockAgentAuthorised()
-        status(result) shouldBe Status.OK
+      "there is a redirect URL currently in session" should {
+
+        lazy val result = TestClientVrnController.show(redirectUrl)(request.withSession(
+          SessionKeys.redirectUrl -> "/homepage"
+        ))
+
+        "return 200" in {
+          mockAgentAuthorised()
+          status(result) shouldBe Status.OK
+        }
+
+        "return HTML" in {
+          contentType(result) shouldBe Some("text/html")
+          charset(result) shouldBe Some("utf-8")
+        }
+
+        "not add the requested redirect URL to the session" in {
+          session(result).get(SessionKeys.redirectUrl) shouldBe None
+        }
       }
 
-      "return HTML" in {
-        contentType(result) shouldBe Some("text/html")
-        charset(result) shouldBe Some("utf-8")
+      "there is no redirect URL currently in session" should {
+
+        lazy val result = TestClientVrnController.show(redirectUrl)(request)
+
+        "return 200" in {
+          mockAgentAuthorised()
+          status(result) shouldBe Status.OK
+        }
+
+        "return HTML" in {
+          contentType(result) shouldBe Some("text/html")
+          charset(result) shouldBe Some("utf-8")
+        }
+
+        "add the redirect URL to the session" in {
+          session(result).get(SessionKeys.redirectUrl) shouldBe Some(redirectUrl)
+        }
+      }
+    }
+
+    "an invalid redirect URL is provided" when {
+
+      "there is a redirect URL currently in session" should {
+
+        lazy val result = TestClientVrnController.show("www.google.com")(request.withSession(
+          SessionKeys.redirectUrl -> "/homepage"
+        ))
+
+        "return 200" in {
+          mockAgentAuthorised()
+          status(result) shouldBe Status.OK
+        }
+
+        "return HTML" in {
+          contentType(result) shouldBe Some("text/html")
+          charset(result) shouldBe Some("utf-8")
+        }
+
+        "not add the requested redirect URL to the session" in {
+          session(result).get(SessionKeys.redirectUrl) shouldBe None
+        }
       }
 
-      "render the Client Vrn Page" in {
-        document.select("h1").text shouldBe Messages.heading
+      "there is no redirect URL currently in session" should {
+
+        lazy val result = TestClientVrnController.show("www.google.com")(request)
+
+        "return 500" in {
+          mockAgentAuthorised()
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+        }
+
+        "return HTML" in {
+          contentType(result) shouldBe Some("text/html")
+          charset(result) shouldBe Some("utf-8")
+        }
+
+        "not add the requested redirect URL to the session" in {
+          session(result).get(SessionKeys.redirectUrl) shouldBe None
+        }
       }
     }
   }
@@ -65,7 +130,7 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth {
       "valid data is posted" should {
 
         lazy val request = FakeRequest("POST", "/").withFormUrlEncodedBody(("vrn", "123456789"))
-        lazy val result = TestClientVrnControllerSpec.submit(request)
+        lazy val result = TestClientVrnController.submit(request)
 
         "return 303" in {
           mockAgentAuthorised()
@@ -84,12 +149,47 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth {
       "invalid data is posted" should {
 
         lazy val request = FakeRequest("POST", "/").withFormUrlEncodedBody(("vrn", ""))
-        lazy val result = TestClientVrnControllerSpec.submit(request)
+        lazy val result = TestClientVrnController.submit(request)
 
         "return 400" in {
           mockAgentAuthorised()
           status(result) shouldBe Status.BAD_REQUEST
         }
+      }
+    }
+  }
+
+  "The extractRedirectUrl() function" when {
+
+    "a valid relative redirect URL is provided" should {
+
+      "return the URL" in {
+        val result = TestClientVrnController.extractRedirectUrl("/homepage")
+        result shouldBe Some("/homepage")
+      }
+    }
+
+    "a valid absolute redirect URL is provided" should {
+
+      "return the URL" in {
+        val result = TestClientVrnController.extractRedirectUrl("http://localhost:9149/homepage")
+        result shouldBe Some("http://localhost:9149/homepage")
+      }
+    }
+
+    "an invalid redirect URL is provided" should {
+
+      "return None" in {
+        val result = TestClientVrnController.extractRedirectUrl("http://www.google.com")
+        result shouldBe None
+      }
+    }
+
+    "an exception is thrown when trying to construct a continue URL" should {
+
+      "return None" in {
+        val result = TestClientVrnController.extractRedirectUrl("99")
+        result shouldBe None
       }
     }
   }

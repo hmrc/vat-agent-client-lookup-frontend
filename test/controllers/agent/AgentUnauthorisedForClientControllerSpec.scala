@@ -84,8 +84,8 @@ class AgentUnauthorisedForClientControllerSpec extends ControllerBaseSpec with M
         status(result) shouldBe Status.SEE_OTHER
       }
 
-      s"redirect to ${controllers.agent.routes.SelectClientVrnController.show().url}" in {
-        redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show().url)
+      s"redirect to ${controllers.agent.routes.SelectClientVrnController.show("").url}" in {
+        redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show("").url)
       }
     }
 

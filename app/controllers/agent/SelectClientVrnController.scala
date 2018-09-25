@@ -25,6 +25,7 @@ import forms.ClientVrnForm
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
+import uk.gov.hmrc.play.binders.ContinueUrl
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
@@ -35,13 +36,23 @@ class SelectClientVrnController @Inject()(val messagesApi: MessagesApi,
                                           val serviceErrorHandler: ErrorHandler,
                                           implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val show: Action[AnyContent] = authenticate.async {
+  def show(redirectUrl: String): Action[AnyContent] = authenticate.async {
     implicit agent =>
-      Future.successful(Ok(views.html.agent.selectClientVrn(ClientVrnForm.form)))
+      agent.session.get(SessionKeys.redirectUrl) match {
+        case Some(_) =>
+          Future.successful(Ok(views.html.agent.selectClientVrn(ClientVrnForm.form)))
+        case None =>
+          extractRedirectUrl(redirectUrl) match {
+            case Some(url) =>
+              Future.successful(Ok(views.html.agent.selectClientVrn(ClientVrnForm.form))
+                .addingToSession(SessionKeys.redirectUrl -> url))
+            case None =>
+              Future.successful(serviceErrorHandler.showInternalServerError)
+          }
+      }
   }
 
   val submit: Action[AnyContent] = authenticate.async {
-
     implicit agent =>
       ClientVrnForm.form.bindFromRequest().fold(
         error => {
@@ -54,5 +65,21 @@ class SelectClientVrnController @Inject()(val messagesApi: MessagesApi,
             .addingToSession(SessionKeys.clientVRN -> data.vrn))
         }
       )
+  }
+
+  private[controllers] def extractRedirectUrl(url: String): Option[String] = {
+    try {
+      val continueUrl = ContinueUrl(url)
+      if (continueUrl.isRelativeUrl || url.startsWith(appConfig.environmentBase)) {
+        Some(url)
+      } else {
+        Logger.warn("[JourneySetupController][journeySetup] redirectUrl was empty or an invalid absolute url")
+        None
+      }
+    } catch {
+      case e: Exception =>
+        Logger.warn("[JourneySetupController][journeySetup] couldn't create ContinueUrl from what was provided.", e)
+        None
+    }
   }
 }

@@ -51,7 +51,7 @@ s"${appConfig.agentInvitationsFastTrack}?continue=${URLEncoder.encode(s"${appCon
       @messages("unauthorised.agentForClient.enterDetails")
 
       <a data-journey-click="unauthorised:try-again:unauthorised-for-client"
-         href="@controllers.agent.routes.SelectClientVrnController.show()">
+         href="@controllers.agent.routes.SelectClientVrnController.show("")">
            @messages("unauthorised.agentForClient.tryAgain")</a>@messages("common.fullStop")
     </p>
 

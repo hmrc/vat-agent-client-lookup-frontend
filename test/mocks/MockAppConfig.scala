@@ -39,7 +39,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val signOutUrl: String = "/sign-out"
   override val unauthorisedSignOutUrl = "/unauthorised-sign-out"
 
-  override val environmentBase: String = ""
+  override val environmentBase: String = "http://localhost:9149"
 
   override def routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchToLanguage(lang)
   override def languageMap: Map[String, Lang] = Map(

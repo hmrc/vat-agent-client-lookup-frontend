@@ -67,7 +67,7 @@ class AuthoriseAsAgentWithClient @Inject()(enrolmentsAuthService: EnrolmentsAuth
         }
       case _ =>
         Logger.warn(s"[AuthoriseAsAgentWithClient][invokeBlock] - No Client VRN in session, redirecting to Select Client page")
-        Future.successful(Redirect(controllers.agent.routes.SelectClientVrnController.show()))
+        Future.successful(Redirect(controllers.agent.routes.SelectClientVrnController.show("")))
     }
   }
 }
