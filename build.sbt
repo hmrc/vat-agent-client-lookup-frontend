@@ -18,13 +18,13 @@ import sbt._
 import uk.gov.hmrc.DefaultBuildSettings._
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import uk.gov.hmrc.versioning.SbtGitVersioning
-import uk.gov.hmrc.SbtAutoBuildPlugin
+import uk.gov.hmrc.{SbtArtifactory, SbtAutoBuildPlugin}
 import play.core.PlayVersion
 import sbt.Tests.{Group, SubProcess}
 
 val appName = "vat-agent-client-lookup-frontend"
 
-val bootstrapPlayVersion       = "1.7.0"
+val bootstrapPlayVersion       = "3.8.0"
 val govTemplateVersion         = "5.22.0"
 val playPartialsVersion        = "6.1.0"
 val authClientVersion          = "2.6.0"
@@ -32,12 +32,12 @@ val playUiVersion              = "7.19.0"
 val playLanguageVersion        = "3.4.0"
 val playWhiteListFilterVersion = "2.0.0"
 val scalaTestPlusVersion       = "2.0.0"
-val hmrcTestVersion            = "3.0.0"
-val scalatestVersion           = "3.0.0"
+val hmrcTestVersion            = "3.1.0"
+val scalatestVersion           = "3.0.1"
 val pegdownVersion             = "1.6.0"
-val jsoupVersion               = "1.10.2"
+val jsoupVersion               = "1.10.3"
 val mockitoVersion             = "2.13.0"
-val scalaMockVersion           = "3.5.0"
+val scalaMockVersion           = "3.6.0"
 val wiremockVersion            = "2.6.0"
 
 val compile = Seq(
@@ -102,7 +102,7 @@ def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] = tests map {
 
 
 lazy val microservice = Project(appName, file("."))
-  .enablePlugins(Seq(play.sbt.PlayScala,SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins : _*)
+  .enablePlugins(Seq(play.sbt.PlayScala,SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory) ++ plugins : _*)
   .settings(PlayKeys.playDefaultPort := 9149)
   .settings(playSettings : _*)
   .settings(coverageSettings: _*)
@@ -113,6 +113,7 @@ lazy val microservice = Project(appName, file("."))
     Keys.fork in Test := true,
     javaOptions in Test += "-Dlogger.resource=logback-test.xml",
     scalaVersion := "2.11.11",
+    majorVersion := 0,
     libraryDependencies ++= appDependencies,
     retrieveManaged := true,
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
