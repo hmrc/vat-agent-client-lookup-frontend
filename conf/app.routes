@@ -5,10 +5,10 @@ GET        /language/:lang                              controllers.LanguageCont
 GET        /sign-out                                    controllers.SignOutController.signOut(authorised: Boolean)
 GET        /time-out                                    controllers.SignOutController.timeout
 
-GET        /client-vat-number                           controllers.agent.SelectClientVrnController.show(redirectUrl: String)
+GET        /client-vat-number                           controllers.agent.SelectClientVrnController.show(redirectUrl: String ?= "")
 POST       /client-vat-number                           controllers.agent.SelectClientVrnController.submit
 
-GET        /unauthorised-for-client                     controllers.agent.AgentUnauthorisedForClientController.show
+GET        /unauthorised-for-client                     controllers.agent.AgentUnauthorisedForClientController.show(redirectUrl: String ?= "")
 
 GET        /change-client-vat-number                    controllers.agent.ConfirmClientVrnController.changeClient
 GET        /confirm-client-vat-number                   controllers.agent.ConfirmClientVrnController.show

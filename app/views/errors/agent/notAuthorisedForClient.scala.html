@@ -19,7 +19,7 @@
 @import common.EnrolmentKeys
 @import java.net.URLEncoder
 
-@(vrn: String)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+@(vrn: String, redirectUrl: String)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @postToInvitations = @{
 s"${appConfig.agentInvitationsFastTrack}?continue=${URLEncoder.encode(s"${appConfig.signInContinueBaseUrl}${controllers.agent.routes.ConfirmClientVrnController.show().url}", "UTF-8")}"
@@ -51,7 +51,7 @@ s"${appConfig.agentInvitationsFastTrack}?continue=${URLEncoder.encode(s"${appCon
       @messages("unauthorised.agentForClient.enterDetails")
 
       <a data-journey-click="unauthorised:try-again:unauthorised-for-client"
-         href="@controllers.agent.routes.SelectClientVrnController.show("")">
+         href="@controllers.agent.routes.SelectClientVrnController.show(redirectUrl)">
            @messages("unauthorised.agentForClient.tryAgain")</a>@messages("common.fullStop")
     </p>
 

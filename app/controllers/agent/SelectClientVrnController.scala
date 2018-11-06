@@ -16,17 +16,15 @@
 
 package controllers.agent
 
-import javax.inject.{Inject, Singleton}
-
 import common.SessionKeys
 import config.{AppConfig, ErrorHandler}
+import controllers.BaseController
 import controllers.predicates.AuthoriseAsAgentOnly
 import forms.ClientVrnForm
+import javax.inject.{Inject, Singleton}
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.MessagesApi
 import play.api.mvc._
-import uk.gov.hmrc.play.binders.ContinueUrl
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
@@ -34,7 +32,7 @@ import scala.concurrent.Future
 class SelectClientVrnController @Inject()(val messagesApi: MessagesApi,
                                           val authenticate: AuthoriseAsAgentOnly,
                                           val serviceErrorHandler: ErrorHandler,
-                                          implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                          implicit val appConfig: AppConfig) extends BaseController {
 
   def show(redirectUrl: String): Action[AnyContent] = authenticate.async {
     implicit agent =>
@@ -65,21 +63,5 @@ class SelectClientVrnController @Inject()(val messagesApi: MessagesApi,
             .addingToSession(SessionKeys.clientVRN -> data.vrn))
         }
       )
-  }
-
-  private[controllers] def extractRedirectUrl(url: String): Option[String] = {
-    try {
-      val continueUrl = ContinueUrl(url)
-      if (continueUrl.isRelativeUrl || url.startsWith(appConfig.environmentBase)) {
-        Some(url)
-      } else {
-        Logger.warn("[JourneySetupController][journeySetup] redirectUrl was empty or an invalid absolute url")
-        None
-      }
-    } catch {
-      case e: Exception =>
-        Logger.warn("[JourneySetupController][journeySetup] couldn't create ContinueUrl from what was provided.", e)
-        None
-    }
   }
 }
