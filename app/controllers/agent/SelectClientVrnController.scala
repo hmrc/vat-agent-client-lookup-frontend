@@ -26,41 +26,39 @@ import play.api.Logger
 import play.api.i18n.MessagesApi
 import play.api.mvc._
 
-import scala.concurrent.Future
-
 @Singleton
 class SelectClientVrnController @Inject()(val messagesApi: MessagesApi,
                                           val authenticate: AuthoriseAsAgentOnly,
                                           val serviceErrorHandler: ErrorHandler,
                                           implicit val appConfig: AppConfig) extends BaseController {
 
-  def show(redirectUrl: String): Action[AnyContent] = authenticate.async {
+  def show(redirectUrl: String): Action[AnyContent] = authenticate {
     implicit agent =>
       agent.session.get(SessionKeys.redirectUrl) match {
         case Some(_) =>
-          Future.successful(Ok(views.html.agent.selectClientVrn(ClientVrnForm.form)))
+          Ok(views.html.agent.selectClientVrn(ClientVrnForm.form))
         case None =>
           extractRedirectUrl(redirectUrl) match {
             case Some(url) =>
-              Future.successful(Ok(views.html.agent.selectClientVrn(ClientVrnForm.form))
-                .addingToSession(SessionKeys.redirectUrl -> url))
+              Ok(views.html.agent.selectClientVrn(ClientVrnForm.form))
+                .addingToSession(SessionKeys.redirectUrl -> url)
             case None =>
-              Future.successful(serviceErrorHandler.showInternalServerError)
+              serviceErrorHandler.showInternalServerError
           }
       }
   }
 
-  val submit: Action[AnyContent] = authenticate.async {
+  val submit: Action[AnyContent] = authenticate {
     implicit agent =>
       ClientVrnForm.form.bindFromRequest().fold(
         error => {
           Logger.debug(s"[SelectClientVrnController][submit] Error")
-          Future.successful(BadRequest(views.html.agent.selectClientVrn(error)))
+          BadRequest(views.html.agent.selectClientVrn(error))
         },
         data => {
           Logger.debug(s"[SelectClientVrnController][submit] Success")
-          Future.successful(Redirect(controllers.agent.routes.ConfirmClientVrnController.show())
-            .addingToSession(SessionKeys.clientVRN -> data.vrn))
+          Redirect(controllers.agent.routes.ConfirmClientVrnController.show())
+            .addingToSession(SessionKeys.clientVRN -> data.vrn)
         }
       )
   }

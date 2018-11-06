@@ -26,8 +26,6 @@ import javax.inject.{Inject, Singleton}
 import play.api.i18n.MessagesApi
 import play.api.mvc._
 
-import scala.concurrent.Future
-
 @Singleton
 class AgentUnauthorisedForClientController @Inject()(val authenticate: AuthoriseAsAgentOnly,
                                                      val serviceErrorHandler: ErrorHandler,
@@ -35,7 +33,7 @@ class AgentUnauthorisedForClientController @Inject()(val authenticate: Authorise
                                                      implicit val appConfig: AppConfig,
                                                      implicit val messagesApi: MessagesApi) extends BaseController {
 
-  def show(redirectUrl: String = ""): Action[AnyContent] = authenticate.async {
+  def show(redirectUrl: String = ""): Action[AnyContent] = authenticate {
     implicit agent => {
       val redirectLink = extractRedirectUrl(redirectUrl).getOrElse("")
       agent.session.get(SessionKeys.clientVRN) match {
@@ -44,10 +42,10 @@ class AgentUnauthorisedForClientController @Inject()(val authenticate: Authorise
             AuthenticateAgentAuditModel(agent.arn, vrn, isAuthorisedForClient = false),
             Some(controllers.agent.routes.ConfirmClientVrnController.show().url)
           )
-          Future.successful(Ok(views.html.errors.agent.notAuthorisedForClient(vrn, redirectLink)))
+          Ok(views.html.errors.agent.notAuthorisedForClient(vrn, redirectLink))
 
         case _ =>
-          Future.successful(Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectLink)))
+          Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectLink))
       }
     }
   }
