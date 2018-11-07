@@ -114,7 +114,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           }
 
           "redirect to Select Client VRN" in {
-            redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show("").url)
+            redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show().url)
           }
         }
       }
@@ -146,7 +146,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           }
 
           "redirect to the Select Your Client show action" in {
-            redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show("").url)
+            redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show().url)
           }
 
           "have removed the Clients VRN from session" in {

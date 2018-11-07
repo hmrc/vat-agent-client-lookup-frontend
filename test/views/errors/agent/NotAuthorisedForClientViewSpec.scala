@@ -44,7 +44,9 @@ class NotAuthorisedForClientViewSpec extends ViewBaseSpec {
       val button = "#content .button"
     }
 
-    lazy val view = views.html.errors.agent.notAuthorisedForClient(vrn)(request, messages, mockConfig)
+    val redirectUrl = "/Some/Redirect"
+
+    lazy val view = views.html.errors.agent.notAuthorisedForClient(vrn, redirectUrl)(request, messages, mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -67,8 +69,8 @@ class NotAuthorisedForClientViewSpec extends ViewBaseSpec {
       elementText(Selectors.tryAgain) shouldBe Messages.tryAgain
     }
 
-    s"have a link to '${controllers.agent.routes.SelectClientVrnController.show("").url}'" in {
-      element(Selectors.tryAgainLink).attr("href") shouldBe controllers.agent.routes.SelectClientVrnController.show("").url
+    s"have a link to '${controllers.agent.routes.SelectClientVrnController.show(redirectUrl).url}'" in {
+      element(Selectors.tryAgainLink).attr("href") shouldBe controllers.agent.routes.SelectClientVrnController.show(redirectUrl).url
     }
 
     "have a form" which {

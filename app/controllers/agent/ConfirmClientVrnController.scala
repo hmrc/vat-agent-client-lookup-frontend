@@ -57,25 +57,21 @@ class ConfirmClientVrnController @Inject()(val messagesApi: MessagesApi,
       }
   }
 
-  def changeClient: Action[AnyContent] = authenticate.async {
+  def changeClient: Action[AnyContent] = authenticate {
     implicit user =>
-      Future.successful(
-        Redirect(controllers.agent.routes.SelectClientVrnController.show(""))
-          .removingFromSession(SessionKeys.clientVRN)
-      )
+      Redirect(controllers.agent.routes.SelectClientVrnController.show())
+        .removingFromSession(SessionKeys.clientVRN)
   }
 
-  def redirectToSessionUrl: Action[AnyContent] = authenticate.async {
+  def redirectToSessionUrl: Action[AnyContent] = authenticate {
     implicit user =>
-      Future.successful(
-        user.session.get(SessionKeys.redirectUrl) match {
-          case Some(redirectUrl) => Redirect(redirectUrl)
-            .removingFromSession(SessionKeys.redirectUrl)
+      user.session.get(SessionKeys.redirectUrl) match {
+        case Some(redirectUrl) => Redirect(redirectUrl)
+          .removingFromSession(SessionKeys.redirectUrl)
 
-          case _ =>
-            Logger.debug("[ConfirmClientVrnController][show] - No redirect URL was found in session")
-            errorHandler.showInternalServerError
-        }
-      )
+        case _ =>
+          Logger.debug("[ConfirmClientVrnController][show] - No redirect URL was found in session")
+          errorHandler.showInternalServerError
+      }
   }
 }

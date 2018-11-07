@@ -20,33 +20,33 @@ import audit.AuditService
 import audit.models.AuthenticateAgentAuditModel
 import common.SessionKeys
 import config.{AppConfig, ErrorHandler}
+import controllers.BaseController
 import controllers.predicates.AuthoriseAsAgentOnly
 import javax.inject.{Inject, Singleton}
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.MessagesApi
 import play.api.mvc._
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-
-import scala.concurrent.Future
 
 @Singleton
 class AgentUnauthorisedForClientController @Inject()(val authenticate: AuthoriseAsAgentOnly,
                                                      val serviceErrorHandler: ErrorHandler,
                                                      val auditService: AuditService,
                                                      implicit val appConfig: AppConfig,
-                                                     implicit val messagesApi: MessagesApi) extends FrontendController with I18nSupport {
+                                                     implicit val messagesApi: MessagesApi) extends BaseController {
 
-  val show: Action[AnyContent] = authenticate.async {
-    implicit agent =>
+  def show(redirectUrl: String = ""): Action[AnyContent] = authenticate {
+    implicit agent => {
+      val redirectLink = extractRedirectUrl(redirectUrl).getOrElse("")
       agent.session.get(SessionKeys.clientVRN) match {
         case Some(vrn) =>
           auditService.extendedAudit(
             AuthenticateAgentAuditModel(agent.arn, vrn, isAuthorisedForClient = false),
             Some(controllers.agent.routes.ConfirmClientVrnController.show().url)
           )
-          Future.successful(Ok(views.html.errors.agent.notAuthorisedForClient(vrn)))
+          Ok(views.html.errors.agent.notAuthorisedForClient(vrn, redirectLink))
 
         case _ =>
-          Future.successful(Redirect(controllers.agent.routes.SelectClientVrnController.show("")))
+          Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectLink))
       }
+    }
   }
 }

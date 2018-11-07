@@ -53,7 +53,7 @@ class AuthoriseAsAgentWithClientSpec extends MockAuth {
       }
 
       "redirect to the Select Your Client controller" in {
-        redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show("").url)
+        redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show().url)
       }
     }
 

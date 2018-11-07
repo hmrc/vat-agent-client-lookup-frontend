@@ -46,7 +46,7 @@ class AgentUnauthorisedForClientControllerSpec extends ControllerBaseSpec with M
 
     "A Clients VRN is in session" should {
 
-      lazy val result = TestUnauthorisedForClientController.show(fakeRequestWithVrnAndRedirectUrl)
+      lazy val result = TestUnauthorisedForClientController.show()(fakeRequestWithVrnAndRedirectUrl)
       lazy val document = Jsoup.parse(bodyOf(result))
 
       "return 200" in {
@@ -77,18 +77,33 @@ class AgentUnauthorisedForClientControllerSpec extends ControllerBaseSpec with M
 
     "A Clients VRN is NOT held in session" should {
 
-      lazy val result = TestUnauthorisedForClientController.show(request)
+      lazy val result = TestUnauthorisedForClientController.show()(request)
 
       "return 303 (SEE_OTHER)" in {
         mockAgentAuthorised()
         status(result) shouldBe Status.SEE_OTHER
       }
 
-      s"redirect to ${controllers.agent.routes.SelectClientVrnController.show("").url}" in {
-        redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show("").url)
+      s"redirect to ${controllers.agent.routes.SelectClientVrnController.show().url}" in {
+        redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show().url)
       }
     }
 
-    unauthenticatedCheck(TestUnauthorisedForClientController.show)
+    "A Clients VRN is NOT held in session and a Redirect URL is provided" should {
+
+      val redirectUrl = "/some/redirect"
+      lazy val result = TestUnauthorisedForClientController.show(redirectUrl)(request)
+
+      "return 303 (SEE_OTHER)" in {
+        mockAgentAuthorised()
+        status(result) shouldBe Status.SEE_OTHER
+      }
+
+      s"redirect to ${controllers.agent.routes.SelectClientVrnController.show(redirectUrl).url}" in {
+        redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show(redirectUrl).url)
+      }
+    }
+
+    unauthenticatedCheck(TestUnauthorisedForClientController.show())
   }
 }
