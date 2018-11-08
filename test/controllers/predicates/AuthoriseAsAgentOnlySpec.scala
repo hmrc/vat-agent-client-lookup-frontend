@@ -69,10 +69,10 @@ class AuthoriseAsAgentOnlySpec extends ControllerBaseSpec {
 
     "the user is not an Agent" should {
 
-      "return 403 (Forbidden)" in {
+      "return 500 (Internal server error)" in {
         mockIndividualAuthorised()
         val result = target(request)
-        status(result) shouldBe Status.FORBIDDEN
+        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }
     }
 
@@ -96,10 +96,10 @@ class AuthoriseAsAgentOnlySpec extends ControllerBaseSpec {
 
     "a user with an authorisation exception" should {
 
-      "return 403 (Forbidden)" in {
+      "return 500 (Internal server error)" in {
         mockUnauthorised()
         val result = target(request)
-        status(result) shouldBe Status.FORBIDDEN
+        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }
     }
   }

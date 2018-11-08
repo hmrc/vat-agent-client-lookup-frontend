@@ -62,7 +62,7 @@ trait BasePageISpec extends IntegrationBaseSpec {
 
         res should have(
           httpStatus(INTERNAL_SERVER_ERROR),
-          pageTitle(Messages("global.error.InternalServerError500.title"))
+          pageTitle(Messages("standardError.title"))
         )
       }
     }

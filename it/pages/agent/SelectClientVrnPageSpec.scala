@@ -72,7 +72,7 @@ class SelectClientVrnPageSpec extends BasePageISpec {
 
     "the user is a Principle Entity and not an Agent" should {
 
-      "render the Unauthorised page" in {
+      "render the Technical Difficulties page" in {
 
         given.user.isAuthenticated
 
@@ -80,8 +80,8 @@ class SelectClientVrnPageSpec extends BasePageISpec {
         val res = show
 
         res should have(
-          httpStatus(FORBIDDEN),
-          pageTitle(Messages("unauthorised.title"))
+          httpStatus(INTERNAL_SERVER_ERROR),
+          pageTitle(Messages("standardError.title"))
         )
       }
     }
@@ -160,7 +160,7 @@ class SelectClientVrnPageSpec extends BasePageISpec {
 
     "the user is a Principle Entity and not an Agent" should {
 
-      "render the Unauthorised page" in {
+      "render the Technical Difficulties page" in {
 
         given.user.isAuthenticated
 
@@ -168,8 +168,8 @@ class SelectClientVrnPageSpec extends BasePageISpec {
         val res = submit(validData)
 
         res should have(
-          httpStatus(FORBIDDEN),
-          pageTitle(Messages("unauthorised.title"))
+          httpStatus(INTERNAL_SERVER_ERROR),
+          pageTitle(Messages("standardError.title"))
         )
       }
     }
