@@ -71,7 +71,7 @@ class ConfirmClientVrnPageSpec extends BasePageISpec {
 
               res should have(
                 httpStatus(INTERNAL_SERVER_ERROR),
-                pageTitle(Messages("global.error.InternalServerError500.title"))
+                pageTitle(Messages("standardError.title"))
               )
             }
           }

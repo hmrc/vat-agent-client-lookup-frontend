@@ -48,8 +48,8 @@ class AuthoriseAsAgentOnly @Inject()(enrolmentsAuthService: EnrolmentsAuthServic
             Logger.debug("[AuthoriseAsAgentOnly][invokeBlock] - Is an Agent, checking HMRC-AS-AGENT enrolment")
             checkAgentEnrolment(allEnrolments, block)
           case (_, _) =>
-            Logger.debug("[AuthoriseAsAgentOnly][invokeBlock] - Is NOT an Agent, rendering Unauthorised view")
-            Future.successful(Forbidden(views.html.errors.unauthorised()))
+            Logger.debug("[AuthoriseAsAgentOnly][invokeBlock] - Is NOT an Agent, rendering Technical Difficulties view")
+            Future.successful(errorHandler.showInternalServerError)
         }
       case _ =>
         Logger.warn("[AuthoriseAsAgentOnly][invokeBlock] - Missing affinity group")
@@ -59,8 +59,8 @@ class AuthoriseAsAgentOnly @Inject()(enrolmentsAuthService: EnrolmentsAuthServic
         Logger.debug("[AuthoriseAsAgentOnly][invokeBlock] - No Active Session, rendering Session Timeout view")
         Unauthorized(views.html.errors.sessionTimeout())
       case _: AuthorisationException =>
-        Logger.warn("[AuthoriseAsAgentOnly][invokeBlock] - Authorisation Exception, rendering Unauthorised view")
-        Forbidden(views.html.errors.unauthorised())
+        Logger.warn("[AuthoriseAsAgentOnly][invokeBlock] - Authorisation Exception, rendering Technical Difficulties view")
+        errorHandler.showInternalServerError
     }
   }
 
