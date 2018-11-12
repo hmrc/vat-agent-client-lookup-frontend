@@ -1,5 +1,5 @@
 # Add all the application routes to the app.routes file
-->         /vat-through-software/agent-lookup      app.Routes
+->         /vat-through-software/representative    app.Routes
 ->         /                                       health.Routes
 ->     	   /template                               template.Routes
 
