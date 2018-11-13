@@ -17,9 +17,9 @@
 package forms
 
 import models.agent.ClientVrnModel
-import uk.gov.hmrc.play.test.UnitSpec
+import utils.TestUtil
 
-class ClientVrnFormSpec extends UnitSpec {
+class ClientVrnFormSpec extends TestUtil {
 
   "Binding a form with invalid data" when {
 
@@ -37,13 +37,49 @@ class ClientVrnFormSpec extends UnitSpec {
       }
 
       "have an error with the correct message" in {
-        form.errors.head.message shouldBe "clientVrnForm.vrn.missing"
+        form.errors.head.message shouldBe "clientVrnForm.error.missing"
       }
     }
 
-    "the VRN is not in the correct format" should {
+    "the VRN is too long" should {
 
-      val invalidVrn = Map("vrn" -> "dsa")
+      val longVrn = Map("vrn" -> "223344556677")
+      val form = ClientVrnForm.form.bind(longVrn)
+
+      "result in a form with errors" in {
+        form.hasErrors shouldBe true
+      }
+
+      "throw one error" in {
+        form.errors.size shouldBe 1
+      }
+
+      "have an error with the correct message" in {
+        form.errors.head.message shouldBe "clientVrnForm.error.tooLong"
+      }
+    }
+
+    "the VRN is too short" should {
+
+      val shortVrn = Map("vrn" -> "223")
+      val form = ClientVrnForm.form.bind(shortVrn)
+
+      "result in a form with errors" in {
+        form.hasErrors shouldBe true
+      }
+
+      "throw one error" in {
+        form.errors.size shouldBe 1
+      }
+
+      "have an error with the correct message" in {
+        form.errors.head.message shouldBe "clientVrnForm.error.tooShort"
+      }
+    }
+
+    "the VRN is not valid" should {
+
+      val invalidVrn = Map("vrn" -> "123456789")
       val form  = ClientVrnForm.form.bind(invalidVrn)
 
       "result in a form with errors" in {
@@ -55,14 +91,14 @@ class ClientVrnFormSpec extends UnitSpec {
       }
 
       "have an error with the correct message" in {
-        form.errors.head.message shouldBe "clientVrnForm.vrn.invalid"
+        form.errors.head.message shouldBe "clientVrnForm.error.invalid"
       }
     }
   }
 
   "Binding a form with valid data" should {
 
-    val data = Map("vrn" -> "123456789")
+    val data = Map("vrn" -> "999969202")
     val form = ClientVrnForm.form.bind(data)
 
     "result in a form with no errors" in {
@@ -70,15 +106,16 @@ class ClientVrnFormSpec extends UnitSpec {
     }
 
     "generate the correct model" in {
-      form.value shouldBe Some(ClientVrnModel("123456789"))
+      form.value shouldBe Some(ClientVrnModel("999969202"))
     }
   }
 
   "A form built from a valid model" should {
+
     "generate the correct mapping" in {
-      val model = ClientVrnModel("123456789")
+      val model = ClientVrnModel("999969202")
       val form = ClientVrnForm.form.fill(model)
-      form.data shouldBe Map("vrn" -> "123456789")
+      form.data shouldBe Map("vrn" -> "999969202")
     }
   }
 }

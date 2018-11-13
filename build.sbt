@@ -39,6 +39,7 @@ val jsoupVersion               = "1.10.3"
 val mockitoVersion             = "2.13.0"
 val scalaMockVersion           = "3.6.0"
 val wiremockVersion            = "2.6.0"
+val referenceCheckerVersion    = "2.4.0"
 
 val compile = Seq(
   ws,
@@ -48,7 +49,8 @@ val compile = Seq(
   "uk.gov.hmrc" %% "play-partials" % playPartialsVersion,
   "uk.gov.hmrc" %% "auth-client" % authClientVersion,
   "uk.gov.hmrc" %% "play-language" % playLanguageVersion,
-  "uk.gov.hmrc" %% "play-whitelist-filter" % playWhiteListFilterVersion
+  "uk.gov.hmrc" %% "play-whitelist-filter" % playWhiteListFilterVersion,
+  "uk.gov.hmrc" %% "reference-checker" % referenceCheckerVersion
 )
 
 def test(scope: String = "test,it"): Seq[ModuleID] = Seq(

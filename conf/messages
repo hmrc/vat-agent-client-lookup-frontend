@@ -36,8 +36,10 @@ clientsVrn.p1 = This is the 9-digit number they received when they registered fo
 clientsVrn.example = For example, ''123456789''
 clientsVrn.label = Client''s VAT Number
 
-clientVrnForm.vrn.missing = Enter your client''s VAT number
-clientVrnForm.vrn.invalid = Enter a valid VAT number
+clientVrnForm.error.missing = Enter your client''s VAT number
+clientVrnForm.error.invalid = Enter a VAT number in the correct format
+clientVrnForm.error.tooLong = You have entered too many numbers
+clientVrnForm.error.tooShort = You have not entered enough numbers
 
 sessionTimeout.title = Your session has timed out
 sessionTimeout.helpOne = To manage your VAT account, you''ll have to
