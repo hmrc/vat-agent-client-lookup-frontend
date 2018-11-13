@@ -59,4 +59,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val timeoutCountdown: Int = 20
 
   override val agentInvitationsFastTrack: String = "/agent-invitations-frontend"
+
+  override val host = "host"
+  override val feedbackUrl: String = "/feedback"
 }

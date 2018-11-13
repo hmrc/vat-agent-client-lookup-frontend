@@ -54,4 +54,6 @@ object ConfigKeys {
 
   val environmentBase:String = "environment-base.url"
 
+  val host:String = "host"
+
 }
