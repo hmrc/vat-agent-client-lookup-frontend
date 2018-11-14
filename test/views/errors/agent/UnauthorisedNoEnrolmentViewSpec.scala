@@ -62,7 +62,8 @@ class UnauthorisedNoEnrolmentViewSpec extends ViewBaseSpec {
     }
 
     s"have a link to sign out" in {
-      element(Selectors.button).attr("href") shouldBe controllers.routes.SignOutController.signOut(authorised = false).url
+      element(Selectors.button).attr("href") shouldBe
+        controllers.routes.SignOutController.signOut(feedbackOnSignOut = false).url
     }
   }
 }

@@ -35,8 +35,8 @@ trait AppConfig extends ServicesConfig {
   val reportAProblemPartialUrl: String
   val reportAProblemNonJSUrl: String
   val agentServicesGovUkGuidance: String
-  val signOutUrl: String
-  val surveyUrl: String
+  val feedbackSignOutUrl: String
+  val feedbackSurveyUrl: String
   val unauthorisedSignOutUrl: String
   val signInUrl: String
   val signInContinueBaseUrl: String
@@ -73,8 +73,8 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
 
   private lazy val governmentGatewayHost: String = getString(Keys.governmentGatewayHost)
 
-  private lazy val surveyBaseUrl = getString(Keys.surveyFrontend) + getString(Keys.surveyContext)
-  override lazy val surveyUrl = s"$surveyBaseUrl/?origin=$contactFormServiceIdentifier"
+  private lazy val feedbackSurveyBase = getString(Keys.surveyFrontend) + getString(Keys.surveyContext)
+  override lazy val feedbackSurveyUrl = s"$feedbackSurveyBase/?origin=$contactFormServiceIdentifier"
 
   private lazy val signInOrigin: String = getString(Keys.appName)
   private lazy val signInBaseUrl: String = getString(Keys.signInBaseUrl)
@@ -85,7 +85,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
       signInContinueBaseUrl + controllers.agent.routes.SelectClientVrnController.show(manageVatCustomerDetailsUrl).url
     ).encodedUrl
 
-  override lazy val signOutUrl: String = s"$governmentGatewayHost/gg/sign-out?continue=$surveyUrl"
+  override lazy val feedbackSignOutUrl: String = s"$governmentGatewayHost/gg/sign-out?continue=$feedbackSurveyUrl"
   override lazy val unauthorisedSignOutUrl: String = s"$governmentGatewayHost/gg/sign-out?continue=$signInContinueUrl"
 
   override def routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchToLanguage(lang)

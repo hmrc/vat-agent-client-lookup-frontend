@@ -59,5 +59,14 @@ class SelectClientVrnViewSpec extends ViewBaseSpec {
         elementText("button") shouldBe BaseMessages.continue
       }
     }
+
+    "have the sign out link in the page header" in {
+      elementText("#sign-out") shouldBe "Sign out"
+    }
+
+    "redirect to the feedback survey on sign out" in {
+      element("#sign-out").attr("href") shouldBe
+        controllers.routes.SignOutController.signOut(feedbackOnSignOut = true).url
+    }
   }
 }

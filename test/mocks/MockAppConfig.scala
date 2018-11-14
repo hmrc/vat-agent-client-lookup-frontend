@@ -31,12 +31,12 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val reportAProblemPartialUrl = ""
   override val reportAProblemNonJSUrl = ""
   override val agentServicesGovUkGuidance = "guidance/get-an-hmrc-agent-services-account"
-  override val surveyUrl: String = "/survey"
+  override val feedbackSurveyUrl: String = "/survey"
 
   override val signInUrl: String = "/sign-in"
   override val signInContinueBaseUrl: String = "/agent-client-lookup-frontend"
 
-  override val signOutUrl: String = "/sign-out"
+  override val feedbackSignOutUrl: String = "/sign-out"
   override val unauthorisedSignOutUrl = "/unauthorised-sign-out"
 
   override val environmentBase: String = "http://localhost:9149"
