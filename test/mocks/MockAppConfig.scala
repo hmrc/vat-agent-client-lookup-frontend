@@ -24,6 +24,8 @@ import play.api.{Configuration, Mode}
 
 class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mode.Test) extends AppConfig {
 
+  override val selfLookup = ""
+
   override val contactHost = ""
   override val assetsPrefix = ""
   override val analyticsToken = ""
@@ -59,4 +61,6 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val timeoutCountdown: Int = 20
 
   override val agentInvitationsFastTrack: String = "/agent-invitations-frontend"
+
+  override val feedbackUrl: String = "/feedback"
 }

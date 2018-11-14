@@ -4,6 +4,11 @@ standardError.title = There is a problem with the service - VAT reporting throug
 standardError.heading = Sorry, there is a problem with the service
 standardError.message = Try again later.
 
+banner.newService = This is a new service – your
+banner.feedback = feedback
+banner.feedbackImprove = will help us to improve it.
+banner.phaseName = BETA
+
 unauthorised.agent.title = You can''t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to
 unauthorised.agent.setUpAccount = set up an agent services account
