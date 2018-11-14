@@ -52,8 +52,8 @@ object ConfigKeys {
 
   val agentInvitationsFastTrack: String = "agent-invitations-fast-track.url"
 
-  val environmentBase:String = "environment-base.url"
+  val environmentBase: String = "environment-base.url"
 
-  val host:String = "host"
+
 
 }
