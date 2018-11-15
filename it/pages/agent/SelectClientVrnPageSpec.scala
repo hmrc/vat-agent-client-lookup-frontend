@@ -47,7 +47,7 @@ class SelectClientVrnPageSpec extends BasePageISpec {
 
           res should have(
             httpStatus(OK),
-            elementText("h1")("What is your client's VAT number?"),
+            elementText("h1")("What is your client’s VAT number?"),
             isElementVisible("#vrn")(isVisible = true)
           )
         }
