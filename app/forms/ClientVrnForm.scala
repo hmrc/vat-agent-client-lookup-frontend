@@ -16,29 +16,25 @@
 
 package forms
 
-import forms.helpers.ConstraintHelper._
 import models.agent.ClientVrnModel
 import play.api.data.Form
 import play.api.data.Forms._
-import play.api.data.validation.{Constraint, Invalid, Valid}
+import uk.gov.hmrc.play.mappers.StopOnFirstFail
+import uk.gov.hmrc.play.mappers.StopOnFirstFail.constraint
+import uk.gov.hmrc.referencechecker.VatReferenceChecker
 
 object ClientVrnForm {
 
-  private val vrnPattern = """^\d{9}$"""
-  private val emptyCheck: Constraint[String] = Constraint("Missing VRN")(vrn =>
-    if (vrn.nonEmpty) Valid else Invalid("clientVrnForm.vrn.missing")
-  )
-  private val invalidVrn: Constraint[String] = Constraint("Invalid VRN")(vrn =>
-    if (vrn.matches(vrnPattern)) Valid else Invalid("clientVrnForm.vrn.invalid")
-  )
-
-  val trimmedVrn: String => String = vrn => vrn.trim
-
   val form: Form[ClientVrnModel] = Form(
     mapping(
-      "vrn" -> text
-        .transform(trimmedVrn, trimmedVrn)
-        .verifying(emptyCheck andThen invalidVrn)
+      "vrn" -> text.verifying(
+          StopOnFirstFail(
+            constraint[String]("clientVrnForm.error.missing", _.length != 0),
+            constraint[String]("clientVrnForm.error.tooLong", _.length <= 9),
+            constraint[String]("clientVrnForm.error.tooShort", _.length >= 9),
+            constraint[String]("clientVrnForm.error.invalid", VatReferenceChecker.isValid)
+          )
+        )
     )(ClientVrnModel.apply)(ClientVrnModel.unapply)
   )
 }

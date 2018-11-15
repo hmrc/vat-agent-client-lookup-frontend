@@ -9,37 +9,39 @@ banner.feedback = feedback
 banner.feedbackImprove = will help us to improve it.
 banner.phaseName = BETA
 
-unauthorised.agent.title = You can''t use this service yet
+unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to
 unauthorised.agent.setUpAccount = set up an agent services account
-unauthorised.agentForClient.title = You''re not authorised for this client
+unauthorised.agentForClient.title = You’re not authorised for this client
 unauthorised.agentForClient.useThisService = To use this service, your client needs to
 unauthorised.agentForClient.authoriseForClient = authorise you as their agent
 unauthorised.agentForClient.enterDetails = If you think you have entered the wrong details you can
 unauthorised.agentForClient.tryAgain = try again
 
 common.confirmAndContinue = Confirm and continue
-common.agentService = Update your client''s VAT details
+common.agentService = Update your client’s VAT details
 common.errorSummary.heading = You have one or more errors
 common.continue = Continue
 common.fullStop = .
 
-confirmClientVrn.title = Confirm your client''s VAT number
-confirmClientVrn.heading = Confirm your client''s VAT number
+confirmClientVrn.title = Confirm your client’s VAT number
+confirmClientVrn.heading = Confirm your client’s VAT number
 confirmClientVrn.name = Client name
 confirmClientVrn.vrn = VAT number
 confirmClientVrn.edit = Edit different client
 
-clientsVrn.title = What is your client''s VAT number?
-clientsVrn.heading = What is your client''s VAT number?
+clientsVrn.title = What is your client’s VAT number?
+clientsVrn.heading = What is your client’s VAT number?
 clientsVrn.p1 = This is the 9-digit number they received when they registered for VAT.
 clientsVrn.example = For example, ''123456789''
-clientsVrn.label = Client''s VAT Number
+clientsVrn.label = Client’s VAT Number
 
-clientVrnForm.vrn.missing = Enter your client''s VAT number
-clientVrnForm.vrn.invalid = Enter a valid VAT number
+clientVrnForm.error.missing = Enter your client’s VAT number
+clientVrnForm.error.invalid = Enter a VAT number in the correct format
+clientVrnForm.error.tooLong = You have entered too many numbers
+clientVrnForm.error.tooShort = You have not entered enough numbers
 
 sessionTimeout.title = Your session has timed out
-sessionTimeout.helpOne = To manage your VAT account, you''ll have to
+sessionTimeout.helpOne = To manage your VAT account, you’ll have to
 sessionTimeout.helpTwo = sign in
 sessionTimeout.helpThree = using your Government Gateway ID.

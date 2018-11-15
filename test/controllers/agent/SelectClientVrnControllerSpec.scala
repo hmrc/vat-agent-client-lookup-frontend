@@ -125,11 +125,11 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth {
 
   "Calling the .submit action" when {
 
-    "the user is an authorised Agent" should {
+    "the user is an authorised Agent" when {
 
       "valid data is posted" should {
 
-        lazy val request = FakeRequest("POST", "/").withFormUrlEncodedBody(("vrn", "123456789"))
+        lazy val request = FakeRequest("POST", "/").withFormUrlEncodedBody(("vrn", "999969202"))
         lazy val result = TestClientVrnController.submit(request)
 
         "return 303" in {
@@ -142,13 +142,13 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth {
         }
 
         "contain the Clients VRN in the session" in {
-          session(result).get(SessionKeys.clientVRN) shouldBe Some("123456789")
+          session(result).get(SessionKeys.clientVRN) shouldBe Some("999969202")
         }
       }
 
       "invalid data is posted" should {
 
-        lazy val request = FakeRequest("POST", "/").withFormUrlEncodedBody(("vrn", ""))
+        lazy val request = FakeRequest("POST", "/").withFormUrlEncodedBody(("vrn", "123456789"))
         lazy val result = TestClientVrnController.submit(request)
 
         "return 400" in {

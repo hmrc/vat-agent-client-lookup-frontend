@@ -47,7 +47,7 @@ class SelectClientVrnPageSpec extends BasePageISpec {
 
           res should have(
             httpStatus(OK),
-            elementText("h1")("What is your client's VAT number?"),
+            elementText("h1")("What is your client’s VAT number?"),
             isElementVisible("#vrn")(isVisible = true)
           )
         }
@@ -122,7 +122,7 @@ class SelectClientVrnPageSpec extends BasePageISpec {
             given.agent.isSignedUpToAgentServices
 
             When("I submit the Client VRN page with invalid data")
-            val res = submit(ClientVrnModel("ABC"))
+            val res = submit(ClientVrnModel("999999999"))
 
             res should have(
               httpStatus(BAD_REQUEST),
@@ -130,12 +130,12 @@ class SelectClientVrnPageSpec extends BasePageISpec {
               //Error Summary
               isElementVisible("#error-summary-display")(isVisible = true),
               isElementVisible("#vrn-error-summary")(isVisible = true),
-              elementText("#vrn-error-summary")("Enter a valid VAT number"),
+              elementText("#vrn-error-summary")("Enter a VAT number in the correct format"),
               elementWithLinkTo("#vrn-error-summary")("#vrn"),
 
               //Error against Input Label
               isElementVisible(".form-field--error .error-notification")(isVisible = true),
-              elementText(".form-field--error .error-notification")("Enter a valid VAT number")
+              elementText(".form-field--error .error-notification")("Enter a VAT number in the correct format")
             )
           }
         }

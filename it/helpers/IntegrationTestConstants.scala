@@ -25,8 +25,7 @@ object IntegrationTestConstants {
   val sessionId = s"stubbed-${UUID.randomUUID}"
   val userId = s"/auth/oid/1234567890"
 
-  val clientVRN = "999999999"
-  val VRN = "111111111"
+  val clientVRN = "999969202"
 
   val website = "www.test.com"
 

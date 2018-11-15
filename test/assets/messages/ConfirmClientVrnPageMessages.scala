@@ -17,8 +17,8 @@
 package assets.messages
 
 object ConfirmClientVrnPageMessages {
-  val title: String = "Confirm your client's VAT number"
-  val heading: String = "Confirm your client's VAT number"
+  val title: String = "Confirm your client’s VAT number"
+  val heading: String = "Confirm your client’s VAT number"
   val name: String = "Client name"
   val vrn: String = "VAT number"
   val edit: String = "Edit different client"

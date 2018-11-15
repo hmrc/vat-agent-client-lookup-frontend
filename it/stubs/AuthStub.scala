@@ -17,7 +17,7 @@
 package stubs
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import helpers.IntegrationTestConstants.VRN
+import helpers.IntegrationTestConstants.clientVRN
 import helpers.WireMockMethods
 import play.api.http.Status.{OK, UNAUTHORIZED}
 import play.api.libs.json.{JsObject, Json}
@@ -70,7 +70,7 @@ object AuthStub extends WireMockMethods {
     "identifiers" -> Json.arr(
       Json.obj(
         "key" -> "VRN",
-        "value" -> VRN
+        "value" -> clientVRN
       )
     )
   )
