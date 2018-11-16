@@ -36,7 +36,7 @@ trait IntegrationBaseSpec extends TestSuite with CustomMatchers
 
   val mockHost: String = WireMockHelper.host
   val mockPort: String = WireMockHelper.wmPort.toString
-  val appContextRoute: String = "/vat-through-software/agent-lookup"
+  val appContextRoute: String = "/vat-through-software/representative"
 
   lazy val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
   implicit lazy val messages: Messages = Messages(Lang("en-GB"), messagesApi)
