@@ -20,7 +20,6 @@ import com.google.inject.{Inject, Singleton}
 import config.AppConfig
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
 import scala.concurrent.Future
 
@@ -28,13 +27,8 @@ import scala.concurrent.Future
 class SignOutController @Inject()(val messagesApi: MessagesApi, implicit val appConfig: AppConfig)
   extends BaseController with I18nSupport {
 
-  def signOut(authorised: Boolean): Action[AnyContent] = Action.async { implicit request =>
-    val redirectUrl: String = if (authorised) appConfig.signOutUrl else appConfig.unauthorisedSignOutUrl
+  def signOut(feedbackOnSignOut: Boolean): Action[AnyContent] = Action.async { implicit request =>
+    val redirectUrl: String = if(feedbackOnSignOut) appConfig.feedbackSignOutUrl else appConfig.unauthorisedSignOutUrl
     Future.successful(Redirect(redirectUrl))
-  }
-
-  val timeout: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Redirect(appConfig.unauthorisedSignOutUrl))
-
   }
 }

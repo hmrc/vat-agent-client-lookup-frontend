@@ -26,33 +26,32 @@ class SignOutControllerSpec extends ControllerBaseSpec {
 
   object TestSignOutController extends SignOutController(messagesApi, mockConfig)
 
-  "navigating to signout page" when {
+  "Navigating to sign out page" when {
 
-    "authorised" should {
-      "return 303 and navigate to the survey url" in {
-        lazy val result: Future[Result] = TestSignOutController.signOut(authorised = true)(request)
+    "feedback on sign out is enabled" should {
 
+      val result: Future[Result] = TestSignOutController.signOut(feedbackOnSignOut = true)(request)
+
+      "return 303" in {
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(mockConfig.signOutUrl)
+      }
+
+      "redirect to the survey page" in {
+        redirectLocation(result) shouldBe Some(mockConfig.feedbackSignOutUrl)
       }
     }
 
-    "unauthorised" should {
-      "return 303 and navigate to sign out url" in {
-        lazy val result: Future[Result] = TestSignOutController.signOut(authorised = false)(request)
+    "feedback on sign out is disabled" should {
 
+      val result: Future[Result] = TestSignOutController.signOut(feedbackOnSignOut = false)(request)
+
+      "return 303" in {
         status(result) shouldBe SEE_OTHER
+      }
+
+      "redirect to the session timeout page" in {
         redirectLocation(result) shouldBe Some(mockConfig.unauthorisedSignOutUrl)
       }
-    }
-  }
-
-  "signing out on timeout" should {
-    "return 303 and navigate to the expected sign out url" in {
-      lazy val result: Future[Result] = TestSignOutController.timeout(request)
-
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(mockConfig.unauthorisedSignOutUrl)
     }
   }
 }

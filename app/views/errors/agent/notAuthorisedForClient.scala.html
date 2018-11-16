@@ -57,6 +57,6 @@ s"${appConfig.agentInvitationsFastTrack}?continue=${URLEncoder.encode(s"${appCon
 
     <a data-journey-click="unauthorised:sign-out:unauthorised-for-client"
        class="button"
-       href="@controllers.routes.SignOutController.signOut(authorised = false)">
+       href="@controllers.routes.SignOutController.signOut(feedbackOnSignOut = true)">
          @messages("base.signOut")</a>
 }

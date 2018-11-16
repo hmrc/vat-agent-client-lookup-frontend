@@ -20,7 +20,8 @@
 
 @views.html.main_template(
     title = messages("unauthorised.agent.title"),
-    bodyClasses = None
+    bodyClasses = None,
+    feedbackOnSignOut = false
 ) {
 
     @headings(messages("unauthorised.agent.title"))
@@ -34,7 +35,7 @@
 
     <a data-journey-click="unauthorised:sign-out:not-enrolled"
        class="button"
-       href="@controllers.routes.SignOutController.signOut(authorised = false)">
+       href="@controllers.routes.SignOutController.signOut(feedbackOnSignOut = false)">
         @messages("base.signOut")
     </a>
 }
