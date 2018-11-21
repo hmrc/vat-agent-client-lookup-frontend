@@ -63,4 +63,6 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val agentInvitationsFastTrack: String = "/agent-invitations-frontend"
 
   override val feedbackUrl: String = "/feedback"
+
+  override val emailVerificationBaseUrl: String = "mockEmailBaseUrl"
 }
