@@ -100,11 +100,13 @@ trait IntegrationBaseSpec extends TestSuite with CustomMatchers
     "play.filters.csrf.header.bypassHeaders.Csrf-Token" -> "nocheck",
     "microservice.services.auth.host" -> mockHost,
     "microservice.services.auth.port" -> mockPort,
-    "microservice.services.vat-subscription.host" -> mockHost,
-    "microservice.services.vat-subscription.port" -> mockPort,
+    "microservice.services.email-verification.host" -> mockHost,
+    "microservice.services.email-verification.port" -> mockPort,
     "microservice.services.manage-vat-subscription-frontend.host" -> mockHost,
     "microservice.services.manage-vat-subscription-frontend.port" -> mockPort,
-    "microservice.services.manage-vat-subscription-frontend.endpoints.customer-details" -> "/customer-details?isAgent=true"
+    "microservice.services.manage-vat-subscription-frontend.endpoints.customer-details" -> "/customer-details?isAgent=true",
+    "microservice.services.vat-subscription.host" -> mockHost,
+    "microservice.services.vat-subscription.port" -> mockPort
   )
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder()

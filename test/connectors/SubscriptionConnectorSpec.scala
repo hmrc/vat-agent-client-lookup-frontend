@@ -18,7 +18,7 @@ package connectors
 
 import assets.BaseTestConstants._
 import assets.CustomerDetailsTestConstants._
-import connectors.httpParsers.ResponseHttpParser.HttpGetResult
+import connectors.httpParsers.ResponseHttpParser.HttpResult
 import mocks.MockHttp
 import models.CustomerDetails
 import play.api.http.Status
@@ -45,7 +45,7 @@ class SubscriptionConnectorSpec extends TestUtil with MockHttp {
 
     "calling .getCustomerDetails" when {
 
-      def result: Future[HttpGetResult[CustomerDetails]] = TestSubscriptionConnector.getCustomerDetails(vrn)
+      def result: Future[HttpResult[CustomerDetails]] = TestSubscriptionConnector.getCustomerDetails(vrn)
 
       "called for a Right with CustomerDetails" should {
 

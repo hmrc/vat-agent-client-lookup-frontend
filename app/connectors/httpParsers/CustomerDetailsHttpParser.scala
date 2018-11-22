@@ -16,18 +16,18 @@
 
 package connectors.httpParsers
 
-import connectors.httpParsers.ResponseHttpParser.HttpGetResult
+import connectors.httpParsers.ResponseHttpParser.HttpResult
 import models.CustomerDetails
-import models.core.ErrorModel
+import models.errors.ErrorModel
 import play.api.Logger
 import play.api.http.Status
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
 object CustomerDetailsHttpParser {
 
-  implicit object CustomerDetailsReads extends HttpReads[HttpGetResult[CustomerDetails]] {
+  implicit object CustomerDetailsReads extends HttpReads[HttpResult[CustomerDetails]] {
 
-    override def read(method: String, url: String, response: HttpResponse): HttpGetResult[CustomerDetails] = {
+    override def read(method: String, url: String, response: HttpResponse): HttpResult[CustomerDetails] = {
 
       response.status match {
         case Status.OK =>

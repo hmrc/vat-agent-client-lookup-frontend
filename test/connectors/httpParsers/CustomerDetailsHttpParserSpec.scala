@@ -18,7 +18,7 @@ package connectors.httpParsers
 
 import assets.CustomerDetailsTestConstants._
 import connectors.httpParsers.CustomerDetailsHttpParser.CustomerDetailsReads
-import models.core.ErrorModel
+import models.errors.ErrorModel
 import play.api.http.Status
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpResponse
