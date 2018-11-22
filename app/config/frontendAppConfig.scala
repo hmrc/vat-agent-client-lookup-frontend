@@ -17,8 +17,9 @@
 package config
 
 import java.util.Base64
-
 import javax.inject.{Inject, Singleton}
+
+import config.features.Features
 import config.{ConfigKeys => Keys}
 import play.api.{Configuration, Environment}
 import play.api.Mode.Mode
@@ -55,6 +56,7 @@ trait AppConfig extends ServicesConfig {
   val feedbackUrl: String
   val selfLookup: String
   val emailVerificationBaseUrl: String
+  val features: Features
 }
 
 @Singleton
@@ -63,6 +65,8 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override lazy val selfLookup: String = baseUrl("selfLookup")
 
   override protected def mode: Mode = environment.mode
+
+  override val features = new Features(runModeConfiguration)
 
   override lazy val contactHost: String = getString(Keys.contactFrontendHost)
   private val contactFormServiceIdentifier = "VATC"

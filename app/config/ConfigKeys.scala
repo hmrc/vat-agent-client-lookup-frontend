@@ -55,4 +55,6 @@ object ConfigKeys {
   val environmentBase: String = "environment-base.url"
 
   val emailVerificationBaseUrl: String = "email-verification"
+
+  val emailVerificationFeature: String = "features.emailVerification.enabled"
 }
