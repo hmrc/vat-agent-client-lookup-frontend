@@ -21,12 +21,11 @@ import config.{AppConfig, ErrorHandler}
 import javax.inject.{Inject, Singleton}
 import models.Agent
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.MessagesApi
 import play.api.mvc._
 import services.EnrolmentsAuthService
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.{Retrievals, ~}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
@@ -35,7 +34,7 @@ class AuthoriseAsAgentOnly @Inject()(enrolmentsAuthService: EnrolmentsAuthServic
                                      val messagesApi: MessagesApi,
                                      val errorHandler: ErrorHandler,
                                      implicit val appConfig: AppConfig)
-  extends FrontendController with AuthBasePredicate with I18nSupport with ActionBuilder[Agent] with ActionFunction[Request, Agent] {
+  extends AuthBasePredicate with ActionBuilder[Agent] with ActionFunction[Request, Agent] {
 
   override def invokeBlock[A](request: Request[A], block: Agent[A] => Future[Result]): Future[Result] = {
 

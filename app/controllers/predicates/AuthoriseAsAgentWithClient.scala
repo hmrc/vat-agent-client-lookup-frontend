@@ -17,16 +17,16 @@
 package controllers.predicates
 
 import javax.inject.{Inject, Singleton}
+
 import audit.AuditService
 import common.{EnrolmentKeys, SessionKeys}
 import config.{AppConfig, ErrorHandler}
 import models.{Agent, User}
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.MessagesApi
 import play.api.mvc._
 import uk.gov.hmrc.auth.core.retrieve.{Retrievals, ~}
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import services.EnrolmentsAuthService
 
 import scala.concurrent.Future
@@ -37,7 +37,7 @@ class AuthoriseAsAgentWithClient @Inject()(enrolmentsAuthService: EnrolmentsAuth
                                            val serviceErrorHandler: ErrorHandler,
                                            implicit val messagesApi: MessagesApi,
                                            implicit val appConfig: AppConfig)
-  extends FrontendController with AuthBasePredicate with I18nSupport with ActionBuilder[User] with ActionFunction[Request, User] {
+  extends AuthBasePredicate with ActionBuilder[User] with ActionFunction[Request, User] {
 
   private def delegatedAuthRule(vrn: String): Enrolment =
     Enrolment(EnrolmentKeys.vatEnrolmentId)
