@@ -22,4 +22,5 @@ object SessionKeys {
   val redirectUrl: String = "redirectUrl"
   val preference: String = "preference"
   val notificationsEmail: String = "notificationsEmail"
+  val verifiedAgentEmail: String = "verifiedAgentEmail"
 }

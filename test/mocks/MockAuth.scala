@@ -70,6 +70,11 @@ trait MockAuth extends TestUtil with BeforeAndAfterEach with MockitoSugar  {
       mockConfig
     )
 
+  val mockPreferencePredicate: PreferencePredicate = new PreferencePredicate()(
+    mockConfig,
+    messagesApi
+  )
+
   def mockIndividualAuthorised(): OngoingStubbing[Future[~[Option[AffinityGroup], Enrolments]]] =
     setupAuthResponse(Future.successful(
       new ~(Some(AffinityGroup.Individual),

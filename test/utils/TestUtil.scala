@@ -20,7 +20,7 @@ import assets.BaseTestConstants._
 import common.SessionKeys
 import config.ErrorHandler
 import mocks.MockAppConfig
-import models.User
+import models.{Agent, User}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
@@ -51,8 +51,7 @@ trait TestUtil extends UnitSpec with GuiceOneAppPerSuite {
     )
 
   lazy val user: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn, active = true)(request)
-  lazy val agent: User[AnyContentAsEmpty.type] =
-    User[AnyContentAsEmpty.type](vrn, active = true, Some(arn))(fakeRequestWithVrnAndRedirectUrl)
+  lazy val agent: Agent[AnyContentAsEmpty.type] = Agent[AnyContentAsEmpty.type](arn)(fakeRequestWithVrnAndRedirectUrl)
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
   implicit lazy val ec: ExecutionContext = injector.instanceOf[ExecutionContext]
 
