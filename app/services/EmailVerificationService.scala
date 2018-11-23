@@ -17,12 +17,12 @@
 package services
 
 import config.AppConfig
+
 import connectors.EmailVerificationConnector
 import connectors.httpParsers.CreateEmailVerificationRequestHttpParser.{EmailAlreadyVerified, EmailVerificationRequestSent}
 import connectors.httpParsers.GetEmailVerificationStateHttpParser.{EmailNotVerified, EmailVerified}
-import javax.inject.{Inject, Singleton}
+import javax.inject.Inject
 import uk.gov.hmrc.http.HeaderCarrier
-
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -32,7 +32,7 @@ class EmailVerificationService @Inject()(emailVerificationConnector: EmailVerifi
 
   def isEmailVerified(email: String)(implicit hc: HeaderCarrier): Future[Option[Boolean]] =
 
-    if(appConfig.features.emailVerificationEnabled()) {
+    if (appConfig.features.emailVerificationEnabled()) {
       emailVerificationConnector.getEmailVerificationState(email) map {
         case Right(EmailVerified) =>
           Some(true)
@@ -48,7 +48,7 @@ class EmailVerificationService @Inject()(emailVerificationConnector: EmailVerifi
   def createEmailVerificationRequest(email: String, continueUrl: String)
                                     (implicit hc: HeaderCarrier): Future[Option[Boolean]] =
 
-    if(appConfig.features.emailVerificationEnabled()) {
+    if (appConfig.features.emailVerificationEnabled()) {
       emailVerificationConnector.createEmailVerificationRequest(email, continueUrl) map {
         case Right(EmailVerificationRequestSent) =>
           Some(true)

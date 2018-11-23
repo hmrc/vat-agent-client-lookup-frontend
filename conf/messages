@@ -1,4 +1,5 @@
 base.signOut = Sign out
+base.back = Back
 
 common.yes = Yes
 common.no = No
@@ -44,6 +45,21 @@ clientVrnForm.error.missing = Enter your client’s VAT number
 clientVrnForm.error.invalid = Enter a VAT number in the correct format
 clientVrnForm.error.tooLong = You have entered too many numbers
 clientVrnForm.error.tooShort = You have not entered enough numbers
+
+confirmEmail.title = Confirm the new email address
+confirmEmail.heading = Confirm the new email address
+confirmEmail.change = Change
+
+verifyEmail.title = Verify your email address
+verifyEmail.heading = Verify your email address
+verifyEmail.lineOne = We’ve sent an email to {0}. Click on the link in the email to verify your email address.
+verifyEmail.lineTwo = You can
+verifyEmail.lineThree = change your email address
+verifyEmail.lineFour = if it is not correct.
+verifyEmail.accordion.heading = I did not get the email
+verifyEmail.accordion.lineOne = Check your junk folder. If it’s not there we can
+verifyEmail.accordion.lineTwo = send it again
+verifyEmail.accordion.lineThree = If we send it again, any previous link will stop working.
 
 sessionTimeout.title = Your session has timed out
 sessionTimeout.helpOne = To manage your VAT account, you’ll have to
