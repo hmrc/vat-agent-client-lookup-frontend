@@ -40,8 +40,11 @@ object CustomerDetailsHttpParser {
             valid => Right(valid)
           )
         case status =>
-          Logger.warn(s"[CustomerCircumstancesHttpParser][read]: Unexpected Response, Status $status returned")
-          Left(ErrorModel(status,"Downstream error returned when retrieving CustomerDetails"))
+          Logger.warn(
+            s"[CustomerCircumstancesHttpParser][read]: - Unexpected Response " +
+              s"Status $status returned, with response: ${response.body}"
+          )
+          Left(ErrorModel(status, response.body))
       }
     }
   }

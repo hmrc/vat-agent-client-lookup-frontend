@@ -66,7 +66,7 @@ class EmailVerificationServiceSpec extends TestUtil with MockEmailVerificationCo
         }
       }
 
-      "the email address verification request failed" should {
+      "the email address verification request fails" should {
 
         "return None" in {
 
@@ -129,7 +129,7 @@ class EmailVerificationServiceSpec extends TestUtil with MockEmailVerificationCo
         }
       }
 
-      "the email is check failed" should {
+      "the email verification status check fails" should {
 
         "return None" in {
 

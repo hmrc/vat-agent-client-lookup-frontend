@@ -17,7 +17,7 @@
 package connectors.httpParsers
 
 import assets.CustomerDetailsTestConstants._
-import connectors.httpParsers.CustomerDetailsHttpParser.CustomerDetailsReads
+import connectors.httpParsers.CustomerDetailsHttpParser.CustomerDetailsReads.read
 import models.errors.ErrorModel
 import play.api.http.Status
 import play.api.libs.json.Json
@@ -34,31 +34,23 @@ class CustomerDetailsHttpParserSpec extends TestUtil {
     "the http response status is OK with valid Json" should {
 
       "return a CustomerDetailsModel" in {
-        CustomerDetailsReads.read("", "", HttpResponse(Status.OK, Some(allInfoJson))) shouldBe Right(customerDetailsAllInfo)
+        read("", "", HttpResponse(Status.OK, Some(allInfoJson))) shouldBe Right(customerDetailsAllInfo)
       }
     }
 
     "the http response status is OK with invalid Json" should {
 
       "return an ErrorModel" in {
-        CustomerDetailsReads.read("", "", HttpResponse(Status.OK, successBadJson)) shouldBe
+        read("", "", HttpResponse(Status.OK, successBadJson)) shouldBe
           Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "Invalid Json"))
       }
     }
 
-    "the http response status is BAD_REQUEST" should {
+    "the http response status is unexpected" should {
 
-      "return an ErrorModel" in {
-        CustomerDetailsReads.read("", "", HttpResponse(Status.BAD_REQUEST, None)) shouldBe
-          Left(ErrorModel(Status.BAD_REQUEST, "Downstream error returned when retrieving CustomerDetails"))
-      }
-    }
-
-    "the http response status unexpected" should {
-
-      "return an ErrorModel" in {
-        CustomerDetailsReads.read("", "", HttpResponse(Status.SEE_OTHER, None)) shouldBe
-          Left(ErrorModel(Status.SEE_OTHER, "Downstream error returned when retrieving CustomerDetails"))
+      "return an ErrorModel with the status and response body" in {
+        val httpResponse = HttpResponse(Status.BAD_REQUEST, None)
+        read("", "", httpResponse) shouldBe Left(ErrorModel(Status.BAD_REQUEST, httpResponse.body))
       }
     }
   }
