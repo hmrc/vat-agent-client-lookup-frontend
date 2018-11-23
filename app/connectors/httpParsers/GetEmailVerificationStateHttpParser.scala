@@ -17,35 +17,34 @@
 package connectors.httpParsers
 
 import connectors.httpParsers.ResponseHttpParser.HttpResult
-import models.CustomerDetails
 import models.errors.ErrorModel
 import play.api.Logger
-import play.api.http.Status
+import play.api.http.Status._
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
-object CustomerDetailsHttpParser {
+object GetEmailVerificationStateHttpParser {
 
-  implicit object CustomerDetailsReads extends HttpReads[HttpResult[CustomerDetails]] {
-
-    override def read(method: String, url: String, response: HttpResponse): HttpResult[CustomerDetails] = {
-
+  implicit object GetEmailVerificationStateHttpReads extends HttpReads[HttpResult[EmailVerificationState]] {
+    override def read(method: String, url: String, response: HttpResponse): HttpResult[EmailVerificationState] =
       response.status match {
-        case Status.OK =>
-          Logger.debug("[CustomerCircumstancesHttpParser][read]: Status OK")
-          response.json.validate[CustomerDetails].fold(
-            invalid => {
-              Logger.warn(s"[CustomerCircumstancesHttpParser][read]: Invalid Json - $invalid")
-              Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "Invalid Json"))
-            },
-            valid => Right(valid)
+        case OK => Right(EmailVerified)
+        case NOT_FOUND =>
+          Logger.debug(
+            "[GetEmailVerificationStateHttpParser][GetEmailVerificationStateHttpReads][read] - Email not verified"
           )
+          Right(EmailNotVerified)
         case status =>
           Logger.warn(
-            s"[CustomerCircumstancesHttpParser][read]: - Unexpected Response " +
-              s"Status $status returned, with response: ${response.body}"
+            "[GetEmailVerificationStateHttpParser][GetEmailVerificationStateHttpReads][read] - " +
+              s"Unexpected Response, Status $status returned, with response: ${response.body}"
           )
           Left(ErrorModel(status, response.body))
       }
-    }
   }
+
+  sealed trait EmailVerificationState
+
+  case object EmailVerified extends EmailVerificationState
+
+  case object EmailNotVerified extends EmailVerificationState
 }

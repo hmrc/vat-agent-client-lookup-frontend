@@ -19,7 +19,7 @@ package services
 import connectors.SubscriptionConnector
 import javax.inject.{Inject, Singleton}
 import models.CustomerDetails
-import models.core.ErrorModel
+import models.errors.ErrorModel
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}

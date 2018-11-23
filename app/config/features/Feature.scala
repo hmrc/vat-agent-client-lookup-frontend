@@ -14,19 +14,12 @@
  * limitations under the License.
  */
 
-package assets
+package config.features
 
-import common.EnrolmentKeys
-import models.errors.ErrorModel
-import play.api.http.Status
-import uk.gov.hmrc.auth.core.Enrolment
+import play.api.Configuration
 
-object BaseTestConstants {
+class Feature(val key: String, config: Configuration) {
 
-  val errorModel = ErrorModel(Status.INTERNAL_SERVER_ERROR, "Some Error, oh no!")
-  val arn = "ABCD12345678901"
-  val vrn: String = "999999999"
-  val testMtdVatEnrolment: Enrolment = Enrolment(EnrolmentKeys.vatEnrolmentId).withIdentifier(EnrolmentKeys.vatIdentifierId, vrn)
-  val formBundle = "XA1234567"
-
+  def apply(value: Boolean): Unit = sys.props += key -> value.toString
+  def apply(): Boolean = sys.props.get(key).fold(config.getBoolean(key).getOrElse(false))(_.toBoolean)
 }

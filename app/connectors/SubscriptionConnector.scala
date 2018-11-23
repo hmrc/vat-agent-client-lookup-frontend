@@ -18,7 +18,7 @@ package connectors
 
 import config.AppConfig
 import connectors.httpParsers.CustomerDetailsHttpParser.CustomerDetailsReads
-import connectors.httpParsers.ResponseHttpParser.HttpGetResult
+import connectors.httpParsers.ResponseHttpParser.HttpResult
 import javax.inject.{Inject, Singleton}
 import models.CustomerDetails
 import play.api.Logger
@@ -33,7 +33,7 @@ class SubscriptionConnector @Inject()(val http: HttpClient,
 
   private[connectors] def getCustomerDetailsUrl(vrn: String) = s"${config.vatSubscriptionUrl}/vat-subscription/$vrn/full-information"
 
-  def getCustomerDetails(id: String)(implicit headerCarrier: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[CustomerDetails]] = {
+  def getCustomerDetails(id: String)(implicit headerCarrier: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[CustomerDetails]] = {
     val url = getCustomerDetailsUrl(id)
     Logger.debug(s"[CustomerDetailsConnector][getCustomerDetails]: Calling getCustomerDetails with URL - $url")
     http.GET(url)(CustomerDetailsReads, headerCarrier, ec)

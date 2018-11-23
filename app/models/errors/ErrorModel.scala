@@ -14,19 +14,12 @@
  * limitations under the License.
  */
 
-package assets
+package models.errors
 
-import common.EnrolmentKeys
-import models.errors.ErrorModel
-import play.api.http.Status
-import uk.gov.hmrc.auth.core.Enrolment
+import play.api.libs.json.{Format, Json}
 
-object BaseTestConstants {
+case class ErrorModel(status: Int, message: String)
 
-  val errorModel = ErrorModel(Status.INTERNAL_SERVER_ERROR, "Some Error, oh no!")
-  val arn = "ABCD12345678901"
-  val vrn: String = "999999999"
-  val testMtdVatEnrolment: Enrolment = Enrolment(EnrolmentKeys.vatEnrolmentId).withIdentifier(EnrolmentKeys.vatIdentifierId, vrn)
-  val formBundle = "XA1234567"
-
+object ErrorModel {
+  implicit val format: Format[ErrorModel] = Json.format[ErrorModel]
 }

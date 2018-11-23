@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package models.core
+package config.features
 
-import play.api.libs.json.{Format, Json}
+import config.ConfigKeys
+import javax.inject.Inject
+import play.api.Configuration
 
-case class ErrorModel(status: Int, message: String)
+class Features @Inject()(config: Configuration) {
 
-object ErrorModel {
-  implicit val format: Format[ErrorModel] = Json.format[ErrorModel]
+  val emailVerificationEnabled = new Feature(ConfigKeys.emailVerificationFeature, config)
 }

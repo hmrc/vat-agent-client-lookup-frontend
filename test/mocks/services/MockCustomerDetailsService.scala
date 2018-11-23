@@ -18,7 +18,7 @@ package mocks.services
 
 import assets.BaseTestConstants._
 import models.CustomerDetails
-import models.core.ErrorModel
+import models.errors.ErrorModel
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.mockito.stubbing.OngoingStubbing
