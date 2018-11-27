@@ -1,5 +1,9 @@
 base.signOut = Sign out
 
+common.yes = Yes
+common.no = No
+common.error.heading = There is a problem
+
 standardError.title = There is a problem with the service - VAT reporting through software - GOV.UK
 standardError.heading = Sorry, there is a problem with the service
 standardError.message = Try again later.
@@ -45,3 +49,12 @@ sessionTimeout.title = Your session has timed out
 sessionTimeout.helpOne = To manage your VAT account, you’ll have to
 sessionTimeout.helpTwo = sign in
 sessionTimeout.helpThree = using your Government Gateway ID.
+
+capturePref.title = Would you like to receive notifications of any changes you make?
+capturePref.hint = We will also send your clients a secure message to their business tax account.
+capturePref.email = What is your email address?
+capturePref.email.hint = We will only use this to send you a confirmation of any changes you make
+capturePref.error.mandatoryRadioOption = Select an option
+capturePref.error.mandatoryEmail = Enter your email address
+capturePref.error.emailLength = Email address must be 132 characters or less
+capturePref.error.invalidEmail = Enter a valid email address
