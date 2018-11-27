@@ -32,20 +32,26 @@ class SelectClientVrnController @Inject()(val messagesApi: MessagesApi,
                                           val serviceErrorHandler: ErrorHandler,
                                           implicit val appConfig: AppConfig) extends BaseController {
 
-  def show(redirectUrl: String): Action[AnyContent] = authenticate {
-    implicit agent =>
+  def show(redirectUrl: String): Action[AnyContent] = authenticate { implicit agent =>
+    val prefYes: Boolean          = agent.session.get(SessionKeys.preference).fold(false)(_ == "yes")
+    val prefNo: Boolean           = agent.session.get(SessionKeys.preference).fold(false)(_ == "no")
+    val hasVerifiedEmail: Boolean = agent.session.get(SessionKeys.verifiedAgentEmail).fold(false)(_.nonEmpty)
+
+    if (prefNo || (prefYes && hasVerifiedEmail)) {
       agent.session.get(SessionKeys.redirectUrl) match {
         case Some(_) =>
           Ok(views.html.agent.selectClientVrn(ClientVrnForm.form))
-        case None =>
-          extractRedirectUrl(redirectUrl) match {
-            case Some(url) =>
-              Ok(views.html.agent.selectClientVrn(ClientVrnForm.form))
-                .addingToSession(SessionKeys.redirectUrl -> url)
-            case None =>
-              serviceErrorHandler.showInternalServerError
+        case None => extractRedirectUrl(redirectUrl) match {
+          case Some(url) =>
+            Ok(views.html.agent.selectClientVrn(ClientVrnForm.form))
+              .addingToSession(SessionKeys.redirectUrl -> url)
+          case None =>
+            serviceErrorHandler.showInternalServerError
           }
       }
+    } else {
+      Redirect(controllers.agent.routes.CapturePreferenceController.show())
+    }
   }
 
   val submit: Action[AnyContent] = authenticate {

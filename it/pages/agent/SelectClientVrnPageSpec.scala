@@ -36,20 +36,56 @@ class SelectClientVrnPageSpec extends BasePageISpec {
 
     "the user is an Agent" when {
 
-      "the Agent is signed up for HMRC-AS-AGENT (authorised)" should {
+      "the Agent is signed up for HMRC-AS-AGENT (authorised)" when {
 
-        "Render the Select a Client page" in {
+        "the agent has a preference of 'yes' and a verified email in session" should {
 
-          given.agent.isSignedUpToAgentServices
+          "Render the Select a Client page" in {
 
-          When("I call the show Select Client VRN page")
-          val res = show
+            given.agent.isSignedUpToAgentServices
 
-          res should have(
-            httpStatus(OK),
-            elementText("h1")("What is your client’s VAT number?"),
-            isElementVisible("#vrn")(isVisible = true)
-          )
+            When("I call the show Select Client VRN page")
+            val res = get(path, formatPreference(Some("yes")) ++ formatVerifiedEmail(Some("test@example.com")))
+
+            res should have(
+              httpStatus(OK),
+              elementText("h1")("What is your client’s VAT number?"),
+              isElementVisible("#vrn")(isVisible = true)
+            )
+          }
+        }
+
+        "the agent has a preference of 'no' in session" should {
+
+          "Render the Select a Client page" in {
+
+            given.agent.isSignedUpToAgentServices
+
+            When("I call the show Select Client VRN page")
+            val res = get(path, formatPreference(Some("no")))
+
+            res should have(
+              httpStatus(OK),
+              elementText("h1")("What is your client’s VAT number?"),
+              isElementVisible("#vrn")(isVisible = true)
+            )
+          }
+        }
+
+        "the agent has no preference in session" should {
+
+          "Render the Capture Preference page" in {
+
+            given.agent.isSignedUpToAgentServices
+
+            When("I call the show Select Client VRN page")
+            val res = show
+
+            res should have(
+              httpStatus(SEE_OTHER),
+              redirectURI(controllers.agent.routes.CapturePreferenceController.show().url)
+            )
+          }
         }
       }
 
