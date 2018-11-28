@@ -44,7 +44,7 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
   lazy val testSendEmailRequest = FakeRequest("GET", "/send-verification")
   lazy val testGetRequest = FakeRequest("GET", "/verify-email-address")
 
-  "Calling the extractEmail function in VerifyEmailController" when {
+  "Calling the extractSessionEmail function in VerifyEmailController" when {
 
     "there is an authenticated request from a user with an email in session" should {
       "result in an email address being retrieved if there is an email" in {
@@ -52,7 +52,7 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
         mockAgentAuthorised()
 
         implicit val request: FakeRequest[AnyContentAsEmpty.type] = testGetRequest.withSession(
-          SessionKeys.emailKey -> testEmail)
+          SessionKeys.notificationsEmail -> testEmail)
 
         val agent = Agent[AnyContent](Enrolments(Set(new Enrolment("HMRC-AS-AGENT",
           Seq(EnrolmentIdentifier("AgentReferenceNumber", "XAIT00000000")), "Activated", None))))(request)
@@ -69,7 +69,7 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
 
         mockAgentAuthorised()
 
-        val request = testGetRequest.withSession(SessionKeys.emailKey -> testEmail)
+        val request = testGetRequest.withSession(SessionKeys.notificationsEmail -> testEmail)
         val result = TestVerifyEmailController.show(request)
 
         status(result) shouldBe Status.OK
@@ -83,7 +83,7 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
 
         mockAgentAuthorised()
 
-        val request = testGetRequest.withSession(SessionKeys.emailKey -> "")
+        val request = testGetRequest.withSession(SessionKeys.notificationsEmail -> "")
         val result = TestVerifyEmailController.show(request)
 
         status(result) shouldBe SEE_OTHER
@@ -96,7 +96,7 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
 
         mockUnauthorised()
 
-        val request = testGetRequest.withSession(SessionKeys.emailKey -> testEmail)
+        val request = testGetRequest.withSession(SessionKeys.notificationsEmail -> testEmail)
         val result = TestVerifyEmailController.show(request)
 
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
@@ -105,7 +105,7 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
     }
   }
 
-  "Calling the emailVerified action in VerifyEmailController" when {
+  "Calling the sendVerification action in VerifyEmailController" when {
 
     "there is an email in session and the email request is successfully created" should {
 
@@ -114,7 +114,7 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
         mockAgentAuthorised()
         mockCreateEmailVerificationRequest(Some(true))
 
-        val request = testSendEmailRequest.withSession(SessionKeys.emailKey -> testEmail)
+        val request = testSendEmailRequest.withSession(SessionKeys.notificationsEmail -> testEmail)
         val result = TestVerifyEmailController.sendVerification(request)
 
         status(result) shouldBe SEE_OTHER
@@ -129,11 +129,11 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
         mockAgentAuthorised()
         mockCreateEmailVerificationRequest(Some(false))
 
-        val request = testSendEmailRequest.withSession(SessionKeys.emailKey -> testEmail)
+        val request = testSendEmailRequest.withSession(SessionKeys.notificationsEmail -> testEmail)
         val result = TestVerifyEmailController.sendVerification(request)
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(routes.ConfirmEmailController.updateEmailAddress().url)
+        redirectLocation(result) shouldBe Some(routes.SelectClientVrnController.show().url)
       }
     }
 
@@ -145,7 +145,7 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
         mockAgentAuthorised()
         mockCreateEmailVerificationRequest(None)
 
-        val request = testSendEmailRequest.withSession(SessionKeys.emailKey -> testEmail)
+        val request = testSendEmailRequest.withSession(SessionKeys.notificationsEmail -> testEmail)
         val result = TestVerifyEmailController.sendVerification(request)
 
         status(result) shouldBe INTERNAL_SERVER_ERROR
@@ -159,7 +159,7 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
         mockAgentAuthorised()
         mockCreateEmailVerificationRequest(None)
 
-        val request = testSendEmailRequest.withSession(SessionKeys.emailKey -> testEmail)
+        val request = testSendEmailRequest.withSession(SessionKeys.notificationsEmail -> testEmail)
         val result = TestVerifyEmailController.sendVerification(request)
 
         status(result) shouldBe INTERNAL_SERVER_ERROR
@@ -171,7 +171,7 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
 
         mockAgentAuthorised()
 
-        val request = testSendEmailRequest.withSession(SessionKeys.emailKey -> "")
+        val request = testSendEmailRequest.withSession(SessionKeys.notificationsEmail -> "")
         val result = TestVerifyEmailController.sendVerification(request)
 
         status(result) shouldBe SEE_OTHER
@@ -184,7 +184,7 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
 
         mockUnauthorised()
 
-        val request = testSendEmailRequest.withSession(SessionKeys.emailKey -> testEmail)
+        val request = testSendEmailRequest.withSession(SessionKeys.notificationsEmail -> testEmail)
         val result = TestVerifyEmailController.sendVerification(request)
 
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR

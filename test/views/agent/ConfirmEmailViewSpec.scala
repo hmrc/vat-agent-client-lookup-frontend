@@ -27,7 +27,8 @@ class ConfirmEmailViewSpec extends ViewBaseSpec {
   val testEmail: String = "test@email.com"
 
   object Selectors {
-    val heading = "heading-large"
+    val heading = ".heading-large"
+    val heading2 = ".lede"
     val backLink = "#content > article > a"
     val continueButton = ".button"
     val editLink = "#content > article > p:nth-child(4) > a"
@@ -39,7 +40,7 @@ class ConfirmEmailViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct heading" in {
-      document.getElementsByClass(Selectors.heading).text() shouldBe "Confirm the new email address"
+      elementText(Selectors.heading) shouldBe "Confirm the new email address"
     }
 
     "have a back link" which {
@@ -54,7 +55,7 @@ class ConfirmEmailViewSpec extends ViewBaseSpec {
     }
 
     "have the email address the user provided" in {
-      document.text() contains testEmail
+      elementText(Selectors.heading2) shouldBe testEmail
     }
 
     "have a link to edit email address" which {
@@ -70,11 +71,6 @@ class ConfirmEmailViewSpec extends ViewBaseSpec {
       "has the correct GA tag" in {
         element(Selectors.editLink).attr("data-journey-click") shouldBe "notification-pref:change:confirm-email"
       }
-    }
-
-    "have some body text" in {
-      document.text() contains
-        "By confirming this change, you agree that the information you have given is complete and correct."
     }
 
     "have a continue button" which {

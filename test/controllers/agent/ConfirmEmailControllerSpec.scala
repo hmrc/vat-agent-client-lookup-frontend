@@ -30,7 +30,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
 
-class ConfirmEmailControllerSpec extends ControllerBaseSpec with ScalaFutures with Waiters with MockVatSubscriptionService {
+class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockVatSubscriptionService {
 
   object TestConfirmEmailController extends ConfirmEmailController(
     mockAgentOnlyAuthPredicate,
@@ -51,7 +51,7 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with ScalaFutures wi
       "result in an email address being retrieved if there is an email" in {
 
         implicit val request: FakeRequest[AnyContentAsEmpty.type] = testGetRequest.withSession(
-         SessionKeys.emailKey -> testEmail)
+         SessionKeys.notificationsEmail -> testEmail)
 
         val agent = Agent[AnyContent](Enrolments(Set(new Enrolment("HMRC-AS-AGENT",
           Seq(EnrolmentIdentifier("AgentReferenceNumber", "XAIT00000000")), "Activated", None))))(request)
@@ -68,7 +68,7 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with ScalaFutures wi
 
         mockAgentAuthorised()
 
-        val request = testGetRequest.withSession(SessionKeys.emailKey -> testEmail)
+        val request = testGetRequest.withSession(SessionKeys.notificationsEmail -> testEmail)
         val result = TestConfirmEmailController.show(request)
 
         status(result) shouldBe Status.OK
@@ -80,11 +80,11 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with ScalaFutures wi
 
         mockAgentAuthorised()
 
-        val request = testGetRequest.withSession(SessionKeys.emailKey -> "")
+        val request = testGetRequest.withSession(SessionKeys.notificationsEmail -> "")
         val result = TestConfirmEmailController.show(request)
 
         status(result) shouldBe Status.SEE_OTHER
-        redirectLocation(result) shouldBe Some("/vat-through-software/representative/change-email-address")
+        redirectLocation(result) shouldBe Some("/vat-through-software/representative/email-notification")
       }
     }
 
@@ -93,7 +93,7 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with ScalaFutures wi
 
         mockUnauthorised()
 
-        val request = testGetRequest.withSession(SessionKeys.emailKey -> testEmail)
+        val request = testGetRequest.withSession(SessionKeys.notificationsEmail -> testEmail)
         val result = TestConfirmEmailController.show(request)
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         Jsoup.parse(bodyOf(result)).title shouldBe "There is a problem with the service - VAT reporting through software - GOV.UK"
@@ -107,7 +107,7 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with ScalaFutures wi
       "redirect to select client VRN page" in {
 
         mockAgentAuthorised()
-        val request = testGetRequest.withSession(SessionKeys.emailKey -> testEmail)
+        val request = testGetRequest.withSession(SessionKeys.notificationsEmail -> testEmail)
 
         when(mockVatSubscriptionService.updateEmail(ArgumentMatchers.any(), ArgumentMatchers.any())
         (ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(Some(true))
@@ -128,11 +128,11 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with ScalaFutures wi
         when(mockVatSubscriptionService.updateEmail(ArgumentMatchers.any(), ArgumentMatchers.any())
         (ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(Some(false))
 
-        val request = testGetRequest.withSession(SessionKeys.emailKey -> testEmail)
+        val request = testGetRequest.withSession(SessionKeys.notificationsEmail -> testEmail)
         val result = TestConfirmEmailController.updateEmailAddress()(request)
 
         status(result) shouldBe Status.SEE_OTHER
-        redirectLocation(result) shouldBe Some("/vat-through-software/representative/send-verification")
+        redirectLocation(result) shouldBe Some("/vat-through-software/representative/send-verification-request")
 
       }
     }
@@ -146,7 +146,7 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with ScalaFutures wi
         when(mockVatSubscriptionService.updateEmail(ArgumentMatchers.any(), ArgumentMatchers.any())
         (ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(None)
 
-        val request = testGetRequest.withSession(SessionKeys.emailKey -> testEmail)
+        val request = testGetRequest.withSession(SessionKeys.notificationsEmail -> testEmail)
         val result = TestConfirmEmailController.updateEmailAddress()(request)
 
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
@@ -164,7 +164,7 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with ScalaFutures wi
         val result = TestConfirmEmailController.updateEmailAddress()(request)
 
         status(result) shouldBe Status.SEE_OTHER
-        redirectLocation(result) shouldBe Some("/vat-through-software/representative/change-email-address")
+        redirectLocation(result) shouldBe Some("/vat-through-software/representative/email-notification")
 
       }
     }
@@ -174,7 +174,7 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with ScalaFutures wi
 
         mockUnauthorised()
 
-        val request = testGetRequest.withSession(SessionKeys.emailKey -> testEmail)
+        val request = testGetRequest.withSession(SessionKeys.notificationsEmail -> testEmail)
         val result = TestConfirmEmailController.updateEmailAddress()(request)
 
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR

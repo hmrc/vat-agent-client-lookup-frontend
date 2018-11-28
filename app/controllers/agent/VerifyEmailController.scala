@@ -48,7 +48,6 @@ class VerifyEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
 
     extractSessionEmail(agent) match {
       case Some(email) =>
-        //TODO: emailVerificationService.createEmailVerificationRequest
         emailVerificationService.createEmailVerificationRequest(email, routes.ConfirmEmailController.updateEmailAddress().url).map{
           case Some(true) => Redirect(routes.VerifyEmailController.show())
           case Some(false) =>
@@ -56,8 +55,7 @@ class VerifyEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
               "[VerifyEmailController][sendVerification] - " +
                 "Unable to send email verification request. Service responded with 'already verified'"
             )
-            //edge case. already verified. just try to the update then? TODO: check this is best thing to do?
-            Redirect(routes.ConfirmEmailController.updateEmailAddress())
+            Redirect(routes.SelectClientVrnController.show())
           case _ => errorHandler.showInternalServerError
         }
 
@@ -66,7 +64,7 @@ class VerifyEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
   }
 
   private[controllers] def extractSessionEmail(agent: Agent[AnyContent]): Option[String] = {
-    agent.session.get(SessionKeys.emailKey).filter(_.nonEmpty).orElse(None)
+    agent.session.get(SessionKeys.notificationsEmail).filter(_.nonEmpty).orElse(None)
   }
 
 }

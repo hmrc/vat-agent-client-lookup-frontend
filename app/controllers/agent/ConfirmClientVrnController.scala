@@ -16,8 +16,6 @@
 
 package controllers.agent
 
-import scala.concurrent.Future
-
 import audit.AuditService
 import audit.models.{AuthenticateAgentAuditModel, GetClientBusinessNameAuditModel}
 import common.SessionKeys

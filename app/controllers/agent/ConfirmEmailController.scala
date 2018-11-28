@@ -23,9 +23,10 @@ import javax.inject.{Inject, Singleton}
 import models.Agent
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, Call}
 import services.VatSubscriptionService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import controllers.agent.VerifyEmailController
 
 @Singleton
 class ConfirmEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
@@ -64,6 +65,6 @@ class ConfirmEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
   }
 
   private[controllers] def extractSessionEmail(agent: Agent[AnyContent]): Option[String] = {
-    agent.session.get(SessionKeys.emailKey).filter(_.nonEmpty)
+    agent.session.get(SessionKeys.notificationsEmail).filter(_.nonEmpty)
   }
 }
