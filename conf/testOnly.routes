@@ -11,4 +11,7 @@
 
 # Add all the application routes to the prod.routes file
 
+GET        /vat-through-software/representative/test-only/feature-switch    @testOnly.controllers.FeatureSwitchController.featureSwitch
+POST       /vat-through-software/representative/test-only/feature-switch    @testOnly.controllers.FeatureSwitchController.submitFeatureSwitch
+
 ->         /                                                                prod.Routes
