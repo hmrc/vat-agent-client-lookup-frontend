@@ -14,13 +14,21 @@
  * limitations under the License.
  */
 
-package common
+package models
 
-object SessionKeys {
+import play.api.libs.json.{Format, Json}
 
-  val clientVRN: String = "CLIENT_VRN"
-  val redirectUrl: String = "redirectUrl"
-  val email: String = "email"
-  val preference: String = "preference"
+case class PreferenceModel(yesNo: YesNo, email: Option[String]) {
 
+  val isValid: Boolean = {
+    yesNo match {
+      case Yes => email.isDefined
+      case _ => true
+    }
+  }
+
+}
+
+object PreferenceModel {
+  implicit val format: Format[PreferenceModel] = Json.format[PreferenceModel]
 }
