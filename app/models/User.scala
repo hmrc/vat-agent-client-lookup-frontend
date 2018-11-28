@@ -28,5 +28,5 @@ object User {
   def apply[A](enrolments: Enrolments)(implicit request: Request[A]): User[A] =
     enrolments.enrolments.collectFirst {
       case Enrolment(EnrolmentKeys.vatEnrolmentId, EnrolmentIdentifier(_, vatId) :: _, _, _) => User(vatId)
-  }.getOrElse(throw InternalError("VRN Missing"))
+  }.getOrElse(throw InternalError("VAT enrolment invalid"))
 }
