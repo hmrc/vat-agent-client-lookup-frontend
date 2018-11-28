@@ -36,7 +36,7 @@ class ConfirmEmailViewSpec extends ViewBaseSpec {
 
   "The Confirm Email view" should {
     lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-    lazy val view = views.html.agent.confirm_email(testEmail)
+    lazy val view = views.html.agent.confirmEmail(testEmail)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct heading" in {
@@ -50,7 +50,7 @@ class ConfirmEmailViewSpec extends ViewBaseSpec {
       }
 
       "should have the correct back link" in {
-        element(Selectors.backLink).attr("href") shouldBe controllers.agent.routes.CaptureEmailController.show().url
+        element(Selectors.backLink).attr("href") shouldBe controllers.agent.routes.CapturePreferenceController.show().url
       }
     }
 
@@ -65,7 +65,7 @@ class ConfirmEmailViewSpec extends ViewBaseSpec {
       }
 
       "has the correct link" in {
-        element(Selectors.editLink).attr("href") shouldBe controllers.agent.routes.CaptureEmailController.show().url
+        element(Selectors.editLink).attr("href") shouldBe controllers.agent.routes.CapturePreferenceController.show().url
       }
 
       "has the correct GA tag" in {

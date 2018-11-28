@@ -37,9 +37,7 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
     mockConfig
   )
 
-  val testVatNumber: String = "999999999"
   val testEmail: String = "test@email.co.uk"
-  val testContinueUrl: String = "/someReturnUrl/verified"
 
   lazy val testSendEmailRequest = FakeRequest("GET", "/send-verification")
   lazy val testGetRequest = FakeRequest("GET", "/verify-email-address")
@@ -79,7 +77,7 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
     }
 
     "there isn't an email in session" should {
-      "return OK" in {
+      "redirect to the capture email page" in {
 
         mockAgentAuthorised()
 
@@ -87,7 +85,7 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
         val result = TestVerifyEmailController.show(request)
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(routes.CaptureEmailController.show().url)
+        redirectLocation(result) shouldBe Some(routes.CapturePreferenceController.show().url)
       }
     }
 
@@ -108,8 +106,7 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
   "Calling the sendVerification action in VerifyEmailController" when {
 
     "there is an email in session and the email request is successfully created" should {
-
-      "show the email verification page" in {
+      "redirect to the email verification page" in {
 
         mockAgentAuthorised()
         mockCreateEmailVerificationRequest(Some(true))
@@ -123,8 +120,7 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
     }
 
     "there is an email in session and the email request is not created as already verified" should {
-
-      "show the email confirmation page" in {
+      "redirect to the select client VRN page" in {
 
         mockAgentAuthorised()
         mockCreateEmailVerificationRequest(Some(false))
@@ -139,8 +135,7 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
 
 
     "there is an email in session and the email request returned an unexpected error" should {
-
-      "show the email confirmation page" in {
+      "show an internal server error" in {
 
         mockAgentAuthorised()
         mockCreateEmailVerificationRequest(None)
@@ -153,8 +148,7 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
     }
 
     "there is not an email in session and the email request returned an unexpected error" should {
-
-      "show the email confirmation page" in {
+      "show an internal server error" in {
 
         mockAgentAuthorised()
         mockCreateEmailVerificationRequest(None)
@@ -167,7 +161,7 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
     }
 
     "there isn't an email in session" should {
-      "return OK" in {
+      "redirect to the capture email page" in {
 
         mockAgentAuthorised()
 
@@ -175,7 +169,7 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
         val result = TestVerifyEmailController.sendVerification(request)
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(routes.CaptureEmailController.show().url)
+        redirectLocation(result) shouldBe Some(routes.CapturePreferenceController.show().url)
       }
     }
 
@@ -188,7 +182,8 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
         val result = TestVerifyEmailController.sendVerification(request)
 
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-        Jsoup.parse(bodyOf(result)).title shouldBe "There is a problem with the service - VAT reporting through software - GOV.UK"
+        Jsoup.parse(bodyOf(result)).title shouldBe "There is a problem with the service - " +
+          "VAT reporting through software - GOV.UK"
       }
     }
 

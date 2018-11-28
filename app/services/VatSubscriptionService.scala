@@ -24,6 +24,6 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class VatSubscriptionService @Inject()(emailVerificationService: EmailVerificationService) {
 
-  def updateEmail(vrn: String, email: String)
-                 (implicit headerCarrier: HeaderCarrier, ec: ExecutionContext): Option[Boolean] = ???
+  def updateNotificationPreference(vrn: String, email: String)
+                                  (implicit headerCarrier: HeaderCarrier, ec: ExecutionContext): Option[Boolean] = ???
 }

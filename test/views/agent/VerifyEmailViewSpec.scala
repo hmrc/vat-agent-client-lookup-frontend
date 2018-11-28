@@ -26,7 +26,7 @@ class VerifyEmailViewSpec extends ViewBaseSpec {
 
   lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
   val testEmail: String = "test@email.com"
-  lazy val view = views.html.agent.verify_email(testEmail)
+  lazy val view = views.html.agent.verifyEmail(testEmail)
 
   lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -52,7 +52,7 @@ class VerifyEmailViewSpec extends ViewBaseSpec {
 
     "have a link element in the first paragraph that links to the Capture your email page" in {
       element("#content > article > p:nth-child(3) > a").attr("href") shouldBe
-        controllers.agent.routes.CaptureEmailController.show().url
+        controllers.agent.routes.CapturePreferenceController.show().url
     }
 
     "have an accordion which" should {

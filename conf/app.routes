@@ -18,5 +18,6 @@ GET        /redirect                                    controllers.agent.Confir
 GET        /email-notification                          controllers.agent.CapturePreferenceController.show
 POST       /email-notification                          controllers.agent.CapturePreferenceController.submit
 GET        /confirm-agent-email                         controllers.agent.ConfirmEmailController.show
-GET        /email-verification                        controllers.agent.VerifyEmailController.show
+GET        /email-verification                          controllers.agent.VerifyEmailController.show
 GET        /send-verification-request                   controllers.agent.VerifyEmailController.sendVerification
+GET        /is-email-verified                           controllers.agent.ConfirmEmailController.isEmailVerified

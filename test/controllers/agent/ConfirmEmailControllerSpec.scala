@@ -18,29 +18,27 @@ package controllers.agent
 
 import common.SessionKeys
 import controllers.ControllerBaseSpec
-import mocks.services.MockVatSubscriptionService
+import mocks.services.MockEmailVerificationService
 import models.Agent
 import org.jsoup.Jsoup
-import org.mockito.ArgumentMatchers
-import org.mockito.Mockito.when
-import org.scalatest.concurrent.{Waiters, _}
 import play.api.http.Status
 import play.api.mvc.{AnyContent, AnyContentAsEmpty}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
 
-class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockVatSubscriptionService {
+import scala.concurrent.Future
+
+class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerificationService {
 
   object TestConfirmEmailController extends ConfirmEmailController(
     mockAgentOnlyAuthPredicate,
     messagesApi,
-    mockVatSubscriptionService,
+    mockEmailVerificationService,
     mockErrorHandler,
     mockConfig
   )
 
-  val testVatNumber: String = "999999999"
   val testEmail: String = "test@email.co.uk"
 
   lazy val testGetRequest = FakeRequest("GET", "/confirm-email")
@@ -96,23 +94,24 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockVatSubscrip
         val request = testGetRequest.withSession(SessionKeys.notificationsEmail -> testEmail)
         val result = TestConfirmEmailController.show(request)
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-        Jsoup.parse(bodyOf(result)).title shouldBe "There is a problem with the service - VAT reporting through software - GOV.UK"
+        Jsoup.parse(bodyOf(result)).title shouldBe "There is a problem with the service - " +
+          "VAT reporting through software - GOV.UK"
       }
     }
   }
 
-  "Calling the updateEmailAddress() action in ConfirmEmailController" when {
+  "Calling the isEmailVerified action in ConfirmEmailController" when {
 
-    "there is a verified email in session and the email has been updated successfully" should {
+    "there is an email in session and it's verified" should {
       "redirect to select client VRN page" in {
 
         mockAgentAuthorised()
+
         val request = testGetRequest.withSession(SessionKeys.notificationsEmail -> testEmail)
 
-        when(mockVatSubscriptionService.updateEmail(ArgumentMatchers.any(), ArgumentMatchers.any())
-        (ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(Some(true))
+        mockGetEmailVerificationState(testEmail)(Future(Some(true)))
 
-        val result = TestConfirmEmailController.updateEmailAddress()(request)
+        val result = TestConfirmEmailController.isEmailVerified()(request)
 
         status(result) shouldBe Status.SEE_OTHER
         redirectLocation(result) shouldBe Some("/vat-through-software/representative/client-vat-number")
@@ -121,37 +120,18 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockVatSubscrip
     }
 
     "there is a non-verified email in session" should {
-      "redirect the user to the send email verification pagee" in {
+      "redirect the user to the send email verification page" in {
 
         mockAgentAuthorised()
 
-        when(mockVatSubscriptionService.updateEmail(ArgumentMatchers.any(), ArgumentMatchers.any())
-        (ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(Some(false))
+        mockGetEmailVerificationState(testEmail)(Future(Some(false)))
 
         val request = testGetRequest.withSession(SessionKeys.notificationsEmail -> testEmail)
-        val result = TestConfirmEmailController.updateEmailAddress()(request)
+        val result = TestConfirmEmailController.isEmailVerified()(request)
 
         status(result) shouldBe Status.SEE_OTHER
         redirectLocation(result) shouldBe Some("/vat-through-software/representative/send-verification-request")
 
-      }
-    }
-
-    "there is a verified email in session but email could not be updated because there was an error " +
-      "trying to update the email address" should {
-      "throw an Internal Server Exception" in {
-
-        mockAgentAuthorised()
-
-        when(mockVatSubscriptionService.updateEmail(ArgumentMatchers.any(), ArgumentMatchers.any())
-        (ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(None)
-
-        val request = testGetRequest.withSession(SessionKeys.notificationsEmail -> testEmail)
-        val result = TestConfirmEmailController.updateEmailAddress()(request)
-
-        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-        Jsoup.parse(bodyOf(result)).title shouldBe
-          "There is a problem with the service - VAT reporting through software - GOV.UK"
       }
     }
 
@@ -161,7 +141,7 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockVatSubscrip
         mockAgentAuthorised()
 
         val request = testGetRequest
-        val result = TestConfirmEmailController.updateEmailAddress()(request)
+        val result = TestConfirmEmailController.isEmailVerified()(request)
 
         status(result) shouldBe Status.SEE_OTHER
         redirectLocation(result) shouldBe Some("/vat-through-software/representative/email-notification")
@@ -175,10 +155,11 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockVatSubscrip
         mockUnauthorised()
 
         val request = testGetRequest.withSession(SessionKeys.notificationsEmail -> testEmail)
-        val result = TestConfirmEmailController.updateEmailAddress()(request)
+        val result = TestConfirmEmailController.isEmailVerified()(request)
 
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-        Jsoup.parse(bodyOf(result)).title shouldBe "There is a problem with the service - VAT reporting through software - GOV.UK"
+        Jsoup.parse(bodyOf(result)).title shouldBe "There is a problem with the service - " +
+          "VAT reporting through software - GOV.UK"
       }
     }
   }

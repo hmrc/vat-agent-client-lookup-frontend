@@ -23,15 +23,16 @@ import javax.inject.{Inject, Singleton}
 import models.Agent
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Call}
-import services.VatSubscriptionService
+import play.api.mvc.{Action, AnyContent}
+import services.EmailVerificationService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import controllers.agent.VerifyEmailController
+
+import scala.concurrent.Future
 
 @Singleton
 class ConfirmEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
                                        val messagesApi: MessagesApi,
-                                       val vatSubscriptionService: VatSubscriptionService,
+                                       val emailVerificationService: EmailVerificationService,
                                        val errorHandler: ErrorHandler,
                                        implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
@@ -39,28 +40,28 @@ class ConfirmEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
 
     extractSessionEmail(agent) match {
       case Some(email) =>
-        Ok(views.html.agent.confirm_email(email))
+        Ok(views.html.agent.confirmEmail(email))
       case _ =>
-        Redirect(routes.CaptureEmailController.show())
+        Redirect(routes.CapturePreferenceController.show())
     }
   }
 
-  def updateEmailAddress(): Action[AnyContent] = authenticate { implicit agent =>
+  def isEmailVerified: Action[AnyContent] = authenticate.async { implicit agent =>
 
     extractSessionEmail(agent) match {
       case Some(email) =>
-        vatSubscriptionService.updateEmail(agent.arn, email) match {
-          case Some(false) =>
-            Redirect(routes.VerifyEmailController.sendVerification())
+        emailVerificationService.isEmailVerified(email) map {
           case Some(true) =>
             Redirect(routes.SelectClientVrnController.show())
-          case None =>
+          case Some(false) =>
+            Redirect(routes.VerifyEmailController.sendVerification())
+          case _ =>
             errorHandler.showInternalServerError
         }
 
       case _ =>
-        Logger.info("[ConfirmEmailController][updateEmailAddress] no email address found in session")
-        Redirect(routes.CaptureEmailController.show())
+        Logger.info("[ConfirmEmailController][updateNotificationPreference] no email address found in session")
+        Future.successful(Redirect(routes.CapturePreferenceController.show()))
     }
   }
 

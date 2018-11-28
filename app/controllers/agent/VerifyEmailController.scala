@@ -39,16 +39,16 @@ class VerifyEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
   def show: Action[AnyContent] = authenticate { implicit agent =>
 
     extractSessionEmail(agent) match {
-      case Some(email) => Ok(views.html.agent.verify_email(email))
-      case _ => Redirect(routes.CaptureEmailController.show())
+      case Some(email) => Ok(views.html.agent.verifyEmail(email))
+      case _ => Redirect(routes.CapturePreferenceController.show())
     }
   }
 
   def sendVerification: Action[AnyContent] = authenticate.async { implicit agent =>
 
     extractSessionEmail(agent) match {
-      case Some(email) =>
-        emailVerificationService.createEmailVerificationRequest(email, routes.ConfirmEmailController.updateEmailAddress().url).map{
+      case Some(email) => emailVerificationService.createEmailVerificationRequest(email, routes.ConfirmEmailController
+            .isEmailVerified().url) map {
           case Some(true) => Redirect(routes.VerifyEmailController.show())
           case Some(false) =>
             Logger.warn(
@@ -59,7 +59,7 @@ class VerifyEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
           case _ => errorHandler.showInternalServerError
         }
 
-      case _ => Future.successful(Redirect(routes.CaptureEmailController.show()))
+      case _ => Future.successful(Redirect(routes.CapturePreferenceController.show()))
     }
   }
 
