@@ -26,29 +26,27 @@ import javax.inject.{Inject, Singleton}
 import play.api.i18n.MessagesApi
 import play.api.mvc._
 
-import scala.concurrent.Future
-
 @Singleton
 class CapturePreferenceController @Inject()(val messagesApi: MessagesApi,
                                             val authenticate: AuthoriseAsAgentOnly,
                                             val preferenceCheck: PreferencePredicate,
                                             implicit val appConfig: AppConfig) extends BaseController {
 
-  def show: Action[AnyContent] = (authenticate andThen preferenceCheck).async { implicit user =>
-    Future.successful(Ok(views.html.agent.capturePreference(preferenceForm)))
+  def show: Action[AnyContent] = (authenticate andThen preferenceCheck) { implicit user =>
+    Ok(views.html.agent.capturePreference(preferenceForm))
   }
 
-  def submit: Action[AnyContent] = (authenticate andThen preferenceCheck).async { implicit user =>
+  def submit: Action[AnyContent] = (authenticate andThen preferenceCheck) { implicit user =>
     preferenceForm.bindFromRequest().fold(
-      error     => Future.successful(BadRequest(views.html.agent.capturePreference(error))),
+      error     => BadRequest(views.html.agent.capturePreference(error)),
       formData  => {
         if (formData.yesNo.value) {
-          Future.successful(Redirect(controllers.agent.routes.SelectClientVrnController.show())
+          Redirect(controllers.agent.routes.ConfirmEmailController.show())
             .addingToSession(SessionKeys.preference -> yes)
-            .addingToSession(SessionKeys.notificationsEmail -> formData.email.getOrElse("")))
+            .addingToSession(SessionKeys.notificationsEmail -> formData.email.getOrElse(""))
         } else {
-          Future.successful(Redirect(controllers.agent.routes.SelectClientVrnController.show())
-            .addingToSession(SessionKeys.preference -> no))
+          Redirect(controllers.agent.routes.SelectClientVrnController.show())
+            .addingToSession(SessionKeys.preference -> no)
         }
       }
     )

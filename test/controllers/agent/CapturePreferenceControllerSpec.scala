@@ -143,7 +143,7 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec {
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        "redirect to the select client VRN view" in {
+        "redirect to the select client VRN controller" in {
           redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show().url)
         }
 
@@ -163,8 +163,8 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec {
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        "redirect to the select client VRN view" in {
-          redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show().url)
+        "redirect to the confirm email controller" in {
+          redirectLocation(result) shouldBe Some(controllers.agent.routes.ConfirmEmailController.show().url)
         }
 
         "add the preference to the session" in {
