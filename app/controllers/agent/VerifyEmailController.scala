@@ -18,7 +18,7 @@ package controllers.agent
 
 import common.SessionKeys
 import config.{AppConfig, ErrorHandler}
-import controllers.predicates.AuthoriseAsAgentOnly
+import controllers.predicates.{AuthoriseAsAgentOnly, PreferencePredicate}
 import javax.inject.{Inject, Singleton}
 import models.Agent
 import play.api.Logger
@@ -31,12 +31,13 @@ import scala.concurrent.Future
 
 @Singleton
 class VerifyEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
+                                      val preferenceCheck: PreferencePredicate,
                                       val messagesApi: MessagesApi,
                                       val emailVerificationService: EmailVerificationService,
                                       val errorHandler: ErrorHandler,
                                       implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  def show: Action[AnyContent] = authenticate { implicit agent =>
+  def show: Action[AnyContent] = (authenticate andThen preferenceCheck) { implicit agent =>
 
     extractSessionEmail(agent) match {
       case Some(email) => Ok(views.html.agent.verifyEmail(email))
@@ -44,11 +45,11 @@ class VerifyEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
     }
   }
 
-  def sendVerification: Action[AnyContent] = authenticate.async { implicit agent =>
+  def sendVerification: Action[AnyContent] = (authenticate andThen preferenceCheck).async { implicit agent =>
 
     extractSessionEmail(agent) match {
-      case Some(email) => emailVerificationService.createEmailVerificationRequest(email, routes.ConfirmEmailController
-            .isEmailVerified().url) map {
+      case Some(email) => emailVerificationService.createEmailVerificationRequest(
+        email, routes.ConfirmEmailController.isEmailVerified().url) map {
           case Some(true) => Redirect(routes.VerifyEmailController.show())
           case Some(false) =>
             Logger.warn(
@@ -64,7 +65,6 @@ class VerifyEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
   }
 
   private[controllers] def extractSessionEmail(agent: Agent[AnyContent]): Option[String] = {
-    agent.session.get(SessionKeys.notificationsEmail).filter(_.nonEmpty).orElse(None)
+    agent.session.get(SessionKeys.notificationsEmail).filter(_.nonEmpty)
   }
-
 }

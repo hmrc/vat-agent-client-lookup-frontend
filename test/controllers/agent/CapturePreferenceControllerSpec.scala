@@ -32,29 +32,67 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec {
   def target: CapturePreferenceController = new CapturePreferenceController(
     messagesApi,
     mockAgentOnlyAuthPredicate,
+    mockPreferencePredicate,
     mockConfig
   )
 
   "Calling the show action" when {
 
-    "a user is enrolled with a valid enrolment" should {
+    "a user is enrolled with a valid enrolment" when {
 
-      lazy val result = target.show(request.withSession(
-        SessionKeys.redirectUrl -> testRedirectUrl
-      ))
+      "there is no preference or verified email in session" should {
 
-      "return 200" in {
-        mockAgentAuthorised()
-        status(result) shouldBe Status.OK
+        lazy val result = target.show(request.withSession(
+          SessionKeys.redirectUrl -> testRedirectUrl
+        ))
+
+        "return 200" in {
+          mockAgentAuthorised()
+          status(result) shouldBe Status.OK
+        }
+
+        "return HTML" in {
+          contentType(result) shouldBe Some("text/html")
+          charset(result) shouldBe Some("utf-8")
+        }
       }
 
-      "return HTML" in {
-        contentType(result) shouldBe Some("text/html")
-        charset(result) shouldBe Some("utf-8")
+      "there is a preference of 'no' in session" should {
+
+        lazy val result = target.show(request.withSession(
+          SessionKeys.redirectUrl -> testRedirectUrl,
+          SessionKeys.preference -> "no"
+        ))
+
+        "return 303" in {
+          mockAgentAuthorised()
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        "redirect to the Select Client VRN controller" in {
+          redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show().url)
+        }
+      }
+
+      "there is a verified email in session" should {
+
+        lazy val result = target.show(request.withSession(
+          SessionKeys.redirectUrl -> testRedirectUrl,
+          SessionKeys.verifiedAgentEmail -> "pepsi-mac@gmail.com"
+        ))
+
+        "return 303" in {
+          mockAgentAuthorised()
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        "redirect to the Select Client VRN controller" in {
+          redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show().url)
+        }
       }
     }
 
-    "a user is does not have a valid enrolment" should {
+    "a user does not have a valid enrolment" should {
 
       lazy val result = target.show(request.withSession(
         SessionKeys.redirectUrl -> testRedirectUrl

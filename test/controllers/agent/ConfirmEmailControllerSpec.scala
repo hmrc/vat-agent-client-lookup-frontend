@@ -33,6 +33,7 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerifi
 
   object TestConfirmEmailController extends ConfirmEmailController(
     mockAgentOnlyAuthPredicate,
+    mockPreferencePredicate,
     messagesApi,
     mockEmailVerificationService,
     mockErrorHandler,

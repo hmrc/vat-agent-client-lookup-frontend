@@ -19,9 +19,10 @@ package controllers.agent
 import common.SessionKeys
 import config.AppConfig
 import controllers.BaseController
-import controllers.predicates.AuthoriseAsAgentOnly
+import controllers.predicates.{AuthoriseAsAgentOnly, PreferencePredicate}
 import forms.PreferenceForm._
 import javax.inject.{Inject, Singleton}
+
 import play.api.i18n.MessagesApi
 import play.api.mvc._
 
@@ -30,13 +31,14 @@ import scala.concurrent.Future
 @Singleton
 class CapturePreferenceController @Inject()(val messagesApi: MessagesApi,
                                             val authenticate: AuthoriseAsAgentOnly,
+                                            val preferenceCheck: PreferencePredicate,
                                             implicit val appConfig: AppConfig) extends BaseController {
 
-  def show: Action[AnyContent] = authenticate.async { implicit user =>
+  def show: Action[AnyContent] = (authenticate andThen preferenceCheck).async { implicit user =>
     Future.successful(Ok(views.html.agent.capturePreference(preferenceForm)))
   }
 
-  def submit: Action[AnyContent] = authenticate.async { implicit user =>
+  def submit: Action[AnyContent] = (authenticate andThen preferenceCheck).async { implicit user =>
     preferenceForm.bindFromRequest().fold(
       error     => Future.successful(BadRequest(views.html.agent.capturePreference(error))),
       formData  => {

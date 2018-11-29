@@ -18,8 +18,9 @@ package controllers.agent
 
 import common.SessionKeys
 import config.{AppConfig, ErrorHandler}
-import controllers.predicates.AuthoriseAsAgentOnly
+import controllers.predicates.{AuthoriseAsAgentOnly, PreferencePredicate}
 import javax.inject.{Inject, Singleton}
+
 import models.Agent
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -31,12 +32,13 @@ import scala.concurrent.Future
 
 @Singleton
 class ConfirmEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
+                                       val preferenceCheck: PreferencePredicate,
                                        val messagesApi: MessagesApi,
                                        val emailVerificationService: EmailVerificationService,
                                        val errorHandler: ErrorHandler,
                                        implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  def show: Action[AnyContent] = authenticate { implicit agent =>
+  def show: Action[AnyContent] = (authenticate andThen preferenceCheck) { implicit agent =>
 
     extractSessionEmail(agent) match {
       case Some(email) =>
@@ -46,7 +48,7 @@ class ConfirmEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
     }
   }
 
-  def isEmailVerified: Action[AnyContent] = authenticate.async { implicit agent =>
+  def isEmailVerified: Action[AnyContent] = (authenticate andThen preferenceCheck).async { implicit agent =>
 
     extractSessionEmail(agent) match {
       case Some(email) =>
