@@ -43,7 +43,7 @@ class CapturePreferenceController @Inject()(val messagesApi: MessagesApi,
         if (formData.yesNo.value) {
           Future.successful(Redirect(controllers.agent.routes.SelectClientVrnController.show())
             .addingToSession(SessionKeys.preference -> yes)
-            .addingToSession(SessionKeys.email      -> formData.email.getOrElse("")))
+            .addingToSession(SessionKeys.notificationsEmail -> formData.email.getOrElse("")))
         } else {
           Future.successful(Redirect(controllers.agent.routes.SelectClientVrnController.show())
             .addingToSession(SessionKeys.preference -> no))

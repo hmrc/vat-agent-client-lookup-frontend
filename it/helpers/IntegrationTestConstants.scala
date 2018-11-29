@@ -27,6 +27,8 @@ object IntegrationTestConstants {
 
   val clientVRN = "999969202"
 
+  val notificationsEmail = "notifyme@email.com"
+
   val website = "www.test.com"
 
   val phoneNumber = "01234 567890"

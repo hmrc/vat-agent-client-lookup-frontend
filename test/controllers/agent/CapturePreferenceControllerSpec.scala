@@ -134,7 +134,7 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec {
         }
 
         "add the new email to the session" in {
-          session(result).get(SessionKeys.email) shouldBe Some(testValidEmail)
+          session(result).get(SessionKeys.notificationsEmail) shouldBe Some(testValidEmail)
         }
       }
 

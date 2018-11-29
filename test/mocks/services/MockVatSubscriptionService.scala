@@ -14,12 +14,20 @@
  * limitations under the License.
  */
 
-package common
+package mocks.services
 
-object SessionKeys {
+import org.mockito.Mockito.reset
+import org.scalatest.mockito.MockitoSugar
+import org.scalatest.{BeforeAndAfterEach, Suite}
+import services.VatSubscriptionService
 
-  val clientVRN: String = "CLIENT_VRN"
-  val redirectUrl: String = "redirectUrl"
-  val preference: String = "preference"
-  val notificationsEmail: String = "notificationsEmail"
+trait MockVatSubscriptionService extends MockitoSugar with BeforeAndAfterEach {
+  this: Suite =>
+
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    reset(mockVatSubscriptionService)
+  }
+
+  val mockVatSubscriptionService: VatSubscriptionService = mock[VatSubscriptionService]
 }

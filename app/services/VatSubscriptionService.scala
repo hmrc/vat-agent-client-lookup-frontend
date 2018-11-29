@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package common
+package services
 
-object SessionKeys {
+import javax.inject.{Inject, Singleton}
+import uk.gov.hmrc.http.HeaderCarrier
 
-  val clientVRN: String = "CLIENT_VRN"
-  val redirectUrl: String = "redirectUrl"
-  val preference: String = "preference"
-  val notificationsEmail: String = "notificationsEmail"
+import scala.concurrent.ExecutionContext
+
+@Singleton
+class VatSubscriptionService @Inject()(emailVerificationService: EmailVerificationService) {
+
+  def updateNotificationPreference(vrn: String, email: String)
+                                  (implicit headerCarrier: HeaderCarrier, ec: ExecutionContext): Option[Boolean] = ???
 }

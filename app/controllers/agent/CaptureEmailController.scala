@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package common
+package controllers.agent
 
-object SessionKeys {
+import javax.inject.Singleton
+import play.api.mvc._
 
-  val clientVRN: String = "CLIENT_VRN"
-  val redirectUrl: String = "redirectUrl"
-  val preference: String = "preference"
-  val notificationsEmail: String = "notificationsEmail"
+@Singleton
+class CaptureEmailController {
+
+  def show: Action[AnyContent] = ???
 }

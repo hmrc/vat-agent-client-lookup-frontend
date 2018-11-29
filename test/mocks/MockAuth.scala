@@ -51,6 +51,8 @@ trait MockAuth extends TestUtil with BeforeAndAfterEach with MockitoSugar  {
 
   val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
 
+  val mockErrorHandler: ErrorHandler = new ErrorHandler(messagesApi, mockConfig)
+
   val mockAuthAsAgentWithClient: AuthoriseAsAgentWithClient =
     new AuthoriseAsAgentWithClient(
       mockEnrolmentsAuthService,

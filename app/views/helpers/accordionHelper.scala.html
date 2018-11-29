@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,14 +12,11 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package common
+@(accordionTitleText: String, feature: String, pageName: String, paragraphText: Html)
 
-object SessionKeys {
-
-  val clientVRN: String = "CLIENT_VRN"
-  val redirectUrl: String = "redirectUrl"
-  val preference: String = "preference"
-  val notificationsEmail: String = "notificationsEmail"
-}
+<details>
+    <summary><span class="summary" data-journey-click="@feature-help:reveal:@pageName">@accordionTitleText</span></summary>
+    <div class="panel panel-border-narrow">@paragraphText</div>
+</details>
