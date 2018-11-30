@@ -21,13 +21,16 @@ import controllers.ControllerBaseSpec
 import mocks.services.MockEmailVerificationService
 import models.Agent
 import org.jsoup.Jsoup
+import org.scalatest.BeforeAndAfterAll
 import play.api.http.Status
 import play.api.mvc.{AnyContent, AnyContentAsEmpty}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
 
-class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerificationService {
+class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerificationService with BeforeAndAfterAll {
+
+  override def beforeAll(): Unit = mockConfig.features.preferenceJourneyEnabled(true)
 
   object TestVerifyEmailController extends VerifyEmailController(
     mockAgentOnlyAuthPredicate,

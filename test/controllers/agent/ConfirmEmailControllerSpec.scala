@@ -21,6 +21,7 @@ import controllers.ControllerBaseSpec
 import mocks.services.MockEmailVerificationService
 import models.Agent
 import org.jsoup.Jsoup
+import org.scalatest.BeforeAndAfterAll
 import play.api.http.Status
 import play.api.mvc.{AnyContent, AnyContentAsEmpty}
 import play.api.test.FakeRequest
@@ -29,7 +30,9 @@ import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
 
 import scala.concurrent.Future
 
-class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerificationService {
+class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerificationService with BeforeAndAfterAll {
+
+  override def beforeAll(): Unit = mockConfig.features.preferenceJourneyEnabled(true)
 
   object TestConfirmEmailController extends ConfirmEmailController(
     mockAgentOnlyAuthPredicate,

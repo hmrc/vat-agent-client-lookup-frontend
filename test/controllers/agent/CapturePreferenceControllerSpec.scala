@@ -18,10 +18,13 @@ package controllers.agent
 
 import common.SessionKeys
 import controllers.ControllerBaseSpec
+import org.scalatest.BeforeAndAfterAll
 import play.api.http.Status
 import play.api.test.Helpers._
 
-class CapturePreferenceControllerSpec extends ControllerBaseSpec {
+class CapturePreferenceControllerSpec extends ControllerBaseSpec with BeforeAndAfterAll {
+
+  override def beforeAll(): Unit = mockConfig.features.preferenceJourneyEnabled(true)
 
   val testRedirectUrl: String     = "/manage-vat-account"
   val testValidEmail: String      = "test@example.com"
@@ -70,7 +73,8 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec {
         }
 
         "redirect to the Select Client VRN controller" in {
-          redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show().url)
+          redirectLocation(result) shouldBe
+            Some(controllers.agent.routes.SelectClientVrnController.show(testRedirectUrl).url)
         }
       }
 
@@ -87,7 +91,8 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec {
         }
 
         "redirect to the Select Client VRN controller" in {
-          redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show().url)
+          redirectLocation(result) shouldBe
+            Some(controllers.agent.routes.SelectClientVrnController.show(testRedirectUrl).url)
         }
       }
     }
@@ -144,7 +149,8 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec {
         }
 
         "redirect to the select client VRN controller" in {
-          redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show().url)
+          redirectLocation(result) shouldBe
+            Some(controllers.agent.routes.SelectClientVrnController.show(testRedirectUrl).url)
         }
 
         "add the preference to the session" in {

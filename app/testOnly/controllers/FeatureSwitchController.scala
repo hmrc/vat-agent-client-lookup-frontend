@@ -30,7 +30,8 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit v
   def featureSwitch: Action[AnyContent] = Action { implicit request =>
     Ok(testOnly.views.html.featureSwitch(FeatureSwitchForm.form.fill(
       FeatureSwitchModel(
-        emailVerificationEnabled = appConfig.features.emailVerificationEnabled()
+        emailVerificationEnabled = appConfig.features.emailVerificationEnabled(),
+        preferenceJourneyEnabled = appConfig.features.preferenceJourneyEnabled()
       )
     )))
   }
@@ -44,6 +45,7 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit v
 
   def handleSuccess(model: FeatureSwitchModel): Result = {
     appConfig.features.emailVerificationEnabled(model.emailVerificationEnabled)
+    appConfig.features.preferenceJourneyEnabled(model.preferenceJourneyEnabled)
     Redirect(routes.FeatureSwitchController.featureSwitch())
   }
 }

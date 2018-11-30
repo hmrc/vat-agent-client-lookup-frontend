@@ -35,16 +35,22 @@ class PreferencePredicate @Inject()(implicit val appConfig: AppConfig,
 
     implicit val agent: Agent[A] = request
 
+    val redirectUrl = agent.session.get(SessionKeys.redirectUrl).getOrElse(appConfig.manageVatCustomerDetailsUrl)
     val preference = agent.session.get(SessionKeys.preference)
     val hasVerifiedEmail = agent.session.get(SessionKeys.verifiedAgentEmail).isDefined
 
-    preference match {
-      case Some("no") =>
-        Future.successful(Left(Redirect(controllers.agent.routes.SelectClientVrnController.show().url)))
-      case _ if hasVerifiedEmail =>
-        Future.successful(Left(Redirect(controllers.agent.routes.SelectClientVrnController.show().url)))
-      case _ =>
-        Future.successful(Right(agent))
+    if(appConfig.features.preferenceJourneyEnabled()) {
+      preference match {
+        case Some("no") =>
+          Future.successful(Left(Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectUrl).url)))
+        case _ if hasVerifiedEmail =>
+          Future.successful(Left(Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectUrl).url)))
+        case _ =>
+          Future.successful(Right(agent))
+      }
+    } else {
+      Future.successful(Left(Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectUrl).url)
+        .addingToSession(SessionKeys.preference -> "no")))
     }
   }
 }

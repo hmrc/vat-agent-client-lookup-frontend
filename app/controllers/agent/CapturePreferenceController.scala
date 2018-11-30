@@ -45,7 +45,8 @@ class CapturePreferenceController @Inject()(val messagesApi: MessagesApi,
             .addingToSession(SessionKeys.preference -> yes)
             .addingToSession(SessionKeys.notificationsEmail -> formData.email.getOrElse(""))
         } else {
-          Redirect(controllers.agent.routes.SelectClientVrnController.show())
+          val redirectUrl = user.session.get(SessionKeys.redirectUrl).getOrElse(appConfig.manageVatCustomerDetailsUrl)
+          Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectUrl))
             .addingToSession(SessionKeys.preference -> no)
         }
       }

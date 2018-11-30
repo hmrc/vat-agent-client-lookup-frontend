@@ -56,4 +56,5 @@ object ConfigKeys {
   val emailVerificationBaseUrl: String = "email-verification"
 
   val emailVerificationFeature: String = "features.emailVerification.enabled"
+  val preferenceJourneyFeature: String = "features.preferenceJourney.enabled"
 }

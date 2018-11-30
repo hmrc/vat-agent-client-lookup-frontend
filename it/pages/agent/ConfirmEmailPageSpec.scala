@@ -24,7 +24,7 @@ import stubs.EmailVerificationStub
 
 class ConfirmEmailPageSpec extends BasePageISpec {
 
-  val path = "/confirm-agent-email"
+  val path = "/email-confirmation"
   val isEmailVerifiedPath = "/is-email-verified"
 
   "Calling the .show action" when {

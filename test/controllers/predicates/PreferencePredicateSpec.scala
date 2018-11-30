@@ -20,45 +20,68 @@ import assets.BaseTestConstants._
 import common.SessionKeys
 import controllers.ControllerBaseSpec
 import models.Agent
+import org.scalatest.BeforeAndAfterAll
 import play.api.mvc.Results.Redirect
 
-class PreferencePredicateSpec extends ControllerBaseSpec {
+class PreferencePredicateSpec extends ControllerBaseSpec with BeforeAndAfterAll {
+
+  override def beforeAll(): Unit = mockConfig.features.preferenceJourneyEnabled(true)
 
   "The preference predicate" when {
 
-    "the agent has no preference or verified email in session" should {
+    "the preference journey feature switch is on" when {
 
-      "allow the request to pass through the predicate" in {
-        await(mockPreferencePredicate.refine(agent)) shouldBe Right(agent)
+      "the agent has no preference or verified email in session" should {
+
+        "allow the request to pass through the predicate" in {
+          await(mockPreferencePredicate.refine(agent)) shouldBe Right(agent)
+        }
+      }
+
+      "the agent has a preference of 'no' in session" should {
+
+        "redirect the request to the SelectClientVrn controller" in {
+          val agentWithPref = Agent(arn)(request.withSession(SessionKeys.preference -> "no"))
+          await(mockPreferencePredicate.refine(agentWithPref)) shouldBe
+            Left(Redirect(controllers.agent.routes.SelectClientVrnController.show("/customer-details")))
+        }
+      }
+
+      "the agent has a preference of 'yes' and no verified email address in session" should {
+
+        "allow the request to pass through the predicate" in {
+          val agentWithPref = Agent(arn)(request.withSession(SessionKeys.preference -> "yes"))
+          await(mockPreferencePredicate.refine(agentWithPref)) shouldBe Right(agentWithPref)
+        }
+      }
+
+      "the agent has a preference of 'yes' and a verified email address in session" should {
+
+        "redirect the request to the SelectClientVrn controller" in {
+          val agentWithPref = Agent(arn)(request.withSession(
+            SessionKeys.preference -> "yes",
+            SessionKeys.verifiedAgentEmail -> "scala@gmail.com"
+          ))
+          await(mockPreferencePredicate.refine(agentWithPref)) shouldBe
+            Left(Redirect(controllers.agent.routes.SelectClientVrnController.show("/customer-details")))
+        }
       }
     }
 
-    "the agent has a preference of 'no' in session" should {
+    "the preference journey feature switch is off" should {
+
+      lazy val result = {
+        mockConfig.features.preferenceJourneyEnabled(false)
+        await(mockPreferencePredicate.refine(agent))
+      }
 
       "redirect the request to the SelectClientVrn controller" in {
-        val agentWithPref = Agent(arn)(request.withSession(SessionKeys.preference -> "no"))
-        await(mockPreferencePredicate.refine(agentWithPref)) shouldBe
-          Left(Redirect(controllers.agent.routes.SelectClientVrnController.show()))
+        result shouldBe Left(Redirect(controllers.agent.routes.SelectClientVrnController.show("/homepage"))
+          .addingToSession(SessionKeys.preference -> "no")(agent))
       }
-    }
 
-    "the agent has a preference of 'yes' and no verified email address in session" should {
-
-      "allow the request to pass through the predicate" in {
-        val agentWithPref = Agent(arn)(request.withSession(SessionKeys.preference -> "yes"))
-        await(mockPreferencePredicate.refine(agentWithPref)) shouldBe Right(agentWithPref)
-      }
-    }
-
-    "the agent has a preference of 'yes' and a verified email address in session" should {
-
-      "redirect the request to the SelectClientVrn controller" in {
-        val agentWithPref = Agent(arn)(request.withSession(
-          SessionKeys.preference -> "yes",
-          SessionKeys.verifiedAgentEmail -> "scala@gmail.com"
-        ))
-        await(mockPreferencePredicate.refine(agentWithPref)) shouldBe
-          Left(Redirect(controllers.agent.routes.SelectClientVrnController.show()))
+      "add the 'no' preference to session to deny further attempts to bypass the predicate" in {
+        result.left.get.session(agent).get(SessionKeys.preference) shouldBe Some("no")
       }
     }
   }
