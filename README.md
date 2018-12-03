@@ -6,7 +6,7 @@
 
 ## Summary
 
-This is the repository for VAT Agent Client Lookup Frontend
+This is the repository for VAT Agent Client Lookup Frontend.
 
 This service provides the functionality to verify that an agent can act on behalf of a given client to manage their VAT account details.
 
