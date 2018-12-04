@@ -54,7 +54,10 @@ class ConfirmEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
       case Some(email) =>
         emailVerificationService.isEmailVerified(email) map {
           case Some(true) =>
-            Redirect(routes.SelectClientVrnController.show())
+            val redirectUrl = agent.session.get(SessionKeys.redirectUrl).getOrElse(appConfig.manageVatCustomerDetailsUrl)
+            Redirect(routes.SelectClientVrnController.show(redirectUrl))
+              .addingToSession(SessionKeys.verifiedAgentEmail -> email)
+
           case Some(false) =>
             Redirect(routes.VerifyEmailController.sendVerification())
           case _ =>
