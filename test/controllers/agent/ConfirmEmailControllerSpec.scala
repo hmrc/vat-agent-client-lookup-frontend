@@ -19,14 +19,10 @@ package controllers.agent
 import common.SessionKeys
 import controllers.ControllerBaseSpec
 import mocks.services.MockEmailVerificationService
-import models.Agent
 import org.jsoup.Jsoup
 import org.scalatest.BeforeAndAfterAll
 import play.api.http.Status
-import play.api.mvc.{AnyContent, AnyContentAsEmpty}
-import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
 
 import scala.concurrent.Future
 
@@ -44,23 +40,6 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerifi
   )
 
   val testEmail: String = "test@email.co.uk"
-
-  "Calling the extractEmail function in ConfirmEmailController" when {
-
-    "there is an authenticated request from an Agent with an email in session" should {
-
-      "result in an email address being retrieved if there is an email" in {
-
-        val testRequest: FakeRequest[AnyContentAsEmpty.type] = request.withSession(
-         SessionKeys.notificationsEmail -> testEmail)
-
-        val agent = Agent[AnyContent](Enrolments(Set(new Enrolment("HMRC-AS-AGENT",
-          Seq(EnrolmentIdentifier("AgentReferenceNumber", "XAIT00000000")), "Activated", None))))(testRequest)
-
-        TestConfirmEmailController.extractSessionEmail(agent) shouldBe Some(testEmail)
-      }
-    }
-  }
 
   "Calling the show action in ConfirmEmailController" when {
 
@@ -82,8 +61,7 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerifi
 
     "there isn't an email in session" should {
 
-      lazy val testRequest = request.withSession(SessionKeys.notificationsEmail -> "")
-      lazy val result = TestConfirmEmailController.show(testRequest)
+      lazy val result = TestConfirmEmailController.show(request)
 
       "return 303" in {
         mockAgentAuthorised()

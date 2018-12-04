@@ -19,14 +19,11 @@ package controllers.agent
 import common.SessionKeys
 import controllers.ControllerBaseSpec
 import mocks.services.MockEmailVerificationService
-import models.Agent
 import org.jsoup.Jsoup
 import org.scalatest.BeforeAndAfterAll
 import play.api.http.Status
-import play.api.mvc.{AnyContent, AnyContentAsEmpty}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
 
 class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerificationService with BeforeAndAfterAll {
 
@@ -45,24 +42,6 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
 
   lazy val testSendEmailRequest = FakeRequest("GET", "/send-verification")
   lazy val testGetRequest = FakeRequest("GET", "/verify-email-address")
-
-  "Calling the extractSessionEmail function in VerifyEmailController" when {
-
-    "there is an authenticated request from a user with an email in session" should {
-      "result in an email address being retrieved if there is an email" in {
-
-        mockAgentAuthorised()
-
-        implicit val request: FakeRequest[AnyContentAsEmpty.type] = testGetRequest.withSession(
-          SessionKeys.notificationsEmail -> testEmail)
-
-        val agent = Agent[AnyContent](Enrolments(Set(new Enrolment("HMRC-AS-AGENT",
-          Seq(EnrolmentIdentifier("AgentReferenceNumber", "XAIT00000000")), "Activated", None))))(request)
-
-        TestVerifyEmailController.extractSessionEmail(agent) shouldBe Some(testEmail)
-      }
-    }
-  }
 
   "Calling the show action in VerifyEmailController" when {
 
@@ -85,7 +64,6 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
 
         mockAgentAuthorised()
 
-        val request = testGetRequest.withSession(SessionKeys.notificationsEmail -> "")
         val result = TestVerifyEmailController.show(request)
 
         status(result) shouldBe SEE_OTHER
@@ -169,7 +147,6 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
 
         mockAgentAuthorised()
 
-        val request = testSendEmailRequest.withSession(SessionKeys.notificationsEmail -> "")
         val result = TestVerifyEmailController.sendVerification(request)
 
         status(result) shouldBe SEE_OTHER

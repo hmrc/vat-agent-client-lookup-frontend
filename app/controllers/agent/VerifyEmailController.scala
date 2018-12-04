@@ -20,7 +20,6 @@ import common.SessionKeys
 import config.{AppConfig, ErrorHandler}
 import controllers.predicates.{AuthoriseAsAgentOnly, PreferencePredicate}
 import javax.inject.{Inject, Singleton}
-import models.Agent
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
@@ -39,7 +38,7 @@ class VerifyEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
 
   def show: Action[AnyContent] = (authenticate andThen preferenceCheck) { implicit agent =>
 
-    extractSessionEmail(agent) match {
+    agent.session.get(SessionKeys.notificationsEmail) match {
       case Some(email) => Ok(views.html.agent.verifyEmail(email))
       case _ => Redirect(routes.CapturePreferenceController.show())
     }
@@ -47,7 +46,7 @@ class VerifyEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
 
   def sendVerification: Action[AnyContent] = (authenticate andThen preferenceCheck).async { implicit agent =>
 
-    extractSessionEmail(agent) match {
+    agent.session.get(SessionKeys.notificationsEmail) match {
       case Some(email) => emailVerificationService.createEmailVerificationRequest(
         email, routes.ConfirmEmailController.isEmailVerified().url) map {
           case Some(true) => Redirect(routes.VerifyEmailController.show())
@@ -62,9 +61,5 @@ class VerifyEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
 
       case _ => Future.successful(Redirect(routes.CapturePreferenceController.show()))
     }
-  }
-
-  private[controllers] def extractSessionEmail(agent: Agent[AnyContent]): Option[String] = {
-    agent.session.get(SessionKeys.notificationsEmail).filter(_.nonEmpty)
   }
 }

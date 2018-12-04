@@ -19,11 +19,12 @@ package controllers.agent
 import common.SessionKeys
 import controllers.ControllerBaseSpec
 import mocks.MockAuth
+import org.scalatest.BeforeAndAfterEach
 import play.api.http.Status
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
-class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth {
+class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth with BeforeAndAfterEach {
 
   object TestClientVrnController extends SelectClientVrnController(
     messagesApi,
@@ -32,16 +33,142 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth {
     mockConfig
   )
 
+  override def beforeEach(): Unit = {
+    mockConfig.features.preferenceJourneyEnabled(true)
+  }
+
   "Calling the .show() action" when {
 
-    val testRedirectUrl   = "/manage-vat-account"
+    val testRedirectUrl = "/manage-vat-account"
     val testYesPreference = "yes"
-    val testNoPreference  = "no"
-    val testEmail         = "test@example.com"
+    val testNoPreference = "no"
+    val testEmail = "test@example.com"
 
-    "the user has a preference of 'yes' in session" when {
+    "the preference feature switch is on" when {
 
-      "the user has a verified email in session" when {
+      "the user has a preference of 'yes' in session" when {
+
+        "the user has a verified email in session" when {
+
+          "a valid redirect URL is provided" when {
+
+            "there is a redirect URL currently in session" should {
+
+              lazy val result = TestClientVrnController.show(testRedirectUrl)(request.withSession(
+                SessionKeys.redirectUrl -> testRedirectUrl,
+                SessionKeys.preference -> testYesPreference,
+                SessionKeys.verifiedAgentEmail -> testEmail
+              ))
+
+              "return 200" in {
+                mockAgentAuthorised()
+                status(result) shouldBe Status.OK
+              }
+
+              "return HTML" in {
+                contentType(result) shouldBe Some("text/html")
+                charset(result) shouldBe Some("utf-8")
+              }
+
+              "not add the requested redirect URL to the session" in {
+                session(result).get(SessionKeys.redirectUrl) shouldBe None
+              }
+            }
+
+            "there is no redirect URL currently in session" should {
+
+              lazy val result = TestClientVrnController.show(testRedirectUrl)(request.withSession(
+                SessionKeys.preference -> testYesPreference,
+                SessionKeys.verifiedAgentEmail -> testEmail
+              ))
+
+              "return 200" in {
+                mockAgentAuthorised()
+                status(result) shouldBe Status.OK
+              }
+
+              "return HTML" in {
+                contentType(result) shouldBe Some("text/html")
+                charset(result) shouldBe Some("utf-8")
+              }
+
+              "add the redirect URL to the session" in {
+                session(result).get(SessionKeys.redirectUrl) shouldBe Some(testRedirectUrl)
+              }
+            }
+          }
+
+          "an invalid redirect URL is provided" when {
+
+            "there is a redirect URL currently in session" should {
+
+              lazy val result = TestClientVrnController.show("www.google.com")(request.withSession(
+                SessionKeys.redirectUrl -> testRedirectUrl,
+                SessionKeys.preference -> testYesPreference,
+                SessionKeys.verifiedAgentEmail -> testEmail
+              ))
+
+              "return 200" in {
+                mockAgentAuthorised()
+                status(result) shouldBe Status.OK
+              }
+
+              "return HTML" in {
+                contentType(result) shouldBe Some("text/html")
+                charset(result) shouldBe Some("utf-8")
+              }
+
+              "not add the requested redirect URL to the session" in {
+                session(result).get(SessionKeys.redirectUrl) shouldBe None
+              }
+            }
+
+            "there is no redirect URL currently in session" should {
+
+              lazy val result = TestClientVrnController.show("www.google.com")(request.withSession(
+                SessionKeys.preference -> testYesPreference,
+                SessionKeys.verifiedAgentEmail -> testEmail
+              ))
+
+              "return 500" in {
+                mockAgentAuthorised()
+                status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+              }
+
+              "return HTML" in {
+                contentType(result) shouldBe Some("text/html")
+                charset(result) shouldBe Some("utf-8")
+              }
+
+              "not add the requested redirect URL to the session" in {
+                session(result).get(SessionKeys.redirectUrl) shouldBe None
+              }
+            }
+          }
+        }
+
+        "the user has no verified email in session" should {
+
+          lazy val result = TestClientVrnController.show("www.google.com")(request.withSession(
+            SessionKeys.preference -> testYesPreference
+          ))
+
+          "return 303" in {
+            mockAgentAuthorised()
+            status(result) shouldBe Status.SEE_OTHER
+          }
+
+          "redirect to the Capture Preference controller action" in {
+            redirectLocation(result) shouldBe Some(controllers.agent.routes.CapturePreferenceController.show().url)
+          }
+
+          "not add the requested redirect URL to the session" in {
+            session(result).get(SessionKeys.redirectUrl) shouldBe None
+          }
+        }
+      }
+
+      "the user has a preference of 'no' in session" when {
 
         "a valid redirect URL is provided" when {
 
@@ -49,8 +176,7 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth {
 
             lazy val result = TestClientVrnController.show(testRedirectUrl)(request.withSession(
               SessionKeys.redirectUrl -> testRedirectUrl,
-              SessionKeys.preference -> testYesPreference,
-              SessionKeys.verifiedAgentEmail -> testEmail
+              SessionKeys.preference -> testNoPreference
             ))
 
             "return 200" in {
@@ -71,8 +197,7 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth {
           "there is no redirect URL currently in session" should {
 
             lazy val result = TestClientVrnController.show(testRedirectUrl)(request.withSession(
-              SessionKeys.preference -> testYesPreference,
-              SessionKeys.verifiedAgentEmail -> testEmail
+              SessionKeys.preference -> testNoPreference
             ))
 
             "return 200" in {
@@ -97,8 +222,7 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth {
 
             lazy val result = TestClientVrnController.show("www.google.com")(request.withSession(
               SessionKeys.redirectUrl -> testRedirectUrl,
-              SessionKeys.preference -> testYesPreference,
-              SessionKeys.verifiedAgentEmail -> testEmail
+              SessionKeys.preference -> testNoPreference
             ))
 
             "return 200" in {
@@ -119,8 +243,7 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth {
           "there is no redirect URL currently in session" should {
 
             lazy val result = TestClientVrnController.show("www.google.com")(request.withSession(
-              SessionKeys.preference -> testYesPreference,
-              SessionKeys.verifiedAgentEmail -> testEmail
+              SessionKeys.preference -> testNoPreference
             ))
 
             "return 500" in {
@@ -140,10 +263,10 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth {
         }
       }
 
-      "the user has no verified email in session" should {
+      "the user does not have a preference in session" should {
 
-        lazy val result = TestClientVrnController.show("www.google.com")(request.withSession(
-          SessionKeys.preference -> testYesPreference
+        lazy val result = TestClientVrnController.show(testRedirectUrl)(request.withSession(
+          SessionKeys.redirectUrl -> testRedirectUrl
         ))
 
         "return 303" in {
@@ -161,118 +284,26 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth {
       }
     }
 
-    "the user has a preference of 'no' in session" when {
+    "the preference feature switch is off" when {
 
-      "a valid redirect URL is provided" when {
+      "the user does not have a preference in session" should {
 
-        "there is a redirect URL currently in session" should {
-
-          lazy val result = TestClientVrnController.show(testRedirectUrl)(request.withSession(
-            SessionKeys.redirectUrl -> testRedirectUrl,
-            SessionKeys.preference  -> testNoPreference
+        lazy val result = {
+          mockConfig.features.preferenceJourneyEnabled(false)
+          TestClientVrnController.show(testRedirectUrl)(request.withSession(
+            SessionKeys.redirectUrl -> testRedirectUrl
           ))
-
-          "return 200" in {
-            mockAgentAuthorised()
-            status(result) shouldBe Status.OK
-          }
-
-          "return HTML" in {
-            contentType(result) shouldBe Some("text/html")
-            charset(result) shouldBe Some("utf-8")
-          }
-
-          "not add the requested redirect URL to the session" in {
-            session(result).get(SessionKeys.redirectUrl) shouldBe None
-          }
         }
 
-        "there is no redirect URL currently in session" should {
-
-          lazy val result = TestClientVrnController.show(testRedirectUrl)(request.withSession(
-            SessionKeys.preference -> testNoPreference
-          ))
-
-          "return 200" in {
-            mockAgentAuthorised()
-            status(result) shouldBe Status.OK
-          }
-
-          "return HTML" in {
-            contentType(result) shouldBe Some("text/html")
-            charset(result) shouldBe Some("utf-8")
-          }
-
-          "add the redirect URL to the session" in {
-            session(result).get(SessionKeys.redirectUrl) shouldBe Some(testRedirectUrl)
-          }
-        }
-      }
-
-      "an invalid redirect URL is provided" when {
-
-        "there is a redirect URL currently in session" should {
-
-          lazy val result = TestClientVrnController.show("www.google.com")(request.withSession(
-            SessionKeys.redirectUrl -> testRedirectUrl,
-            SessionKeys.preference  -> testNoPreference
-          ))
-
-          "return 200" in {
-            mockAgentAuthorised()
-            status(result) shouldBe Status.OK
-          }
-
-          "return HTML" in {
-            contentType(result) shouldBe Some("text/html")
-            charset(result) shouldBe Some("utf-8")
-          }
-
-          "not add the requested redirect URL to the session" in {
-            session(result).get(SessionKeys.redirectUrl) shouldBe None
-          }
+        "return 200" in {
+          mockAgentAuthorised()
+          status(result) shouldBe Status.OK
         }
 
-        "there is no redirect URL currently in session" should {
-
-          lazy val result = TestClientVrnController.show("www.google.com")(request.withSession(
-            SessionKeys.preference  -> testNoPreference
-          ))
-
-          "return 500" in {
-            mockAgentAuthorised()
-            status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-          }
-
-          "return HTML" in {
-            contentType(result) shouldBe Some("text/html")
-            charset(result) shouldBe Some("utf-8")
-          }
-
-          "not add the requested redirect URL to the session" in {
-            session(result).get(SessionKeys.redirectUrl) shouldBe None
-          }
+        "return HTML" in {
+          contentType(result) shouldBe Some("text/html")
+          charset(result) shouldBe Some("utf-8")
         }
-      }
-    }
-
-    "the user does not have a preference in session" should {
-
-      lazy val result = TestClientVrnController.show(testRedirectUrl)(request.withSession(
-        SessionKeys.redirectUrl -> testRedirectUrl
-      ))
-
-      "return 303" in {
-        mockAgentAuthorised()
-        status(result) shouldBe Status.SEE_OTHER
-      }
-
-      "redirect to the Capture Preference controller action" in {
-        redirectLocation(result) shouldBe Some(controllers.agent.routes.CapturePreferenceController.show().url)
-      }
-
-      "not add the requested redirect URL to the session" in {
-        session(result).get(SessionKeys.redirectUrl) shouldBe None
       }
     }
   }
