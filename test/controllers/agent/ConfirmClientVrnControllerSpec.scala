@@ -21,7 +21,6 @@ import assets.CustomerDetailsTestConstants._
 import assets.messages.{ConfirmClientVrnPageMessages => Messages}
 import audit.mocks.MockAuditingService
 import audit.models.{AuthenticateAgentAuditModel, GetClientBusinessNameAuditModel}
-import common.SessionKeys
 import controllers.ControllerBaseSpec
 import mocks.services.MockCustomerDetailsService
 import org.jsoup.Jsoup
@@ -148,10 +147,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           "redirect to the Select Your Client show action" in {
             redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show().url)
           }
-
-          "have removed the Clients VRN from session" in {
-            session(result).get(SessionKeys.clientVRN) shouldBe None
-          }
         }
       }
     }
@@ -182,10 +177,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
 
         "redirect to the Select Your Client show action" in {
           redirectLocation(result) shouldBe Some("/homepage")
-        }
-
-        "have removed the Clients redirect URL from session" in {
-          session(result).get(SessionKeys.redirectUrl) shouldBe None
         }
       }
 

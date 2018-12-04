@@ -106,7 +106,8 @@ trait IntegrationBaseSpec extends TestSuite with CustomMatchers
     "microservice.services.manage-vat-subscription-frontend.port" -> mockPort,
     "microservice.services.manage-vat-subscription-frontend.endpoints.customer-details" -> "/customer-details?isAgent=true",
     "microservice.services.vat-subscription.host" -> mockHost,
-    "microservice.services.vat-subscription.port" -> mockPort
+    "microservice.services.vat-subscription.port" -> mockPort,
+    "features.emailVerification.enabled" -> "true"
   )
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder()
