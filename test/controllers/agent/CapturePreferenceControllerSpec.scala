@@ -18,6 +18,7 @@ package controllers.agent
 
 import common.SessionKeys
 import controllers.ControllerBaseSpec
+import org.jsoup.Jsoup
 import org.scalatest.BeforeAndAfterAll
 import play.api.http.Status
 import play.api.test.Helpers._
@@ -93,6 +94,33 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with BeforeAndA
         "redirect to the Select Client VRN controller" in {
           redirectLocation(result) shouldBe
             Some(controllers.agent.routes.SelectClientVrnController.show(testRedirectUrl).url)
+        }
+      }
+
+      "there is a preference of 'Yes' and a notification email in session" should {
+
+        lazy val result = target.show(request.withSession(
+          SessionKeys.preference -> "yes",
+          SessionKeys.notificationsEmail -> "pepsi-mac@test.com"
+        ))
+        lazy val document = Jsoup.parse(bodyOf(result))
+
+        "return 200" in {
+          mockAgentAuthorised()
+          status(result) shouldBe Status.OK
+        }
+
+        "return HTML" in {
+          contentType(result) shouldBe Some("text/html")
+          charset(result) shouldBe Some("utf-8")
+        }
+
+        "prepopulate the form with the preference" in {
+          document.select("#yes_no-yes").attr("checked") shouldBe "checked"
+        }
+
+        "prepopulate the form with the email" in {
+          document.select("#email").attr("value") shouldBe "pepsi-mac@test.com"
         }
       }
     }

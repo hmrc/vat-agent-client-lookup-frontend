@@ -23,6 +23,7 @@ import controllers.predicates.{AuthoriseAsAgentOnly, PreferencePredicate}
 import forms.PreferenceForm._
 import javax.inject.{Inject, Singleton}
 
+import models.{PreferenceModel, Yes}
 import play.api.i18n.MessagesApi
 import play.api.mvc._
 
@@ -33,7 +34,16 @@ class CapturePreferenceController @Inject()(val messagesApi: MessagesApi,
                                             implicit val appConfig: AppConfig) extends BaseController {
 
   def show: Action[AnyContent] = (authenticate andThen preferenceCheck) { implicit user =>
-    Ok(views.html.agent.capturePreference(preferenceForm))
+
+    val preference = user.session.get(SessionKeys.preference)
+    val notificationEmail = user.session.get(SessionKeys.notificationsEmail)
+
+    preference match {
+      case Some(_) =>
+        Ok(views.html.agent.capturePreference(preferenceForm.fill(PreferenceModel(Yes, notificationEmail))))
+      case None =>
+        Ok(views.html.agent.capturePreference(preferenceForm))
+    }
   }
 
   def submit: Action[AnyContent] = (authenticate andThen preferenceCheck) { implicit user =>
