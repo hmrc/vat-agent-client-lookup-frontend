@@ -20,6 +20,9 @@ import common.SessionKeys
 import config.{AppConfig, ErrorHandler}
 import controllers.predicates.{AuthoriseAsAgentOnly, PreferencePredicate}
 import javax.inject.{Inject, Singleton}
+
+import audit.AuditService
+import audit.models.YesPreferenceVerifiedAuditModel
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
@@ -34,6 +37,7 @@ class ConfirmEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
                                        val messagesApi: MessagesApi,
                                        val emailVerificationService: EmailVerificationService,
                                        val errorHandler: ErrorHandler,
+                                       val auditService: AuditService,
                                        implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   def show: Action[AnyContent] = (authenticate andThen preferenceCheck) { implicit agent =>
@@ -51,13 +55,16 @@ class ConfirmEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
     agent.session.get(SessionKeys.notificationsEmail) match {
       case Some(email) =>
         emailVerificationService.isEmailVerified(email) map {
+
           case Some(true) =>
+            auditService.extendedAudit(YesPreferenceVerifiedAuditModel(agent.arn, email))
             val redirectUrl = agent.session.get(SessionKeys.redirectUrl).getOrElse(appConfig.manageVatCustomerDetailsUrl)
             Redirect(routes.SelectClientVrnController.show(redirectUrl))
               .addingToSession(SessionKeys.verifiedAgentEmail -> email)
 
           case Some(false) =>
             Redirect(routes.VerifyEmailController.sendVerification())
+
           case _ =>
             errorHandler.showInternalServerError
         }
