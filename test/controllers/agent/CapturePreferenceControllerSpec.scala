@@ -16,14 +16,19 @@
 
 package controllers.agent
 
+import assets.BaseTestConstants.arn
+import audit.mocks.MockAuditingService
+import audit.models.NoPreferenceAuditModel
 import common.SessionKeys
 import controllers.ControllerBaseSpec
+import models.Agent
 import org.jsoup.Jsoup
 import org.scalatest.BeforeAndAfterAll
 import play.api.http.Status
+import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.Helpers._
 
-class CapturePreferenceControllerSpec extends ControllerBaseSpec with BeforeAndAfterAll {
+class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditingService with BeforeAndAfterAll {
 
   override def beforeAll(): Unit = mockConfig.features.preferenceJourneyEnabled(true)
 
@@ -37,6 +42,7 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with BeforeAndA
     messagesApi,
     mockAgentOnlyAuthPredicate,
     mockPreferencePredicate,
+    mockAuditingService,
     mockConfig
   )
 
@@ -167,9 +173,11 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with BeforeAndA
 
       "the user enters the 'No' option" should {
 
-        lazy val result = target.submit(request
-          .withSession(SessionKeys.redirectUrl -> testRedirectUrl)
-          .withFormUrlEncodedBody("yes_no" -> testNoPreference))
+        lazy val testRequest =
+          Agent[AnyContentAsFormUrlEncoded](arn)(request
+            .withSession(SessionKeys.redirectUrl -> testRedirectUrl)
+            .withFormUrlEncodedBody("yes_no" -> testNoPreference))
+        lazy val result = target.submit(testRequest)
 
         "return 303" in {
           mockAgentAuthorised()
@@ -183,6 +191,12 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with BeforeAndA
 
         "add the preference to the session" in {
           session(result).get(SessionKeys.preference) shouldBe Some(testNoPreference)
+        }
+
+        "audit the event" in {
+          mockAgentAuthorised()
+          target.submit(testRequest)
+          verifyExtendedAudit(NoPreferenceAuditModel(arn))
         }
       }
 
