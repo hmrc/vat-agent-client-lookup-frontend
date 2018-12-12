@@ -23,6 +23,8 @@ import controllers.predicates.{AuthoriseAsAgentOnly, PreferencePredicate}
 import forms.PreferenceForm._
 import javax.inject.{Inject, Singleton}
 
+import audit.AuditService
+import audit.models.NoPreferenceAuditModel
 import models.{PreferenceModel, Yes}
 import play.api.i18n.MessagesApi
 import play.api.mvc._
@@ -31,6 +33,7 @@ import play.api.mvc._
 class CapturePreferenceController @Inject()(val messagesApi: MessagesApi,
                                             val authenticate: AuthoriseAsAgentOnly,
                                             val preferenceCheck: PreferencePredicate,
+                                            val auditService: AuditService,
                                             implicit val appConfig: AppConfig) extends BaseController {
 
   def show: Action[AnyContent] = (authenticate andThen preferenceCheck) { implicit user =>
@@ -55,6 +58,7 @@ class CapturePreferenceController @Inject()(val messagesApi: MessagesApi,
             .addingToSession(SessionKeys.preference -> yes)
             .addingToSession(SessionKeys.notificationsEmail -> formData.email.getOrElse(""))
         } else {
+          auditService.extendedAudit(NoPreferenceAuditModel(user.arn))
           val redirectUrl = user.session.get(SessionKeys.redirectUrl).getOrElse(appConfig.manageVatCustomerDetailsUrl)
           Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectUrl))
             .addingToSession(SessionKeys.preference -> no)
