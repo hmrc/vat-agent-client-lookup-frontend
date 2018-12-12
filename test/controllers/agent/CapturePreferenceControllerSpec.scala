@@ -16,9 +16,9 @@
 
 package controllers.agent
 
-import assets.BaseTestConstants.arn
+import assets.BaseTestConstants._
 import audit.mocks.MockAuditingService
-import audit.models.NoPreferenceAuditModel
+import audit.models.{NoPreferenceAuditModel, YesPreferenceAttemptedAuditModel}
 import common.SessionKeys
 import controllers.ControllerBaseSpec
 import models.Agent
@@ -195,16 +195,18 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
 
         "audit the event" in {
           mockAgentAuthorised()
-          target.submit(testRequest)
+          await(target.submit(testRequest))
           verifyExtendedAudit(NoPreferenceAuditModel(arn))
         }
       }
 
       "the user enters the 'Yes' option and an email address" should {
 
-        lazy val result = target.submit(request
-          .withSession(SessionKeys.redirectUrl -> testRedirectUrl)
-          .withFormUrlEncodedBody("yes_no" -> testYesPreference, "email" -> testValidEmail))
+        lazy val testRequest =
+          Agent[AnyContentAsFormUrlEncoded](arn)(request
+            .withSession(SessionKeys.redirectUrl -> testRedirectUrl)
+            .withFormUrlEncodedBody("yes_no" -> testYesPreference, "email" -> testValidEmail))
+        lazy val result = target.submit(testRequest)
 
         "return 303" in {
           mockAgentAuthorised()
@@ -221,6 +223,12 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
 
         "add the new email to the session" in {
           session(result).get(SessionKeys.notificationsEmail) shouldBe Some(testValidEmail)
+        }
+
+        "audit the event" in {
+          mockAgentAuthorised()
+          await(target.submit(testRequest))
+          verifyExtendedAudit(YesPreferenceAttemptedAuditModel(arn, testValidEmail))
         }
       }
 
