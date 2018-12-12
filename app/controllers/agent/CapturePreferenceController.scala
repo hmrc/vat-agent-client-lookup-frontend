@@ -16,15 +16,14 @@
 
 package controllers.agent
 
+import audit.AuditService
+import audit.models.{NoPreferenceAuditModel, YesPreferenceAttemptedAuditModel}
 import common.SessionKeys
 import config.AppConfig
 import controllers.BaseController
 import controllers.predicates.{AuthoriseAsAgentOnly, PreferencePredicate}
 import forms.PreferenceForm._
 import javax.inject.{Inject, Singleton}
-
-import audit.AuditService
-import audit.models.NoPreferenceAuditModel
 import models.{PreferenceModel, Yes}
 import play.api.i18n.MessagesApi
 import play.api.mvc._
@@ -54,6 +53,7 @@ class CapturePreferenceController @Inject()(val messagesApi: MessagesApi,
       error     => BadRequest(views.html.agent.capturePreference(error)),
       formData  => {
         if (formData.yesNo.value) {
+          auditService.extendedAudit(YesPreferenceAttemptedAuditModel(user.arn, formData.email.getOrElse("")))
           Redirect(controllers.agent.routes.ConfirmEmailController.show())
             .addingToSession(SessionKeys.preference -> yes)
             .addingToSession(SessionKeys.notificationsEmail -> formData.email.getOrElse(""))
