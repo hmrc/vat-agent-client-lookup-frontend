@@ -196,7 +196,10 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
         "audit the event" in {
           mockAgentAuthorised()
           await(target.submit(testRequest))
-          verifyExtendedAudit(NoPreferenceAuditModel(arn))
+          verifyExtendedAudit(
+            NoPreferenceAuditModel(arn),
+            Some(controllers.agent.routes.CapturePreferenceController.submit().url)
+          )
         }
       }
 
@@ -228,7 +231,10 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
         "audit the event" in {
           mockAgentAuthorised()
           await(target.submit(testRequest))
-          verifyExtendedAudit(YesPreferenceAttemptedAuditModel(arn, testValidEmail))
+          verifyExtendedAudit(
+            YesPreferenceAttemptedAuditModel(arn, testValidEmail),
+            Some(controllers.agent.routes.CapturePreferenceController.submit().url)
+          )
         }
       }
 

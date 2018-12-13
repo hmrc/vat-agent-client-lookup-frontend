@@ -126,7 +126,10 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerifi
         mockAgentAuthorised()
         mockGetEmailVerificationState(testEmail)(Future(Some(true)))
         await(TestConfirmEmailController.isEmailVerified()(testRequest))
-        verifyExtendedAudit(YesPreferenceVerifiedAuditModel(arn, testEmail))
+        verifyExtendedAudit(
+          YesPreferenceVerifiedAuditModel(arn, testEmail),
+          Some(controllers.agent.routes.ConfirmEmailController.isEmailVerified().url)
+        )
       }
     }
 
