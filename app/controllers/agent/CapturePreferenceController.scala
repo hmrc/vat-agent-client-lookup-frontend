@@ -53,12 +53,18 @@ class CapturePreferenceController @Inject()(val messagesApi: MessagesApi,
       error     => BadRequest(views.html.agent.capturePreference(error)),
       formData  => {
         if (formData.yesNo.value) {
-          auditService.extendedAudit(YesPreferenceAttemptedAuditModel(user.arn, formData.email.getOrElse("")))
+          auditService.extendedAudit(
+            YesPreferenceAttemptedAuditModel(user.arn, formData.email.getOrElse("")),
+            Some(controllers.agent.routes.CapturePreferenceController.submit().url)
+          )
           Redirect(controllers.agent.routes.ConfirmEmailController.show())
             .addingToSession(SessionKeys.preference -> yes)
             .addingToSession(SessionKeys.notificationsEmail -> formData.email.getOrElse(""))
         } else {
-          auditService.extendedAudit(NoPreferenceAuditModel(user.arn))
+          auditService.extendedAudit(
+            NoPreferenceAuditModel(user.arn),
+            Some(controllers.agent.routes.CapturePreferenceController.submit().url)
+          )
           val redirectUrl = user.session.get(SessionKeys.redirectUrl).getOrElse(appConfig.manageVatCustomerDetailsUrl)
           Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectUrl))
             .addingToSession(SessionKeys.preference -> no)
