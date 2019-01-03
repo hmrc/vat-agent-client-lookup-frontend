@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,19 +24,19 @@ import sbt.Tests.{Group, SubProcess}
 
 val appName = "vat-agent-client-lookup-frontend"
 
-val bootstrapPlayVersion       = "3.3.0"
-val govTemplateVersion         = "5.22.0"
-val playPartialsVersion        = "6.1.0"
+val bootstrapPlayVersion       = "4.6.0"
+val govTemplateVersion         = "5.23.0"
+val playPartialsVersion        = "6.3.0"
 val authClientVersion          = "2.6.0"
-val playUiVersion              = "7.19.0"
+val playUiVersion              = "7.22.0"
 val playLanguageVersion        = "3.4.0"
 val playWhiteListFilterVersion = "2.0.0"
-val scalaTestPlusVersion       = "2.0.0"
-val hmrcTestVersion            = "3.1.0"
-val scalatestVersion           = "3.0.1"
+val scalaTestPlusVersion       = "2.0.1"
+val hmrcTestVersion            = "3.3.0"
+val scalatestVersion           = "3.0.5"
 val pegdownVersion             = "1.6.0"
-val jsoupVersion               = "1.10.3"
-val mockitoVersion             = "2.13.0"
+val jsoupVersion               = "1.11.3"
+val mockitoVersion             = "2.23.4"
 val scalaMockVersion           = "3.6.0"
 val wiremockVersion            = "2.6.0"
 val referenceCheckerVersion    = "2.4.0"
