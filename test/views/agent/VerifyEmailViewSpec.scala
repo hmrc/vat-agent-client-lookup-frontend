@@ -46,12 +46,12 @@ class VerifyEmailViewSpec extends ViewBaseSpec {
     }
 
     "have a GA tag with the correct tag" in {
-      element("#content > article > p:nth-child(3) > a").attr("data-journey-click") shouldBe
+      element("#content > article > p > a").attr("data-journey-click") shouldBe
         "notification-pref:change:verify-email"
     }
 
     "have a link element in the first paragraph that links to the Capture your email page" in {
-      element("#content > article > p:nth-child(3) > a").attr("href") shouldBe
+      element("#content > article > p > a").attr("href") shouldBe
         controllers.agent.routes.CapturePreferenceController.show().url
     }
 
