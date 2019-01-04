@@ -31,7 +31,7 @@ class ConfirmEmailViewSpec extends ViewBaseSpec {
     val heading2 = ".lede"
     val backLink = "#content > article > a"
     val continueButton = ".button"
-    val editLink = "#content > article > p:nth-child(4) > a"
+    val editLink = "#content > article > p > a"
   }
 
   "The Confirm Email view" should {

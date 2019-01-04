@@ -33,7 +33,8 @@
   feedbackOnSignOut: Boolean = true)(implicit request: Request[_], messages: Messages)
 
 @scriptElement = {
-  <script type="text/javascript" src='@routes.Assets.at("javascript/vat-agent-client-v1.js")'></script>
+  <script type="text/javascript" src=@routes.Assets.at("javascript/vat-agent-client-v1.js")></script>
+  <script type="text/javascript" src=@routes.Assets.at("javascript/ga-tag-manager.js")></script>
   <script>
     @if(showSignOut) {
         $.timeoutDialog({
