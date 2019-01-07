@@ -22,11 +22,9 @@
 
 @(preferenceForm: Form[PreferenceModel])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@main_template(messages("capturePref.title")) {
+  @main_template(if(preferenceForm.errors.nonEmpty) messages("common.error.prefixTitle", messages("capturePref.title")) else messages("capturePref.title")) {
 
   @errorSummary(messages("common.error.heading"), preferenceForm, forceDivToAppear = false)
-
-  <h1 class="heading-large">@messages("capturePref.title")</h1>
 
   @form(action = controllers.agent.routes.CapturePreferenceController.submit) {
     <div id="@yesNo">
@@ -44,7 +42,7 @@
             '_maxlength      -> maxLength,
             '_inputHint      -> messages("capturePref.email.hint")),
         field          = preferenceForm(yesNo),
-        question       = messages("optionOwnsStockToSell.title"),
+        question       = messages("capturePref.title"),
         inline         = true,
         legendAsHeader = false
       )

@@ -29,7 +29,10 @@
 
  <p>
    <a href="@controllers.agent.routes.CapturePreferenceController.show()"
-   data-journey-click="notification-pref:change:confirm-email">@messages("confirmEmail.change")</a>
+     data-journey-click="notification-pref:change:confirm-email">
+     <span>@messages("confirmEmail.change")</span>
+     <span class="visuallyhidden">@messages("confirmEmail.changeContext")</span>
+   </a>
  </p>
 
  <a href='@controllers.agent.routes.ConfirmEmailController.isEmailVerified' role="button" tabindex="0" class="button"
