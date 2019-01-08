@@ -4,6 +4,7 @@ base.back = Back
 common.yes = Yes
 common.no = No
 common.error.heading = There is a problem
+common.error.prefixTitle = Error: {0}
 
 standardError.title = There is a problem with the service - VAT reporting through software - GOV.UK
 standardError.heading = Sorry, there is a problem with the service
@@ -49,6 +50,7 @@ clientVrnForm.error.tooShort = You have not entered enough numbers
 confirmEmail.title = Confirm the new email address
 confirmEmail.heading = Confirm the new email address
 confirmEmail.change = Change
+confirmEmail.changeContext = Change your email address
 
 verifyEmail.title = Verify your email address
 verifyEmail.heading = Verify your email address

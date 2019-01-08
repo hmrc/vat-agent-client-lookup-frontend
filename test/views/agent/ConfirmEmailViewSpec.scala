@@ -27,11 +27,13 @@ class ConfirmEmailViewSpec extends ViewBaseSpec {
   val testEmail: String = "test@email.com"
 
   object Selectors {
-    val heading = ".heading-large"
-    val heading2 = ".lede"
-    val backLink = "#content > article > a"
-    val continueButton = ".button"
-    val editLink = "#content > article > p > a"
+    val heading         = ".heading-large"
+    val heading2        = ".lede"
+    val backLink        = "#content > article > a"
+    val continueButton  = ".button"
+    val editLink        = "#content > article > p > a"
+    val editLinkText    = "#content > article > p > a > span:nth-of-type(1)"
+    val editLinkContext = "#content > article > p > a > span:nth-of-type(2)"
   }
 
   "The Confirm Email view" should {
@@ -61,11 +63,15 @@ class ConfirmEmailViewSpec extends ViewBaseSpec {
     "have a link to edit email address" which {
 
       "has the correct text" in {
-        elementText(Selectors.editLink) shouldBe "Change"
+        elementText(Selectors.editLinkText) shouldBe "Change"
       }
 
       "has the correct link" in {
         element(Selectors.editLink).attr("href") shouldBe controllers.agent.routes.CapturePreferenceController.show().url
+      }
+
+      "has the correct hidden context text" in {
+        elementText(Selectors.editLinkContext) shouldBe "Change your email address"
       }
 
       "has the correct GA tag" in {
