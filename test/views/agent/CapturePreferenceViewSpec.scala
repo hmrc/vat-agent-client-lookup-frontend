@@ -25,19 +25,19 @@ import views.ViewBaseSpec
 class CapturePreferenceViewSpec extends ViewBaseSpec {
 
   object Selectors {
-    val pageHeading = "#content h1"
-    val backLink = "#content > article > a"
-    val emailQuestionText = "#hiddenContent > label > span.form-field"
-    val emailHintText = "#label-email-hint"
-    val form = "form"
-    val emailField = "#email"
-    val continueButton = "button"
-    val errorSummary = "#error-summary-heading"
-    val radioOptionYes = "#yes_no-yes"
-    val radioOptionNo = "#yes_no-no"
+    val pageHeading         = "#content h1"
+    val backLink            = "#content > article > a"
+    val emailQuestionText   = "#hiddenContent > label > span.form-field"
+    val emailHintText       = "#hiddenContent > label > span.form-hint"
+    val form                = "form"
+    val emailField          = "#email"
+    val continueButton      = "button"
+    val errorSummary        = "#error-summary-heading"
+    val radioOptionYes      = "#yes_no-yes"
+    val radioOptionNo       = "#yes_no-no"
     val radioOptionYesLabel = "#label-yes_no-yes"
-    val radioOptionNoLabel = "#label-yes_no-no"
-    val emailFormGroup = "#hiddenContent"
+    val radioOptionNoLabel  = "#label-yes_no-no"
+    val emailFormGroup      = "#hiddenContent"
   }
 
   "Rendering the capture preference page" when {
