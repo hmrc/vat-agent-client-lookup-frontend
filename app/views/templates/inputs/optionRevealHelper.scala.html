@@ -22,7 +22,8 @@
   question: String,
   inline: Boolean = false,
   hiddenContent: Html,
-  legendAsHeader: Boolean = true
+  legendAsHeader: Boolean = true,
+  subtext: Option[String] = None
 )(implicit messages: Messages)
 
 @elements = @{ FieldElements(field.id, field, null, Map(), messages) }
@@ -32,6 +33,10 @@
     <legend>
       <h1>@question</h1>
     </legend>
+
+    @subtext.map { text =>
+      <p>@text</p>
+    }
 
     @elements.errors.map { error => <span class="error-message">@messages(error)</span> }
 

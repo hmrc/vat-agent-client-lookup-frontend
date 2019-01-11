@@ -26,6 +26,7 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
 
   object Selectors {
     val pageHeading         = "#content h1"
+    val subtext             = "fieldset > p"
     val backLink            = "#content > article > a"
     val emailQuestionText   = "#hiddenContent > label > span.form-field"
     val emailHintText       = "#hiddenContent > label > span.form-hint"
@@ -50,11 +51,17 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the correct document title" in {
-          document.title shouldBe "Would you like to receive notifications of any changes you make?"
+          document.title shouldBe "Would you like to receive email notifications of any changes you make?"
         }
 
         "have the correct page heading" in {
-          elementText(Selectors.pageHeading) shouldBe "Would you like to receive notifications of any changes you make?"
+          elementText(Selectors.pageHeading) shouldBe
+            "Would you like to receive email notifications of any changes you make?"
+        }
+
+        "have the correct subtext" in {
+          elementText(Selectors.subtext) shouldBe
+            "We will also send a secure message to your client’s business tax account."
         }
 
         "have the preference form with the correct form action" in {
@@ -86,7 +93,8 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
         }
 
         "have the correct email hint text" in {
-          elementText(Selectors.emailHintText) shouldBe "We will only use this to send you a confirmation of any changes you make"
+          elementText(Selectors.emailHintText) shouldBe
+            "We will only use this to send you a confirmation of any changes you make"
         }
 
         "have the continue button" in {
@@ -96,7 +104,8 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
 
       "the user has the 'Yes' radio option selected" should {
 
-        lazy val view: Html = views.html.agent.capturePreference(preferenceForm.bind(Map(yesNo -> "yes")))(request, messages, mockConfig)
+        lazy val view: Html =
+          views.html.agent.capturePreference(preferenceForm.bind(Map(yesNo -> "yes")))(request, messages, mockConfig)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the 'Yes' radio option checked" in {
@@ -110,7 +119,8 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
 
       "the user has the 'No' radio option selected" should {
 
-        lazy val view: Html = views.html.agent.capturePreference(preferenceForm.bind(Map(yesNo -> "no")))(request, messages, mockConfig)
+        lazy val view: Html =
+          views.html.agent.capturePreference(preferenceForm.bind(Map(yesNo -> "no")))(request, messages, mockConfig)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the 'No' radio option checked" in {
@@ -124,8 +134,13 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
     }
 
     "the form has an option error" should {
-      lazy val view = views.html.agent.capturePreference(preferenceForm.bind(Map(yesNo -> "")))(request, messages, mockConfig)
+      lazy val view =
+        views.html.agent.capturePreference(preferenceForm.bind(Map(yesNo -> "")))(request, messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have the correct document title" in {
+        document.title shouldBe "Error: Would you like to receive email notifications of any changes you make?"
+      }
 
       "display the error summary" in {
         element(Selectors.errorSummary).text() shouldBe "There is a problem"
@@ -133,8 +148,13 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
     }
 
     "the form has an email error" should {
-      lazy val view = views.html.agent.capturePreference(preferenceForm.bind(Map(yesNo -> yes, email -> "invalid")))(request, messages, mockConfig)
+      lazy val view = views.html.agent.capturePreference(
+        preferenceForm.bind(Map(yesNo -> yes, email -> "invalid")))(request, messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have the correct document title" in {
+        document.title shouldBe "Error: Would you like to receive email notifications of any changes you make?"
+      }
 
       "display the error summary" in {
         element(Selectors.errorSummary).text() shouldBe "There is a problem"
