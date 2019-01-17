@@ -60,11 +60,11 @@ class SelectClientVrnController @Inject()(val messagesApi: MessagesApi,
     implicit agent =>
       ClientVrnForm.form.bindFromRequest().fold(
         error => {
-          Logger.debug(s"[SelectClientVrnController][submit] Error")
+          Logger.debug("[SelectClientVrnController][submit] Error")
           BadRequest(views.html.agent.selectClientVrn(error))
         },
         data => {
-          Logger.debug(s"[SelectClientVrnController][submit] Success")
+          Logger.debug("[SelectClientVrnController][submit] Success")
           Redirect(controllers.agent.routes.ConfirmClientVrnController.show())
             .addingToSession(SessionKeys.clientVRN -> data.vrn)
         }
