@@ -19,8 +19,8 @@ package common
 object SessionKeys {
 
   val clientVRN: String = "CLIENT_VRN"
-  val redirectUrl: String = "redirectUrl"
-  val preference: String = "preference"
-  val notificationsEmail: String = "notificationsEmail"
-  val verifiedAgentEmail: String = "verifiedAgentEmail"
+  val redirectUrl: String = "vatAgentLookupRedirectUrl"
+  val preference: String = "vatAgentLookupEmailPreference"
+  val notificationsEmail: String = "vatAgentLookupNotificationsPreferenceEmail"
+  val verifiedAgentEmail: String = "vatAgentLookupVerifiedAgentEmail"
 }
