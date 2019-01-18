@@ -38,7 +38,7 @@ val pegdownVersion             = "1.6.0"
 val jsoupVersion               = "1.11.3"
 val mockitoVersion             = "2.23.4"
 val scalaMockVersion           = "3.6.0"
-val wiremockVersion            = "2.6.0"
+val wiremockVersion            = "2.20.0"
 val referenceCheckerVersion    = "2.4.0"
 
 val compile = Seq(
