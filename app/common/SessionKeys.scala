@@ -22,5 +22,5 @@ object SessionKeys {
   val redirectUrl: String = "vatAgentLookupRedirectUrl"
   val preference: String = "vatAgentLookupEmailPreference"
   val notificationsEmail: String = "vatAgentLookupNotificationsPreferenceEmail"
-  val verifiedAgentEmail: String = "vatAgentLookupVerifiedAgentEmail"
+  val verifiedAgentEmail: String = "verifiedAgentEmail"
 }
