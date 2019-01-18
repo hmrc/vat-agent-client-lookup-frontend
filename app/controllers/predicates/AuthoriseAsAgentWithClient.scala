@@ -59,14 +59,14 @@ class AuthoriseAsAgentWithClient @Inject()(enrolmentsAuthService: EnrolmentsAuth
             block(user)
         } recover {
           case _: NoActiveSession =>
-            Logger.debug(s"[AuthoriseAsAgentWithClient][invokeBlock] - Agent does not have an active session, rendering Session Timeout")
+            Logger.debug("[AuthoriseAsAgentWithClient][invokeBlock] - Agent does not have an active session, rendering Session Timeout")
             Unauthorized(views.html.errors.sessionTimeout())
           case _: AuthorisationException =>
-            Logger.warn(s"[AuthoriseAsAgentWithClient][invokeBlock] - Agent does not have delegated authority for Client")
+            Logger.warn("[AuthoriseAsAgentWithClient][invokeBlock] - Agent does not have delegated authority for Client")
             Redirect(controllers.agent.routes.AgentUnauthorisedForClientController.show())
         }
       case _ =>
-        Logger.warn(s"[AuthoriseAsAgentWithClient][invokeBlock] - No Client VRN in session, redirecting to Select Client page")
+        Logger.warn("[AuthoriseAsAgentWithClient][invokeBlock] - No Client VRN in session, redirecting to Select Client page")
         Future.successful(Redirect(controllers.agent.routes.SelectClientVrnController.show()))
     }
   }
