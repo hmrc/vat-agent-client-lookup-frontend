@@ -29,7 +29,7 @@ import scala.concurrent.Future
 
 class SubscriptionConnectorSpec extends TestUtil with MockHttp {
 
-  val errorModel = HttpResponse(Status.BAD_REQUEST, responseString = Some("Error Message"))
+  val errorResponse = HttpResponse(Status.BAD_REQUEST, responseString = Some("Error Message"))
 
   object TestSubscriptionConnector extends SubscriptionConnector(mockHttp,mockConfig)
 
@@ -57,9 +57,9 @@ class SubscriptionConnectorSpec extends TestUtil with MockHttp {
 
       "given an error should" should {
 
-        "return a Left with an ErrorModel" in {
-          setupMockHttpGet(TestSubscriptionConnector.getCustomerDetailsUrl(vrn))(Left(errorModel))
-          await(result) shouldBe Left(errorModel)
+        "return a Left with an error response" in {
+          setupMockHttpGet(TestSubscriptionConnector.getCustomerDetailsUrl(vrn))(Left(errorResponse))
+          await(result) shouldBe Left(errorResponse)
         }
       }
     }

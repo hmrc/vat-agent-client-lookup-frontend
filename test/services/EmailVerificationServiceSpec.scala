@@ -19,7 +19,7 @@ package services
 import connectors.httpParsers.CreateEmailVerificationRequestHttpParser.{EmailAlreadyVerified, EmailVerificationRequestSent}
 import connectors.httpParsers.GetEmailVerificationStateHttpParser.{EmailNotVerified, EmailVerified}
 import mocks.connectors.MockEmailVerificationConnector
-import models.errors.ErrorModel
+import models.errors.UnexpectedError
 import org.mockito.Mockito.{never, verify}
 import play.api.http.Status._
 import utils.TestUtil
@@ -70,7 +70,7 @@ class EmailVerificationServiceSpec extends TestUtil with MockEmailVerificationCo
 
         "return None" in {
 
-          mockCreateEmailVerificationRequest(Future.successful(Left(ErrorModel(BAD_REQUEST, ""))))
+          mockCreateEmailVerificationRequest(Future.successful(Left(UnexpectedError(BAD_REQUEST, ""))))
           val res: Option[Boolean] = {
             mockConfig.features.emailVerificationEnabled(true)
             await(TestStoreEmailService.createEmailVerificationRequest(testEmail, continueUrl))
@@ -133,7 +133,7 @@ class EmailVerificationServiceSpec extends TestUtil with MockEmailVerificationCo
 
         "return None" in {
 
-          mockGetEmailVerificationState(Future.successful(Left(ErrorModel(BAD_REQUEST, ""))))
+          mockGetEmailVerificationState(Future.successful(Left(UnexpectedError(BAD_REQUEST, ""))))
           val res: Option[Boolean] = {
             mockConfig.features.emailVerificationEnabled(true)
             await(TestStoreEmailService.isEmailVerified(testEmail))

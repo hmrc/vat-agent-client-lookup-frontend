@@ -17,13 +17,13 @@
 package assets
 
 import common.EnrolmentKeys
-import models.errors.ErrorModel
+import models.errors.UnexpectedError
 import play.api.http.Status
 import uk.gov.hmrc.auth.core.Enrolment
 
 object BaseTestConstants {
 
-  val errorModel = ErrorModel(Status.INTERNAL_SERVER_ERROR, "Some Error, oh no!")
+  val unexpectedError = UnexpectedError(Status.INTERNAL_SERVER_ERROR, "Some Error, oh no!")
   val arn = "ABCD12345678901"
   val vrn: String = "999999999"
   val email = "test@test.com"

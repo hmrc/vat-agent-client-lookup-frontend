@@ -19,9 +19,13 @@
 @()(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @views.html.main_template(title = messages("common.agentService")) {
+
   <h1>@messages("accountMigration.heading")</h1>
+
   <p>@messages("accountMigration.explanation")</p>
+
   <p>@messages("accountMigration.checkBackLater")</p>
+
   <a href="@controllers.agent.routes.SelectClientVrnController.show()">
     @messages("accountMigration.differentClient")
   </a>

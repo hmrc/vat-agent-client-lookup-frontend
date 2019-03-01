@@ -18,7 +18,7 @@ package connectors.httpParsers
 
 import assets.CustomerDetailsTestConstants._
 import connectors.httpParsers.CustomerDetailsHttpParser.CustomerDetailsReads.read
-import models.errors.ErrorModel
+import models.errors.UnexpectedError
 import play.api.http.Status
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpResponse
@@ -27,7 +27,7 @@ import utils.TestUtil
 class CustomerDetailsHttpParserSpec extends TestUtil {
 
   val successBadJson = Some(Json.obj("firstName" -> 1))
-  val errorModel = ErrorModel(Status.BAD_REQUEST, "Error Message")
+  val errorModel = UnexpectedError(Status.BAD_REQUEST, "Error Message")
 
   "The CustomerDetailsHttpParser" when {
 
@@ -40,17 +40,17 @@ class CustomerDetailsHttpParserSpec extends TestUtil {
 
     "the http response status is OK with invalid Json" should {
 
-      "return an ErrorModel" in {
+      "return an UnexpectedError" in {
         read("", "", HttpResponse(Status.OK, successBadJson)) shouldBe
-          Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "Invalid Json"))
+          Left(UnexpectedError(Status.INTERNAL_SERVER_ERROR, "Invalid Json"))
       }
     }
 
     "the http response status is unexpected" should {
 
-      "return an ErrorModel with the status and response body" in {
+      "return an UnexpectedError with the status and response body" in {
         val httpResponse = HttpResponse(Status.BAD_REQUEST, None)
-        read("", "", httpResponse) shouldBe Left(ErrorModel(Status.BAD_REQUEST, httpResponse.body))
+        read("", "", httpResponse) shouldBe Left(UnexpectedError(Status.BAD_REQUEST, httpResponse.body))
       }
     }
   }

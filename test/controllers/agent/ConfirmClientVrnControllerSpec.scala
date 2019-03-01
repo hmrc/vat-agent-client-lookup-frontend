@@ -119,7 +119,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
 
             "return 500" in {
               mockAgentAuthorised()
-              mockCustomerDetailsError(BaseTestConstants.errorModel)
+              mockCustomerDetailsError(BaseTestConstants.unexpectedError)
               status(result) shouldBe Status.INTERNAL_SERVER_ERROR
             }
 

@@ -18,7 +18,7 @@ package connectors.httpParsers
 
 import connectors.httpParsers.ResponseHttpParser.HttpResult
 import models.CustomerDetails
-import models.errors.{ErrorModel, Migration}
+import models.errors._
 import play.api.Logger
 import play.api.http.Status._
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
@@ -35,7 +35,7 @@ object CustomerDetailsHttpParser {
           response.json.validate[CustomerDetails].fold(
             invalid => {
               Logger.debug(s"[CustomerCircumstancesHttpParser][read]: Invalid Json - $invalid")
-              Left(ErrorModel(INTERNAL_SERVER_ERROR, "Invalid Json"))
+              Left(UnexpectedError(INTERNAL_SERVER_ERROR, "Invalid Json"))
             },
             valid => Right(valid)
           )
@@ -47,7 +47,7 @@ object CustomerDetailsHttpParser {
             s"[CustomerCircumstancesHttpParser][read]: - Unexpected Response " +
               s"Status $status returned, with response: ${response.body}"
           )
-          Left(ErrorModel(status, response.body))
+          Left(UnexpectedError(status, response.body))
       }
     }
   }

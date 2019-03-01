@@ -18,7 +18,7 @@ package connectors.httpParsers
 
 import connectors.httpParsers.GetEmailVerificationStateHttpParser.{EmailNotVerified, EmailVerified}
 import connectors.httpParsers.GetEmailVerificationStateHttpParser.GetEmailVerificationStateHttpReads.read
-import models.errors.ErrorModel
+import models.errors.UnexpectedError
 import play.api.http.Status._
 import uk.gov.hmrc.http.HttpResponse
 import uk.gov.hmrc.play.test.UnitSpec
@@ -47,7 +47,7 @@ class GetEmailVerificationStateHttpParserSpec extends UnitSpec {
 
       "return an error model with the status and response body" in {
         val httpResponse : HttpResponse = HttpResponse(responseStatus = INTERNAL_SERVER_ERROR)
-        read("", "", httpResponse) shouldBe Left(ErrorModel(INTERNAL_SERVER_ERROR, httpResponse.body))
+        read("", "", httpResponse) shouldBe Left(UnexpectedError(INTERNAL_SERVER_ERROR, httpResponse.body))
       }
     }
   }

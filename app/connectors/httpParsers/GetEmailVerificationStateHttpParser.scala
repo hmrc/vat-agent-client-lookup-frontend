@@ -17,7 +17,7 @@
 package connectors.httpParsers
 
 import connectors.httpParsers.ResponseHttpParser.HttpResult
-import models.errors.ErrorModel
+import models.errors.UnexpectedError
 import play.api.Logger
 import play.api.http.Status._
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
@@ -38,7 +38,7 @@ object GetEmailVerificationStateHttpParser {
             "[GetEmailVerificationStateHttpParser][GetEmailVerificationStateHttpReads][read] - " +
               s"Unexpected Response, Status $status returned, with response: ${response.body}"
           )
-          Left(ErrorModel(status, response.body))
+          Left(UnexpectedError(status, response.body))
       }
   }
 
