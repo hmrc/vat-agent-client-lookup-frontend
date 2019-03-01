@@ -18,8 +18,12 @@ package models.errors
 
 import play.api.libs.json.{Format, Json}
 
-case class ErrorModel(status: Int, message: String)
+sealed trait Error
+
+case class ErrorModel(status: Int, message: String) extends Error
 
 object ErrorModel {
   implicit val format: Format[ErrorModel] = Json.format[ErrorModel]
 }
+
+case object Migration extends Error

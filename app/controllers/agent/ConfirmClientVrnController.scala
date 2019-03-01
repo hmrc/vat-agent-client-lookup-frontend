@@ -22,6 +22,7 @@ import common.SessionKeys
 import config.{AppConfig, ErrorHandler}
 import controllers.predicates.AuthoriseAsAgentWithClient
 import javax.inject.{Inject, Singleton}
+import models.errors.Migration
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -50,7 +51,7 @@ class ConfirmClientVrnController @Inject()(val messagesApi: MessagesApi,
           )
 
           Ok(views.html.agent.confirmClientVrn(user.vrn, customerDetails))
-
+        case Left(Migration) => PreconditionFailed(views.html.errors.accountMigration())
         case _ => errorHandler.showInternalServerError
       }
   }

@@ -16,8 +16,8 @@
 
 package connectors.httpParsers
 
-import models.errors.ErrorModel
+import models.errors.Error
 
 object ResponseHttpParser {
-  type HttpResult[T] = Either[ErrorModel, T]
+  type HttpResult[T] = Either[Error, T]
 }

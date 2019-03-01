@@ -16,6 +16,7 @@
 
 package controllers.agent
 
+import assets.BaseTestConstants
 import assets.BaseTestConstants.{arn, vrn}
 import assets.CustomerDetailsTestConstants._
 import assets.messages.{ConfirmClientVrnPageMessages => Messages}
@@ -23,6 +24,7 @@ import audit.mocks.MockAuditingService
 import audit.models.{AuthenticateAgentAuditModel, GetClientBusinessNameAuditModel}
 import controllers.ControllerBaseSpec
 import mocks.services.MockCustomerDetailsService
+import models.errors.Migration
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.verify
@@ -49,58 +51,82 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
 
       "the Agent is authorised and signed up to HMRC-AS-AGENT" when {
 
-        "a Client's VRN is held in Session and details are successfully retrieved" should {
+        "a Client's VRN is held in Session" when {
 
-          lazy val result = TestConfirmClientVrnController.show(fakeRequestWithVrnAndRedirectUrl)
-          lazy val document = Jsoup.parse(bodyOf(result))
+          "details are successfully retrieved" should {
 
-          "return 200" in {
-            mockAgentAuthorised()
-            mockCustomerDetailsSuccess(customerDetailsOrganisation)
-            status(result) shouldBe Status.OK
+            lazy val result = TestConfirmClientVrnController.show(fakeRequestWithVrnAndRedirectUrl)
+            lazy val document = Jsoup.parse(bodyOf(result))
 
-            verify(mockAuditingService)
-              .extendedAudit(
-                ArgumentMatchers.eq(AuthenticateAgentAuditModel(arn, vrn, isAuthorisedForClient = true)),
-                ArgumentMatchers.eq[Option[String]](Some(controllers.agent.routes.ConfirmClientVrnController.show().url))
-              )(
-                ArgumentMatchers.any[HeaderCarrier],
-                ArgumentMatchers.any[ExecutionContext]
-              )
+            "return 200" in {
+              mockAgentAuthorised()
+              mockCustomerDetailsSuccess(customerDetailsOrganisation)
+              status(result) shouldBe Status.OK
 
-            verify(mockAuditingService)
-              .extendedAudit(
-                ArgumentMatchers.eq(GetClientBusinessNameAuditModel(arn, vrn, customerDetailsOrganisation.clientName)),
-                ArgumentMatchers.eq[Option[String]](Some(controllers.agent.routes.ConfirmClientVrnController.show().url))
-              )(
-                ArgumentMatchers.any[HeaderCarrier],
-                ArgumentMatchers.any[ExecutionContext]
-              )
+              verify(mockAuditingService)
+                .extendedAudit(
+                  ArgumentMatchers.eq(AuthenticateAgentAuditModel(arn, vrn, isAuthorisedForClient = true)),
+                  ArgumentMatchers.eq[Option[String]](Some(controllers.agent.routes.ConfirmClientVrnController.show().url))
+                )(
+                  ArgumentMatchers.any[HeaderCarrier],
+                  ArgumentMatchers.any[ExecutionContext]
+                )
+
+              verify(mockAuditingService)
+                .extendedAudit(
+                  ArgumentMatchers.eq(GetClientBusinessNameAuditModel(arn, vrn, customerDetailsOrganisation.clientName)),
+                  ArgumentMatchers.eq[Option[String]](Some(controllers.agent.routes.ConfirmClientVrnController.show().url))
+                )(
+                  ArgumentMatchers.any[HeaderCarrier],
+                  ArgumentMatchers.any[ExecutionContext]
+                )
+            }
+
+            "return HTML" in {
+              contentType(result) shouldBe Some("text/html")
+              charset(result) shouldBe Some("utf-8")
+            }
+
+            "render the Confirm Client Vrn Page" in {
+              document.select("h1").text shouldBe Messages.heading
+            }
           }
 
-          "return HTML" in {
-            contentType(result) shouldBe Some("text/html")
-            charset(result) shouldBe Some("utf-8")
+          "a data migration error is retrieved" should {
+
+            lazy val result = TestConfirmClientVrnController.show(fakeRequestWithVrnAndRedirectUrl)
+
+            "return 412" in {
+              mockAgentAuthorised()
+              mockCustomerDetailsError(Migration)
+              status(result) shouldBe Status.PRECONDITION_FAILED
+            }
+
+            "return HTML" in {
+              contentType(result) shouldBe Some("text/html")
+              charset(result) shouldBe Some("utf-8")
+            }
+
+            "return the migration error page" in {
+              lazy val document = Jsoup.parse(bodyOf(result))
+              document.select("h1").text shouldBe "You cannot make changes for that client’s business right now"
+            }
           }
 
-          "render the Confirm Client Vrn Page" in {
-            document.select("h1").text shouldBe Messages.heading
-          }
-        }
+          "no details are retrieved" should {
 
-        "a clients VRN is held in session but no details are retrieved" should {
+            lazy val result = TestConfirmClientVrnController.show(fakeRequestWithVrnAndRedirectUrl)
 
-          lazy val result = TestConfirmClientVrnController.show(fakeRequestWithVrnAndRedirectUrl)
+            "return 500" in {
+              mockAgentAuthorised()
+              mockCustomerDetailsError(BaseTestConstants.errorModel)
+              status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+            }
 
-          "return 500" in {
-            mockAgentAuthorised()
-            mockCustomerDetailsError()
-            status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-          }
-
-          "return HTML" in {
-            contentType(result) shouldBe Some("text/html")
-            charset(result) shouldBe Some("utf-8")
+            "return HTML" in {
+              contentType(result) shouldBe Some("text/html")
+              charset(result) shouldBe Some("utf-8")
+            }
           }
         }
 

@@ -18,9 +18,9 @@ package connectors.httpParsers
 
 import connectors.httpParsers.ResponseHttpParser.HttpResult
 import models.CustomerDetails
-import models.errors.ErrorModel
+import models.errors.{ErrorModel, Migration}
 import play.api.Logger
-import play.api.http.Status
+import play.api.http.Status._
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
 object CustomerDetailsHttpParser {
@@ -30,15 +30,18 @@ object CustomerDetailsHttpParser {
     override def read(method: String, url: String, response: HttpResponse): HttpResult[CustomerDetails] = {
 
       response.status match {
-        case Status.OK =>
+        case OK =>
           Logger.debug("[CustomerCircumstancesHttpParser][read]: Status OK")
           response.json.validate[CustomerDetails].fold(
             invalid => {
               Logger.debug(s"[CustomerCircumstancesHttpParser][read]: Invalid Json - $invalid")
-              Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "Invalid Json"))
+              Left(ErrorModel(INTERNAL_SERVER_ERROR, "Invalid Json"))
             },
             valid => Right(valid)
           )
+        case PRECONDITION_FAILED =>
+          Logger.debug(s"[CustomerCircumstancesHttpParser][read]: Status $PRECONDITION_FAILED")
+          Left(Migration)
         case status =>
           Logger.warn(
             s"[CustomerCircumstancesHttpParser][read]: - Unexpected Response " +

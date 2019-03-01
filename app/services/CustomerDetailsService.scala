@@ -17,9 +17,9 @@
 package services
 
 import connectors.SubscriptionConnector
+import connectors.httpParsers.ResponseHttpParser.HttpResult
 import javax.inject.{Inject, Singleton}
 import models.CustomerDetails
-import models.errors.ErrorModel
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -27,7 +27,8 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class CustomerDetailsService @Inject()(val subscriptionConnector: SubscriptionConnector) {
 
-  def getCustomerDetails(vrn: String)(implicit headerCarrier: HeaderCarrier, ec: ExecutionContext)
-  : Future[Either[ErrorModel, CustomerDetails]] =
+  def getCustomerDetails(vrn: String)
+                        (implicit headerCarrier: HeaderCarrier,
+                         ec: ExecutionContext): Future[HttpResult[CustomerDetails]] =
     subscriptionConnector.getCustomerDetails(vrn)
 }
