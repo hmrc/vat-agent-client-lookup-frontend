@@ -14,24 +14,16 @@
  * limitations under the License.
  */
 
-package assets.messages
+package models.errors
 
-object BaseMessages {
+import play.api.libs.json.{Format, Json}
 
-  val clientServiceName = "Business tax account"
-  val agentServiceName = "Your client’s VAT details"
+sealed trait Error
 
-  val continue = "Continue"
-  val confirm = "Confirm"
-  val confirmAndContinue = "Confirm and continue"
-  val saveAndContinue = "Save and continue"
-  val signOut = "Sign out"
-  val finish = "Finish"
-  val back = "Back"
-  val errorHeading = "You have one or more errors"
+case class UnexpectedError(status: Int, message: String) extends Error
 
-  val breadcrumbBta = "Business tax account"
-  val breadcrumbVat = "Your VAT details"
-  val breadcrumbBizDeets = "Change of business details"
-
+object UnexpectedError {
+  implicit val format: Format[UnexpectedError] = Json.format[UnexpectedError]
 }
+
+case object Migration extends Error

@@ -17,7 +17,7 @@
 package connectors.httpParsers
 
 import connectors.httpParsers.ResponseHttpParser.HttpResult
-import models.errors.ErrorModel
+import models.errors.UnexpectedError
 import play.api.Logger
 import play.api.http.Status.{CONFLICT, CREATED}
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
@@ -38,7 +38,7 @@ object CreateEmailVerificationRequestHttpParser {
             "[CreateEmailVerificationRequestHttpParser][CreateEmailVerificationRequestHttpReads][read] - " +
               s"Failed to create email verification. Received status: $status Response body: ${response.body}"
           )
-          Left(ErrorModel(status, response.body))
+          Left(UnexpectedError(status, response.body))
       }
   }
 

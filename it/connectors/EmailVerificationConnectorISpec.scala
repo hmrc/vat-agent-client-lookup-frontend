@@ -21,7 +21,7 @@ import connectors.httpParsers.CreateEmailVerificationRequestHttpParser.{EmailAlr
 import connectors.httpParsers.GetEmailVerificationStateHttpParser.{EmailNotVerified, EmailVerificationState, EmailVerified}
 import connectors.httpParsers.ResponseHttpParser.HttpResult
 import helpers.IntegrationBaseSpec
-import models.errors.ErrorModel
+import models.errors.UnexpectedError
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import stubs.EmailVerificationStub
 import uk.gov.hmrc.http.HeaderCarrier
@@ -65,7 +65,7 @@ class EmailVerificationConnectorISpec extends IntegrationBaseSpec {
       "return a GetEmailVerificationStateErrorResponse" in new Test {
         override def setupStubs(): StubMapping = EmailVerificationStub.stubEmailVerifiedError
         setupStubs()
-        val expected = Left(ErrorModel(
+        val expected = Left(UnexpectedError(
           INTERNAL_SERVER_ERROR,
           EmailVerificationStub.internalServerErrorJson.toString
         ))
@@ -109,7 +109,7 @@ class EmailVerificationConnectorISpec extends IntegrationBaseSpec {
       "return an EmailVerificationRequestSent" in new Test {
         override def setupStubs(): StubMapping = EmailVerificationStub.stubVerificationRequestError
         setupStubs()
-        val expected = Left(ErrorModel(
+        val expected = Left(UnexpectedError(
           INTERNAL_SERVER_ERROR,
           EmailVerificationStub.internalServerErrorJson.toString
         ))

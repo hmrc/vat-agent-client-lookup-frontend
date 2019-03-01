@@ -18,7 +18,7 @@ package mocks.connectors
 
 import connectors.SubscriptionConnector
 import models.CustomerDetails
-import models.errors.ErrorModel
+import models.errors.UnexpectedError
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -36,7 +36,7 @@ trait MockSubscriptionConnector extends UnitSpec with MockitoSugar with BeforeAn
     reset(mockSubscriptionConnector)
   }
 
-  def setupMockUserDetails(vrn: String)(response: Either[ErrorModel, CustomerDetails]): Unit = {
+  def setupMockUserDetails(vrn: String)(response: Either[UnexpectedError, CustomerDetails]): Unit = {
     when(mockSubscriptionConnector.getCustomerDetails(ArgumentMatchers.eq(vrn))(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(response))
   }

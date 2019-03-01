@@ -25,7 +25,7 @@ unauthorised.agentForClient.enterDetails = If you think you have entered the wro
 unauthorised.agentForClient.tryAgain = try again
 
 common.confirmAndContinue = Confirm and continue
-common.agentService = Update your client’s VAT details
+common.agentService = Your client’s VAT details
 common.errorSummary.heading = You have one or more errors
 common.continue = Continue
 common.fullStop = .
@@ -76,3 +76,8 @@ capturePref.error.mandatoryRadioOption = Select an option
 capturePref.error.mandatoryEmail = Enter your email address
 capturePref.error.emailLength = Email address must be 132 characters or less
 capturePref.error.invalidEmail = Enter a valid email address
+
+accountMigration.heading = You cannot make changes for that client’s business right now
+accountMigration.explanation = This is because the business’s Making Tax Digital account is being set up - this can take up to 72 hours.
+accountMigration.checkBackLater = Check back again later.
+accountMigration.differentClient = Make changes for a different client
