@@ -20,11 +20,22 @@
 
 @views.html.main_template(title = messages("common.agentService")) {
 
-  <h1>@messages("accountMigration.heading")</h1>
+  <h1>@messages("notSignedUp.heading")</h1>
 
-  <p>@messages("accountMigration.explanation")</p>
+  <p>@messages("notSignedUp.explanation")</p>
 
-  <p>@messages("accountMigration.checkBackLater")</p>
+  <h2>@messages("notSignedUp.listHeading")</h2>
+
+  <ul class="list list-bullet">
+    <li>
+      <a target="_blank" href=@appConfig.agentSignUpUrl>@messages("notSignedUp.listItem1Link")</a>
+      @messages("notSignedUp.listItem1Text")
+    </li>
+    <li>
+      <a target="_blank" href=@appConfig.submitVatReturnsUrl>@messages("notSignedUp.listItem2Link")</a>
+      @messages("notSignedUp.listItem2Text")
+    </li>
+  </ul>
 
   <a href="@controllers.agent.routes.SelectClientVrnController.show()">
     @messages("common.differentClient")

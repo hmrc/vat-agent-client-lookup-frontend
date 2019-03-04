@@ -39,9 +39,15 @@ object CustomerDetailsHttpParser {
             },
             valid => Right(valid)
           )
+
         case PRECONDITION_FAILED =>
           Logger.debug(s"[CustomerCircumstancesHttpParser][read]: Status $PRECONDITION_FAILED")
           Left(Migration)
+
+        case NOT_FOUND =>
+          Logger.debug(s"[CustomerCircumstancesHttpParser][read]: Status $NOT_FOUND")
+          Left(NotSignedUp)
+
         case status =>
           Logger.warn(
             s"[CustomerCircumstancesHttpParser][read]: - Unexpected Response " +

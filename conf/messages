@@ -5,6 +5,7 @@ common.yes = Yes
 common.no = No
 common.error.heading = There is a problem
 common.error.prefixTitle = Error: {0}
+common.differentClient = Make changes for a different client
 
 standardError.title = There is a problem with the service - VAT reporting through software - GOV.UK
 standardError.heading = Sorry, there is a problem with the service
@@ -80,4 +81,11 @@ capturePref.error.invalidEmail = Enter a valid email address
 accountMigration.heading = You cannot make changes for that client’s business right now
 accountMigration.explanation = This is because the business’s Making Tax Digital account is being set up - this can take up to 72 hours.
 accountMigration.checkBackLater = Check back again later.
-accountMigration.differentClient = Make changes for a different client
+
+notSignedUp.heading = The business has not signed up to Making Tax Digital for VAT
+notSignedUp.explanation = You cannot use this service for your client’s business as the business has not signed up for Making Tax Digital for VAT.
+notSignedUp.listHeading = What happens next
+notSignedUp.listItem1Link = sign up for Making Tax Digital for VAT (opens in a new tab)
+notSignedUp.listItem1Text = to make changes to your client’s business details
+notSignedUp.listItem2Link = submit VAT Returns and manage your client’s business details (opens in a new tab)
+notSignedUp.listItem2Text = without signing up to Making Tax Digital for VAT
