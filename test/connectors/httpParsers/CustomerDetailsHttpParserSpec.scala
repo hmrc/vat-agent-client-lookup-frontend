@@ -18,7 +18,7 @@ package connectors.httpParsers
 
 import assets.CustomerDetailsTestConstants._
 import connectors.httpParsers.CustomerDetailsHttpParser.CustomerDetailsReads.read
-import models.errors.UnexpectedError
+import models.errors._
 import play.api.http.Status
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpResponse
@@ -43,6 +43,22 @@ class CustomerDetailsHttpParserSpec extends TestUtil {
       "return an UnexpectedError" in {
         read("", "", HttpResponse(Status.OK, successBadJson)) shouldBe
           Left(UnexpectedError(Status.INTERNAL_SERVER_ERROR, "Invalid Json"))
+      }
+    }
+
+    "the http response status is PRECONDITION_FAILED" should {
+
+      "return an Migration error" in {
+        read("", "", HttpResponse(Status.PRECONDITION_FAILED, None)) shouldBe
+          Left(Migration)
+      }
+    }
+
+    "the http response status is NOT_FOUND" should {
+
+      "return an NotSignedUp error" in {
+        read("", "", HttpResponse(Status.NOT_FOUND, None)) shouldBe
+          Left(NotSignedUp)
       }
     }
 

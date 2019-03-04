@@ -56,6 +56,8 @@ trait AppConfig extends ServicesConfig {
   val feedbackUrl: String
   val selfLookup: String
   val emailVerificationBaseUrl: String
+  val agentSignUpUrl: String
+  val submitVatReturnsUrl: String
   val features: Features
 }
 
@@ -124,6 +126,9 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
 
   override lazy val feedbackUrl: String = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier" +
     s"&backUrl=${ContinueUrl(selfLookup + controllers.agent.routes.SelectClientVrnController.show().url).encodedUrl}"
+
+  override lazy val agentSignUpUrl: String = getString(Keys.agentSignUpUrl)
+  override lazy val submitVatReturnsUrl: String = getString(Keys.submitVatReturnsUrl)
 
   override lazy val emailVerificationBaseUrl: String = baseUrl(Keys.emailVerificationBaseUrl)
 }

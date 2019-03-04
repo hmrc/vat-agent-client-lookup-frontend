@@ -26,6 +26,8 @@ object ConfigKeys {
   val contactFrontendHost: String = "contact-frontend.host"
 
   val govUkSetupAgentServices: String = "govuk.guidance.setupAgentServices.url"
+  val agentSignUpUrl: String = "govuk.guidance.agentSignUp.url"
+  val submitVatReturnsUrl: String = "govuk.guidance.submitVatReturns.url"
 
   val governmentGatewayHost: String = "government-gateway.host"
 

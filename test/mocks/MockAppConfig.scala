@@ -36,6 +36,8 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val reportAProblemPartialUrl = ""
   override val reportAProblemNonJSUrl = ""
   override val agentServicesGovUkGuidance = "guidance/get-an-hmrc-agent-services-account"
+  override val agentSignUpUrl = "guidance/agent-sign-up"
+  override val submitVatReturnsUrl = "guidance/submit-vat-returns"
   override val feedbackSurveyUrl: String = "/survey"
 
   override val signInUrl: String = "/sign-in"

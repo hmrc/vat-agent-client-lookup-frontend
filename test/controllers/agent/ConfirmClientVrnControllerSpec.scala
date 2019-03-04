@@ -24,7 +24,7 @@ import audit.mocks.MockAuditingService
 import audit.models.{AuthenticateAgentAuditModel, GetClientBusinessNameAuditModel}
 import controllers.ControllerBaseSpec
 import mocks.services.MockCustomerDetailsService
-import models.errors.Migration
+import models.errors.{Migration, NotSignedUp}
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.verify
@@ -110,6 +110,27 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
             "return the migration error page" in {
               lazy val document = Jsoup.parse(bodyOf(result))
               document.select("h1").text shouldBe "You cannot make changes for that client’s business right now"
+            }
+          }
+
+          "a business has not been signed up to MTD error is retrieved" should {
+
+            lazy val result = TestConfirmClientVrnController.show(fakeRequestWithVrnAndRedirectUrl)
+
+            "return 404" in {
+              mockAgentAuthorised()
+              mockCustomerDetailsError(NotSignedUp)
+              status(result) shouldBe Status.NOT_FOUND
+            }
+
+            "return HTML" in {
+              contentType(result) shouldBe Some("text/html")
+              charset(result) shouldBe Some("utf-8")
+            }
+
+            "return the not signed up error page" in {
+              lazy val document = Jsoup.parse(bodyOf(result))
+              document.select("h1").text shouldBe "The business has not signed up to Making Tax Digital for VAT"
             }
           }
 

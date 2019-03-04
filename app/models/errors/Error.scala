@@ -20,10 +20,11 @@ import play.api.libs.json.{Format, Json}
 
 sealed trait Error
 
-case class UnexpectedError(status: Int, message: String) extends Error
-
 object UnexpectedError {
   implicit val format: Format[UnexpectedError] = Json.format[UnexpectedError]
 }
 
-case object Migration extends Error
+case class UnexpectedError(status: Int, message: String) extends Error
+
+case object Migration   extends Error
+case object NotSignedUp extends Error
