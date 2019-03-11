@@ -41,8 +41,12 @@ class ConfirmEmailViewSpec extends ViewBaseSpec {
     lazy val view = views.html.agent.confirmEmail(testEmail)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
+    "have the correct title" in {
+      document.title() shouldBe "Confirm the email address"
+    }
+
     "have the correct heading" in {
-      elementText(Selectors.heading) shouldBe "Confirm the new email address"
+      elementText(Selectors.heading) shouldBe "Confirm the email address"
     }
 
     "have a back link" which {
