@@ -65,7 +65,7 @@ class ConfirmEmailPageSpec extends BasePageISpec {
 
             res should have(
               httpStatus(OK),
-              elementText("h1")("Confirm the new email address")
+              elementText("h1")("Confirm the email address")
             )
           }
         }
