@@ -35,7 +35,6 @@ class CustomerDetailsSpec extends UnitSpec {
       "FirstName is present" should {
 
         "return 'Firstname'" in {
-          //CustomerDetails(Some(firstName), None, None, None).userName shouldBe Some(s"$firstName")
           customerDetailsFnameOnly.userName shouldBe Some(s"$firstName")
         }
       }
@@ -75,6 +74,13 @@ class CustomerDetailsSpec extends UnitSpec {
 
         "return the first and last name" in {
           customerDetailsIndividual.clientName shouldBe s"$firstName $lastName"
+        }
+      }
+
+      "no names are present" should {
+
+        "throw an exception" in {
+          intercept[Exception](customerDetailsNoInfo.clientName)
         }
       }
     }
