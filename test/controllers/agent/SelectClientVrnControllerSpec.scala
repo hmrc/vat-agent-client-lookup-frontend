@@ -130,9 +130,9 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wit
                 SessionKeys.verifiedAgentEmail -> testEmail
               ))
 
-              "return 500" in {
+              "return 200" in {
                 mockAgentAuthorised()
-                status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+                status(result) shouldBe Status.OK
               }
 
               "return HTML" in {
@@ -140,8 +140,8 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wit
                 charset(result) shouldBe Some("utf-8")
               }
 
-              "not add the requested redirect URL to the session" in {
-                session(result).get(SessionKeys.redirectUrl) shouldBe None
+              "add the default redirect URL (ChoC overview) to the session" in {
+                session(result).get(SessionKeys.redirectUrl) shouldBe Some(mockConfig.manageVatCustomerDetailsUrl)
               }
             }
           }
@@ -246,9 +246,9 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wit
               SessionKeys.preference -> testNoPreference
             ))
 
-            "return 500" in {
+            "return 200" in {
               mockAgentAuthorised()
-              status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+              status(result) shouldBe Status.OK
             }
 
             "return HTML" in {
@@ -256,8 +256,8 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wit
               charset(result) shouldBe Some("utf-8")
             }
 
-            "not add the requested redirect URL to the session" in {
-              session(result).get(SessionKeys.redirectUrl) shouldBe None
+            "add the default redirect URL (ChoC overview) to the session" in {
+              session(result).get(SessionKeys.redirectUrl) shouldBe Some(mockConfig.manageVatCustomerDetailsUrl)
             }
           }
         }

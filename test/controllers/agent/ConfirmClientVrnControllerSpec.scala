@@ -22,6 +22,7 @@ import assets.CustomerDetailsTestConstants._
 import assets.messages.{ConfirmClientVrnPageMessages => Messages}
 import audit.mocks.MockAuditingService
 import audit.models.{AuthenticateAgentAuditModel, GetClientBusinessNameAuditModel}
+import common.SessionKeys
 import controllers.ControllerBaseSpec
 import mocks.services.MockCustomerDetailsService
 import models.errors.{Migration, NotSignedUp}
@@ -182,7 +183,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
 
       "the Agent is authorised and signed up to HMRC-AS-AGENT" when {
 
-        "a Clients VRN is held in Session" should {
+        "a redirect URL and client's VRN are held in session" should {
 
           lazy val result = TestConfirmClientVrnController.changeClient(fakeRequestWithVrnAndRedirectUrl)
 
@@ -191,8 +192,26 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
             status(result) shouldBe Status.SEE_OTHER
           }
 
-          "redirect to the Select Your Client show action" in {
-            redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show().url)
+          "redirect to the Select Your Client show action with the redirect URL from session" in {
+            redirectLocation(result) shouldBe
+              Some(controllers.agent.routes.SelectClientVrnController.show("/homepage").url)
+          }
+        }
+
+        "a client's VRN is held in session, but no redirect URL" should {
+
+          lazy val result = TestConfirmClientVrnController.changeClient(request.withSession(
+            SessionKeys.clientVRN -> vrn
+          ))
+
+          "return status redirect SEE_OTHER (303)" in {
+            mockAgentAuthorised()
+            status(result) shouldBe Status.SEE_OTHER
+          }
+
+          "redirect to the Select Your Client show action with the default redirect URL (ChoC overview)" in {
+            redirectLocation(result) shouldBe
+              Some(controllers.agent.routes.SelectClientVrnController.show(mockConfig.manageVatCustomerDetailsUrl).url)
           }
         }
       }
