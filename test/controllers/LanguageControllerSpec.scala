@@ -72,4 +72,13 @@ class LanguageControllerSpec extends ControllerBaseSpec {
       }
     }
   }
+
+  "calling .langToCall"  should {
+
+    val result = controller.langToCall("en")
+
+    "return the correct app config route with language supplied as parameter" in {
+      result shouldBe controllers.routes.LanguageController.switchToLanguage("en")
+    }
+  }
 }
