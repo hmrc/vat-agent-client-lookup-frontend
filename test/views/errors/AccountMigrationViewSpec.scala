@@ -51,7 +51,7 @@ class AccountMigrationViewSpec extends ViewBaseSpec {
       }
 
       "have the correct href" in {
-        element("#content a").attr("href") shouldBe "/vat-through-software/representative/client-vat-number"
+        element("#content article a").attr("href") shouldBe "/vat-through-software/representative/client-vat-number"
       }
     }
   }
