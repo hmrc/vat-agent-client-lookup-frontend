@@ -47,7 +47,7 @@ class AccountMigrationViewSpec extends ViewBaseSpec {
     "have the correct link for making changes to a different client which" should {
 
       "have the correct text" in {
-        elementText("#content article p:nth-of-type(1)") shouldBe "Make changes for a different client"
+        elementText("#content article a") shouldBe "Make changes for a different client"
       }
 
       "have the correct href" in {
