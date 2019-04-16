@@ -42,7 +42,7 @@ class VerifyEmailViewSpec extends ViewBaseSpec {
     }
 
     "have the correct text for the second paragraph" in {
-      elementText("#content p:nth-of-type(2)") shouldBe "You can change your email address if it is not correct."
+      elementText("#content article p:nth-of-type(2)") shouldBe "You can change your email address if it is not correct."
     }
 
     "have a GA tag with the correct tag" in {

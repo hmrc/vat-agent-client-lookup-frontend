@@ -36,7 +36,7 @@ class NotSignedUpViewSpec extends ViewBaseSpec {
     }
 
     "have the correct main paragraph" in {
-      elementText("#content p:nth-of-type(1)") shouldBe
+      elementText("#content article p:nth-of-type(1)") shouldBe
         "You cannot use this service for your client’s business as the business has not signed up for Making Tax Digital for VAT."
     }
 
