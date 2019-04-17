@@ -26,7 +26,7 @@ val appName = "vat-agent-client-lookup-frontend"
 
 val bootstrapPlayVersion       = "4.11.0"
 val govTemplateVersion         = "5.23.0"
-val playPartialsVersion        = "6.9.0"
+val playPartialsVersion        = "6.9.0-play-25"
 val authClientVersion          = "2.20.0-play-25"
 val playUiVersion              = "7.39.0-play-25"
 val playLanguageVersion        = "3.4.0"
