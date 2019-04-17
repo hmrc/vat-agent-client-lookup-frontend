@@ -37,7 +37,7 @@ class VerifyEmailViewSpec extends ViewBaseSpec {
     }
 
     "have the correct text for the first paragraph" in {
-      elementText("#content p") shouldBe
+      elementText("#content article p") shouldBe
         "We’ve sent an email to test@email.com. Click on the link in the email to verify your email address."
     }
 
