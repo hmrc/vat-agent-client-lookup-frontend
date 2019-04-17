@@ -16,11 +16,10 @@
 
 package views.errors.agent
 
-import assets.messages.BaseMessages
+import assets.messages.{BaseMessages, AgentUnauthorisedPageMessages => Messages}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
-import assets.messages.{AgentUnauthorisedPageMessages => Messages}
 
 class UnauthorisedNoEnrolmentViewSpec extends ViewBaseSpec {
 
@@ -29,8 +28,8 @@ class UnauthorisedNoEnrolmentViewSpec extends ViewBaseSpec {
     object Selectors {
       val serviceName = ".header__menu__proposition-name"
       val pageHeading = "#content h1"
-      val instructions = "#content p"
-      val instructionsLink = "#content p > a"
+      val instructions = "#content article p"
+      val instructionsLink = "#content article p > a"
       val button = "#content .button"
     }
 

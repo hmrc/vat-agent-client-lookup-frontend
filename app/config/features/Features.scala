@@ -24,4 +24,5 @@ class Features @Inject()(config: Configuration) {
 
   val emailVerificationEnabled = new Feature(ConfigKeys.emailVerificationFeature, config)
   val preferenceJourneyEnabled = new Feature(ConfigKeys.preferenceJourneyFeature, config)
+  val useLanguageSelector = new Feature(ConfigKeys.useLanguageSelectorFeature, config)
 }

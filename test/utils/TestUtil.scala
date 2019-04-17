@@ -43,6 +43,7 @@ trait TestUtil extends UnitSpec with GuiceOneAppPerSuite {
   implicit lazy val serviceErrorHandler: ErrorHandler = injector.instanceOf[ErrorHandler]
 
   lazy val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+  lazy val language: Lang = mockConfig.languageMap("english")
 
   lazy val fakeRequestWithVrnAndRedirectUrl: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest().withSession(

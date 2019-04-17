@@ -31,7 +31,8 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit v
     Ok(testOnly.views.html.featureSwitch(FeatureSwitchForm.form.fill(
       FeatureSwitchModel(
         emailVerificationEnabled = appConfig.features.emailVerificationEnabled(),
-        preferenceJourneyEnabled = appConfig.features.preferenceJourneyEnabled()
+        preferenceJourneyEnabled = appConfig.features.preferenceJourneyEnabled(),
+        useLanguageFeatureEnabled = appConfig.features.useLanguageSelector()
       )
     )))
   }
@@ -46,6 +47,7 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit v
   def handleSuccess(model: FeatureSwitchModel): Result = {
     appConfig.features.emailVerificationEnabled(model.emailVerificationEnabled)
     appConfig.features.preferenceJourneyEnabled(model.preferenceJourneyEnabled)
+    appConfig.features.useLanguageSelector(model.useLanguageFeatureEnabled)
     Redirect(routes.FeatureSwitchController.featureSwitch())
   }
 }
