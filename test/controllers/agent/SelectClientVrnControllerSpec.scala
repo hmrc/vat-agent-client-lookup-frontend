@@ -92,7 +92,7 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wit
                 charset(result) shouldBe Some("utf-8")
               }
 
-              "add the redirect URL to the session" in {
+              "add the requested redirect URL to the session" in {
                 session(result).get(SessionKeys.redirectUrl) shouldBe Some(testRedirectUrl)
               }
             }
@@ -149,7 +149,7 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wit
 
         "the user has no verified email in session" should {
 
-          lazy val result = TestClientVrnController.show("www.google.com")(request.withSession(
+          lazy val result = TestClientVrnController.show(testRedirectUrl)(request.withSession(
             SessionKeys.preference -> testYesPreference
           ))
 
@@ -162,8 +162,8 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wit
             redirectLocation(result) shouldBe Some(controllers.agent.routes.CapturePreferenceController.show().url)
           }
 
-          "not add the requested redirect URL to the session" in {
-            session(result).get(SessionKeys.redirectUrl) shouldBe None
+          "add the requested redirect URL to the session" in {
+            session(result).get(SessionKeys.redirectUrl) shouldBe Some(testRedirectUrl)
           }
         }
       }
@@ -210,7 +210,7 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wit
               charset(result) shouldBe Some("utf-8")
             }
 
-            "add the redirect URL to the session" in {
+            "add the requested redirect URL to the session" in {
               session(result).get(SessionKeys.redirectUrl) shouldBe Some(testRedirectUrl)
             }
           }
@@ -263,9 +263,9 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wit
         }
       }
 
-      "the user does not have a preference in session" should {
+      "the user does not have a preference in session, but does have a redirect URL in session" should {
 
-        lazy val result = TestClientVrnController.show(testRedirectUrl)(request.withSession(
+        lazy val result = TestClientVrnController.show("/homepage")(request.withSession(
           SessionKeys.redirectUrl -> testRedirectUrl
         ))
 
@@ -280,6 +280,24 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wit
 
         "not add the requested redirect URL to the session" in {
           session(result).get(SessionKeys.redirectUrl) shouldBe None
+        }
+      }
+
+      "the user does not have a preference or a redirect URL in session" should {
+
+        lazy val result = TestClientVrnController.show(testRedirectUrl)(request)
+
+        "return 303" in {
+          mockAgentAuthorised()
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        "redirect to the Capture Preference controller action" in {
+          redirectLocation(result) shouldBe Some(controllers.agent.routes.CapturePreferenceController.show().url)
+        }
+
+        "add the requested redirect URL to the session" in {
+          session(result).get(SessionKeys.redirectUrl) shouldBe Some(testRedirectUrl)
         }
       }
     }
