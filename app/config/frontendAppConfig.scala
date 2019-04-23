@@ -85,7 +85,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   private lazy val governmentGatewayHost: String = getString(Keys.governmentGatewayHost)
 
   private lazy val feedbackSurveyBase = getString(Keys.surveyFrontend) + getString(Keys.surveyContext)
-  override lazy val feedbackSurveyUrl = s"$feedbackSurveyBase/?origin=$contactFormServiceIdentifier"
+  override lazy val feedbackSurveyUrl = s"$feedbackSurveyBase/$contactFormServiceIdentifier"
 
   private lazy val signInOrigin: String = getString(Keys.appName)
   private lazy val signInBaseUrl: String = getString(Keys.signInBaseUrl)
