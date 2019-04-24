@@ -24,7 +24,7 @@ import sbt.Tests.{Group, SubProcess}
 
 val appName = "vat-agent-client-lookup-frontend"
 
-val bootstrapPlayVersion       = "4.9.0"
+val bootstrapPlayVersion       = "4.10.0-SNAPSHOT"
 val govTemplateVersion         = "5.23.0"
 val playPartialsVersion        = "6.5.0"
 val authClientVersion          = "2.20.0-play-25"
