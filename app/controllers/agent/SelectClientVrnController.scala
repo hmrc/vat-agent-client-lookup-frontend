@@ -48,7 +48,14 @@ class SelectClientVrnController @Inject()(val messagesApi: MessagesApi,
             Ok(views.html.agent.selectClientVrn(ClientVrnForm.form)).addingToSession(SessionKeys.redirectUrl -> url)
         }
       } else {
-        Redirect(controllers.agent.routes.CapturePreferenceController.show())
+        agent.session.get(SessionKeys.redirectUrl) match {
+          case Some(_) =>
+            Redirect(controllers.agent.routes.CapturePreferenceController.show())
+          case None =>
+            val url: String = extractRedirectUrl(redirectUrl).getOrElse(appConfig.manageVatCustomerDetailsUrl)
+            Redirect(controllers.agent.routes.CapturePreferenceController.show())
+              .addingToSession(SessionKeys.redirectUrl -> url)
+        }
       }
   }
 
