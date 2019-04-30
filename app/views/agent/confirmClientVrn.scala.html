@@ -23,12 +23,9 @@
     title = messages("confirmClientVrn.title"),
     bodyClasses = None) {
 
-    <header class="page-heading">
-      <h1 data-journey="agent_select-client:view:confirm-client-vat-number"
-          class="heading-large">
-            @messages("confirmClientVrn.heading")
-      </h1>
-    </header>
+    <h1 data-journey="agent_select-client:view:confirm-client-vat-number" class="heading-large">
+        @messages("confirmClientVrn.heading")
+    </h1>
 
     <h2 class="bold-medium">@messages("confirmClientVrn.name")</h2>
     <p>@customerDetails.clientName</p>

@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import views.html.templates.headings
 @import views.html.templates.errors.errorSummary
 @import templates.inputs._
 @import models.agent.ClientVrnModel
@@ -30,7 +29,7 @@
 
     @errorSummary("common.errorSummary.heading", form)
 
-    @headings(messages("clientsVrn.heading"))
+    <h1 class="heading-large">@messages("clientsVrn.heading")</h1>
 
     <p>@messages("clientsVrn.p1")</p>
 
