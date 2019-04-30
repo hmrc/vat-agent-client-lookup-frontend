@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import views.html.templates.headings
 @import uk.gov.hmrc.play.views.html.helpers._
 @import common.EnrolmentKeys
 @import java.net.URLEncoder
@@ -30,7 +29,7 @@ s"${appConfig.agentInvitationsFastTrack}?continue=${URLEncoder.encode(s"${appCon
     bodyClasses = None
 ) {
 
-    @headings(messages("unauthorised.agentForClient.title"))
+    <h1 class="heading-large">@messages("unauthorised.agentForClient.title")</h1>
 
     <form method="POST" action="@postToInvitations" id="agentInviteForm">
       <input type="hidden" name="service" id="service" value="@{EnrolmentKeys.vatEnrolmentId}">

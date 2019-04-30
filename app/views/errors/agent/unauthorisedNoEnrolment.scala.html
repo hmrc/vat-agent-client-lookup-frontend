@@ -14,8 +14,6 @@
  * limitations under the License.
  *@
 
-@import views.html.templates.headings
-
 @()(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
@@ -24,7 +22,7 @@
     feedbackOnSignOut = false
 ) {
 
-    @headings(messages("unauthorised.agent.title"))
+    <h1 class="heading-large">@messages("unauthorised.agent.title")</h1>
 
     <p data-journey="agent_unauthorised:view:not-enrolled">
         @messages("unauthorised.agent.useThisService")
