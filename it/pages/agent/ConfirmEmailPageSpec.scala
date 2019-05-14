@@ -91,7 +91,7 @@ class ConfirmEmailPageSpec extends BasePageISpec {
             given.agent.isSignedUpToAgentServices
 
             And("I stub an email verified successful response from EmailVerificationService")
-            EmailVerificationStub.stubEmailVerified
+            EmailVerificationStub.stubEmailVerified(notificationsEmail)
 
             When("I call the isEmailVerified controller action with a verified notification email in session")
 

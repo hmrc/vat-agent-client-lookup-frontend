@@ -33,15 +33,15 @@ import scala.concurrent.Future
 class EmailVerificationConnector @Inject()(http: HttpClient,
                                            appConfig: AppConfig) {
 
-  private[connectors] def checkVerifiedEmailUrl(email: String): String =
-    s"${appConfig.emailVerificationBaseUrl}/email-verification/verified-email-addresses/$email"
+  private val checkVerifiedEmailUrl: String =
+    s"${appConfig.emailVerificationBaseUrl}/email-verification/verified-email-check"
 
   private[connectors] lazy val createEmailVerificationRequestUrl: String =
     s"${appConfig.emailVerificationBaseUrl}/email-verification/verification-requests"
 
   def getEmailVerificationState(emailAddress: String)
                                (implicit hc: HeaderCarrier): Future[HttpResult[EmailVerificationState]] =
-    http.GET[HttpResult[EmailVerificationState]](checkVerifiedEmailUrl(emailAddress))
+    http.POST[JsObject, HttpResult[EmailVerificationState]](checkVerifiedEmailUrl, Json.obj("email" -> emailAddress))
 
   def createEmailVerificationRequest(emailAddress: String, continueUrl: String)
                                     (implicit hc: HeaderCarrier): Future[HttpResult[EmailVerificationRequest]] = {
