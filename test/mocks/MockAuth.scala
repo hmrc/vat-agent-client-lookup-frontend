@@ -21,7 +21,6 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.{reset, when}
 import org.mockito.stubbing.OngoingStubbing
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.mockito.MockitoSugar
 import _root_.services.EnrolmentsAuthService
 import audit.AuditService
 import config.ErrorHandler
@@ -29,10 +28,11 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import utils.TestUtil
 import assets.BaseTestConstants._
+import org.scalatestplus.mockito.MockitoSugar
 
 import scala.concurrent.Future
 
-trait MockAuth extends TestUtil with BeforeAndAfterEach with MockitoSugar  {
+trait MockAuth extends TestUtil with BeforeAndAfterEach with MockitoSugar {
 
   override def beforeEach(): Unit = {
     super.beforeEach()

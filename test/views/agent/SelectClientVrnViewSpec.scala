@@ -24,49 +24,79 @@ import views.ViewBaseSpec
 
 class SelectClientVrnViewSpec extends ViewBaseSpec {
 
-  "Rendering the Change Clients VRN page" should {
+  "Rendering the Select Client VRN page" when {
 
-    lazy val view = views.html.agent.selectClientVrn(ClientVrnForm.form)(request, messages, mockConfig)
-    lazy implicit val document: Document = Jsoup.parse(view.body)
+    "there are no errors in the form" should {
 
-    s"have the correct document title of '${viewMessages.title}'" in {
-      document.title shouldBe viewMessages.title
-    }
+      lazy val view = views.html.agent.selectClientVrn(ClientVrnForm.form)(request, messages, mockConfig)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct service name" in {
-      elementText(".header__menu__proposition-name") shouldBe BaseMessages.agentServiceName
-    }
+      s"have the correct document title of '${viewMessages.title}'" in {
+        document.title shouldBe viewMessages.title
+      }
 
-    s"have the correct page heading of '${viewMessages.heading}'" in {
-      elementText("h1") shouldBe viewMessages.heading
-    }
+      s"have the correct service name" in {
+        elementText(".header__menu__proposition-name") shouldBe BaseMessages.agentServiceName
+      }
 
-    s"have the correct p1 of '${viewMessages.p1}'" in {
-      elementText("article > p") shouldBe viewMessages.p1
-    }
+      s"have the correct page heading of '${viewMessages.heading}'" in {
+        elementText("h1") shouldBe viewMessages.heading
+      }
 
-    s"have the correct form hint of '${viewMessages.hint}'" in {
-      elementText(".form-hint") shouldBe viewMessages.hint
-    }
+      s"have the correct p1 of '${viewMessages.p1}'" in {
+        elementText("article > p") shouldBe viewMessages.p1
+      }
 
-    s"have an input box for the VRN" in {
-      elementText("label[for = vrn] > .visuallyhidden") shouldBe viewMessages.label
-    }
+      s"have the correct form hint of '${viewMessages.hint}'" in {
+        elementText(".form-hint") shouldBe viewMessages.hint
+      }
 
-    "have a submit button" which {
+      s"have an input box for the VRN" in {
+        elementText("label[for = vrn] > .visuallyhidden") shouldBe viewMessages.label
+      }
 
-      s"has the text '${BaseMessages.continue}'" in {
+      s"have a submit button with the text '${BaseMessages.continue}'" in {
         elementText("button") shouldBe BaseMessages.continue
+      }
+
+      "has the correct form action" in {
+        element("form").attr("action") shouldBe controllers.agent.routes.SelectClientVrnController.submit().url
+      }
+
+      "have the sign out link in the page header" in {
+        elementText("#sign-out") shouldBe "Sign out"
+      }
+
+      "redirect to the feedback survey on sign out" in {
+        element("#sign-out").attr("href") shouldBe
+          controllers.routes.SignOutController.signOut(feedbackOnSignOut = true).url
       }
     }
 
-    "have the sign out link in the page header" in {
-      elementText("#sign-out") shouldBe "Sign out"
-    }
+    "there are errors in the form" should {
 
-    "redirect to the feedback survey on sign out" in {
-      element("#sign-out").attr("href") shouldBe
-        controllers.routes.SignOutController.signOut(feedbackOnSignOut = true).url
+      lazy val view =
+        views.html.agent.selectClientVrn(ClientVrnForm.form.bind(Map("vrn" -> "9")))(request, messages, mockConfig)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have the correct title" in {
+        document.title shouldBe "Error: " + viewMessages.title
+      }
+
+      "have a form error box" which {
+
+        "has the correct heading" in {
+          elementText("#error-summary-heading") shouldBe viewMessages.formErrorHeading
+        }
+
+        "has the correct error message" in {
+          elementText("#vrn-error-summary") shouldBe viewMessages.formErrorNotEnoughNumbers
+        }
+      }
+
+      "have the correct error notification text above the input box" in {
+        elementText(".error-notification") shouldBe viewMessages.formErrorNotEnoughNumbers
+      }
     }
   }
 }
