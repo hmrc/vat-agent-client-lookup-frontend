@@ -23,8 +23,7 @@
 @(form: Form[ClientVrnModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
-    title = messages("clientsVrn.title"),
-    bodyClasses = None
+    if(form.errors.nonEmpty) messages("common.error.prefixTitle", messages("clientsVrn.title")) else messages("clientsVrn.title")
 ) {
 
     @errorSummary("common.errorSummary.heading", form)

@@ -22,4 +22,6 @@ object ClientVrnPageMessages {
   val p1: String = "This is the 9-digit number they received when they registered for VAT."
   val hint: String = "For example, '123456789'"
   val label: String = "Client’s VAT Number"
+  val formErrorHeading: String = "You have one or more errors"
+  val formErrorNotEnoughNumbers: String = "You have not entered enough numbers"
 }
