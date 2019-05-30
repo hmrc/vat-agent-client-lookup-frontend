@@ -60,4 +60,5 @@ object ConfigKeys {
   val emailVerificationFeature: String = "features.emailVerification.enabled"
   val preferenceJourneyFeature: String = "features.preferenceJourney.enabled"
   val useLanguageSelectorFeature: String = "features.useLanguageSelector.enabled"
+  val whereToGoFeature: String = "features.whereToGo.enabled"
 }

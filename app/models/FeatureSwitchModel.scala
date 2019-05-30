@@ -18,4 +18,6 @@ package models
 
 case class FeatureSwitchModel(emailVerificationEnabled: Boolean,
                               preferenceJourneyEnabled: Boolean,
-                              useLanguageFeatureEnabled: Boolean)
+                              useLanguageFeatureEnabled: Boolean,
+                              whereToGoFeatureEnabled: Boolean
+                             )
