@@ -19,9 +19,15 @@ package controllers.agent
 import config.{AppConfig, ErrorHandler}
 import controllers.BaseController
 import controllers.predicates.AuthoriseAsAgentOnly
+import forms.WhatToDoForm
 import javax.inject.{Inject, Singleton}
+import models.Agent
+import models.agent._
+import play.api.data.Form
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Action, AnyContent}
+
+import scala.concurrent.Future
 
 @Singleton
 class WhatToDoController @Inject()(val messagesApi: MessagesApi,
@@ -29,10 +35,28 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
                                    val serviceErrorHandler: ErrorHandler,
                                    implicit val appConfig: AppConfig) extends BaseController {
 
+  private def renderView(data: Form[WhatToDoModel] = WhatToDoForm.whatToDoForm)(implicit agent: Agent[_]) =
+    views.html.agent.whatToDo(data)
+
   def show: Action[AnyContent] = authenticate { implicit agent =>
     if(appConfig.features.whereToGoFeature()){
-      
+      Ok(renderView())
+    } else {
+      Ok(views.html.errors.standardError(appConfig, "", "", "not found-arino"))
     }
   }
 
+
+  def submit: Action[AnyContent] = authenticate {
+    implicit agent =>
+      WhatToDoForm.whatToDoForm.bindFromRequest().fold(
+        error => BadRequest(renderView(error)),
+        data => data.value match {
+          case SubmitReturn.value => Ok("1")
+          case ViewReturn.value => Ok("2")
+          case ChangeDetails.value => Ok("3")
+          case ViewCertificate.value => Ok("4")
+        }
+      )
+  }
 }
