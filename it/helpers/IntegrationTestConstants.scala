@@ -27,6 +27,8 @@ object IntegrationTestConstants {
 
   val clientVRN = "999969202"
 
+  val nonMTDfB = "Non MTDfB"
+
   val notificationsEmail = "notifyme@email.com"
 
   val website = "www.test.com"
@@ -41,19 +43,22 @@ object IntegrationTestConstants {
     firstName = None,
     lastName = None,
     tradingName = Some("Vatmobile Taxi"),
-    organisationName = Some("Vatmobile Taxi LTD")
+    organisationName = Some("Vatmobile Taxi LTD"),
+    mandationStatus = nonMTDfB
   )
 
   val individual = CustomerDetails(
     firstName = Some("Pepsi"),
     lastName = Some("Mac"),
     tradingName = Some("PepsiCo"),
-    organisationName = None
+    organisationName = None,
+    mandationStatus = nonMTDfB
   )
 
   val individualJson: JsObject = Json.obj(
     "firstName" -> "Pepsi",
     "lastName" -> "Mac",
-    "tradingName" -> "PepsiCo"
+    "tradingName" -> "PepsiCo",
+    "mandationStatus" -> nonMTDfB
   )
 }

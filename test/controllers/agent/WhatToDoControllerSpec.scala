@@ -16,6 +16,8 @@
 
 package controllers.agent
 
+import assets.BaseTestConstants
+import assets.CustomerDetailsTestConstants.{customerDetailsFnameOnly, firstName}
 import controllers.ControllerBaseSpec
 import controllers.predicates.AuthoriseAsAgentOnly
 import play.api.mvc._
@@ -26,17 +28,13 @@ import mocks.services.MockCustomerDetailsService
 import models.Agent
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+
 import scala.concurrent.Future
 
 class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetailsService{
 
   trait Test {
     lazy val controller = new WhatToDoController(messagesApi, mockAuthAsAgentWithClient, mockErrorHandler, mockCustomerDetailsService, mockConfig)
-
-    lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
-
-    lazy val fakeRequestWithIncorrectFormData: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest()
-      .withFormUrlEncodedBody()
   }
 
   ".show" should {
@@ -45,24 +43,35 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
         mockConfig.features.whereToGoFeature(true)
 
         mockAgentAuthorised()
+        mockCustomerDetailsSuccess(customerDetailsFnameOnly)
 
-        val result: Future[Result] = controller.show()(fakeRequest)
+        val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
         status(result) shouldBe OK
-        Jsoup.parse(bodyOf(result)).title() shouldBe title("l'biz")
+        Jsoup.parse(bodyOf(result)).title() shouldBe title(firstName)
       }
     }
     "render the error page" when {
-      "user is not an agent" in new Test {
+      "an error is returned in customer details" in new Test {
+        mockConfig.features.whereToGoFeature(true)
+
+        mockAgentAuthorised()
+        mockCustomerDetailsError(BaseTestConstants.unexpectedError)
+
+        val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
+
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+      }
+
+      "the whereToGo feature is off" in new Test {
         mockConfig.features.whereToGoFeature(false)
 
         mockAgentAuthorised()
 
+        val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
-        val result: Future[Result] = controller.show()(fakeRequest)
-
-        status(result) shouldBe OK
-        Jsoup.parse(bodyOf(result)).title() shouldBe ""
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+        Jsoup.parse(bodyOf(result)).title() shouldBe "There is a problem with the service - VAT reporting through software - GOV.UK"
       }
     }
   }
@@ -80,7 +89,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
         mockAgentAuthorised()
 
-        val result: Future[Result] = controller.submit("name", true)(fakeRequestWithIncorrectFormData)
+        val result: Future[Result] = controller.submit("l'biz", true)(fakeRequestWithVrnAndRedirectUrl)
         val parsedBody: Document = Jsoup.parse(bodyOf(result))
 
         status(result) shouldBe BAD_REQUEST

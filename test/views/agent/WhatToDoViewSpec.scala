@@ -26,23 +26,50 @@ import play.api.test.FakeRequest
 
 class WhatToDoViewSpec extends ViewBaseSpec {
 
-  "WhatToDo view" should {
+  "WhatToDo view" when {
 
-    lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-    lazy val view = views.html.agent.whatToDo(WhatToDoForm.whatToDoForm, "l'biz", true)
-    lazy implicit val document: Document = Jsoup.parse(view.body)
+    "passed a mandation status of 'Non MTDfB'" should {
 
-    "display the correct heading" in {
-      elementText("#page-heading") shouldBe Messages.title("l'biz")
+      lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
+      lazy val view = views.html.agent.whatToDo(WhatToDoForm.whatToDoForm, "l'biz", true)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "display the correct heading" in {
+        elementText("#page-heading") shouldBe Messages.title("l'biz")
+      }
+      "display the correct radio options" in {
+        elementText(".multiple-choice:nth-of-type(1) label") shouldBe Messages.submitReturn
+        elementText(".multiple-choice:nth-of-type(2) label") shouldBe Messages.viewReturn
+        elementText(".multiple-choice:nth-of-type(3) label") shouldBe Messages.changeDetails
+        elementText(".multiple-choice:nth-of-type(4) label") shouldBe Messages.viewCertificate
+      }
+      "display the continue button" in {
+        elementText("#continue") shouldBe Messages.continue
+      }
+
     }
-    "display the correct radio options" in {
-      elementText(".multiple-choice:nth-of-type(1) label") shouldBe Messages.submitReturn
-      elementText(".multiple-choice:nth-of-type(2) label") shouldBe Messages.viewReturn
-      elementText(".multiple-choice:nth-of-type(3) label") shouldBe Messages.changeDetails
-      elementText(".multiple-choice:nth-of-type(4) label") shouldBe Messages.viewCertificate
-    }
-    "display the continue button" in {
-      elementText("#continue") shouldBe Messages.continue
+
+    "passed a mandation status that is not 'Non MTDfB'" should {
+
+      lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
+      lazy val view = views.html.agent.whatToDo(WhatToDoForm.whatToDoForm, "l'biz", false)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "display the correct heading" in {
+        elementText("#page-heading") shouldBe Messages.title("l'biz")
+      }
+      "display the correct radio options" in {
+        elementText(".multiple-choice:nth-of-type(1) label") shouldBe Messages.changeDetails
+        elementText(".multiple-choice:nth-of-type(2) label") shouldBe Messages.viewCertificate
+      }
+      "not display the submit or view return options" in {
+        document.getElementById("submit-return") shouldBe null
+        document.getElementById("view-return") shouldBe null
+      }
+      "display the continue button" in {
+        elementText("#continue") shouldBe Messages.continue
+      }
+
     }
   }
 

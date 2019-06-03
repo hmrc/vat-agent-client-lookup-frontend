@@ -92,7 +92,7 @@ class CustomerDetailsSpec extends UnitSpec {
       }
 
       "no optional fields are returned" in {
-        noInfoJson.as[CustomerDetails] shouldBe customerDetailsNoInfo
+        noOptionalInfoJson.as[CustomerDetails] shouldBe customerDetailsNoInfo
       }
     }
   }

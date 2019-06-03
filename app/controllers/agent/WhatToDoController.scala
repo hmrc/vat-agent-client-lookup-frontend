@@ -46,7 +46,7 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
         case Left(_) => serviceErrorHandler.showInternalServerError
       }
     } else {
-      Future.successful(Ok(views.html.errors.standardError(appConfig, "", "", "not found-arino")))
+      Future.successful(serviceErrorHandler.showInternalServerError)
     }
   }
 
