@@ -22,16 +22,16 @@ import play.api.mvc._
 import play.api.test.FakeRequest
 import play.mvc.Http.Status._
 import assets.messages.WhatToDoMessages._
+import mocks.services.MockCustomerDetailsService
 import models.Agent
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-
 import scala.concurrent.Future
 
-class WhatToDoControllerSpec extends ControllerBaseSpec {
+class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetailsService{
 
   trait Test {
-    lazy val controller = new WhatToDoController(messagesApi, mockAgentOnlyAuthPredicate, mockErrorHandler, mockConfig)
+    lazy val controller = new WhatToDoController(messagesApi, mockAuthAsAgentWithClient, mockErrorHandler, mockCustomerDetailsService, mockConfig)
 
     lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
@@ -80,7 +80,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec {
 
         mockAgentAuthorised()
 
-        val result: Future[Result] = controller.submit()(fakeRequestWithIncorrectFormData)
+        val result: Future[Result] = controller.submit("name", true)(fakeRequestWithIncorrectFormData)
         val parsedBody: Document = Jsoup.parse(bodyOf(result))
 
         status(result) shouldBe BAD_REQUEST

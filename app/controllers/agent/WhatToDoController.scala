@@ -17,40 +17,44 @@
 package controllers.agent
 
 import config.{AppConfig, ErrorHandler}
+import connectors.SubscriptionConnector
 import controllers.BaseController
-import controllers.predicates.AuthoriseAsAgentOnly
+import controllers.predicates.{AuthoriseAsAgentOnly, AuthoriseAsAgentWithClient}
 import forms.WhatToDoForm
 import javax.inject.{Inject, Singleton}
-import models.Agent
+import models.{Agent, User}
+import models.CustomerDetails.NON_MTDFB
 import models.agent._
 import play.api.data.Form
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Action, AnyContent}
+import services.CustomerDetailsService
 
 import scala.concurrent.Future
 
 @Singleton
 class WhatToDoController @Inject()(val messagesApi: MessagesApi,
-                                   val authenticate: AuthoriseAsAgentOnly,
+                                   val authenticate: AuthoriseAsAgentWithClient,
                                    val serviceErrorHandler: ErrorHandler,
+                                   val deetsService: CustomerDetailsService,
                                    implicit val appConfig: AppConfig) extends BaseController {
 
-  private def renderView(data: Form[WhatToDoModel] = WhatToDoForm.whatToDoForm)(implicit agent: Agent[_]) =
-    views.html.agent.whatToDo(data)
-
-  def show: Action[AnyContent] = authenticate { implicit agent =>
+  def show: Action[AnyContent] = authenticate.async { implicit user =>
     if(appConfig.features.whereToGoFeature()){
-      Ok(renderView())
+      deetsService.getCustomerDetails(user.vrn).map {
+        case Right(deets) => Ok(views.html.agent.whatToDo(WhatToDoForm.whatToDoForm, deets.clientName, deets.mandationStatus == NON_MTDFB))
+        case Left(_) => serviceErrorHandler.showInternalServerError
+      }
     } else {
-      Ok(views.html.errors.standardError(appConfig, "", "", "not found-arino"))
+      Future.successful(Ok(views.html.errors.standardError(appConfig, "", "", "not found-arino")))
     }
   }
 
 
-  def submit: Action[AnyContent] = authenticate {
-    implicit agent =>
+  def submit(name: String, nonMTDfB: Boolean): Action[AnyContent] = authenticate {
+    implicit user =>
       WhatToDoForm.whatToDoForm.bindFromRequest().fold(
-        error => BadRequest(renderView(error)),
+        error => BadRequest(views.html.agent.whatToDo(error, name, nonMTDfB)),
         data => data.value match {
           case SubmitReturn.value => Ok("1")
           case ViewReturn.value => Ok("2")

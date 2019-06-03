@@ -24,7 +24,8 @@ import uk.gov.hmrc.http.InternalServerException
 case class CustomerDetails(firstName: Option[String],
                            lastName: Option[String],
                            organisationName: Option[String],
-                           tradingName: Option[String]) {
+                           tradingName: Option[String],
+                           mandationStatus: String) {
 
   val userName: Option[String] = {
     val name = s"${firstName.getOrElse("")} ${lastName.getOrElse("")}".trim
@@ -47,11 +48,15 @@ object CustomerDetails {
   private val lastNamePath = __ \\ "lastName"
   private val organisationNamePath = __ \\ "organisationName"
   private val tradingNamePath = __ \\ "tradingName"
+  private val mandationStatusPath = __ \ "mandationStatus"
+
+  val NON_MTDFB = "Non MTDfB"
 
   implicit val reads: Reads[CustomerDetails] = (
     firstNamePath.readNullable[String] and
     lastNamePath.readNullable[String] and
     organisationNamePath.readNullable[String] and
-    tradingNamePath.readNullable[String]
+    tradingNamePath.readNullable[String] and
+    mandationStatusPath.read[String]
   ) (CustomerDetails.apply _)
 }

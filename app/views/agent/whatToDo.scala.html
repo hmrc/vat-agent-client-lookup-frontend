@@ -20,12 +20,13 @@
 @import models.agent.WhatToDoModel
 @import forms.WhatToDoForm._
 @import uk.gov.hmrc.play.views.html.helpers.{errorSummary => summary}
+@import models.CustomerDetails
 
-@(form: Form[WhatToDoModel])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(form: Form[WhatToDoModel], name: String, nonMTDfB: Boolean)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@main_template(title = s"${if(form.errors.nonEmpty) "Error: " else ""}${messages("whatToDo.heading", "l'biz")}", bodyClasses = None) {
+@main_template(title = s"${if(form.errors.nonEmpty) "Error: " else ""}${messages("whatToDo.heading", name)}", bodyClasses = None) {
 
-    @helpers.form(action = controllers.agent.routes.WhatToDoController.submit, 'novalidate -> "novalidate") {
+    @helpers.form(action = controllers.agent.routes.WhatToDoController.submit(name, nonMTDfB), 'novalidate -> "novalidate") {
 
         <div class="form-group" id="reason">
 
@@ -35,13 +36,17 @@
 
             @radioHelper(
                 field = form("option"),
-                choices = Seq(
-                    (submitReturn, Messages("whatToDo.submitReturn")),
-                    (viewReturn, Messages("whatToDo.viewReturns")),
-                    (changeDetails, Messages("whatToDo.changeDetails")),
-                    (viewCertificate, Messages("whatToDo.viewCertificate"))
-                ),
-                question = Messages("whatToDo.heading", "l'biz")
+                choices = {
+                    (if(nonMTDfB) Seq(
+                        (submitReturn, Messages("whatToDo.submitReturn")),
+                        (viewReturn, Messages("whatToDo.viewReturns"))
+                    ) else Seq()) ++
+                            Seq(
+                                (changeDetails, Messages("whatToDo.changeDetails")),
+                                (viewCertificate, Messages("whatToDo.viewCertificate"))
+                            )
+                },
+                question = Messages("whatToDo.heading", name)
             )
         </div>
 
