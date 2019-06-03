@@ -59,6 +59,9 @@ trait AppConfig extends ServicesConfig {
   val agentSignUpUrl: String
   val submitVatReturnsUrl: String
   val features: Features
+  val vatCertificateUrl: String
+  val submittedReturnsUrl: Int => String
+  val returnDeadlinesUrl: String
 }
 
 @Singleton
@@ -131,4 +134,9 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override lazy val submitVatReturnsUrl: String = getString(Keys.submitVatReturnsUrl)
 
   override lazy val emailVerificationBaseUrl: String = baseUrl(Keys.emailVerificationBaseUrl)
+
+  override lazy val vatCertificateUrl: String = getString(Keys.vatSummaryFrontendHost) + getString(Keys.vatCertificateEndpoint)
+  override lazy val submittedReturnsUrl: Int => String = yearValue => getString(Keys.viewVatReturnsFrontendHost) +
+    getString(Keys.submittedReturnsEndpoint) + s"$yearValue"
+  override lazy val returnDeadlinesUrl: String = getString(Keys.viewVatReturnsFrontendHost) + getString(Keys.returnDeadlinesEndpoint)
 }

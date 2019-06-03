@@ -61,4 +61,11 @@ object ConfigKeys {
   val preferenceJourneyFeature: String = "features.preferenceJourney.enabled"
   val useLanguageSelectorFeature: String = "features.useLanguageSelector.enabled"
   val whereToGoFeature: String = "features.whereToGo.enabled"
+
+  val vatSummaryFrontendHost: String = "vat-summary-frontend.host"
+  val vatCertificateEndpoint: String = "vat-summary-frontend.endpoints.vat-certificate"
+
+  val viewVatReturnsFrontendHost: String = "view-vat-returns-frontend.host"
+  val submittedReturnsEndpoint: String = "view-vat-returns-frontend.endpoints.submitted-returns"
+  val returnDeadlinesEndpoint: String = "view-vat-returns-frontend.endpoints.return-deadlines"
 }

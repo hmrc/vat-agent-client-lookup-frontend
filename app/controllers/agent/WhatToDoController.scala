@@ -25,6 +25,7 @@ import javax.inject.{Inject, Singleton}
 import models.{Agent, User}
 import models.CustomerDetails.NON_MTDFB
 import models.agent._
+import org.joda.time.{DateTime, DateTimeZone}
 import play.api.data.Form
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Action, AnyContent}
@@ -42,7 +43,8 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
   def show: Action[AnyContent] = authenticate.async { implicit user =>
     if(appConfig.features.whereToGoFeature()){
       deetsService.getCustomerDetails(user.vrn).map {
-        case Right(deets) => Ok(views.html.agent.whatToDo(WhatToDoForm.whatToDoForm, deets.clientName, deets.mandationStatus == NON_MTDFB))
+        case Right(deets) =>
+          Ok(views.html.agent.whatToDo(WhatToDoForm.whatToDoForm, deets.clientName, deets.mandationStatus == NON_MTDFB))
         case Left(_) => serviceErrorHandler.showInternalServerError
       }
     } else {
@@ -53,14 +55,18 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
 
   def submit(name: String, nonMTDfB: Boolean): Action[AnyContent] = authenticate {
     implicit user =>
-      WhatToDoForm.whatToDoForm.bindFromRequest().fold(
-        error => BadRequest(views.html.agent.whatToDo(error, name, nonMTDfB)),
-        data => data.value match {
-          case SubmitReturn.value => Ok("1")
-          case ViewReturn.value => Ok("2")
-          case ChangeDetails.value => Ok("3")
-          case ViewCertificate.value => Ok("4")
-        }
-      )
+      if (appConfig.features.whereToGoFeature()) {
+        WhatToDoForm.whatToDoForm.bindFromRequest().fold(
+          error => BadRequest(views.html.agent.whatToDo(error, name, nonMTDfB)),
+          data => data.value match {
+            case SubmitReturn.value => Redirect(appConfig.returnDeadlinesUrl)
+            case ViewReturn.value => Redirect(appConfig.submittedReturnsUrl(DateTime.now(DateTimeZone.UTC).year().get()))
+            case ChangeDetails.value => Redirect(appConfig.manageVatCustomerDetailsUrl)
+            case ViewCertificate.value => Redirect(appConfig.vatCertificateUrl)
+          }
+        )
+      } else {
+        Ok(views.html.errors.standardError(appConfig, "", "", "not found-arino"))
+      }
   }
 }

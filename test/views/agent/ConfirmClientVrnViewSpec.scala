@@ -61,8 +61,8 @@ class ConfirmClientVrnViewSpec extends ViewBaseSpec {
           elementText("a.button") shouldBe BaseMessages.confirmAndContinue
         }
 
-        "has a link to the redirect URL" in {
-          element("a.button").attr("href") shouldBe controllers.agent.routes.ConfirmClientVrnController.redirectToSessionUrl().url
+        "has a link to the what to do URL" in {
+          element("a.button").attr("href") shouldBe controllers.agent.routes.WhatToDoController.show().url
         }
       }
 
