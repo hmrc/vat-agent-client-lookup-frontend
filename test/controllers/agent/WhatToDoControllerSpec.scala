@@ -16,18 +16,19 @@
 
 package controllers.agent
 
+import java.util.concurrent.TimeUnit
+
+import akka.util.Timeout
 import assets.BaseTestConstants
 import assets.CustomerDetailsTestConstants.{customerDetailsFnameOnly, firstName}
-import controllers.ControllerBaseSpec
-import controllers.predicates.AuthoriseAsAgentOnly
-import play.api.mvc._
-import play.api.test.FakeRequest
-import play.mvc.Http.Status._
 import assets.messages.WhatToDoMessages._
+import controllers.ControllerBaseSpec
 import mocks.services.MockCustomerDetailsService
-import models.Agent
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import play.api.mvc._
+import play.api.test.Helpers.redirectLocation
+import play.mvc.Http.Status._
 
 import scala.concurrent.Future
 
@@ -35,6 +36,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
   trait Test {
     lazy val controller = new WhatToDoController(messagesApi, mockAuthAsAgentWithClient, mockErrorHandler, mockCustomerDetailsService, mockConfig)
+    implicit val timeout: Timeout = Timeout.apply(60, TimeUnit.SECONDS)
   }
 
   ".show" should {
@@ -78,10 +80,50 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
   ".submit" should {
     "render the page" when {
-      "option 1 is selected" in pending
-      "option 2 is selected" in pending
-      "option 3 is selected" in pending
-      "option 4 is selected" in pending
+      "option 1 is selected" in new Test {
+        mockConfig.features.whereToGoFeature(true)
+
+        mockAgentAuthorised()
+
+        val result: Future[Result] = controller.submit("l'biz", nonMTDfB = true)(fakeRequestWithVrnAndRedirectUrl
+          .withFormUrlEncodedBody("option" -> "submit-return")
+        )
+
+        redirectLocation(result) shouldBe Some(mockConfig.returnDeadlinesUrl)
+      }
+      "option 2 is selected" in new Test {
+        mockConfig.features.whereToGoFeature(true)
+
+        mockAgentAuthorised()
+
+        val result: Future[Result] = controller.submit("l'biz", nonMTDfB = true)(fakeRequestWithVrnAndRedirectUrl
+          .withFormUrlEncodedBody("option" -> "view-return")
+        )
+
+        redirectLocation(result) shouldBe Some(mockConfig.submittedReturnsUrl(1993))
+      }
+      "option 3 is selected" in new Test {
+        mockConfig.features.whereToGoFeature(true)
+
+        mockAgentAuthorised()
+
+        val result: Future[Result] = controller.submit("l'biz", nonMTDfB = true)(fakeRequestWithVrnAndRedirectUrl
+          .withFormUrlEncodedBody("option" -> "change-details")
+        )
+
+        redirectLocation(result) shouldBe Some(mockConfig.manageVatCustomerDetailsUrl)
+      }
+      "option 4 is selected" in new Test {
+        mockConfig.features.whereToGoFeature(true)
+
+        mockAgentAuthorised()
+
+        val result: Future[Result] = controller.submit("l'biz", nonMTDfB = true)(fakeRequestWithVrnAndRedirectUrl
+          .withFormUrlEncodedBody("option" -> "view-certificate")
+        )
+
+        redirectLocation(result) shouldBe Some(mockConfig.vatCertificateUrl)
+      }
     }
     "render the page with an error" when {
       "the form submitted is incorrect" in new Test {
