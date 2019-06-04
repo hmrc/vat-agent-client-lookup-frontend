@@ -72,5 +72,5 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val emailVerificationBaseUrl: String = "mockEmailBaseUrl"
   override val vatCertificateUrl: String = "/certificate"
   override val submittedReturnsUrl: Int => String = _ => "/submitted-returns"
-  override val returnDeadlinesUrl: String = "/return-deadline"
+  override val returnDeadlinesUrl: String = "/vat-through-software/vat-returns/return-deadlines"
 }
