@@ -55,10 +55,14 @@ class WhatToDoFormSpec extends UnitSpec {
   }
 
   "A form built from a valid model" should {
+    val validInputValues = Seq(SubmitReturn, ViewReturn, ChangeDetails, ViewCertificate)
 
-    "generate the correct mapping" in {
-      val form = WhatToDoForm.whatToDoForm.fill(SubmitReturn)
-      form.data shouldBe Map("option" -> SubmitReturn.value)
+    validInputValues.foreach { input =>
+      s"generate the correct mapping for input: $input" in {
+        val form = WhatToDoForm.whatToDoForm.fill(input)
+        form.data shouldBe Map("option" -> input.value)
+      }
     }
+
   }
 }

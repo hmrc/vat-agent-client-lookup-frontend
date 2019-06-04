@@ -28,6 +28,7 @@ object IntegrationTestConstants {
   val clientVRN = "999969202"
 
   val nonMTDfB = "Non MTDfB"
+  val mandated = "MTDfB Mandated"
 
   val notificationsEmail = "notifyme@email.com"
 
@@ -56,6 +57,13 @@ object IntegrationTestConstants {
   )
 
   val individualJson: JsObject = Json.obj(
+    "firstName" -> "Pepsi",
+    "lastName" -> "Mac",
+    "tradingName" -> "PepsiCo",
+    "mandationStatus" -> mandated
+  )
+
+  val individualNonMTDfBJson: JsObject = Json.obj(
     "firstName" -> "Pepsi",
     "lastName" -> "Mac",
     "tradingName" -> "PepsiCo",
