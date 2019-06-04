@@ -66,7 +66,7 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
           }
         )
       } else {
-        Ok(views.html.errors.standardError(appConfig, "", "", "not found-arino"))
+        serviceErrorHandler.showInternalServerError
       }
   }
 }
