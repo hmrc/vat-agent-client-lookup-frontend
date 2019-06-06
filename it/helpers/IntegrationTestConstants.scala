@@ -56,7 +56,7 @@ object IntegrationTestConstants {
     mandationStatus = nonMTDfB
   )
 
-  val individualJson: JsObject = Json.obj(
+  val individualMandatedJson: JsObject = Json.obj(
     "firstName" -> "Pepsi",
     "lastName" -> "Mac",
     "tradingName" -> "PepsiCo",

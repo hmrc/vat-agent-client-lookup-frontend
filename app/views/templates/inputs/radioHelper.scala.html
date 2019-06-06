@@ -18,8 +18,7 @@
 
 @(field: Field,
         choices: Seq[(String, String)],
-        question: String,
-        additionalContent: Option[Html] = None
+        question: String
 )(implicit messages: Messages)
 
 @elements = @{ FieldElements(field.id, field, null, Map(), messages) }
@@ -30,8 +29,6 @@
         <legend>
             <h1 id="page-heading" class="heading-large">@question</h1>
         </legend>
-
-        @additionalContent.map { content => @content }
 
         @elements.errors.map { error => <span class="error-message">@messages(error)</span> }
 

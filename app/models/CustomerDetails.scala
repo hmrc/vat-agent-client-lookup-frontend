@@ -50,8 +50,6 @@ object CustomerDetails {
   private val tradingNamePath = __ \\ "tradingName"
   private val mandationStatusPath = __ \ "mandationStatus"
 
-  val NON_MTDFB = "Non MTDfB"
-
   implicit val reads: Reads[CustomerDetails] = (
     firstNamePath.readNullable[String] and
     lastNamePath.readNullable[String] and

@@ -16,15 +16,12 @@
 
 package pages.agent
 
-import helpers.IntegrationTestConstants.{clientVRN, individualJson, individualNonMTDfBJson}
+import helpers.IntegrationTestConstants.{clientVRN, individualMandatedJson, individualNonMTDfBJson}
 import pages.BasePageISpec
-import play.api.i18n.Messages
 import play.api.libs.ws.WSResponse
 import play.api.test.Helpers._
 import stubs.VatSubscriptionStub
 import assets.WhatToDoConstants._
-import forms.WhatToDoForm
-import models.agent.{SubmitReturn, WhatToDoModel}
 
 class WhatToDoPageSpec extends BasePageISpec {
 
@@ -64,7 +61,7 @@ class WhatToDoPageSpec extends BasePageISpec {
           "Render the WhatToDo page" in {
 
             given.agent.isSignedUpToAgentServices
-            VatSubscriptionStub.getClientDetailsSuccess(clientVRN)(individualJson)
+            VatSubscriptionStub.getClientDetailsSuccess(clientVRN)(individualMandatedJson)
 
             When("I call the show WhatToDo page")
             val res = show

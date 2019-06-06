@@ -17,16 +17,14 @@
 package controllers.agent
 
 import config.{AppConfig, ErrorHandler}
-import connectors.SubscriptionConnector
 import controllers.BaseController
-import controllers.predicates.{AuthoriseAsAgentOnly, AuthoriseAsAgentWithClient}
+import controllers.predicates.AuthoriseAsAgentWithClient
 import forms.WhatToDoForm
 import javax.inject.{Inject, Singleton}
-import models.{Agent, User}
-import models.CustomerDetails.NON_MTDFB
+import common.MandationStatus.nonMTDfB
 import models.agent._
 import org.joda.time.{DateTime, DateTimeZone}
-import play.api.data.Form
+import play.api.Logger
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Action, AnyContent}
 import services.CustomerDetailsService
@@ -37,15 +35,17 @@ import scala.concurrent.Future
 class WhatToDoController @Inject()(val messagesApi: MessagesApi,
                                    val authenticate: AuthoriseAsAgentWithClient,
                                    val serviceErrorHandler: ErrorHandler,
-                                   val deetsService: CustomerDetailsService,
+                                   val customerDetailsService: CustomerDetailsService,
                                    implicit val appConfig: AppConfig) extends BaseController {
 
   def show: Action[AnyContent] = authenticate.async { implicit user =>
     if(appConfig.features.whereToGoFeature()){
-      deetsService.getCustomerDetails(user.vrn).map {
-        case Right(deets) =>
-          Ok(views.html.agent.whatToDo(WhatToDoForm.whatToDoForm, deets.clientName, deets.mandationStatus == NON_MTDFB))
-        case Left(_) => serviceErrorHandler.showInternalServerError
+      customerDetailsService.getCustomerDetails(user.vrn).map {
+        case Right(details) =>
+          Ok(views.html.agent.whatToDo(WhatToDoForm.whatToDoForm, details.clientName, details.mandationStatus == nonMTDfB))
+        case Left(error) =>
+          Logger.warn(s"[WhatToDoController][show] - received an error from CustomerDetailsService: $error")
+          serviceErrorHandler.showInternalServerError
       }
     } else {
       Future.successful(serviceErrorHandler.showInternalServerError)
