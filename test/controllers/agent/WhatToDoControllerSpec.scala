@@ -139,6 +139,18 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
         parsedBody.body().toString should include(error)
       }
+
+      "the feature switch is off" in new Test {
+        mockConfig.features.whereToGoFeature(false)
+
+        mockAgentAuthorised()
+
+        val result: Future[Result] = controller.submit("l'biz", true)(fakeRequestWithVrnAndRedirectUrl)
+        val parsedBody: Document = Jsoup.parse(bodyOf(result))
+
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+        parsedBody.title shouldBe "There is a problem with the service - VAT reporting through software - GOV.UK"
+      }
     }
   }
 }
