@@ -27,7 +27,7 @@
 
     @helpers.form(action = controllers.agent.routes.WhatToDoController.submit(name, nonMTDfB)) {
 
-        <div class="form-group" id="reason">
+        <div class="form-group" id="option">
 
             @if(form.errors.nonEmpty) {
                 @errorSummary(messages("common.errorSummary.heading"), form)
