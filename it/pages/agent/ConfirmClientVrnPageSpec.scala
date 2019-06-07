@@ -44,7 +44,7 @@ class ConfirmClientVrnPageSpec extends BasePageISpec {
               given.agent.isSignedUpToAgentServices
 
               And("I stub a successful response Individual response from ")
-              VatSubscriptionStub.getClientDetailsSuccess(clientVRN)(individualJson)
+              VatSubscriptionStub.getClientDetailsSuccess(clientVRN)(individualMandatedJson)
 
               When("I call the Confirm Client VRN page with the clients VRN in the session")
               val res = show(Some(clientVRN))

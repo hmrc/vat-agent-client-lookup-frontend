@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package config.features
+package assets
 
-import config.ConfigKeys
-import javax.inject.Inject
-import play.api.Configuration
+object WhatToDoConstants {
 
-class Features @Inject()(config: Configuration) {
+  val heading: String => String = name => s"What would you like to do for $name?"
+  val submitReturn = "Submit VAT return"
+  val viewReturn = "View submitted returns"
+  val changeDetails = "Change VAT details"
+  val viewCertificate = "View VAT certificate"
 
-  val emailVerificationEnabled = new Feature(ConfigKeys.emailVerificationFeature, config)
-  val preferenceJourneyEnabled = new Feature(ConfigKeys.preferenceJourneyFeature, config)
-  val useLanguageSelector = new Feature(ConfigKeys.useLanguageSelectorFeature, config)
-  val whereToGoFeature = new Feature(ConfigKeys.whereToGoFeature, config)
 }

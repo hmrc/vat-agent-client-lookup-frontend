@@ -14,16 +14,10 @@
  * limitations under the License.
  */
 
-package config.features
+package common
 
-import config.ConfigKeys
-import javax.inject.Inject
-import play.api.Configuration
+object MandationStatus {
 
-class Features @Inject()(config: Configuration) {
+  val nonMTDfB = "Non MTDfB"
 
-  val emailVerificationEnabled = new Feature(ConfigKeys.emailVerificationFeature, config)
-  val preferenceJourneyEnabled = new Feature(ConfigKeys.preferenceJourneyFeature, config)
-  val useLanguageSelector = new Feature(ConfigKeys.useLanguageSelectorFeature, config)
-  val whereToGoFeature = new Feature(ConfigKeys.whereToGoFeature, config)
 }

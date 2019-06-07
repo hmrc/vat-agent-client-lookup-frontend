@@ -25,62 +25,74 @@ object CustomerDetailsTestConstants {
   val tradingName = "Dusty Relics"
   val firstName = "Fred"
   val lastName = "Flintstone"
+  val mandationStatus = "MTDfB Mandated"
+  val nonMTDfB = "Non MTDfB"
 
-  val noInfoJson: JsObject = Json.obj()
+  val noOptionalInfoJson: JsObject = Json.obj(
+    "mandationStatus" -> mandationStatus
+  )
 
   val allInfoJson: JsObject = Json.obj(
     "firstName" -> firstName,
     "lastName" -> lastName,
     "organisationName" -> orgName,
-    "tradingName" -> tradingName
+    "tradingName" -> tradingName,
+    "mandationStatus" -> mandationStatus
   )
 
   val customerDetailsAllInfo = CustomerDetails(
     Some(firstName),
     Some(lastName),
     Some(orgName),
-    Some(tradingName)
+    Some(tradingName),
+    mandationStatus
   )
 
   val customerDetailsNoInfo = CustomerDetails(
     None,
     None,
     None,
-    None
+    None,
+    mandationStatus
   )
 
   val customerDetailsFnameOnly = CustomerDetails(
     Some(firstName),
     None,
     None,
-    None
+    None,
+    mandationStatus
   )
 
   val customerDetailsLnameOnly = CustomerDetails(
     None,
     Some(lastName),
     None,
-    None
+    None,
+    mandationStatus
   )
 
   val customerDetailsNoTradingName = CustomerDetails(
     None,
     None,
     Some(orgName),
-    None
+    None,
+    mandationStatus
   )
 
   val customerDetailsIndividual = CustomerDetails(
     Some(firstName),
     Some(lastName),
     None,
-    None
+    None,
+    mandationStatus
   )
 
   val customerDetailsOrganisation = CustomerDetails(
     None,
     None,
     Some(orgName),
-    Some(tradingName)
+    Some(tradingName),
+    mandationStatus
   )
 }

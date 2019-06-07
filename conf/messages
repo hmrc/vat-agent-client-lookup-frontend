@@ -89,3 +89,10 @@ notSignedUp.listItem1Link = sign up for Making Tax Digital for VAT (opens in a n
 notSignedUp.listItem1Text = to make changes to your client’s business details
 notSignedUp.listItem2Link = submit VAT Returns and manage your client’s business details (opens in a new tab)
 notSignedUp.listItem2Text = without signing up to Making Tax Digital for VAT
+
+whatToDo.heading = What would you like to do for {0}?
+whatToDo.submitReturn = Submit VAT return
+whatToDo.viewReturns = View submitted returns
+whatToDo.changeDetails = Change VAT details
+whatToDo.viewCertificate = View VAT certificate
+whatToDo.error.mandatoryRadioOption = Select what you would like to do for this client
