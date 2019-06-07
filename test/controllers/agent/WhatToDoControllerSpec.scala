@@ -39,7 +39,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
     implicit val timeout: Timeout = Timeout.apply(60, TimeUnit.SECONDS)
   }
 
-  ".show" should {
+  "WhatToDoController.show" should {
     "render the page" when {
       "user is an agent" in new Test {
         mockConfig.features.whereToGoFeature(true)
@@ -63,6 +63,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
         val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
         status(result) shouldBe INTERNAL_SERVER_ERROR
+        Jsoup.parse(bodyOf(result)).title() shouldBe "There is a problem with the service - VAT reporting through software - GOV.UK"
       }
 
       "the whereToGo feature is off" in new Test {
@@ -78,7 +79,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
     }
   }
 
-  ".submit" should {
+  "WhatToDoController.submit" should {
     "render the page" when {
       "option 1 is selected" in new Test {
         mockConfig.features.whereToGoFeature(true)

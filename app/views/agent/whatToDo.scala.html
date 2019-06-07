@@ -19,8 +19,7 @@
 @import templates.inputs.radioHelper
 @import models.agent.WhatToDoModel
 @import forms.WhatToDoForm._
-@import uk.gov.hmrc.play.views.html.helpers.{errorSummary => summary}
-@import models.CustomerDetails
+@import uk.gov.hmrc.play.views.html.helpers.errorSummary
 
 @(form: Form[WhatToDoModel], name: String, nonMTDfB: Boolean)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
@@ -31,7 +30,7 @@
         <div class="form-group" id="reason">
 
             @if(form.errors.nonEmpty) {
-                @summary(messages("common.errorSummary.heading"), form)
+                @errorSummary(messages("common.errorSummary.heading"), form)
             }
 
             @radioHelper(
