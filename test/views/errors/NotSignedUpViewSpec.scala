@@ -28,7 +28,7 @@ class NotSignedUpViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct title" in {
-      document.title shouldBe "Your client’s VAT details"
+      document.title shouldBe "Client’s VAT details"
     }
 
     "have the correct heading" in {
