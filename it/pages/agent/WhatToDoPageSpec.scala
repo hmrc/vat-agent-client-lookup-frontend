@@ -39,6 +39,9 @@ class WhatToDoPageSpec extends BasePageISpec {
 
           "Render the WhatToDo page" in {
 
+            Given("Where to go feature switch is on")
+            mockAppConfig.features.whereToGoFeature(true)
+
             given.agent.isSignedUpToAgentServices
             VatSubscriptionStub.getClientDetailsSuccess(clientVRN)(individualNonMTDfBJson)
 
@@ -59,6 +62,9 @@ class WhatToDoPageSpec extends BasePageISpec {
         "the user has a mandation status other than 'Non MTDfB'" should {
 
           "Render the WhatToDo page" in {
+
+            Given("Where to go feature switch is on")
+            mockAppConfig.features.whereToGoFeature(true)
 
             given.agent.isSignedUpToAgentServices
             VatSubscriptionStub.getClientDetailsSuccess(clientVRN)(individualMandatedJson)
