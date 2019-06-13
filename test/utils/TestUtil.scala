@@ -18,6 +18,7 @@ package utils
 
 import assets.BaseTestConstants._
 import common.SessionKeys
+import common.MandationStatus.nonMTDfB
 import config.ErrorHandler
 import mocks.MockAppConfig
 import models.{Agent, User}
@@ -49,6 +50,14 @@ trait TestUtil extends UnitSpec with GuiceOneAppPerSuite {
     FakeRequest().withSession(
       SessionKeys.clientVRN -> vrn,
       SessionKeys.redirectUrl -> "/homepage"
+    )
+
+  lazy val fakeRequestWithMtdVatAgentData: FakeRequest[AnyContentAsEmpty.type] =
+    FakeRequest().withSession(
+      SessionKeys.clientVRN -> vrn,
+      SessionKeys.redirectUrl -> "/homepage",
+      SessionKeys.mtdVatAgentClientName -> "l'biz",
+      SessionKeys.mtdVatAgentMandationStatus -> nonMTDfB
     )
 
   lazy val user: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn, active = true)(request)

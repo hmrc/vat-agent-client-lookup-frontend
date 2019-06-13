@@ -86,7 +86,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
         mockAgentAuthorised()
 
-        val result: Future[Result] = controller.submit("l'biz", nonMTDfB = true)(fakeRequestWithVrnAndRedirectUrl
+        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl
           .withFormUrlEncodedBody("option" -> "submit-return")
         )
 
@@ -97,7 +97,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
         mockAgentAuthorised()
 
-        val result: Future[Result] = controller.submit("l'biz", nonMTDfB = true)(fakeRequestWithVrnAndRedirectUrl
+        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl
           .withFormUrlEncodedBody("option" -> "view-return")
         )
 
@@ -108,7 +108,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
         mockAgentAuthorised()
 
-        val result: Future[Result] = controller.submit("l'biz", nonMTDfB = true)(fakeRequestWithVrnAndRedirectUrl
+        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl
           .withFormUrlEncodedBody("option" -> "change-details")
         )
 
@@ -119,7 +119,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
         mockAgentAuthorised()
 
-        val result: Future[Result] = controller.submit("l'biz", nonMTDfB = true)(fakeRequestWithVrnAndRedirectUrl
+        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl
           .withFormUrlEncodedBody("option" -> "view-certificate")
         )
 
@@ -132,7 +132,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
         mockAgentAuthorised()
 
-        val result: Future[Result] = controller.submit("l'biz", true)(fakeRequestWithVrnAndRedirectUrl)
+        val result: Future[Result] = controller.submit(fakeRequestWithMtdVatAgentData)
         val parsedBody: Document = Jsoup.parse(bodyOf(result))
 
         status(result) shouldBe BAD_REQUEST
@@ -146,7 +146,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
         mockAgentAuthorised()
 
-        val result: Future[Result] = controller.submit("l'biz", true)(fakeRequestWithVrnAndRedirectUrl)
+        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl)
         val parsedBody: Document = Jsoup.parse(bodyOf(result))
 
         status(result) shouldBe INTERNAL_SERVER_ERROR
