@@ -39,7 +39,13 @@ class SelectClientVrnController @Inject()(val messagesApi: MessagesApi,
       val hasVerifiedEmail: Boolean = agent.session.get(SessionKeys.verifiedAgentEmail).fold(false)(_.nonEmpty)
       val preferenceLogic: Boolean = prefNo || (prefYes && hasVerifiedEmail)
 
-      if (preferenceLogic || !appConfig.features.preferenceJourneyEnabled()) {
+      if(appConfig.features.whereToGoFeature()) {
+        extractRedirectUrl(redirectUrl).fold(Ok(views.html.agent.selectClientVrn(ClientVrnForm.form))) {
+          url =>
+            Ok(views.html.agent.selectClientVrn(ClientVrnForm.form)).addingToSession(SessionKeys.redirectUrl -> url)
+        }
+      //TODO: all remaining logic will become redundant and should be removed when whereToGoFeature permanently on
+      } else if (preferenceLogic || !appConfig.features.preferenceJourneyEnabled()) {
         agent.session.get(SessionKeys.redirectUrl) match {
           case Some(_) =>
             Ok(views.html.agent.selectClientVrn(ClientVrnForm.form))

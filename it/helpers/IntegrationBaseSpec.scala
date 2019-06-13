@@ -16,6 +16,7 @@
 
 package helpers
 
+import config.FrontendAppConfig
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
@@ -39,6 +40,14 @@ trait IntegrationBaseSpec extends TestSuite with CustomMatchers
   val appContextRoute: String = "/vat-through-software/representative"
 
   lazy val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
+  lazy val mockAppConfig: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
+
+  override def beforeEach() {
+    mockAppConfig.features.whereToGoFeature(false)
+    mockAppConfig.features.emailVerificationEnabled(true)
+    super.beforeEach()
+  }
+
   implicit lazy val messages: Messages = Messages(Lang("en-GB"), messagesApi)
 
   class PreconditionBuilder {
@@ -107,7 +116,8 @@ trait IntegrationBaseSpec extends TestSuite with CustomMatchers
     "microservice.services.manage-vat-subscription-frontend.endpoints.customer-details" -> "/customer-details?isAgent=true",
     "microservice.services.vat-subscription.host" -> mockHost,
     "microservice.services.vat-subscription.port" -> mockPort,
-    "features.emailVerification.enabled" -> "true"
+    "features.emailVerification.enabled" -> "true",
+    "features.whereToGo.enabled" -> "false"
   )
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder()
