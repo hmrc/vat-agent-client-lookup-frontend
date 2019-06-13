@@ -19,6 +19,7 @@ package common
 object SessionKeys {
 
   val clientVRN: String = "CLIENT_VRN"
+  val clientMandationStatus: String = "mtdVatMandationStatus"
   val redirectUrl: String = "vatAgentLookupRedirectUrl"
   val preference: String = "vatAgentLookupEmailPreference"
   val notificationsEmail: String = "vatAgentLookupNotificationsPreferenceEmail"

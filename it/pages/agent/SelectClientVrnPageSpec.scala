@@ -127,7 +127,10 @@ class SelectClientVrnPageSpec extends BasePageISpec {
   "Calling the .submit action" when {
 
     val validData = ClientVrnModel(clientVRN)
-    def submit(data: ClientVrnModel): WSResponse = post(path)(toFormData(ClientVrnForm.form, data))
+    def submit(data: ClientVrnModel): WSResponse = post(
+      path,
+      Map(SessionKeys.clientMandationStatus -> "Non MTDfB")
+    )(toFormData(ClientVrnForm.form, data))
 
     "the user is an Agent" when {
 
@@ -148,6 +151,7 @@ class SelectClientVrnPageSpec extends BasePageISpec {
             )
 
             SessionCookieCrumbler.getSessionMap(res).get(SessionKeys.clientVRN) shouldBe Some(clientVRN)
+            SessionCookieCrumbler.getSessionMap(res).get(SessionKeys.clientMandationStatus) shouldBe None
           }
         }
 
