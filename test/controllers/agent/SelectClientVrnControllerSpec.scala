@@ -332,7 +332,14 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wit
 
       "valid data is posted" should {
 
-        lazy val request = FakeRequest("POST", "/").withFormUrlEncodedBody(("vrn", "999969202"))
+        lazy val request = FakeRequest("POST", "/")
+          .withFormUrlEncodedBody(("vrn", "999969202"))
+          .withSession(SessionKeys.clientMandationStatus -> "Non MTDfB")
+
+        "original request should contain mandation status in cookie" in {
+          request.headers.get("Cookie").get should include("mtdVatMandationStatus=Non+MTDfB")
+        }
+
         lazy val result = TestClientVrnController.submit(request)
 
         "return 303" in {
@@ -344,8 +351,12 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wit
           redirectLocation(result) shouldBe Some(controllers.agent.routes.ConfirmClientVrnController.show().url)
         }
 
-        "contain the Clients VRN in the session" in {
-          session(result).get(SessionKeys.clientVRN) shouldBe Some("999969202")
+        "add Client VRN to session cookie" in {
+          result.header.headers("Set-Cookie") should include("CLIENT_VRN=999969202")
+        }
+
+        "remove mandation status from session cookie" in {
+          result.header.headers("Set-Cookie") shouldNot include("mtdVatMandationStatus=Non+MTDfB")
         }
       }
 

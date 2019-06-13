@@ -69,6 +69,7 @@ class SelectClientVrnController @Inject()(val messagesApi: MessagesApi,
         data => {
           Logger.debug("[SelectClientVrnController][submit] Success")
           Redirect(controllers.agent.routes.ConfirmClientVrnController.show())
+            .removingFromSession(SessionKeys.clientMandationStatus)
             .addingToSession(SessionKeys.clientVRN -> data.vrn)
         }
       )
