@@ -23,11 +23,12 @@ import forms.WhatToDoForm
 import javax.inject.{Inject, Singleton}
 import common.MandationStatus.nonMTDfB
 import common.SessionKeys
+import models.User
 import models.agent._
 import org.joda.time.{DateTime, DateTimeZone}
 import play.api.Logger
 import play.api.i18n.MessagesApi
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, Result}
 import services.CustomerDetailsService
 
 import scala.concurrent.Future
@@ -55,13 +56,38 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
   }
 
 
-  def submit: Action[AnyContent] = authenticate {
+  def submit: Action[AnyContent] = authenticate.async {
     implicit user =>
-      val clientName: String = user.session.get(SessionKeys.mtdVatAgentClientName).fold("no name")(a => a)
-      val isNonMTfB: Boolean = user.session.get(SessionKeys.mtdVatAgentMandationStatus).fold(false)(_ == nonMTDfB)
+
       if (appConfig.features.whereToGoFeature()) {
+        (user.session.get(SessionKeys.mtdVatAgentClientName), user.session.get(SessionKeys.mtdVatAgentMandationStatus)) match {
+          case (Some(clientName), Some(mandationStatus)) =>
+            Future.successful(WhatToDoForm.whatToDoForm.bindFromRequest().fold(
+              error => BadRequest(views.html.agent.whatToDo(error, clientName, mandationStatus == nonMTDfB)),
+              data => {
+                data.value match {
+                  case SubmitReturn.value => Redirect(appConfig.returnDeadlinesUrl)
+                  case ViewReturn.value => Redirect(appConfig.submittedReturnsUrl(DateTime.now(DateTimeZone.UTC).year().get()))
+                  case ChangeDetails.value => Redirect(appConfig.manageVatCustomerDetailsUrl)
+                  case ViewCertificate.value => Redirect(appConfig.vatCertificateUrl)
+                }
+              }
+            ).removingFromSession(SessionKeys.mtdVatAgentClientName, SessionKeys.mtdVatAgentMandationStatus))
+          case _ => {
+            Logger.debug("[WhatToDoController][submit] - unable to get at least one of mtdVatAgentClientName, mtdVatAgentMandationStatus from session")
+            detailsCallAndSubmit
+          }
+        }
+      } else {
+        Future.successful(serviceErrorHandler.showInternalServerError)
+      }
+  }
+
+  private def detailsCallAndSubmit(implicit user: User[_]): Future[Result] = {
+    customerDetailsService.getCustomerDetails(user.vrn).map {
+      case Right(details) =>
         WhatToDoForm.whatToDoForm.bindFromRequest().fold(
-          error => BadRequest(views.html.agent.whatToDo(error, clientName, isNonMTfB)),
+          error => BadRequest(views.html.agent.whatToDo(error, details.clientName, details.mandationStatus == nonMTDfB)),
           data => {
             data.value match {
               case SubmitReturn.value => Redirect(appConfig.returnDeadlinesUrl)
@@ -71,8 +97,9 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
             }
           }
         ).removingFromSession(SessionKeys.mtdVatAgentClientName, SessionKeys.mtdVatAgentMandationStatus)
-      } else {
+      case Left(error) =>
+        Logger.warn(s"[WhatToDoController][submit] - received an error from CustomerDetailsService: $error")
         serviceErrorHandler.showInternalServerError
-      }
+    }
   }
 }

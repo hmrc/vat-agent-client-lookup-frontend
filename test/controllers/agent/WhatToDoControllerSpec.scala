@@ -20,10 +20,11 @@ import java.util.concurrent.TimeUnit
 
 import akka.util.Timeout
 import assets.BaseTestConstants
-import assets.CustomerDetailsTestConstants.{customerDetailsFnameOnly, firstName}
+import assets.CustomerDetailsTestConstants._
 import assets.messages.WhatToDoMessages._
 import controllers.ControllerBaseSpec
 import mocks.services.MockCustomerDetailsService
+import models.errors.UnexpectedError
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.mvc._
@@ -86,7 +87,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
         mockAgentAuthorised()
 
-        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl
+        val result: Future[Result] = controller.submit(fakeRequestWithMtdVatAgentData
           .withFormUrlEncodedBody("option" -> "submit-return")
         )
 
@@ -97,7 +98,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
         mockAgentAuthorised()
 
-        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl
+        val result: Future[Result] = controller.submit(fakeRequestWithMtdVatAgentData
           .withFormUrlEncodedBody("option" -> "view-return")
         )
 
@@ -108,7 +109,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
         mockAgentAuthorised()
 
-        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl
+        val result: Future[Result] = controller.submit(fakeRequestWithMtdVatAgentData
           .withFormUrlEncodedBody("option" -> "change-details")
         )
 
@@ -119,11 +120,26 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
         mockAgentAuthorised()
 
-        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl
+        val result: Future[Result] = controller.submit(fakeRequestWithMtdVatAgentData
           .withFormUrlEncodedBody("option" -> "view-certificate")
         )
 
         redirectLocation(result) shouldBe Some(mockConfig.vatCertificateUrl)
+      }
+    }
+    "make a call to the customerDetailsService and render the page" when {
+
+      "a value cannot be obtained from session" in new Test {
+        mockConfig.features.whereToGoFeature(true)
+
+        mockAgentAuthorised()
+        mockCustomerDetailsSuccess(customerDetailsFnameOnly)
+
+        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl
+          .withFormUrlEncodedBody("option" -> "submit-return")
+        )
+
+        redirectLocation(result) shouldBe Some(mockConfig.returnDeadlinesUrl)
       }
     }
     "render the page with an error" when {
@@ -139,6 +155,21 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
         parsedBody.title() shouldBe "Error: " + title("l'biz")
 
         parsedBody.body().toString should include(error)
+      }
+
+      "no session data can be obtained and the call to customerDetailsService fails" in new Test{
+        mockConfig.features.whereToGoFeature(true)
+
+        mockAgentAuthorised()
+        mockCustomerDetailsError(UnexpectedError(INTERNAL_SERVER_ERROR, "It's ok, this is just a test"))
+
+        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl
+          .withFormUrlEncodedBody("option" -> "submit-return")
+        )
+        val parsedBody: Document = Jsoup.parse(bodyOf(result))
+
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+        parsedBody.title shouldBe "There is a problem with the service - VAT reporting through software - GOV.UK"
       }
 
       "the feature switch is off" in new Test {
