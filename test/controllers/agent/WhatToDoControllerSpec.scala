@@ -140,7 +140,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
           .withFormUrlEncodedBody("option" -> "change-details")
         )
 
-        redirectLocation(result) shouldBe "/vat-through-software/representative/email-notification"
+        redirectLocation(result) shouldBe Some("/vat-through-software/representative/email-notification")
       }
     }
     "render the page with an error" when {
