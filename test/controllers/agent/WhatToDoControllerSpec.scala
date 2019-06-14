@@ -22,11 +22,13 @@ import akka.util.Timeout
 import assets.BaseTestConstants
 import assets.CustomerDetailsTestConstants.{customerDetailsFnameOnly, firstName}
 import assets.messages.WhatToDoMessages._
+import common.SessionKeys
 import controllers.ControllerBaseSpec
 import mocks.services.MockCustomerDetailsService
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.mvc._
+import play.api.test.FakeRequest
 import play.api.test.Helpers.redirectLocation
 import play.mvc.Http.Status._
 
@@ -37,6 +39,9 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
   trait Test {
     lazy val controller = new WhatToDoController(messagesApi, mockAuthAsAgentWithClient, mockErrorHandler, mockCustomerDetailsService, mockConfig)
     implicit val timeout: Timeout = Timeout.apply(60, TimeUnit.SECONDS)
+    val fakeRequestWithEmailPref: FakeRequest[AnyContentAsEmpty.type] = fakeRequestWithVrnAndRedirectUrl.withSession(
+      SessionKeys.preference -> "true"
+    )
   }
 
   "WhatToDoController.show" should {
@@ -108,7 +113,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
         mockAgentAuthorised()
 
-        val result: Future[Result] = controller.submit("l'biz", nonMTDfB = true)(fakeRequestWithVrnAndRedirectUrl
+        val result: Future[Result] = controller.submit("l'biz", nonMTDfB = true)(fakeRequestWithEmailPref
           .withFormUrlEncodedBody("option" -> "change-details")
         )
 
@@ -124,6 +129,18 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
         )
 
         redirectLocation(result) shouldBe Some(mockConfig.vatCertificateUrl)
+      }
+    }
+    "redirect to the capture preferences page" when {
+      "the email preference is not present in the session" in new Test {
+        mockConfig.features.whereToGoFeature(true)
+        mockAgentAuthorised()
+
+        val result: Future[Result] = controller.submit("l'biz", nonMTDfB = true)(fakeRequestWithVrnAndRedirectUrl
+          .withFormUrlEncodedBody("option" -> "change-details")
+        )
+
+        redirectLocation(result) shouldBe "/vat-through-software/representative/email-notification"
       }
     }
     "render the page with an error" when {
