@@ -38,6 +38,8 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
   val testYesPreference: String   = "yes"
   val testNoPreference: String    = "no"
 
+  mockConfig.features.whereToGoFeature(false)
+
   def target: CapturePreferenceController = new CapturePreferenceController(
     messagesApi,
     mockAgentOnlyAuthPredicate,
