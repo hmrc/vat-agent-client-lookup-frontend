@@ -39,12 +39,18 @@ class CapturePreferenceController @Inject()(val messagesApi: MessagesApi,
 
     val preference = user.session.get(SessionKeys.preference)
     val notificationEmail = user.session.get(SessionKeys.notificationsEmail)
+    val clientVrn = user.session.get(SessionKeys.clientVRN)
+    val redirectUrl = user.session.get(SessionKeys.redirectUrl)
 
-    preference match {
-      case Some(_) =>
-        Ok(views.html.agent.capturePreference(preferenceForm.fill(PreferenceModel(Yes, notificationEmail))))
-      case None =>
-        Ok(views.html.agent.capturePreference(preferenceForm))
+    if(appConfig.features.whereToGoFeature() && clientVrn.isEmpty) {
+      Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectUrl.getOrElse("")))
+    } else {
+      preference match {
+        case Some(_) =>
+          Ok(views.html.agent.capturePreference(preferenceForm.fill(PreferenceModel(Yes, notificationEmail))))
+        case None =>
+          Ok(views.html.agent.capturePreference(preferenceForm))
+      }
     }
   }
 
@@ -65,9 +71,16 @@ class CapturePreferenceController @Inject()(val messagesApi: MessagesApi,
             NoPreferenceAuditModel(user.arn),
             Some(controllers.agent.routes.CapturePreferenceController.submit().url)
           )
-          val redirectUrl = user.session.get(SessionKeys.redirectUrl).getOrElse(appConfig.manageVatCustomerDetailsUrl)
-          Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectUrl))
-            .addingToSession(SessionKeys.preference -> no)
+
+          val redirectUrl = user.session.get(SessionKeys.redirectUrl)
+
+          if(appConfig.features.whereToGoFeature()) {
+            Redirect(redirectUrl.getOrElse(appConfig.manageVatCustomerDetailsUrl))
+              .addingToSession(SessionKeys.preference -> no)
+          } else {
+            Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectUrl.getOrElse(appConfig.manageVatCustomerDetailsUrl)))
+              .addingToSession(SessionKeys.preference -> no)
+          }
         }
       }
     )
