@@ -22,11 +22,13 @@ import controllers.predicates.AuthoriseAsAgentWithClient
 import forms.WhatToDoForm
 import javax.inject.{Inject, Singleton}
 import common.MandationStatus.nonMTDfB
+import common.SessionKeys
+import models.User
 import models.agent._
 import org.joda.time.{DateTime, DateTimeZone}
 import play.api.Logger
 import play.api.i18n.MessagesApi
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, Result}
 import services.CustomerDetailsService
 
 import scala.concurrent.Future
@@ -39,7 +41,7 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
                                    implicit val appConfig: AppConfig) extends BaseController {
 
   def show: Action[AnyContent] = authenticate.async { implicit user =>
-    if(appConfig.features.whereToGoFeature()){
+    if (appConfig.features.whereToGoFeature()) {
       customerDetailsService.getCustomerDetails(user.vrn).map {
         case Right(details) =>
           Ok(views.html.agent.whatToDo(WhatToDoForm.whatToDoForm, details.clientName, details.mandationStatus == nonMTDfB))
@@ -61,12 +63,21 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
           data => data.value match {
             case SubmitReturn.value => Redirect(appConfig.returnDeadlinesUrl)
             case ViewReturn.value => Redirect(appConfig.submittedReturnsUrl(DateTime.now(DateTimeZone.UTC).year().get()))
-            case ChangeDetails.value => Redirect(appConfig.manageVatCustomerDetailsUrl)
+            case ChangeDetails.value => emailPrefCheck(user)
             case ViewCertificate.value => Redirect(appConfig.vatCertificateUrl)
           }
         )
       } else {
         serviceErrorHandler.showInternalServerError
       }
+  }
+
+  private def emailPrefCheck: User[AnyContent] => Result = { implicit user: User[AnyContent] =>
+    val hasVerifiedEmail = user.session.get(SessionKeys.preference).isDefined
+    if (hasVerifiedEmail) {
+      Redirect(appConfig.manageVatCustomerDetailsUrl)
+    } else {
+      Redirect(routes.CapturePreferenceController.show())
+    }
   }
 }
