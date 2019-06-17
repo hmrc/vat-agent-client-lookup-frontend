@@ -42,7 +42,7 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
                                    implicit val appConfig: AppConfig) extends BaseController {
 
   def show: Action[AnyContent] = authenticate.async { implicit user =>
-    if(appConfig.features.whereToGoFeature()){
+    if (appConfig.features.whereToGoFeature()) {
       customerDetailsService.getCustomerDetails(user.vrn).map {
         case Right(details) =>
           Ok(views.html.agent.whatToDo(WhatToDoForm.whatToDoForm, details.clientName, details.mandationStatus == nonMTDfB))
@@ -67,7 +67,7 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
             data.value match {
               case SubmitReturn.value => Redirect(appConfig.returnDeadlinesUrl)
               case ViewReturn.value => Redirect(appConfig.submittedReturnsUrl(DateTime.now(DateTimeZone.UTC).year().get()))
-              case ChangeDetails.value => Redirect(appConfig.manageVatCustomerDetailsUrl)
+              case ChangeDetails.value => emailPrefCheck(user)
               case ViewCertificate.value => Redirect(appConfig.vatCertificateUrl)
             }
           )
@@ -91,6 +91,15 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
             serviceErrorHandler.showInternalServerError
         }.removeSessionKey(SessionKeys.mtdVatAgentClientName)
           .removeSessionKey(SessionKeys.mtdVatAgentMandationStatus)
+    }
+  }
+
+  private def emailPrefCheck: User[AnyContent] => Result = { implicit user: User[AnyContent] =>
+    val hasVerifiedEmail = user.session.get(SessionKeys.preference).isDefined
+    if (hasVerifiedEmail) {
+      Redirect(appConfig.manageVatCustomerDetailsUrl)
+    } else {
+      Redirect(routes.CapturePreferenceController.show())
     }
   }
 }

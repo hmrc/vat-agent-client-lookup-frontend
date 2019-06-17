@@ -13,7 +13,7 @@ GET        /unauthorised-for-client                     controllers.agent.AgentU
 
 GET        /change-client-vat-number                    controllers.agent.ConfirmClientVrnController.changeClient
 GET        /confirm-client-vat-number                   controllers.agent.ConfirmClientVrnController.show
-GET        /redirect                                    controllers.agent.ConfirmClientVrnController.redirectToSessionUrl
+GET        /redirect                                    controllers.agent.ConfirmClientVrnController.redirect
 
 GET        /email-notification                          controllers.agent.CapturePreferenceController.show
 POST       /email-notification                          controllers.agent.CapturePreferenceController.submit

@@ -30,6 +30,7 @@ import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.verify
 import play.api.http.Status
+import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -45,6 +46,10 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
     mockAuditingService,
     mockConfig
   )
+
+  override def beforeEach(): Unit = {
+    mockConfig.features.whereToGoFeature(false)
+  }
 
   "Calling the .show action" when {
 
@@ -198,20 +203,45 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           }
         }
 
-        "a client's VRN is held in session, but no redirect URL" should {
+        "a client's VRN is held in session, but no redirect URL" when {
 
-          lazy val result = TestConfirmClientVrnController.changeClient(request.withSession(
-            SessionKeys.clientVRN -> vrn
-          ))
+          "whatToDo feature switch is on" should {
 
-          "return status redirect SEE_OTHER (303)" in {
-            mockAgentAuthorised()
-            status(result) shouldBe Status.SEE_OTHER
+            lazy val result = {
+              mockConfig.features.whereToGoFeature(true)
+              TestConfirmClientVrnController.changeClient(request.withSession(
+                SessionKeys.clientVRN -> vrn
+              ))
+            }
+
+            "return status redirect SEE_OTHER (303)" in {
+              mockAgentAuthorised()
+              status(result) shouldBe Status.SEE_OTHER
+            }
+
+            "redirect to the Select Your Client show action with the no redirect URL" in {
+              redirectLocation(result) shouldBe
+                Some(controllers.agent.routes.SelectClientVrnController.show().url)
+            }
           }
 
-          "redirect to the Select Your Client show action with the default redirect URL (ChoC overview)" in {
-            redirectLocation(result) shouldBe
-              Some(controllers.agent.routes.SelectClientVrnController.show(mockConfig.manageVatCustomerDetailsUrl).url)
+          "whatToDo feature switch is off" should {
+            lazy val result = {
+              mockConfig.features.whereToGoFeature(false)
+              TestConfirmClientVrnController.changeClient(request.withSession(
+                SessionKeys.clientVRN -> vrn
+              ))
+            }
+
+            "return status redirect SEE_OTHER (303)" in {
+              mockAgentAuthorised()
+              status(result) shouldBe Status.SEE_OTHER
+            }
+
+            "redirect to the Select Your Client show action with the default redirect URL (ChoC overview)" in {
+              redirectLocation(result) shouldBe
+                Some(controllers.agent.routes.SelectClientVrnController.show(mockConfig.manageVatCustomerDetailsUrl).url)
+            }
           }
         }
       }
@@ -227,38 +257,108 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
     }
   }
 
-  "Calling the .redirectToSessionUrl action" when {
+  "Calling the .redirect action" when {
 
     "the user is an Agent" when {
 
-      "a clients VRN is held in session and a redirect URL is found" should {
+      "whatToDo feature is on" when {
 
-        lazy val result = TestConfirmClientVrnController.redirectToSessionUrl(fakeRequestWithVrnAndRedirectUrl)
+        "redirect URL is in session" should {
 
-        "return status SEE_OTHER (303)" in {
-          mockAgentAuthorised()
-          mockCustomerDetailsSuccess(customerDetailsOrganisation)
-          status(result) shouldBe Status.SEE_OTHER
+          "notification preference is in session" should {
+
+            lazy val result = {
+              mockConfig.features.whereToGoFeature(true)
+              TestConfirmClientVrnController.redirect(FakeRequest().withSession(
+                SessionKeys.clientVRN -> vrn,
+                SessionKeys.redirectUrl -> "/homepage",
+                SessionKeys.preference -> "no"
+              ))
+            }
+
+            "return status SEE_OTHER (303)" in {
+              mockAgentAuthorised()
+              mockCustomerDetailsSuccess(customerDetailsOrganisation)
+              status(result) shouldBe Status.SEE_OTHER
+            }
+
+            "redirect to the redirect URL in session" in {
+              redirectLocation(result) shouldBe Some("/homepage")
+            }
+          }
+
+          "notification preference is not in session" should {
+
+            lazy val result = {
+              mockConfig.features.whereToGoFeature(true)
+              TestConfirmClientVrnController.redirect(FakeRequest().withSession(
+                SessionKeys.clientVRN -> vrn,
+                SessionKeys.redirectUrl -> "/homepage"
+              ))
+            }
+
+            "return status SEE_OTHER (303)" in {
+              mockAgentAuthorised()
+              mockCustomerDetailsSuccess(customerDetailsOrganisation)
+              status(result) shouldBe Status.SEE_OTHER
+            }
+
+            "redirect to CapturePreference controller" in {
+              redirectLocation(result) shouldBe Some(controllers.agent.routes.CapturePreferenceController.show().url)
+            }
+          }
         }
 
-        "redirect to the Select Your Client show action" in {
-          redirectLocation(result) shouldBe Some("/homepage")
+        "redirect URL is not in session" should {
+
+          lazy val result = {
+            mockConfig.features.whereToGoFeature(true)
+            TestConfirmClientVrnController.redirect(FakeRequest().withSession(SessionKeys.clientVRN -> vrn))
+          }
+
+          "return status SEE_OTHER (303)" in {
+            mockAgentAuthorised()
+            mockCustomerDetailsSuccess(customerDetailsOrganisation)
+            status(result) shouldBe Status.SEE_OTHER
+          }
+
+          "redirect to WhatToDo controller" in {
+            redirectLocation(result) shouldBe Some(controllers.agent.routes.WhatToDoController.show().url)
+          }
         }
       }
 
-      "a client's VRN is held in session but no redirect URL is found" should {
+      "whatToDo feature is off" when {
 
-        lazy val result = TestConfirmClientVrnController.redirectToSessionUrl(request.withSession(common.SessionKeys.clientVRN -> vrn))
+        "a clients VRN is held in session and a redirect URL is found" should {
 
-        "return status INTERNAL_SERVER_ERROR (500)" in {
-          mockAgentAuthorised()
-          mockCustomerDetailsSuccess(customerDetailsOrganisation)
-          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+          lazy val result = TestConfirmClientVrnController.redirect(fakeRequestWithVrnAndRedirectUrl)
+
+          "return status SEE_OTHER (303)" in {
+            mockAgentAuthorised()
+            mockCustomerDetailsSuccess(customerDetailsOrganisation)
+            status(result) shouldBe Status.SEE_OTHER
+          }
+
+          "redirect to the Select Your Client show action" in {
+            redirectLocation(result) shouldBe Some("/homepage")
+          }
         }
 
-        "return HTML" in {
-          contentType(result) shouldBe Some("text/html")
-          charset(result) shouldBe Some("utf-8")
+        "a client's VRN is held in session but no redirect URL is found" should {
+
+          lazy val result = TestConfirmClientVrnController.redirect(request.withSession(common.SessionKeys.clientVRN -> vrn))
+
+          "return status INTERNAL_SERVER_ERROR (500)" in {
+            mockAgentAuthorised()
+            mockCustomerDetailsSuccess(customerDetailsOrganisation)
+            status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+          }
+
+          "return HTML" in {
+            contentType(result) shouldBe Some("text/html")
+            charset(result) shouldBe Some("utf-8")
+          }
         }
       }
     }

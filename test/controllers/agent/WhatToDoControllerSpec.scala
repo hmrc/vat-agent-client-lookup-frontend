@@ -22,12 +22,14 @@ import akka.util.Timeout
 import assets.BaseTestConstants
 import assets.CustomerDetailsTestConstants._
 import assets.messages.WhatToDoMessages._
+import common.SessionKeys
 import controllers.ControllerBaseSpec
 import mocks.services.MockCustomerDetailsService
 import models.errors.UnexpectedError
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.mvc._
+import play.api.test.FakeRequest
 import play.api.test.Helpers.redirectLocation
 import play.mvc.Http.Status._
 
@@ -38,6 +40,9 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
   trait Test {
     lazy val controller = new WhatToDoController(messagesApi, mockAuthAsAgentWithClient, mockErrorHandler, mockCustomerDetailsService, mockConfig)
     implicit val timeout: Timeout = Timeout.apply(60, TimeUnit.SECONDS)
+    val fakeRequestWithEmailPref: FakeRequest[AnyContentAsEmpty.type] = fakeRequestWithVrnAndRedirectUrl.withSession(
+      SessionKeys.preference -> "true"
+    )
   }
 
   "WhatToDoController.show" should {
@@ -104,12 +109,12 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
         redirectLocation(result) shouldBe Some(mockConfig.submittedReturnsUrl(1993))
       }
-      "option 3 is selected" in new Test {
+      "option 3 is selected with email preference in session" in new Test {
         mockConfig.features.whereToGoFeature(true)
 
         mockAgentAuthorised()
 
-        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl
+        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl.withSession(SessionKeys.preference -> "yes")
           .withFormUrlEncodedBody("option" -> "change-details")
         )
 
@@ -168,6 +173,18 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
         status(result) shouldBe INTERNAL_SERVER_ERROR
         parsedBody.title shouldBe "There is a problem with the service - VAT reporting through software - GOV.UK"
+      }
+    }
+    "redirect to the capture preferences page" when {
+      "the email preference is not present in the session" in new Test {
+        mockConfig.features.whereToGoFeature(true)
+        mockAgentAuthorised()
+
+        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl
+          .withFormUrlEncodedBody("option" -> "change-details")
+        )
+
+        redirectLocation(result) shouldBe Some("/vat-through-software/representative/email-notification")
       }
     }
     "return an ISE" when {
