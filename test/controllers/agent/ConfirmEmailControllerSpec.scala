@@ -51,9 +51,11 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerifi
   "Calling the show action in ConfirmEmailController" when {
 
     "there is an email in session" should {
-
       lazy val testRequest = request.withSession(SessionKeys.notificationsEmail -> testEmail)
-      lazy val result = TestConfirmEmailController.show(testRequest)
+      lazy val result = {
+        TestConfirmEmailController.appConfig.features.whereToGoFeature(false)
+        TestConfirmEmailController.show(testRequest)
+      }
 
       "return 200" in {
         mockAgentAuthorised()
@@ -67,8 +69,10 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerifi
     }
 
     "there isn't an email in session" should {
-
-      lazy val result = TestConfirmEmailController.show(request)
+      lazy val result = {
+        TestConfirmEmailController.appConfig.features.whereToGoFeature(false)
+        TestConfirmEmailController.show(request)
+      }
 
       "return 303" in {
         mockAgentAuthorised()
@@ -81,9 +85,11 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerifi
     }
 
     "the user is not authorised" should {
-
       lazy val testRequest = request.withSession(SessionKeys.notificationsEmail -> testEmail)
-      lazy val result = TestConfirmEmailController.show(testRequest)
+      lazy val result = {
+        TestConfirmEmailController.appConfig.features.whereToGoFeature(false)
+        TestConfirmEmailController.show(testRequest)
+      }
       lazy val document = Jsoup.parse(bodyOf(result))
 
       "return 500" in {
@@ -98,86 +104,252 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerifi
   }
 
   "Calling the isEmailVerified action in ConfirmEmailController" when {
+    "the feature switch is off" when {
+      "there is an email in session and it's verified" should {
+        lazy val testRequest =
+          Agent[AnyContentAsEmpty.type](arn)(request.withSession(SessionKeys.notificationsEmail -> testEmail))
+        lazy val result = {
+          TestConfirmEmailController.appConfig.features.whereToGoFeature(false)
+          mockGetEmailVerificationState(testEmail)(Future(Some(true)))
+          TestConfirmEmailController.isEmailVerified()(testRequest)
+        }
 
-    "there is an email in session and it's verified" should {
+        "return 303" in {
+          mockAgentAuthorised()
+          status(result) shouldBe Status.SEE_OTHER
+        }
 
-      lazy val testRequest =
-        Agent[AnyContentAsEmpty.type](arn)(request.withSession(SessionKeys.notificationsEmail -> testEmail))
-      lazy val result = {
-        mockGetEmailVerificationState(testEmail)(Future(Some(true)))
-        TestConfirmEmailController.isEmailVerified()(testRequest)
+        "redirect to select client VRN page" in {
+          redirectLocation(result) shouldBe
+            Some("/vat-through-software/representative/client-vat-number?redirectUrl=%2Fcustomer-details")
+        }
+
+        "add the verified email to the session" in {
+          session(result).get(SessionKeys.verifiedAgentEmail) shouldBe Some(testEmail)
+        }
+
+        "audit the event" in {
+          mockAgentAuthorised()
+          mockGetEmailVerificationState(testEmail)(Future(Some(true)))
+          await(TestConfirmEmailController.isEmailVerified()(testRequest))
+          verifyExtendedAudit(
+            YesPreferenceVerifiedAuditModel(arn, testEmail),
+            Some(controllers.agent.routes.ConfirmEmailController.isEmailVerified().url)
+          )
+        }
       }
 
-      "return 303" in {
-        mockAgentAuthorised()
-        status(result) shouldBe Status.SEE_OTHER
+      "there is a redirect url in session" should {
+        lazy val testRequest =
+          Agent[AnyContentAsEmpty.type](arn)(request.withSession(
+            SessionKeys.notificationsEmail -> testEmail,
+            SessionKeys.redirectUrl -> "/this-is-a-random-FIRIN-MUH-LASER-BWAAAAAAAAAAH"
+          ))
+        lazy val result = {
+          TestConfirmEmailController.appConfig.features.whereToGoFeature(false)
+          mockGetEmailVerificationState(testEmail)(Future(Some(true)))
+          TestConfirmEmailController.isEmailVerified()(testRequest)
+        }
+
+        "return 303" in {
+          mockAgentAuthorised()
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        "redirect to select client VRN page" in {
+          redirectLocation(result) shouldBe
+            Some("/vat-through-software/representative/client-vat-number?redirectUrl=%2Fthis-is-a-random-FIRIN-MUH-LASER-BWAAAAAAAAAAH")
+        }
+
+        "add the verified email to the session" in {
+          session(result).get(SessionKeys.verifiedAgentEmail) shouldBe Some(testEmail)
+        }
+
+        "audit the event" in {
+          mockAgentAuthorised()
+          mockGetEmailVerificationState(testEmail)(Future(Some(true)))
+          await(TestConfirmEmailController.isEmailVerified()(testRequest))
+          verifyExtendedAudit(
+            YesPreferenceVerifiedAuditModel(arn, testEmail),
+            Some(controllers.agent.routes.ConfirmEmailController.isEmailVerified().url)
+          )
+        }
       }
 
-      "redirect to select client VRN page" in {
-        redirectLocation(result) shouldBe
-          Some("/vat-through-software/representative/client-vat-number?redirectUrl=%2Fcustomer-details")
+      "there is a non-verified email in session" should {
+        lazy val testRequest = request.withSession(SessionKeys.notificationsEmail -> testEmail)
+        lazy val result = {
+          TestConfirmEmailController.appConfig.features.whereToGoFeature(false)
+          mockGetEmailVerificationState(testEmail)(Future(Some(false)))
+          TestConfirmEmailController.isEmailVerified()(testRequest)
+        }
+
+        "return 303" in {
+          mockAgentAuthorised()
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        "redirect the user to the send email verification page" in {
+          redirectLocation(result) shouldBe Some("/vat-through-software/representative/send-verification-request")
+        }
       }
 
-      "add the verified email to the session" in {
-        session(result).get(SessionKeys.verifiedAgentEmail) shouldBe Some(testEmail)
+      "there isn't an email in session" should {
+        lazy val result = {
+          TestConfirmEmailController.appConfig.features.whereToGoFeature(false)
+          TestConfirmEmailController.isEmailVerified()(request)
+        }
+
+        "return 303" in {
+          mockAgentAuthorised()
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        "take the user to the capture email address page" in {
+          redirectLocation(result) shouldBe Some("/vat-through-software/representative/email-notification")
+        }
       }
 
-      "audit the event" in {
-        mockAgentAuthorised()
-        mockGetEmailVerificationState(testEmail)(Future(Some(true)))
-        await(TestConfirmEmailController.isEmailVerified()(testRequest))
-        verifyExtendedAudit(
-          YesPreferenceVerifiedAuditModel(arn, testEmail),
-          Some(controllers.agent.routes.ConfirmEmailController.isEmailVerified().url)
-        )
+      "the user is not authorised" should {
+        lazy val testRequest = request.withSession(SessionKeys.notificationsEmail -> testEmail)
+        lazy val result = {
+          TestConfirmEmailController.appConfig.features.whereToGoFeature(false)
+          TestConfirmEmailController.isEmailVerified()(testRequest)
+        }
+        lazy val document = Jsoup.parse(bodyOf(result))
+
+        "return 500" in {
+          mockUnauthorised()
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+        }
+
+        "show the technical difficulties page" in {
+          document.title shouldBe "There is a problem with the service - VAT reporting through software - GOV.UK"
+        }
       }
     }
+    "the feature switch is on" when {
+      "there is an email in session and it's verified" should {
+        lazy val testRequest =
+          Agent[AnyContentAsEmpty.type](arn)(request.withSession(SessionKeys.notificationsEmail -> testEmail))
+        lazy val result = {
+          TestConfirmEmailController.appConfig.features.whereToGoFeature(true)
+          mockGetEmailVerificationState(testEmail)(Future(Some(true)))
+          TestConfirmEmailController.isEmailVerified()(testRequest)
+        }
 
-    "there is a non-verified email in session" should {
+        "return 303" in {
+          mockAgentAuthorised()
+          status(result) shouldBe Status.SEE_OTHER
+        }
 
-      lazy val testRequest = request.withSession(SessionKeys.notificationsEmail -> testEmail)
-      lazy val result = {
-        mockGetEmailVerificationState(testEmail)(Future(Some(false)))
-        TestConfirmEmailController.isEmailVerified()(testRequest)
+        "redirect to the business details page" in {
+          redirectLocation(result) shouldBe
+            Some("/customer-details")
+        }
+
+        "add the verified email to the session" in {
+          session(result).get(SessionKeys.verifiedAgentEmail) shouldBe Some(testEmail)
+        }
+
+        "audit the event" in {
+          mockAgentAuthorised()
+          mockGetEmailVerificationState(testEmail)(Future(Some(true)))
+          await(TestConfirmEmailController.isEmailVerified()(testRequest))
+          verifyExtendedAudit(
+            YesPreferenceVerifiedAuditModel(arn, testEmail),
+            Some(controllers.agent.routes.ConfirmEmailController.isEmailVerified().url)
+          )
+        }
       }
 
-      "return 303" in {
-        mockAgentAuthorised()
-        status(result) shouldBe Status.SEE_OTHER
+      "there is a redirect url in session" should {
+        lazy val testRequest =
+          Agent[AnyContentAsEmpty.type](arn)(request.withSession(
+            SessionKeys.notificationsEmail -> testEmail,
+            SessionKeys.redirectUrl -> "/this-is-a-random-FIRIN-MUH-LASER-BWAAAAAAAAAAH"
+          ))
+        lazy val result = {
+          TestConfirmEmailController.appConfig.features.whereToGoFeature(true)
+          mockGetEmailVerificationState(testEmail)(Future(Some(true)))
+          TestConfirmEmailController.isEmailVerified()(testRequest)
+        }
+
+        "return 303" in {
+          mockAgentAuthorised()
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        "redirect to the redirectUrl location held in session" in {
+          redirectLocation(result) shouldBe
+            Some("/this-is-a-random-FIRIN-MUH-LASER-BWAAAAAAAAAAH")
+        }
+
+        "add the verified email to the session" in {
+          session(result).get(SessionKeys.verifiedAgentEmail) shouldBe Some(testEmail)
+        }
+
+        "audit the event" in {
+          mockAgentAuthorised()
+          mockGetEmailVerificationState(testEmail)(Future(Some(true)))
+          await(TestConfirmEmailController.isEmailVerified()(testRequest))
+          verifyExtendedAudit(
+            YesPreferenceVerifiedAuditModel(arn, testEmail),
+            Some(controllers.agent.routes.ConfirmEmailController.isEmailVerified().url)
+          )
+        }
       }
 
-      "redirect the user to the send email verification page" in {
-        redirectLocation(result) shouldBe Some("/vat-through-software/representative/send-verification-request")
-      }
-    }
+      "there is a non-verified email in session" should {
+        lazy val testRequest = request.withSession(SessionKeys.notificationsEmail -> testEmail)
+        lazy val result = {
+          TestConfirmEmailController.appConfig.features.whereToGoFeature(true)
+          mockGetEmailVerificationState(testEmail)(Future(Some(false)))
+          TestConfirmEmailController.isEmailVerified()(testRequest)
+        }
 
-    "there isn't an email in session" should {
+        "return 303" in {
+          mockAgentAuthorised()
+          status(result) shouldBe Status.SEE_OTHER
+        }
 
-      lazy val result = TestConfirmEmailController.isEmailVerified()(request)
-
-      "return 303" in {
-        mockAgentAuthorised()
-        status(result) shouldBe Status.SEE_OTHER
-      }
-
-      "take the user to the capture email address page" in {
-        redirectLocation(result) shouldBe Some("/vat-through-software/representative/email-notification")
-      }
-    }
-
-    "the user is not authorised" should {
-
-      lazy val testRequest = request.withSession(SessionKeys.notificationsEmail -> testEmail)
-      lazy val result = TestConfirmEmailController.isEmailVerified()(testRequest)
-      lazy val document = Jsoup.parse(bodyOf(result))
-
-      "return 500" in {
-        mockUnauthorised()
-        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+        "redirect the user to the send email verification page" in {
+          redirectLocation(result) shouldBe Some("/vat-through-software/representative/send-verification-request")
+        }
       }
 
-      "show the technical difficulties page" in {
-        document.title shouldBe "There is a problem with the service - VAT reporting through software - GOV.UK"
+      "there isn't an email in session" should {
+        lazy val result = {
+          TestConfirmEmailController.appConfig.features.whereToGoFeature(true)
+          TestConfirmEmailController.isEmailVerified()(request)
+        }
+
+        "return 303" in {
+          mockAgentAuthorised()
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        "take the user to the capture email address page" in {
+          redirectLocation(result) shouldBe Some("/vat-through-software/representative/email-notification")
+        }
+      }
+
+      "the user is not authorised" should {
+        lazy val testRequest = request.withSession(SessionKeys.notificationsEmail -> testEmail)
+        lazy val result = {
+          TestConfirmEmailController.appConfig.features.whereToGoFeature(true)
+          TestConfirmEmailController.isEmailVerified()(testRequest)
+        }
+        lazy val document = Jsoup.parse(bodyOf(result))
+
+        "return 500" in {
+          mockUnauthorised()
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+        }
+
+        "show the technical difficulties page" in {
+          document.title shouldBe "There is a problem with the service - VAT reporting through software - GOV.UK"
+        }
       }
     }
   }

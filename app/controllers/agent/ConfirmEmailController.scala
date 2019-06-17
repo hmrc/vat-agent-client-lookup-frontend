@@ -20,13 +20,14 @@ import common.SessionKeys
 import config.{AppConfig, ErrorHandler}
 import controllers.predicates.{AuthoriseAsAgentOnly, PreferencePredicate}
 import javax.inject.{Inject, Singleton}
-
 import audit.AuditService
 import audit.models.YesPreferenceVerifiedAuditModel
+import models.Agent
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, RequestHeader, Result}
 import services.EmailVerificationService
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
@@ -41,7 +42,6 @@ class ConfirmEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
                                        implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   def show: Action[AnyContent] = (authenticate andThen preferenceCheck) { implicit agent =>
-
     agent.session.get(SessionKeys.notificationsEmail) match {
       case Some(email) =>
         Ok(views.html.agent.confirmEmail(email))
@@ -51,30 +51,34 @@ class ConfirmEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
   }
 
   def isEmailVerified: Action[AnyContent] = (authenticate andThen preferenceCheck).async { implicit agent =>
-
     agent.session.get(SessionKeys.notificationsEmail) match {
       case Some(email) =>
         emailVerificationService.isEmailVerified(email) map {
-
           case Some(true) =>
-            auditService.extendedAudit(
-              YesPreferenceVerifiedAuditModel(agent.arn, email),
-              Some(controllers.agent.routes.ConfirmEmailController.isEmailVerified().url)
-            )
-            val redirectUrl = agent.session.get(SessionKeys.redirectUrl).getOrElse(appConfig.manageVatCustomerDetailsUrl)
-            Redirect(routes.SelectClientVrnController.show(redirectUrl))
-              .addingToSession(SessionKeys.verifiedAgentEmail -> email)
-
+            handleRedirect(agent, email)
           case Some(false) =>
             Redirect(routes.VerifyEmailController.sendVerification())
-
           case _ =>
             errorHandler.showInternalServerError
         }
-
       case _ =>
         Logger.info("[ConfirmEmailController][updateNotificationPreference] no email address found in session")
         Future.successful(Redirect(routes.CapturePreferenceController.show()))
     }
   }
+
+  private def handleRedirect(agent: Agent[AnyContent], email: String)(implicit rh: RequestHeader): Result = {
+    val redirectUrl = agent.session.get(SessionKeys.redirectUrl).getOrElse(appConfig.manageVatCustomerDetailsUrl)
+
+    auditService.extendedAudit(
+      YesPreferenceVerifiedAuditModel(agent.arn, email),
+      Some(controllers.agent.routes.ConfirmEmailController.isEmailVerified().url)
+    )
+    (if(appConfig.features.whereToGoFeature()) {
+      Redirect(redirectUrl)
+    } else {
+      Redirect(routes.SelectClientVrnController.show(redirectUrl))
+    }).addingToSession(SessionKeys.verifiedAgentEmail -> email)
+  }
+
 }
