@@ -243,7 +243,7 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerifi
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        "redirect to select client VRN page" in {
+        "redirect to the business details page" in {
           redirectLocation(result) shouldBe
             Some("/customer-details")
         }
@@ -280,7 +280,7 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerifi
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        "redirect to select client VRN page" in {
+        "redirect to the redirectUrl location held in session" in {
           redirectLocation(result) shouldBe
             Some("/this-is-a-random-FIRIN-MUH-LASER-BWAAAAAAAAAAH")
         }
