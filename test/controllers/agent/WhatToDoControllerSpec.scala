@@ -87,7 +87,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
         mockAgentAuthorised()
 
-        val result: Future[Result] = controller.submit(fakeRequestWithMtdVatAgentData
+        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl
           .withFormUrlEncodedBody("option" -> "submit-return")
         )
 
@@ -98,7 +98,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
         mockAgentAuthorised()
 
-        val result: Future[Result] = controller.submit(fakeRequestWithMtdVatAgentData
+        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl
           .withFormUrlEncodedBody("option" -> "view-return")
         )
 
@@ -109,7 +109,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
         mockAgentAuthorised()
 
-        val result: Future[Result] = controller.submit(fakeRequestWithMtdVatAgentData
+        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl
           .withFormUrlEncodedBody("option" -> "change-details")
         )
 
@@ -120,7 +120,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
         mockAgentAuthorised()
 
-        val result: Future[Result] = controller.submit(fakeRequestWithMtdVatAgentData
+        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl
           .withFormUrlEncodedBody("option" -> "view-certificate")
         )
 
@@ -147,6 +147,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
         mockConfig.features.whereToGoFeature(true)
 
         mockAgentAuthorised()
+        mockCustomerDetailsError(UnexpectedError(INTERNAL_SERVER_ERROR, "It's ok, this is just a test"))
 
         val result: Future[Result] = controller.submit(fakeRequestWithMtdVatAgentData)
         val parsedBody: Document = Jsoup.parse(bodyOf(result))
@@ -157,27 +158,28 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
         parsedBody.body().toString should include(error)
       }
 
-      "no session data can be obtained and the call to customerDetailsService fails" in new Test{
-        mockConfig.features.whereToGoFeature(true)
-
-        mockAgentAuthorised()
-        mockCustomerDetailsError(UnexpectedError(INTERNAL_SERVER_ERROR, "It's ok, this is just a test"))
-
-        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl
-          .withFormUrlEncodedBody("option" -> "submit-return")
-        )
-        val parsedBody: Document = Jsoup.parse(bodyOf(result))
-
-        status(result) shouldBe INTERNAL_SERVER_ERROR
-        parsedBody.title shouldBe "There is a problem with the service - VAT reporting through software - GOV.UK"
-      }
-
       "the feature switch is off" in new Test {
         mockConfig.features.whereToGoFeature(false)
 
         mockAgentAuthorised()
 
         val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl)
+        val parsedBody: Document = Jsoup.parse(bodyOf(result))
+
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+        parsedBody.title shouldBe "There is a problem with the service - VAT reporting through software - GOV.UK"
+      }
+    }
+    "return an ISE" when {
+
+      "an incorrect form is submitted with no session data and customerDetailsService returns an error" in new Test{
+        mockConfig.features.whereToGoFeature(true)
+
+        mockAgentAuthorised()
+        mockCustomerDetailsError(UnexpectedError(INTERNAL_SERVER_ERROR, "It's ok, this is just a test"))
+
+        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl
+        )
         val parsedBody: Document = Jsoup.parse(bodyOf(result))
 
         status(result) shouldBe INTERNAL_SERVER_ERROR

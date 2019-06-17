@@ -27,6 +27,7 @@ import models.User
 import models.agent._
 import org.joda.time.{DateTime, DateTimeZone}
 import play.api.Logger
+import play.api.data.Form
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Action, AnyContent, Result}
 import services.CustomerDetailsService
@@ -60,46 +61,36 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
     implicit user =>
 
       if (appConfig.features.whereToGoFeature()) {
-        (user.session.get(SessionKeys.mtdVatAgentClientName), user.session.get(SessionKeys.mtdVatAgentMandationStatus)) match {
-          case (Some(clientName), Some(mandationStatus)) =>
-            Future.successful(WhatToDoForm.whatToDoForm.bindFromRequest().fold(
-              error => BadRequest(views.html.agent.whatToDo(error, clientName, mandationStatus == nonMTDfB)),
-              data => {
-                data.value match {
-                  case SubmitReturn.value => Redirect(appConfig.returnDeadlinesUrl)
-                  case ViewReturn.value => Redirect(appConfig.submittedReturnsUrl(DateTime.now(DateTimeZone.UTC).year().get()))
-                  case ChangeDetails.value => Redirect(appConfig.manageVatCustomerDetailsUrl)
-                  case ViewCertificate.value => Redirect(appConfig.vatCertificateUrl)
-                }
-              }
-            ).removingFromSession(SessionKeys.mtdVatAgentClientName, SessionKeys.mtdVatAgentMandationStatus))
-          case _ => {
-            Logger.debug("[WhatToDoController][submit] - unable to get at least one of mtdVatAgentClientName, mtdVatAgentMandationStatus from session")
-            detailsCallAndSubmit
-          }
-        }
-      } else {
-        Future.successful(serviceErrorHandler.showInternalServerError)
-      }
-  }
-
-  private def detailsCallAndSubmit(implicit user: User[_]): Future[Result] = {
-    customerDetailsService.getCustomerDetails(user.vrn).map {
-      case Right(details) =>
         WhatToDoForm.whatToDoForm.bindFromRequest().fold(
-          error => BadRequest(views.html.agent.whatToDo(error, details.clientName, details.mandationStatus == nonMTDfB)),
-          data => {
+          error => badRequestResult(error),
+          data => Future.successful(
             data.value match {
               case SubmitReturn.value => Redirect(appConfig.returnDeadlinesUrl)
               case ViewReturn.value => Redirect(appConfig.submittedReturnsUrl(DateTime.now(DateTimeZone.UTC).year().get()))
               case ChangeDetails.value => Redirect(appConfig.manageVatCustomerDetailsUrl)
               case ViewCertificate.value => Redirect(appConfig.vatCertificateUrl)
             }
-          }
-        ).removingFromSession(SessionKeys.mtdVatAgentClientName, SessionKeys.mtdVatAgentMandationStatus)
-      case Left(error) =>
-        Logger.warn(s"[WhatToDoController][submit] - received an error from CustomerDetailsService: $error")
-        serviceErrorHandler.showInternalServerError
+          )
+        ).removeSessionKey(SessionKeys.mtdVatAgentClientName)
+          .removeSessionKey(SessionKeys.mtdVatAgentMandationStatus)
+      } else {
+        Future.successful(serviceErrorHandler.showInternalServerError)
+      }
+  }
+
+  private def badRequestResult(error: Form[WhatToDoModel])(implicit user: User[_]): Future[Result] = {
+    (user.session.get(SessionKeys.mtdVatAgentClientName), user.session.get(SessionKeys.mtdVatAgentMandationStatus)) match {
+      case (Some(clientName), Some(mandationStatus)) =>
+        Future.successful(BadRequest(views.html.agent.whatToDo(error, clientName, mandationStatus == nonMTDfB))
+          .removingFromSession(SessionKeys.mtdVatAgentClientName, SessionKeys.mtdVatAgentMandationStatus))
+      case _ =>
+        customerDetailsService.getCustomerDetails(user.vrn).map {
+          case Right(details) => BadRequest(views.html.agent.whatToDo(error, details.clientName, details.mandationStatus == nonMTDfB))
+          case Left(cdsError) =>
+            Logger.warn(s"[WhatToDoController][submit] - received an error from CustomerDetailsService: $cdsError")
+            serviceErrorHandler.showInternalServerError
+        }.removeSessionKey(SessionKeys.mtdVatAgentClientName)
+          .removeSessionKey(SessionKeys.mtdVatAgentMandationStatus)
     }
   }
 }
