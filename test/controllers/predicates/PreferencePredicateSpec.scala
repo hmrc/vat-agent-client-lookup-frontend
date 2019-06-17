@@ -81,7 +81,7 @@ class PreferencePredicateSpec extends ControllerBaseSpec with BeforeAndAfterAll 
         }
       }
 
-      "the agent has a preference of 'no' in session" should {
+      "the agent has a preference of 'no' in session and no redirect url in session" should {
 
         "redirect the request to the change customer details page" in {
           mockPreferencePredicate.appConfig.features.whereToGoFeature(true)
@@ -94,7 +94,7 @@ class PreferencePredicateSpec extends ControllerBaseSpec with BeforeAndAfterAll 
 
       "the agent has a preference of 'no' in session with a redirect url in session" should {
 
-        "redirect the request to the change customer details page" in {
+        "redirect the request to the url held in session" in {
           mockPreferencePredicate.appConfig.features.whereToGoFeature(true)
 
           val agentWithPref = Agent(arn)(request.withSession(
@@ -130,7 +130,7 @@ class PreferencePredicateSpec extends ControllerBaseSpec with BeforeAndAfterAll 
 
       "the agent has a preference of 'yes' and a verified email address in session and a redirect url in session" should {
 
-        "redirect the request to the change customer details page" in {
+        "redirect the request to the url held in session" in {
           mockPreferencePredicate.appConfig.features.whereToGoFeature(true)
 
           val agentWithPref = Agent(arn)(request.withSession(
