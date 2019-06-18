@@ -20,11 +20,12 @@ import java.util.concurrent.TimeUnit
 
 import akka.util.Timeout
 import assets.BaseTestConstants
-import assets.CustomerDetailsTestConstants.{customerDetailsFnameOnly, firstName}
+import assets.CustomerDetailsTestConstants._
 import assets.messages.WhatToDoMessages._
 import common.SessionKeys
 import controllers.ControllerBaseSpec
 import mocks.services.MockCustomerDetailsService
+import models.errors.UnexpectedError
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.mvc._
@@ -91,7 +92,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
         mockAgentAuthorised()
 
-        val result: Future[Result] = controller.submit("l'biz", nonMTDfB = true)(fakeRequestWithVrnAndRedirectUrl
+        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl
           .withFormUrlEncodedBody("option" -> "submit-return")
         )
 
@@ -102,18 +103,18 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
         mockAgentAuthorised()
 
-        val result: Future[Result] = controller.submit("l'biz", nonMTDfB = true)(fakeRequestWithVrnAndRedirectUrl
+        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl
           .withFormUrlEncodedBody("option" -> "view-return")
         )
 
         redirectLocation(result) shouldBe Some(mockConfig.submittedReturnsUrl(1993))
       }
-      "option 3 is selected" in new Test {
+      "option 3 is selected with email preference in session" in new Test {
         mockConfig.features.whereToGoFeature(true)
 
         mockAgentAuthorised()
 
-        val result: Future[Result] = controller.submit("l'biz", nonMTDfB = true)(fakeRequestWithEmailPref
+        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl.withSession(SessionKeys.preference -> "yes")
           .withFormUrlEncodedBody("option" -> "change-details")
         )
 
@@ -124,32 +125,21 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
         mockAgentAuthorised()
 
-        val result: Future[Result] = controller.submit("l'biz", nonMTDfB = true)(fakeRequestWithVrnAndRedirectUrl
+        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl
           .withFormUrlEncodedBody("option" -> "view-certificate")
         )
 
         redirectLocation(result) shouldBe Some(mockConfig.vatCertificateUrl)
       }
     }
-    "redirect to the capture preferences page" when {
-      "the email preference is not present in the session" in new Test {
-        mockConfig.features.whereToGoFeature(true)
-        mockAgentAuthorised()
-
-        val result: Future[Result] = controller.submit("l'biz", nonMTDfB = true)(fakeRequestWithVrnAndRedirectUrl
-          .withFormUrlEncodedBody("option" -> "change-details")
-        )
-
-        redirectLocation(result) shouldBe Some("/vat-through-software/representative/email-notification")
-      }
-    }
+    
     "render the page with an error" when {
       "the form submitted is incorrect" in new Test {
         mockConfig.features.whereToGoFeature(true)
 
         mockAgentAuthorised()
 
-        val result: Future[Result] = controller.submit("l'biz", true)(fakeRequestWithVrnAndRedirectUrl)
+        val result: Future[Result] = controller.submit(fakeRequestWithMtdVatAgentData)
         val parsedBody: Document = Jsoup.parse(bodyOf(result))
 
         status(result) shouldBe BAD_REQUEST
@@ -163,7 +153,51 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
         mockAgentAuthorised()
 
-        val result: Future[Result] = controller.submit("l'biz", true)(fakeRequestWithVrnAndRedirectUrl)
+        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl)
+        val parsedBody: Document = Jsoup.parse(bodyOf(result))
+
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+        parsedBody.title shouldBe "There is a problem with the service - VAT reporting through software - GOV.UK"
+      }
+
+      "the form submitted is incorrect, there's no session data and customerDetailService call is successful" in new Test {
+
+        mockConfig.features.whereToGoFeature(true)
+
+        mockAgentAuthorised()
+        mockCustomerDetailsSuccess(customerDetailsFnameOnly)
+
+        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl)
+        val parsedBody: Document = Jsoup.parse(bodyOf(result))
+
+        status(result) shouldBe BAD_REQUEST
+        parsedBody.title() shouldBe "Error: " + title(firstName)
+
+        parsedBody.body().toString should include(error)
+      }
+    }
+    "redirect to the capture preferences page" when {
+      "the email preference is not present in the session" in new Test {
+        mockConfig.features.whereToGoFeature(true)
+        mockAgentAuthorised()
+
+        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl
+          .withFormUrlEncodedBody("option" -> "change-details")
+        )
+
+        redirectLocation(result) shouldBe Some("/vat-through-software/representative/email-notification")
+      }
+    }
+    "return an ISE" when {
+
+      "an incorrect form is submitted with no session data and customerDetailsService returns an error" in new Test{
+        mockConfig.features.whereToGoFeature(true)
+
+        mockAgentAuthorised()
+        mockCustomerDetailsError(UnexpectedError(INTERNAL_SERVER_ERROR, "It's ok, this is just a test"))
+
+        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl
+        )
         val parsedBody: Document = Jsoup.parse(bodyOf(result))
 
         status(result) shouldBe INTERNAL_SERVER_ERROR

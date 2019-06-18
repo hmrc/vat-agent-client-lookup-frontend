@@ -27,6 +27,7 @@ import models.User
 import models.agent._
 import org.joda.time.{DateTime, DateTimeZone}
 import play.api.Logger
+import play.api.data.Form
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Action, AnyContent, Result}
 import services.CustomerDetailsService
@@ -45,6 +46,7 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
       customerDetailsService.getCustomerDetails(user.vrn).map {
         case Right(details) =>
           Ok(views.html.agent.whatToDo(WhatToDoForm.whatToDoForm, details.clientName, details.mandationStatus == nonMTDfB))
+            .addingToSession(SessionKeys.mtdVatAgentClientName -> details.clientName, SessionKeys.mtdVatAgentMandationStatus -> details.mandationStatus)
         case Left(error) =>
           Logger.warn(s"[WhatToDoController][show] - received an error from CustomerDetailsService: $error")
           serviceErrorHandler.showInternalServerError
@@ -55,21 +57,39 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
   }
 
 
-  def submit(name: String, nonMTDfB: Boolean): Action[AnyContent] = authenticate {
+  def submit: Action[AnyContent] = authenticate.async {
     implicit user =>
+
       if (appConfig.features.whereToGoFeature()) {
         WhatToDoForm.whatToDoForm.bindFromRequest().fold(
-          error => BadRequest(views.html.agent.whatToDo(error, name, nonMTDfB)),
-          data => data.value match {
-            case SubmitReturn.value => Redirect(appConfig.returnDeadlinesUrl)
-            case ViewReturn.value => Redirect(appConfig.submittedReturnsUrl(DateTime.now(DateTimeZone.UTC).year().get()))
-            case ChangeDetails.value => emailPrefCheck(user)
-            case ViewCertificate.value => Redirect(appConfig.vatCertificateUrl)
-          }
+          error => badRequestResult(error),
+          data => Future.successful(
+            data.value match {
+              case SubmitReturn.value => Redirect(appConfig.returnDeadlinesUrl)
+              case ViewReturn.value => Redirect(appConfig.submittedReturnsUrl(DateTime.now(DateTimeZone.UTC).year().get()))
+              case ChangeDetails.value => emailPrefCheck(user)
+              case ViewCertificate.value => Redirect(appConfig.vatCertificateUrl)
+            }
+          ).removeSessionKey(SessionKeys.mtdVatAgentClientName)
+            .removeSessionKey(SessionKeys.mtdVatAgentMandationStatus)
         )
       } else {
-        serviceErrorHandler.showInternalServerError
+        Future.successful(serviceErrorHandler.showInternalServerError)
       }
+  }
+
+  private def badRequestResult(error: Form[WhatToDoModel])(implicit user: User[_]): Future[Result] = {
+    (user.session.get(SessionKeys.mtdVatAgentClientName), user.session.get(SessionKeys.mtdVatAgentMandationStatus)) match {
+      case (Some(clientName), Some(mandationStatus)) =>
+        Future.successful(BadRequest(views.html.agent.whatToDo(error, clientName, mandationStatus == nonMTDfB)))
+      case _ =>
+        customerDetailsService.getCustomerDetails(user.vrn).map {
+          case Right(details) => BadRequest(views.html.agent.whatToDo(error, details.clientName, details.mandationStatus == nonMTDfB))
+          case Left(cdsError) =>
+            Logger.warn(s"[WhatToDoController][submit] - received an error from CustomerDetailsService: $cdsError")
+            serviceErrorHandler.showInternalServerError
+        }
+    }
   }
 
   private def emailPrefCheck: User[AnyContent] => Result = { implicit user: User[AnyContent] =>

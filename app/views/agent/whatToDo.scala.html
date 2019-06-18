@@ -25,7 +25,7 @@
 
 @main_template(title = s"${if(form.errors.nonEmpty) "Error: " else ""}${messages("whatToDo.heading", name)}", bodyClasses = None) {
 
-    @helpers.form(action = controllers.agent.routes.WhatToDoController.submit(name, nonMTDfB)) {
+    @helpers.form(action = controllers.agent.routes.WhatToDoController.submit) {
 
         <div class="form-group" id="option">
 

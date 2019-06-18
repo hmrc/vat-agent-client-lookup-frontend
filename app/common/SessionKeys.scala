@@ -24,4 +24,6 @@ object SessionKeys {
   val preference: String = "vatAgentLookupEmailPreference"
   val notificationsEmail: String = "vatAgentLookupNotificationsPreferenceEmail"
   val verifiedAgentEmail: String = "verifiedAgentEmail"
+  val mtdVatAgentClientName: String = "mtdVatAgentClientName"
+  val mtdVatAgentMandationStatus: String = "mtdVatAgentMandationStatus"
 }
