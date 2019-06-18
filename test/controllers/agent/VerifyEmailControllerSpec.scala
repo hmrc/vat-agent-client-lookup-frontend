@@ -25,9 +25,12 @@ import play.api.http.Status
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
-class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerificationService {
+class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerificationService with BeforeAndAfterAll {
 
-  override def beforeAll(): Unit = mockConfig.features.preferenceJourneyEnabled(true)
+  override def beforeAll(): Unit = {
+    mockConfig.features.preferenceJourneyEnabled(true)
+    mockConfig.features.whereToGoFeature(false)
+  }
 
   object TestVerifyEmailController extends VerifyEmailController(
     mockAgentOnlyAuthPredicate,
@@ -103,8 +106,6 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
 
     "there is an email in session and the email request is not created as already verified" should {
       "redirect to the select client VRN page" in {
-
-        mockConfig.features.whereToGoFeature(false)
 
         mockAgentAuthorised()
         mockCreateEmailVerificationRequest(Some(false))
