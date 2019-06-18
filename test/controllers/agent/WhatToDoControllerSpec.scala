@@ -174,6 +174,22 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
         status(result) shouldBe INTERNAL_SERVER_ERROR
         parsedBody.title shouldBe "There is a problem with the service - VAT reporting through software - GOV.UK"
       }
+
+      "the form submitted is incorrect, there's no session data and customerDetailService call is successful" in new Test {
+
+        mockConfig.features.whereToGoFeature(true)
+
+        mockAgentAuthorised()
+        mockCustomerDetailsSuccess(customerDetailsFnameOnly)
+
+        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl)
+        val parsedBody: Document = Jsoup.parse(bodyOf(result))
+
+        status(result) shouldBe BAD_REQUEST
+        parsedBody.title() shouldBe "Error: " + title(firstName)
+
+        parsedBody.body().toString should include(error)
+      }
     }
     "redirect to the capture preferences page" when {
       "the email preference is not present in the session" in new Test {

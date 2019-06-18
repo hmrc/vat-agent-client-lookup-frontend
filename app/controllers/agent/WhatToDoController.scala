@@ -70,9 +70,9 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
               case ChangeDetails.value => emailPrefCheck(user)
               case ViewCertificate.value => Redirect(appConfig.vatCertificateUrl)
             }
-          )
-        ).removeSessionKey(SessionKeys.mtdVatAgentClientName)
-          .removeSessionKey(SessionKeys.mtdVatAgentMandationStatus)
+          ).removeSessionKey(SessionKeys.mtdVatAgentClientName)
+            .removeSessionKey(SessionKeys.mtdVatAgentMandationStatus)
+        )
       } else {
         Future.successful(serviceErrorHandler.showInternalServerError)
       }
@@ -81,16 +81,14 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
   private def badRequestResult(error: Form[WhatToDoModel])(implicit user: User[_]): Future[Result] = {
     (user.session.get(SessionKeys.mtdVatAgentClientName), user.session.get(SessionKeys.mtdVatAgentMandationStatus)) match {
       case (Some(clientName), Some(mandationStatus)) =>
-        Future.successful(BadRequest(views.html.agent.whatToDo(error, clientName, mandationStatus == nonMTDfB))
-          .removingFromSession(SessionKeys.mtdVatAgentClientName, SessionKeys.mtdVatAgentMandationStatus))
+        Future.successful(BadRequest(views.html.agent.whatToDo(error, clientName, mandationStatus == nonMTDfB)))
       case _ =>
         customerDetailsService.getCustomerDetails(user.vrn).map {
           case Right(details) => BadRequest(views.html.agent.whatToDo(error, details.clientName, details.mandationStatus == nonMTDfB))
           case Left(cdsError) =>
             Logger.warn(s"[WhatToDoController][submit] - received an error from CustomerDetailsService: $cdsError")
             serviceErrorHandler.showInternalServerError
-        }.removeSessionKey(SessionKeys.mtdVatAgentClientName)
-          .removeSessionKey(SessionKeys.mtdVatAgentMandationStatus)
+        }
     }
   }
 
