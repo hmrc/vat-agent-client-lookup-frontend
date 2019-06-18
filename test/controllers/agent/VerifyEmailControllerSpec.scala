@@ -27,7 +27,10 @@ import play.api.test.Helpers._
 
 class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerificationService with BeforeAndAfterAll {
 
-  override def beforeAll(): Unit = mockConfig.features.preferenceJourneyEnabled(true)
+  override def beforeAll(): Unit = {
+    mockConfig.features.preferenceJourneyEnabled(true)
+    mockConfig.features.whereToGoFeature(false)
+  }
 
   object TestVerifyEmailController extends VerifyEmailController(
     mockAgentOnlyAuthPredicate,
@@ -165,6 +168,33 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         Jsoup.parse(bodyOf(result)).title shouldBe "There is a problem with the service - " +
           "VAT reporting through software - GOV.UK"
+      }
+    }
+
+    "the whereToGo feature is enabled and an email is in session" should {
+
+      "redirect to the redirectUrl if one exists" in {
+        mockConfig.features.whereToGoFeature(true)
+        mockAgentAuthorised()
+        mockCreateEmailVerificationRequest(Some(false))
+
+        val request = testSendEmailRequest.withSession(SessionKeys.notificationsEmail -> testEmail, SessionKeys.redirectUrl -> "/something")
+        val result = TestVerifyEmailController.sendVerification(request)
+
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some("/something")
+      }
+
+      "redirect to the manageVat url if no redirect url exists" in {
+        mockConfig.features.whereToGoFeature(true)
+        mockAgentAuthorised()
+        mockCreateEmailVerificationRequest(Some(false))
+
+        val request = testSendEmailRequest.withSession(SessionKeys.notificationsEmail -> testEmail)
+        val result = TestVerifyEmailController.sendVerification(request)
+
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some(mockConfig.manageVatCustomerDetailsUrl)
       }
     }
 
