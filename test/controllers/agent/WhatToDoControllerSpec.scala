@@ -132,27 +132,12 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
         redirectLocation(result) shouldBe Some(mockConfig.vatCertificateUrl)
       }
     }
-    "make a call to the customerDetailsService and render the page" when {
-
-      "a value cannot be obtained from session" in new Test {
-        mockConfig.features.whereToGoFeature(true)
-
-        mockAgentAuthorised()
-        mockCustomerDetailsSuccess(customerDetailsFnameOnly)
-
-        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl
-          .withFormUrlEncodedBody("option" -> "submit-return")
-        )
-
-        redirectLocation(result) shouldBe Some(mockConfig.returnDeadlinesUrl)
-      }
-    }
+    
     "render the page with an error" when {
       "the form submitted is incorrect" in new Test {
         mockConfig.features.whereToGoFeature(true)
 
         mockAgentAuthorised()
-        mockCustomerDetailsError(UnexpectedError(INTERNAL_SERVER_ERROR, "It's ok, this is just a test"))
 
         val result: Future[Result] = controller.submit(fakeRequestWithMtdVatAgentData)
         val parsedBody: Document = Jsoup.parse(bodyOf(result))
