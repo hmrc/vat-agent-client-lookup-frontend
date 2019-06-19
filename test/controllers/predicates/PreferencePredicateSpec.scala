@@ -29,7 +29,7 @@ class PreferencePredicateSpec extends ControllerBaseSpec with BeforeAndAfterAll 
 
   "The preference predicate" when {
 
-    "the preference journey feature switch is on" when {
+    "the preference journey feature switch is on and the where to go switch is off" when {
 
       "the agent has no preference or verified email in session" should {
 
@@ -41,6 +41,8 @@ class PreferencePredicateSpec extends ControllerBaseSpec with BeforeAndAfterAll 
       "the agent has a preference of 'no' in session" should {
 
         "redirect the request to the SelectClientVrn controller" in {
+          mockPreferencePredicate.appConfig.features.whereToGoFeature(false)
+
           val agentWithPref = Agent(arn)(request.withSession(SessionKeys.preference -> "no"))
           await(mockPreferencePredicate.refine(agentWithPref)) shouldBe
             Left(Redirect(controllers.agent.routes.SelectClientVrnController.show("/customer-details")))
@@ -58,12 +60,86 @@ class PreferencePredicateSpec extends ControllerBaseSpec with BeforeAndAfterAll 
       "the agent has a preference of 'yes' and a verified email address in session" should {
 
         "redirect the request to the SelectClientVrn controller" in {
+          mockPreferencePredicate.appConfig.features.whereToGoFeature(false)
+
           val agentWithPref = Agent(arn)(request.withSession(
             SessionKeys.preference -> "yes",
             SessionKeys.verifiedAgentEmail -> "scala@gmail.com"
           ))
           await(mockPreferencePredicate.refine(agentWithPref)) shouldBe
             Left(Redirect(controllers.agent.routes.SelectClientVrnController.show("/customer-details")))
+        }
+      }
+    }
+
+    "the preference journey feature switch is on and the where to go switch is on" when {
+
+      "the agent has no preference or verified email in session" should {
+
+        "allow the request to pass through the predicate" in {
+          await(mockPreferencePredicate.refine(agent)) shouldBe Right(agent)
+        }
+      }
+
+      "the agent has a preference of 'no' in session and no redirect url in session" should {
+
+        "redirect the request to the change customer details page" in {
+          mockPreferencePredicate.appConfig.features.whereToGoFeature(true)
+
+          val agentWithPref = Agent(arn)(request.withSession(SessionKeys.preference -> "no"))
+          await(mockPreferencePredicate.refine(agentWithPref)) shouldBe
+            Left(Redirect("/customer-details"))
+        }
+      }
+
+      "the agent has a preference of 'no' in session with a redirect url in session" should {
+
+        "redirect the request to the url held in session" in {
+          mockPreferencePredicate.appConfig.features.whereToGoFeature(true)
+
+          val agentWithPref = Agent(arn)(request.withSession(
+            SessionKeys.preference -> "no",
+            SessionKeys.redirectUrl -> "/thisisntthechangepage"
+          ))
+          await(mockPreferencePredicate.refine(agentWithPref)) shouldBe
+            Left(Redirect("/thisisntthechangepage"))
+        }
+      }
+
+      "the agent has a preference of 'yes' and no verified email address in session" should {
+
+        "allow the request to pass through the predicate" in {
+          val agentWithPref = Agent(arn)(request.withSession(SessionKeys.preference -> "yes"))
+          await(mockPreferencePredicate.refine(agentWithPref)) shouldBe Right(agentWithPref)
+        }
+      }
+
+      "the agent has a preference of 'yes' and a verified email address in session" should {
+
+        "redirect the request to the change customer details page" in {
+          mockPreferencePredicate.appConfig.features.whereToGoFeature(true)
+
+          val agentWithPref = Agent(arn)(request.withSession(
+            SessionKeys.preference -> "yes",
+            SessionKeys.verifiedAgentEmail -> "scala@gmail.com"
+          ))
+          await(mockPreferencePredicate.refine(agentWithPref)) shouldBe
+            Left(Redirect("/customer-details"))
+        }
+      }
+
+      "the agent has a preference of 'yes' and a verified email address in session and a redirect url in session" should {
+
+        "redirect the request to the url held in session" in {
+          mockPreferencePredicate.appConfig.features.whereToGoFeature(true)
+
+          val agentWithPref = Agent(arn)(request.withSession(
+            SessionKeys.preference -> "yes",
+            SessionKeys.verifiedAgentEmail -> "scala@gmail.com",
+            SessionKeys.redirectUrl -> "/immafiringmuhlaserbwaaaaaaaaaaah"
+          ))
+          await(mockPreferencePredicate.refine(agentWithPref)) shouldBe
+            Left(Redirect("/immafiringmuhlaserbwaaaaaaaaaaah"))
         }
       }
     }
