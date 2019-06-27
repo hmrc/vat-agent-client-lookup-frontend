@@ -51,8 +51,7 @@ class ConfirmClientVrnController @Inject()(val messagesApi: MessagesApi,
           )
 
           Ok(views.html.agent.confirmClientVrn(user.vrn, customerDetails))
-
-        case Left(Migration)   => PreconditionFailed(views.html.errors.accountMigration())
+        case Left(Migration) => PreconditionFailed(views.html.errors.accountMigration())
         case Left(NotSignedUp) => NotFound(views.html.errors.notSignedUp())
         case _ =>
           Logger.warn("[ConfirmClientVrnController][show] Error returned from GetCustomerDetails")
@@ -72,7 +71,7 @@ class ConfirmClientVrnController @Inject()(val messagesApi: MessagesApi,
   def redirect: Action[AnyContent] = authenticate {
     implicit user =>
 
-      if(appConfig.features.whereToGoFeature()) {
+      if (appConfig.features.whereToGoFeature()) {
         user.session.get(SessionKeys.redirectUrl) match {
           case Some(redirectUrl) =>
             user.session.get(SessionKeys.preference) match {
@@ -83,7 +82,7 @@ class ConfirmClientVrnController @Inject()(val messagesApi: MessagesApi,
             Logger.debug("[ConfirmClientVrnController][redirect] User has come from portal. Redirecting to 'What To Do' page.")
             Redirect(controllers.agent.routes.WhatToDoController.show())
         }
-      //TODO: all remaining logic will become redundant and should be removed when whereToGoFeature permanently on
+        //TODO: all remaining logic will become redundant and should be removed when whereToGoFeature permanently on
       } else {
         user.session.get(SessionKeys.redirectUrl) match {
           case Some(redirectUrl) => Redirect(redirectUrl)

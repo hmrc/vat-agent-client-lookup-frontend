@@ -37,38 +37,12 @@ class NotSignedUpViewSpec extends ViewBaseSpec {
 
     "have the correct main paragraph" in {
       elementText("#content article p:nth-of-type(1)") shouldBe
-        "You cannot use this service for your client’s business as the business has not signed up for Making Tax Digital for VAT."
+        "If you want to make any changes to your client’s details, you’ll need to sign them up to Making Tax Digital for VAT (opens in a new tab)."
     }
 
-    "have the correct list header text" in {
-      elementText("h2") shouldBe "What happens next"
-    }
-
-    "have the guidance list which" should {
-
-      "have contain the first list item which" should {
-
-        "have the correct text" in {
-          elementText("#content li:nth-of-type(1)") shouldBe
-            "sign up for Making Tax Digital for VAT (opens in a new tab) to make changes to your client’s business details"
-        }
-
-        "have the correct href" in {
-          element("#content li:nth-of-type(1) > a").attr("href") shouldBe "guidance/agent-sign-up"
-        }
-      }
-
-      "have contain the second list item which" should {
-
-        "have the correct text" in {
-          elementText("li:nth-of-type(2)") shouldBe
-            "submit VAT Returns and manage your client’s business details (opens in a new tab) without signing up to Making Tax Digital for VAT"
-        }
-
-        "have the correct href" in {
-          element("li:nth-of-type(2) > a").attr("href") shouldBe "guidance/submit-vat-returns"
-        }
-      }
+    "have the correct second paragraph" in {
+      elementText("#content article p:nth-of-type(2)") shouldBe
+        "You can sign out and use your existing HMRC online services account to submit VAT Returns and manage your client’s business details."
     }
 
     "have the correct link for making changes to a different client which" should {
