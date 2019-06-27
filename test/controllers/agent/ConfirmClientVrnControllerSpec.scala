@@ -30,6 +30,7 @@ import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.verify
 import play.api.http.Status
+import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
@@ -190,7 +191,13 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
 
         "a redirect URL and client's VRN are held in session" should {
 
-          lazy val result = TestConfirmClientVrnController.changeClient(fakeRequestWithVrnAndRedirectUrl)
+          lazy val result = TestConfirmClientVrnController.changeClient(
+            request.withSession(
+              SessionKeys.clientVRN -> vrn,
+              SessionKeys.redirectUrl -> "/homepage",
+              SessionKeys.notificationsEmail -> "an.email@ahost.com"
+            )
+          )
 
           "return status redirect SEE_OTHER (303)" in {
             mockAgentAuthorised()
@@ -201,6 +208,14 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
             redirectLocation(result) shouldBe
               Some(controllers.agent.routes.SelectClientVrnController.show("/homepage").url)
           }
+
+          "the client VRN should be cleared" in {
+            session(result).get(SessionKeys.clientVRN) shouldBe None
+          }
+
+          "the agent email should be retained" in {
+            session(result).get(SessionKeys.notificationsEmail) shouldBe Some("an.email@ahost.com")
+          }
         }
 
         "a client's VRN is held in session, but no redirect URL" when {
@@ -210,7 +225,8 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
             lazy val result = {
               mockConfig.features.whereToGoFeature(true)
               TestConfirmClientVrnController.changeClient(request.withSession(
-                SessionKeys.clientVRN -> vrn
+                SessionKeys.clientVRN -> vrn,
+                SessionKeys.notificationsEmail -> "an.email@ahost.com"
               ))
             }
 
@@ -223,13 +239,22 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
               redirectLocation(result) shouldBe
                 Some(controllers.agent.routes.SelectClientVrnController.show().url)
             }
+
+            "the client VRN should be cleared" in {
+              session(result).get(SessionKeys.clientVRN) shouldBe None
+            }
+
+            "the agent email should be retained" in {
+              session(result).get(SessionKeys.notificationsEmail) shouldBe Some("an.email@ahost.com")
+            }
           }
 
           "whatToDo feature switch is off" should {
             lazy val result = {
               mockConfig.features.whereToGoFeature(false)
               TestConfirmClientVrnController.changeClient(request.withSession(
-                SessionKeys.clientVRN -> vrn
+                SessionKeys.clientVRN -> vrn,
+                SessionKeys.notificationsEmail -> "an.email@ahost.com"
               ))
             }
 
@@ -241,6 +266,14 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
             "redirect to the Select Your Client show action with the default redirect URL (ChoC overview)" in {
               redirectLocation(result) shouldBe
                 Some(controllers.agent.routes.SelectClientVrnController.show(mockConfig.manageVatCustomerDetailsUrl).url)
+            }
+
+            "the client VRN should be cleared" in {
+              session(result).get(SessionKeys.clientVRN) shouldBe None
+            }
+
+            "the agent email should be retained" in {
+              session(result).get(SessionKeys.notificationsEmail) shouldBe Some("an.email@ahost.com")
             }
           }
         }
@@ -272,7 +305,8 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
               TestConfirmClientVrnController.redirect(FakeRequest().withSession(
                 SessionKeys.clientVRN -> vrn,
                 SessionKeys.redirectUrl -> "/homepage",
-                SessionKeys.preference -> "no"
+                SessionKeys.preference -> "no",
+                SessionKeys.notificationsEmail -> "an.email@ahost.com"
               ))
             }
 
@@ -285,6 +319,14 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
             "redirect to the redirect URL in session" in {
               redirectLocation(result) shouldBe Some("/homepage")
             }
+
+            "the client VRN should be retained" in {
+              session(result).get(SessionKeys.clientVRN) shouldBe Some(vrn)
+            }
+
+            "the agent email should be retained" in {
+              session(result).get(SessionKeys.notificationsEmail) shouldBe Some("an.email@ahost.com")
+            }
           }
 
           "notification preference is not in session" should {
@@ -293,7 +335,8 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
               mockConfig.features.whereToGoFeature(true)
               TestConfirmClientVrnController.redirect(FakeRequest().withSession(
                 SessionKeys.clientVRN -> vrn,
-                SessionKeys.redirectUrl -> "/homepage"
+                SessionKeys.redirectUrl -> "/homepage",
+                SessionKeys.notificationsEmail -> "an.email@ahost.com"
               ))
             }
 
@@ -313,7 +356,10 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
 
           lazy val result = {
             mockConfig.features.whereToGoFeature(true)
-            TestConfirmClientVrnController.redirect(FakeRequest().withSession(SessionKeys.clientVRN -> vrn))
+            TestConfirmClientVrnController.redirect(FakeRequest().withSession(
+              SessionKeys.clientVRN -> vrn,
+              SessionKeys.notificationsEmail -> "an.email@ahost.com"
+            ))
           }
 
           "return status SEE_OTHER (303)" in {
@@ -332,7 +378,13 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
 
         "a clients VRN is held in session and a redirect URL is found" should {
 
-          lazy val result = TestConfirmClientVrnController.redirect(fakeRequestWithVrnAndRedirectUrl)
+          lazy val result = TestConfirmClientVrnController.redirect(
+            request.withSession(
+              SessionKeys.clientVRN -> vrn,
+              SessionKeys.redirectUrl -> "/homepage",
+              SessionKeys.notificationsEmail -> "an.email@ahost.com"
+            )
+          )
 
           "return status SEE_OTHER (303)" in {
             mockAgentAuthorised()
@@ -343,11 +395,22 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           "redirect to the Select Your Client show action" in {
             redirectLocation(result) shouldBe Some("/homepage")
           }
+
+          "the client VRN should be retained" in {
+            session(result).get(SessionKeys.clientVRN) shouldBe Some(vrn)
+          }
+
+          "the agent email should be retained" in {
+            session(result).get(SessionKeys.notificationsEmail) shouldBe Some("an.email@ahost.com")
+          }
         }
 
         "a client's VRN is held in session but no redirect URL is found" should {
 
-          lazy val result = TestConfirmClientVrnController.redirect(request.withSession(common.SessionKeys.clientVRN -> vrn))
+          lazy val result = TestConfirmClientVrnController.redirect(request.withSession(
+            common.SessionKeys.clientVRN -> vrn,
+            common.SessionKeys.notificationsEmail -> "an.email@host.com"
+          ))
 
           "return status INTERNAL_SERVER_ERROR (500)" in {
             mockAgentAuthorised()

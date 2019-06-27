@@ -76,7 +76,7 @@ class ConfirmClientVrnController @Inject()(val messagesApi: MessagesApi,
         user.session.get(SessionKeys.redirectUrl) match {
           case Some(redirectUrl) =>
             user.session.get(SessionKeys.preference) match {
-              case Some(_) => Redirect(redirectUrl).removingFromSession(SessionKeys.redirectUrl, SessionKeys.notificationsEmail)
+              case Some(_) => Redirect(redirectUrl).removingFromSession(SessionKeys.redirectUrl)
               case None => Redirect(controllers.agent.routes.CapturePreferenceController.show())
             }
           case _ =>
@@ -87,7 +87,7 @@ class ConfirmClientVrnController @Inject()(val messagesApi: MessagesApi,
       } else {
         user.session.get(SessionKeys.redirectUrl) match {
           case Some(redirectUrl) => Redirect(redirectUrl)
-            .removingFromSession(SessionKeys.redirectUrl, SessionKeys.notificationsEmail)
+            .removingFromSession(SessionKeys.redirectUrl)
 
           case _ =>
             Logger.debug("[ConfirmClientVrnController][show] - No redirect URL was found in session")

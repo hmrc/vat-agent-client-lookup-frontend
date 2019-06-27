@@ -33,16 +33,16 @@
     <h3 class="bold-medium">@messages("confirmClientVrn.vrn")</h3>
     <p>@vrn</p>
 
+    <p>
+        <a data-journey-click="select-client:change:confirm-client-vat-number"
+        href="@controllers.agent.routes.ConfirmClientVrnController.changeClient()">
+        @messages("confirmClientVrn.edit")
+        </a>
+    </p>
+
     <a data-journey-click="select-client:confirm:confirm-client-vat-number"
        href="@controllers.agent.routes.ConfirmClientVrnController.redirect()"
        class="button form-group">
         @messages("common.confirmAndContinue")
     </a>
-
-    <p>
-      <a data-journey-click="select-client:change:confirm-client-vat-number"
-         href="@controllers.agent.routes.ConfirmClientVrnController.changeClient()">
-          @messages("confirmClientVrn.edit")
-      </a>
-    </p>
 }
