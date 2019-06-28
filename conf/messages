@@ -83,12 +83,11 @@ accountMigration.explanation = This is because the business’s Making Tax Digit
 accountMigration.checkBackLater = Check back again later.
 
 notSignedUp.heading = The business has not signed up to Making Tax Digital for VAT
-notSignedUp.explanation = You cannot use this service for your client’s business as the business has not signed up for Making Tax Digital for VAT.
-notSignedUp.listHeading = What happens next
-notSignedUp.listItem1Link = sign up for Making Tax Digital for VAT (opens in a new tab)
-notSignedUp.listItem1Text = to make changes to your client’s business details
-notSignedUp.listItem2Link = submit VAT Returns and manage your client’s business details (opens in a new tab)
-notSignedUp.listItem2Text = without signing up to Making Tax Digital for VAT
+notSignedUp.paragraph1Text = If you want to make any changes to your client’s details, you’ll need to
+notSignedUp.paragraph1Link = sign them up to Making Tax Digital for VAT (opens in a new tab).
+notSignedUp.paragraph2Text1 = You can
+notSignedUp.paragraph2Text2 = to submit VAT Returns and manage your client’s business details.
+notSignedUp.paragraph2Link = sign out and use your existing HMRC online services account
 
 whatToDo.heading = What would you like to do for {0}?
 whatToDo.submitReturn = Submit VAT return
