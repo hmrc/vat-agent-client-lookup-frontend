@@ -62,6 +62,7 @@ trait AppConfig extends ServicesConfig {
   val vatCertificateUrl: String
   val submittedReturnsUrl: Int => String
   val returnDeadlinesUrl: String
+  val classicServicesSignInUrl: String
 }
 
 @Singleton
@@ -101,6 +102,8 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
 
   override lazy val feedbackSignOutUrl: String = s"$governmentGatewayHost/gg/sign-out?continue=$feedbackSurveyUrl"
   override lazy val unauthorisedSignOutUrl: String = s"$governmentGatewayHost/gg/sign-out?continue=$signInContinueUrl"
+
+  override lazy val classicServicesSignInUrl: String = s"$governmentGatewayHost/gg/sign-out?continue=${getString(Keys.classicServicesSignIn)}"
 
   override def routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchToLanguage(lang)
   override def languageMap: Map[String, Lang] = Map(

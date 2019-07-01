@@ -68,4 +68,6 @@ object ConfigKeys {
   val viewVatReturnsFrontendHost: String = "view-vat-returns-frontend.host"
   val submittedReturnsEndpoint: String = "view-vat-returns-frontend.endpoints.submitted-returns"
   val returnDeadlinesEndpoint: String = "view-vat-returns-frontend.endpoints.return-deadlines"
+
+  val classicServicesSignIn: String = "classic-services.sign-in-url"
 }
