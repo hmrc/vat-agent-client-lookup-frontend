@@ -20,19 +20,22 @@
 
 @views.html.main_template(title = messages("common.agentService")) {
 
-    <h1>@messages("notSignedUp.heading")</h1>
+  <h1>@messages("notSignedUp.heading")</h1>
 
-    <p>
-        @messages("notSignedUp.paragraph1Text") <a href = "https://www.gov.uk/guidance/making-tax-digital-for-vat-as-an-agent-step-by-step"
-                                                    id="sign-up-to-mtd" target="_blank">@messages("notSignedUp.paragraph1Link")</a>
-    </p>
+  <p>
+    @messages("notSignedUp.paragraph1Text")
+    <a href = "https://www.gov.uk/guidance/making-tax-digital-for-vat-as-an-agent-step-by-step"
+    id="sign-up-to-mtd" target="_blank">@messages("notSignedUp.paragraph1Link")</a>
+  </p>
 
-    <p>
-        @messages("notSignedUp.paragraph2Text1") <a href="https://www.gov.uk/log-in-register-hmrc-online-services"
-                                                    id="use-existing-hmrc-service-account">@messages("notSignedUp.paragraph2Link")</a> @messages("notSignedUp.paragraph2Text2")
-    </p>
+  <p>
+    @messages("notSignedUp.paragraph2Text1")
+    <a href="@appConfig.classicServicesSignInUrl"
+    id="use-existing-hmrc-service-account">@messages("notSignedUp.paragraph2Link")</a>
+    @messages("notSignedUp.paragraph2Text2")
+  </p>
 
-    <a id="change-client-link" href="@controllers.agent.routes.SelectClientVrnController.show()">
-        @messages("common.differentClient")
-    </a>
+  <a id="change-client-link" href="@controllers.agent.routes.SelectClientVrnController.show()">
+    @messages("common.differentClient")
+  </a>
 }

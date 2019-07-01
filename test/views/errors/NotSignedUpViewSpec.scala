@@ -40,9 +40,16 @@ class NotSignedUpViewSpec extends ViewBaseSpec {
         "If you want to make any changes to your client’s details, you’ll need to sign them up to Making Tax Digital for VAT (opens in a new tab)."
     }
 
-    "have the correct second paragraph" in {
-      elementText("#content article p:nth-of-type(2)") shouldBe
-        "You can sign out and use your existing HMRC online services account to submit VAT Returns and manage your client’s business details."
+    "have the correct second paragraph" should {
+
+      "have the correct text" in {
+        elementText("#content article p:nth-of-type(2)") shouldBe
+          "You can sign out and use your existing HMRC online services account to submit VAT Returns and manage your client’s business details."
+      }
+
+      "have the correct redirect url to the classic services sign in page" in {
+        element("#use-existing-hmrc-service-account").attr("href") shouldBe "/classic-services-sign-in"
+      }
     }
 
     "have the correct link for making changes to a different client which" should {
