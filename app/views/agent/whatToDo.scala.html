@@ -30,7 +30,7 @@
 
     @helpers.form(action = controllers.agent.routes.WhatToDoController.submit) {
 
-        <div class="form-group" id="option" data-metrics="vat-agent-client-lookup:view:agent-action;true">
+        <div class="form-group" id="option" data-journey="agent_choose-option:view:agent-action">
 
             @if(form.errors.nonEmpty) {
                 @errorSummary(messages("common.errorSummary.heading"), form)
@@ -53,7 +53,7 @@
         </div>
 
         <button
-            onClick="sendGAEvent('vat-agent-client-lookup', 'continue', 'agent-action', true)"
+            data-journey-click="agent_choose-option:submit:agent-action"
             class="button"
             type ="submit"
             id="continue">
