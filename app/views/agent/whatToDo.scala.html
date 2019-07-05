@@ -23,7 +23,10 @@
 
 @(form: Form[WhatToDoModel], name: String, nonMTDfB: Boolean)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@main_template(title = s"${if(form.errors.nonEmpty) "Error: " else ""}${messages("whatToDo.heading", name)}", bodyClasses = None) {
+@main_template(
+    if(form.errors.nonEmpty) messages("common.error.prefixTitle", messages("whatToDo.heading", name)) else messages("whatToDo.heading", name),
+    bodyClasses = None
+) {
 
     @helpers.form(action = controllers.agent.routes.WhatToDoController.submit) {
 
