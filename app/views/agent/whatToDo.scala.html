@@ -23,11 +23,14 @@
 
 @(form: Form[WhatToDoModel], name: String, nonMTDfB: Boolean)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@main_template(title = s"${if(form.errors.nonEmpty) "Error: " else ""}${messages("whatToDo.heading", name)}", bodyClasses = None) {
+@main_template(
+    if(form.errors.nonEmpty) messages("common.error.prefixTitle", messages("whatToDo.heading", name)) else messages("whatToDo.heading", name),
+    bodyClasses = None
+) {
 
     @helpers.form(action = controllers.agent.routes.WhatToDoController.submit) {
 
-        <div class="form-group" id="option">
+        <div class="form-group" id="option" data-journey="agent_choose-option:view:agent-action">
 
             @if(form.errors.nonEmpty) {
                 @errorSummary(messages("common.errorSummary.heading"), form)
@@ -49,7 +52,11 @@
             )
         </div>
 
-        <button class="button" type ="submit" id="continue">
+        <button
+            data-journey-click="agent_choose-option:submit:agent-action"
+            class="button"
+            type ="submit"
+            id="continue">
             @messages("common.continue")
         </button>
     }
