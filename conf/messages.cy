@@ -41,7 +41,7 @@ clientsVrn.title = Beth yw rhif TAW eich cleient?
 clientsVrn.heading = Beth yw rhif TAW eich cleient?
 clientsVrn.p1 = Dyma’r rhif 9 digid a gafodd wrth gofrestru ar gyfer TAW.
 clientsVrn.example = Er enghraifft, ‘123456789’
-clientsVrn.label = Rhif TAW y cleient
+clientsVrn.label = Beth yw rhif TAW eich cleient?
 
 clientVrnForm.error.missing = Nodwch rif TAW eich cleient
 clientVrnForm.error.invalid = Nodwch rif TAW yn y fformat cywir
