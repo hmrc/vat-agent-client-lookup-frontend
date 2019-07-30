@@ -41,7 +41,7 @@ clientsVrn.title = What is your client’s VAT number?
 clientsVrn.heading = What is your client’s VAT number?
 clientsVrn.p1 = This is the 9-digit number they received when they registered for VAT.
 clientsVrn.example = For example, ''123456789''
-clientsVrn.label = Client’s VAT Number
+clientsVrn.label = What is your client’s VAT number?
 
 clientVrnForm.error.missing = Enter your client’s VAT number
 clientVrnForm.error.invalid = Enter a VAT number in the correct format
