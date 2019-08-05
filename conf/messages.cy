@@ -89,4 +89,19 @@ notSignedUp.listItem1Link = cofrestru ar gyfer Troi Treth yn Ddigidol ar gyfer T
 notSignedUp.listItem1Text = i wneud newidiadau i fanylion busnes eich cleient
 notSignedUp.listItem2Link = cyflwyno Ffurflenni TAW a rheoli manylion busnes eich cleient (yn agor tab newydd)
 notSignedUp.listItem2Text = heb gofrestru ar gyfer Troi Treth yn Ddigidol ar gyfer TAW
+notSignedUp.paragraph1Text = Os ydych am wneud newidiadau i fanylion eich cleient, bydd angen i chi
+notSignedUp.paragraph1Link = ei gofrestru ar gyfer Troi Treth yn Ddigidol ar gyfer TAW (yn agor tab newydd).
+notSignedUp.paragraph2Text1 = Gallwch
+notSignedUp.paragraph2Text2 = gyflwyno Ffurflenni TAW a rheoli manylion busnes eich cleient.
+notSignedUp.paragraph2Link = allgofnodi a defnyddio’ch cyfrif Gwasanaethau Ar-lein CThEM presennol
+
+
+
+whatToDo.heading = Beth ydych am ei wneud ar gyfer {0}?
+whatToDo.submitReturn = Cyflwyno Ffurflen TAW
+whatToDo.viewReturns = Bwrw golwg dros y Ffurflenni TAW a gyflwynwyd
+whatToDo.changeDetails = Newid manylion TAW
+whatToDo.viewCertificate = Bwrw golwg dros y dystysgrif TAW
+whatToDo.error.mandatoryRadioOption = Dewiswch beth ydych am ei wneud ar gyfer y cleient hwn
+
 
