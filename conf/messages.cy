@@ -26,7 +26,7 @@ unauthorised.agentForClient.enterDetails = Os ydych yn credu eich bod wedi nodiâ
 unauthorised.agentForClient.tryAgain = roi cynnig arall arni
 
 common.confirmAndContinue = Cadarnhau ac yn eich blaen
-common.agentService = Manylion TAW eich cleient
+common.agentService = Manylion TAW y cleient
 common.errorSummary.heading = Mae gennych un neu fwy o wallau
 common.continue = Yn eich blaen
 common.fullStop = .
