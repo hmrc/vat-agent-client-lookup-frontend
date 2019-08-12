@@ -30,7 +30,7 @@ class TextTemplateSpec extends TemplateBaseSpec {
     val hintText = "hintText"
     val errorMessage = "error message"
 
-    "the field is not populated and hint text is supplied" should {
+    "the field is not populated" should {
 
       val field: Field = Field(ClientVrnForm.form, fieldName, Seq(), None, Seq(), None)
 
@@ -39,20 +39,14 @@ class TextTemplateSpec extends TemplateBaseSpec {
            |
            |<div class="form-field">
            |  <label for="$fieldName" class="  ">
-           |      <span class="form-label visuallyhidden">
-           |          $labelText
-           |      </span>
-           |      <span class="form-hint">
-           |          $hintText
-           |      </span>
-           |      <input type="text" class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="">
+           |      <input type="text" class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="" aria-describedby=""/>
            |  </label>
            |</div>
            |
         """.stripMargin
       )
 
-      val markup = views.html.templates.inputs.text(field, labelText, Some(hintText))
+      val markup = views.html.templates.inputs.text(field, labelText)
 
       "generate the correct markup" in {
         formatHtml(markup) shouldBe formatHtml(expectedMarkup)
@@ -69,13 +63,7 @@ class TextTemplateSpec extends TemplateBaseSpec {
            |
            |<div class="form-field">
            |  <label for="$fieldName" class="  ">
-           |      <span class="form-label visuallyhidden">
-           |          $labelText
-           |      </span>
-           |      <span class="form-hint">
-           |          $hintText
-           |      </span>
-           |      <input type="text" class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="$value">
+           |    <input type="text" class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="$value" aria-describedby=""/>
            |  </label>
            |</div>
            |
@@ -98,16 +86,10 @@ class TextTemplateSpec extends TemplateBaseSpec {
            |
            |<div class="form-field">
            |  <label for="$fieldName" class="  form-field--error">
-           |      <span class="form-label visuallyhidden">
-           |          $labelText
-           |      </span>
-           |      <span class="form-hint">
-           |          $hintText
-           |      </span>
            |      <span class="error-notification" role="tooltip" data-journey="search-page:error:$fieldName">
            |          $errorMessage
            |      </span>
-           |      <input type="text" class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="">
+           |      <input type="text" class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="" aria-describedby=""/>
            |  </label>
            |</div>
            |
@@ -115,32 +97,6 @@ class TextTemplateSpec extends TemplateBaseSpec {
       )
 
       val markup = views.html.templates.inputs.text(field, labelText, Some(hintText))
-
-      "generate the correct markup" in {
-        formatHtml(markup) shouldBe formatHtml(expectedMarkup)
-      }
-    }
-
-    "hint text is not supplied" should {
-
-      val field: Field = Field(ClientVrnForm.form, fieldName, Seq(), None, Seq(), None)
-
-      val expectedMarkup = Html(
-        s"""
-           |
-           |<div class="form-field">
-           |  <label for="$fieldName" class="  ">
-           |      <span class="form-label visuallyhidden">
-           |          $labelText
-           |      </span>
-           |      <input type="text" class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="">
-           |  </label>
-           |</div>
-           |
-        """.stripMargin
-      )
-
-      val markup = views.html.templates.inputs.text(field, labelText, None)
 
       "generate the correct markup" in {
         formatHtml(markup) shouldBe formatHtml(expectedMarkup)

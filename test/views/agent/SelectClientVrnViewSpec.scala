@@ -52,7 +52,7 @@ class SelectClientVrnViewSpec extends ViewBaseSpec {
       }
 
       s"have an input box for the VRN" in {
-        elementText("label[for = vrn] > .visuallyhidden") shouldBe viewMessages.label
+        elementText("label[for = vrn]") shouldBe viewMessages.label
       }
 
       s"have a submit button with the text '${BaseMessages.continue}'" in {

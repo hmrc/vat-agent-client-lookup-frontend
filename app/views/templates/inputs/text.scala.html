@@ -16,23 +16,13 @@
 
 @import uk.gov.hmrc.play.views.html.helpers
 
-@(field: Field, label: String, hint: Option[String] = None)(implicit messages: Messages)
+@(field: Field, label: String, hint: Option[String] = None, hintId: String = "")(implicit messages: Messages)
 
 <div class="form-field">
-    @if(hint.isDefined) {
-        @helpers.input(
-            field,
-            '_label -> messages(label),
-            '_labelTextClass -> "form-label visuallyhidden",
-            '_inputHint -> messages(hint.get),
-            '_inputClass -> "form-control input--no-spinner"
-        )
-    } else {
-        @helpers.input(
-            field,
-            '_label -> messages(label),
-            '_labelTextClass -> "form-label visuallyhidden",
-            '_inputClass -> "form-control input--no-spinner"
-        )
-    }
+
+    @helpers.input(
+        field,
+        '_inputClass -> "form-control input--no-spinner",
+        '_hintId -> hintId
+    )
 </div>
