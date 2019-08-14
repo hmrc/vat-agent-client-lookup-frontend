@@ -33,7 +33,7 @@
         <div class="form-group" id="option" data-journey="agent_choose-option:view:agent-action">
 
             @if(form.errors.nonEmpty) {
-                @errorSummary(messages("common.errorSummary.heading"), form)
+                @errorSummary(messages("common.error.heading"), form)
             }
 
             @radioHelper(
