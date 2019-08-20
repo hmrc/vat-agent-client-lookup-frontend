@@ -42,7 +42,7 @@ class ConfirmEmailViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct title" in {
-      document.title() shouldBe "Confirm the email address"
+      document.title() shouldBe "Confirm the email address - Client’s VAT details - GOV.UK"
     }
 
     "have the correct heading" in {
