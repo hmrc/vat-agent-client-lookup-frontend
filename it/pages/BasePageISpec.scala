@@ -49,7 +49,7 @@ trait BasePageISpec extends IntegrationBaseSpec {
 
         res should have(
           httpStatus(UNAUTHORIZED),
-          pageTitle(Messages("sessionTimeout.title"))
+          pageTitle(Messages("sessionTimeout.title") + " - Client’s VAT details - GOV.UK")
         )
       }
     }
@@ -65,7 +65,7 @@ trait BasePageISpec extends IntegrationBaseSpec {
 
         res should have(
           httpStatus(INTERNAL_SERVER_ERROR),
-          pageTitle(Messages("standardError.title"))
+          pageTitle(Messages("standardError.title") + " - Client’s VAT details - GOV.UK")
         )
       }
     }

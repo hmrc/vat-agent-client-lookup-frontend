@@ -1,5 +1,6 @@
 base.signOut = Allgofnodi
 base.back = Yn ôl
+base.pageTitle = {0} - {1} - GOV.UK
 
 common.yes = Iawn
 common.no = Na
@@ -7,7 +8,7 @@ common.error.heading = Mae problem wedi codi
 common.error.prefixTitle = Gwall: {0}
 common.differentClient = Gwneud newidiadau ar gyfer cleient gwahanol
 
-standardError.title = Mae problem gyda’r gwasanaeth – Rhoi gwybod am TAW drwy feddalwedd – GOV.UK
+standardError.title = Mae problem gyda’r gwasanaeth
 standardError.heading = Mae’n ddrwg gennym – mae problem gyda’r gwasanaeth
 standardError.message = Rhowch gynnig arall arni yn nes ymlaen.
 

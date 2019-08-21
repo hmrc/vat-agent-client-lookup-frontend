@@ -1,5 +1,6 @@
 base.signOut = Sign out
 base.back = Back
+base.pageTitle = {0} - {1} - GOV.UK
 
 common.yes = Yes
 common.no = No
@@ -7,7 +8,7 @@ common.error.heading = There is a problem
 common.error.prefixTitle = Error: {0}
 common.differentClient = Make changes for a different client
 
-standardError.title = There is a problem with the service - VAT reporting through software - GOV.UK
+standardError.title = There is a problem with the service
 standardError.heading = Sorry, there is a problem with the service
 standardError.message = Try again later.
 

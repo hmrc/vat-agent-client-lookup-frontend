@@ -56,7 +56,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
         val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
         status(result) shouldBe OK
-        Jsoup.parse(bodyOf(result)).title() shouldBe title(firstName)
+        Jsoup.parse(bodyOf(result)).title() shouldBe (title(firstName) + " - Client’s VAT details - GOV.UK")
       }
     }
     "render the error page" when {
@@ -69,7 +69,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
         val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
         status(result) shouldBe INTERNAL_SERVER_ERROR
-        Jsoup.parse(bodyOf(result)).title() shouldBe "There is a problem with the service - VAT reporting through software - GOV.UK"
+        Jsoup.parse(bodyOf(result)).title() shouldBe "There is a problem with the service - Client’s VAT details - GOV.UK"
       }
 
       "the whereToGo feature is off" in new Test {
@@ -80,7 +80,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
         val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
         status(result) shouldBe INTERNAL_SERVER_ERROR
-        Jsoup.parse(bodyOf(result)).title() shouldBe "There is a problem with the service - VAT reporting through software - GOV.UK"
+        Jsoup.parse(bodyOf(result)).title() shouldBe "There is a problem with the service - Client’s VAT details - GOV.UK"
       }
     }
   }
@@ -143,7 +143,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
         val parsedBody: Document = Jsoup.parse(bodyOf(result))
 
         status(result) shouldBe BAD_REQUEST
-        parsedBody.title() shouldBe "Error: " + title("l'biz")
+        parsedBody.title() shouldBe "Error: " + (title("l'biz") + " - Client’s VAT details - GOV.UK")
 
         parsedBody.body().toString should include(error)
       }
@@ -157,7 +157,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
         val parsedBody: Document = Jsoup.parse(bodyOf(result))
 
         status(result) shouldBe INTERNAL_SERVER_ERROR
-        parsedBody.title shouldBe "There is a problem with the service - VAT reporting through software - GOV.UK"
+        parsedBody.title shouldBe "There is a problem with the service - Client’s VAT details - GOV.UK"
       }
 
       "the form submitted is incorrect, there's no session data and customerDetailService call is successful" in new Test {
@@ -171,7 +171,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
         val parsedBody: Document = Jsoup.parse(bodyOf(result))
 
         status(result) shouldBe BAD_REQUEST
-        parsedBody.title() shouldBe "Error: " + title(firstName)
+        parsedBody.title() shouldBe "Error: " + (title(firstName) + " - Client’s VAT details - GOV.UK")
 
         parsedBody.body().toString should include(error)
       }
@@ -201,7 +201,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
         val parsedBody: Document = Jsoup.parse(bodyOf(result))
 
         status(result) shouldBe INTERNAL_SERVER_ERROR
-        parsedBody.title shouldBe "There is a problem with the service - VAT reporting through software - GOV.UK"
+        parsedBody.title shouldBe "There is a problem with the service - Client’s VAT details - GOV.UK"
       }
     }
   }
