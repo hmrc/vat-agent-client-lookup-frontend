@@ -34,6 +34,10 @@ class WhatToDoViewSpec extends ViewBaseSpec {
       lazy val view = views.html.agent.whatToDo(WhatToDoForm.whatToDoForm, "l'biz", true)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
+      s"have the correct document title" in {
+        document.title shouldBe ("What would you like to do for l'biz? - Your client’s VAT details - GOV.UK")
+      }
+
       "display the correct heading" in {
         elementText("#page-heading") shouldBe Messages.title("l'biz")
       }
@@ -54,6 +58,10 @@ class WhatToDoViewSpec extends ViewBaseSpec {
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
       lazy val view = views.html.agent.whatToDo(WhatToDoForm.whatToDoForm, "l'biz", false)
       lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      s"have the correct document title" in {
+        document.title shouldBe ("What would you like to do for l'biz? - Your client’s VAT details - GOV.UK")
+      }
 
       "display the correct heading" in {
         elementText("#page-heading") shouldBe Messages.title("l'biz")

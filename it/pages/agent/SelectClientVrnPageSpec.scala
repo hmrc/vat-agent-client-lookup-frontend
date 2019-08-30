@@ -100,7 +100,7 @@ class SelectClientVrnPageSpec extends BasePageISpec {
 
           res should have(
             httpStatus(FORBIDDEN),
-            pageTitle(Messages("unauthorised.agent.title") + " - Client’s VAT details - GOV.UK")
+            pageTitle(Messages("unauthorised.agent.title") + " - Your client’s VAT details - GOV.UK")
           )
         }
       }
@@ -117,7 +117,7 @@ class SelectClientVrnPageSpec extends BasePageISpec {
 
         res should have(
           httpStatus(INTERNAL_SERVER_ERROR),
-          pageTitle(Messages("standardError.title") + " - Client’s VAT details - GOV.UK")
+          pageTitle(Messages("standardError.title") + " - Your client’s VAT details - GOV.UK")
         )
       }
     }
@@ -192,7 +192,7 @@ class SelectClientVrnPageSpec extends BasePageISpec {
 
           res should have(
             httpStatus(FORBIDDEN),
-            pageTitle(Messages("unauthorised.agent.title") + " - Client’s VAT details - GOV.UK")
+            pageTitle(Messages("unauthorised.agent.title") + " - Your client’s VAT details - GOV.UK")
           )
         }
       }
@@ -209,7 +209,7 @@ class SelectClientVrnPageSpec extends BasePageISpec {
 
         res should have(
           httpStatus(INTERNAL_SERVER_ERROR),
-          pageTitle(Messages("standardError.title") + " - Client’s VAT details - GOV.UK")
+          pageTitle(Messages("standardError.title") + " - Your client’s VAT details - GOV.UK")
         )
       }
     }

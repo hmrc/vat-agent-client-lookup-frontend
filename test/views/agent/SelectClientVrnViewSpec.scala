@@ -32,7 +32,7 @@ class SelectClientVrnViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct document title of '${viewMessages.title}'" in {
-        document.title shouldBe (viewMessages.title + " - Client’s VAT details - GOV.UK")
+        document.title shouldBe (viewMessages.title + " - Your client’s VAT details - GOV.UK")
       }
 
       s"have the correct service name" in {
@@ -80,7 +80,7 @@ class SelectClientVrnViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {
-        document.title shouldBe "Error: " + (viewMessages.title + " - Client’s VAT details - GOV.UK")
+        document.title shouldBe "Error: " + (viewMessages.title + " - Your client’s VAT details - GOV.UK")
       }
 
       "have a form error box" which {

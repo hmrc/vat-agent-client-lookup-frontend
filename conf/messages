@@ -27,7 +27,7 @@ unauthorised.agentForClient.enterDetails = If you think you have entered the wro
 unauthorised.agentForClient.tryAgain = try again
 
 common.confirmAndContinue = Confirm and continue
-common.agentService = Client’s VAT details
+common.agentService = Your client’s VAT details
 common.errorSummary.heading = You have one or more errors
 common.continue = Continue
 common.fullStop = .

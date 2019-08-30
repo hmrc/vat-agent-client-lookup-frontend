@@ -98,7 +98,7 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerifi
       }
 
       "show the technical difficulties page" in {
-        document.title shouldBe "There is a problem with the service - Client’s VAT details - GOV.UK"
+        document.title shouldBe "There is a problem with the service - Your client’s VAT details - GOV.UK"
       }
     }
   }
@@ -224,7 +224,7 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerifi
         }
 
         "show the technical difficulties page" in {
-          document.title shouldBe "There is a problem with the service - Client’s VAT details - GOV.UK"
+          document.title shouldBe "There is a problem with the service - Your client’s VAT details - GOV.UK"
         }
       }
     }
@@ -348,7 +348,7 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerifi
         }
 
         "show the technical difficulties page" in {
-          document.title shouldBe "There is a problem with the service - Client’s VAT details - GOV.UK"
+          document.title shouldBe "There is a problem with the service - Your client’s VAT details - GOV.UK"
         }
       }
     }
