@@ -61,7 +61,7 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wit
         }
 
         "render selectClientVrn page" in {
-          Jsoup.parse(bodyOf(result)).title() shouldBe "What is your client’s VAT number? - Client’s VAT details - GOV.UK"
+          Jsoup.parse(bodyOf(result)).title() shouldBe "What is your client’s VAT number? - Your client’s VAT details - GOV.UK"
         }
 
         "add redirectURL to session" in {
@@ -82,7 +82,7 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wit
         }
 
         "render selectClientVrn page" in {
-          Jsoup.parse(bodyOf(result)).title() shouldBe "What is your client’s VAT number? - Client’s VAT details - GOV.UK"
+          Jsoup.parse(bodyOf(result)).title() shouldBe "What is your client’s VAT number? - Your client’s VAT details - GOV.UK"
         }
 
         "not add redirectURL to session" in {

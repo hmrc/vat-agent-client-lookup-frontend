@@ -19,7 +19,7 @@ package assets.messages
 object BaseMessages {
 
   val clientServiceName = "Business tax account"
-  val agentServiceName = "Client’s VAT details"
+  val agentServiceName = "Your client’s VAT details"
 
   val continue = "Continue"
   val confirm = "Confirm"

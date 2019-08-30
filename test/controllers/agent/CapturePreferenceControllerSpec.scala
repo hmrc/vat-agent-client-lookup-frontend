@@ -73,7 +73,7 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
           }
 
           "render capturePreference page" in {
-            Jsoup.parse(bodyOf(result)).title() shouldBe "Would you like to receive email notifications of any changes you make? - Client’s VAT details - GOV.UK"
+            Jsoup.parse(bodyOf(result)).title() shouldBe "Would you like to receive email notifications of any changes you make? - Your client’s VAT details - GOV.UK"
           }
         }
 

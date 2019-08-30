@@ -38,7 +38,7 @@ class ConfirmClientVrnViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct document title of '${viewMessages.title}'" in {
-        document.title shouldBe (viewMessages.title + " - Client’s VAT details - GOV.UK")
+        document.title shouldBe (viewMessages.title + " - Your client’s VAT details - GOV.UK")
       }
 
       s"have the correct page heading of '${viewMessages.heading}'" in {
@@ -89,7 +89,7 @@ class ConfirmClientVrnViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct document title of '${viewMessages.title}'" in {
-        document.title shouldBe (viewMessages.title + " - Client’s VAT details - GOV.UK")
+        document.title shouldBe (viewMessages.title + " - Your client’s VAT details - GOV.UK")
       }
 
       s"have the correct page heading of '${viewMessages.heading}'" in {

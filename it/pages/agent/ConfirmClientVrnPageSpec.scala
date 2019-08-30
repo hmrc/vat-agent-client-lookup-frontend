@@ -71,7 +71,7 @@ class ConfirmClientVrnPageSpec extends BasePageISpec {
 
               res should have(
                 httpStatus(INTERNAL_SERVER_ERROR),
-                pageTitle(Messages("standardError.title") + " - Client’s VAT details - GOV.UK")
+                pageTitle(Messages("standardError.title") + " - Your client’s VAT details - GOV.UK")
               )
             }
           }

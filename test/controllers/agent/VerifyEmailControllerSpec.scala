@@ -83,7 +83,7 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
         val result = TestVerifyEmailController.show(request)
 
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-        Jsoup.parse(bodyOf(result)).title shouldBe "There is a problem with the service - Client’s VAT details - GOV.UK"
+        Jsoup.parse(bodyOf(result)).title shouldBe "There is a problem with the service - Your client’s VAT details - GOV.UK"
       }
     }
   }
@@ -167,7 +167,7 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
 
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         Jsoup.parse(bodyOf(result)).title shouldBe "There is a problem with the service - " +
-          "Client’s VAT details - GOV.UK"
+          "Your client’s VAT details - GOV.UK"
       }
     }
 
