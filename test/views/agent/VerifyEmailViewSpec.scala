@@ -32,6 +32,10 @@ class VerifyEmailViewSpec extends ViewBaseSpec {
 
   "The Verify Email view" should {
 
+    s"have the correct document title" in {
+      document.title shouldBe ("Verify your email address - Your client’s VAT details - GOV.UK")
+    }
+
     "have the correct heading" in {
       document.getElementsByClass("heading-large").text() shouldBe "Verify your email address"
     }
