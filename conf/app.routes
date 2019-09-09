@@ -26,3 +26,6 @@ GET        /send-verification-request                   controllers.agent.Verify
 
 GET        /agent-action                                controllers.agent.WhatToDoController.show
 POST       /agent-action                                controllers.agent.WhatToDoController.submit
+
+# Map static resources from the /public folder to the /assets URL path
+GET        /assets/*file              controllers.Assets.at(path="/public", file)
