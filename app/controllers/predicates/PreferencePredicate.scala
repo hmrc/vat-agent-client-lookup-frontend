@@ -39,11 +39,7 @@ class PreferencePredicate @Inject()(implicit val appConfig: AppConfig,
     val preference = agent.session.get(SessionKeys.preference)
     val hasVerifiedEmail = agent.session.get(SessionKeys.verifiedAgentEmail).isDefined
 
-    val featureSwitchUrl = if(appConfig.features.whereToGoFeature()) {
-      redirectUrl
-    } else {
-      controllers.agent.routes.SelectClientVrnController.show(redirectUrl).url
-    }
+    val featureSwitchUrl = redirectUrl
 
     if(appConfig.features.preferenceJourneyEnabled()) {
       preference match {

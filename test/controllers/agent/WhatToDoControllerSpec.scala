@@ -48,7 +48,6 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
   "WhatToDoController.show" should {
     "render the page" when {
       "user is an agent" in new Test {
-        mockConfig.features.whereToGoFeature(true)
 
         mockAgentAuthorised()
         mockCustomerDetailsSuccess(customerDetailsFnameOnly)
@@ -61,21 +60,9 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
     }
     "render the error page" when {
       "an error is returned in customer details" in new Test {
-        mockConfig.features.whereToGoFeature(true)
 
         mockAgentAuthorised()
         mockCustomerDetailsError(BaseTestConstants.unexpectedError)
-
-        val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
-
-        status(result) shouldBe INTERNAL_SERVER_ERROR
-        Jsoup.parse(bodyOf(result)).title() shouldBe "There is a problem with the service - Your client’s VAT details - GOV.UK"
-      }
-
-      "the whereToGo feature is off" in new Test {
-        mockConfig.features.whereToGoFeature(false)
-
-        mockAgentAuthorised()
 
         val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
@@ -88,7 +75,6 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
   "WhatToDoController.submit" should {
     "render the page" when {
       "option 1 is selected" in new Test {
-        mockConfig.features.whereToGoFeature(true)
 
         mockAgentAuthorised()
 
@@ -99,7 +85,6 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
         redirectLocation(result) shouldBe Some(mockConfig.returnDeadlinesUrl)
       }
       "option 2 is selected" in new Test {
-        mockConfig.features.whereToGoFeature(true)
 
         mockAgentAuthorised()
 
@@ -110,7 +95,6 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
         redirectLocation(result) shouldBe Some(mockConfig.submittedReturnsUrl(1993))
       }
       "option 3 is selected with email preference in session" in new Test {
-        mockConfig.features.whereToGoFeature(true)
 
         mockAgentAuthorised()
 
@@ -121,7 +105,6 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
         redirectLocation(result) shouldBe Some(mockConfig.manageVatCustomerDetailsUrl)
       }
       "option 4 is selected" in new Test {
-        mockConfig.features.whereToGoFeature(true)
 
         mockAgentAuthorised()
 
@@ -135,7 +118,6 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
     
     "render the page with an error" when {
       "the form submitted is incorrect" in new Test {
-        mockConfig.features.whereToGoFeature(true)
 
         mockAgentAuthorised()
 
@@ -148,21 +130,8 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
         parsedBody.body().toString should include(error)
       }
 
-      "the feature switch is off" in new Test {
-        mockConfig.features.whereToGoFeature(false)
-
-        mockAgentAuthorised()
-
-        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl)
-        val parsedBody: Document = Jsoup.parse(bodyOf(result))
-
-        status(result) shouldBe INTERNAL_SERVER_ERROR
-        parsedBody.title shouldBe "There is a problem with the service - Your client’s VAT details - GOV.UK"
-      }
-
       "the form submitted is incorrect, there's no session data and customerDetailService call is successful" in new Test {
 
-        mockConfig.features.whereToGoFeature(true)
 
         mockAgentAuthorised()
         mockCustomerDetailsSuccess(customerDetailsFnameOnly)
@@ -178,7 +147,6 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
     }
     "redirect to the capture preferences page" when {
       "the email preference is not present in the session" in new Test {
-        mockConfig.features.whereToGoFeature(true)
         mockAgentAuthorised()
 
         val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl
@@ -191,7 +159,6 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
     "return an ISE" when {
 
       "an incorrect form is submitted with no session data and customerDetailsService returns an error" in new Test{
-        mockConfig.features.whereToGoFeature(true)
 
         mockAgentAuthorised()
         mockCustomerDetailsError(UnexpectedError(INTERNAL_SERVER_ERROR, "It's ok, this is just a test"))

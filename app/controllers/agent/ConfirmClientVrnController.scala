@@ -61,37 +61,23 @@ class ConfirmClientVrnController @Inject()(val messagesApi: MessagesApi,
 
   def changeClient: Action[AnyContent] = authenticate {
     implicit user =>
-      val redirectUrl = user.session.get(SessionKeys.redirectUrl).getOrElse {
-        if (appConfig.features.whereToGoFeature()) "" else appConfig.manageVatCustomerDetailsUrl
-      }
+      val redirectUrl = user.session.get(SessionKeys.redirectUrl).getOrElse("")
+
       Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectUrl))
         .removingFromSession(SessionKeys.clientVRN)
   }
 
   def redirect: Action[AnyContent] = authenticate {
     implicit user =>
-
-      if (appConfig.features.whereToGoFeature()) {
-        user.session.get(SessionKeys.redirectUrl) match {
-          case Some(redirectUrl) =>
-            user.session.get(SessionKeys.preference) match {
-              case Some(_) => Redirect(redirectUrl).removingFromSession(SessionKeys.redirectUrl)
-              case None => Redirect(controllers.agent.routes.CapturePreferenceController.show())
-            }
-          case _ =>
-            Logger.debug("[ConfirmClientVrnController][redirect] User has come from portal. Redirecting to 'What To Do' page.")
-            Redirect(controllers.agent.routes.WhatToDoController.show())
-        }
-        //TODO: all remaining logic will become redundant and should be removed when whereToGoFeature permanently on
-      } else {
-        user.session.get(SessionKeys.redirectUrl) match {
-          case Some(redirectUrl) => Redirect(redirectUrl)
-            .removingFromSession(SessionKeys.redirectUrl)
-
-          case _ =>
-            Logger.debug("[ConfirmClientVrnController][show] - No redirect URL was found in session")
-            errorHandler.showInternalServerError
-        }
+      user.session.get(SessionKeys.redirectUrl) match {
+        case Some(redirectUrl) =>
+          user.session.get(SessionKeys.preference) match {
+            case Some(_) => Redirect(redirectUrl).removingFromSession(SessionKeys.redirectUrl)
+            case None => Redirect(controllers.agent.routes.CapturePreferenceController.show())
+          }
+        case _ =>
+          Logger.debug("[ConfirmClientVrnController][redirect] User has come from portal. Redirecting to 'What To Do' page.")
+          Redirect(controllers.agent.routes.WhatToDoController.show())
       }
   }
 }

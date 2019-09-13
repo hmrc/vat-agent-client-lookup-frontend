@@ -43,7 +43,6 @@ trait IntegrationBaseSpec extends TestSuite with CustomMatchers
   lazy val mockAppConfig: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
   override def beforeEach() {
-    mockAppConfig.features.whereToGoFeature(false)
     mockAppConfig.features.emailVerificationEnabled(true)
     super.beforeEach()
   }
@@ -116,8 +115,7 @@ trait IntegrationBaseSpec extends TestSuite with CustomMatchers
     "microservice.services.manage-vat-subscription-frontend.endpoints.customer-details" -> "/customer-details?isAgent=true",
     "microservice.services.vat-subscription.host" -> mockHost,
     "microservice.services.vat-subscription.port" -> mockPort,
-    "features.emailVerification.enabled" -> "true",
-    "features.whereToGo.enabled" -> "false"
+    "features.emailVerification.enabled" -> "true"
   )
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder()

@@ -55,11 +55,9 @@ class VerifyEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
               "[VerifyEmailController][sendVerification] - " +
                 "Unable to send email verification request. Service responded with 'already verified'"
             )
-            if(appConfig.features.whereToGoFeature()) {
-              Redirect(agent.session.get(SessionKeys.redirectUrl).getOrElse(appConfig.manageVatCustomerDetailsUrl))
-            } else {
-              Redirect(routes.SelectClientVrnController.show())
-            }
+
+            Redirect(agent.session.get(SessionKeys.redirectUrl).getOrElse(appConfig.manageVatCustomerDetailsUrl))
+
           case _ => errorHandler.showInternalServerError
         }
 
