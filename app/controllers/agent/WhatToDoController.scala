@@ -42,17 +42,13 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
                                    implicit val appConfig: AppConfig) extends BaseController {
 
   def show: Action[AnyContent] = authenticate.async { implicit user =>
-    if (appConfig.features.whereToGoFeature()) {
-      customerDetailsService.getCustomerDetails(user.vrn).map {
-        case Right(details) =>
-          Ok(views.html.agent.whatToDo(WhatToDoForm.whatToDoForm, details.clientName, details.mandationStatus == nonMTDfB))
-            .addingToSession(SessionKeys.mtdVatAgentClientName -> details.clientName, SessionKeys.mtdVatAgentMandationStatus -> details.mandationStatus)
-        case Left(error) =>
-          Logger.warn(s"[WhatToDoController][show] - received an error from CustomerDetailsService: $error")
-          serviceErrorHandler.showInternalServerError
-      }
-    } else {
-      Future.successful(serviceErrorHandler.showInternalServerError)
+    customerDetailsService.getCustomerDetails(user.vrn).map {
+      case Right(details) =>
+        Ok(views.html.agent.whatToDo(WhatToDoForm.whatToDoForm, details.clientName, details.mandationStatus == nonMTDfB))
+          .addingToSession(SessionKeys.mtdVatAgentClientName -> details.clientName, SessionKeys.mtdVatAgentMandationStatus -> details.mandationStatus)
+      case Left(error) =>
+        Logger.warn(s"[WhatToDoController][show] - received an error from CustomerDetailsService: $error")
+        serviceErrorHandler.showInternalServerError
     }
   }
 
@@ -60,22 +56,18 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
   def submit: Action[AnyContent] = authenticate.async {
     implicit user =>
 
-      if (appConfig.features.whereToGoFeature()) {
-        WhatToDoForm.whatToDoForm.bindFromRequest().fold(
-          error => badRequestResult(error),
-          data => Future.successful(
-            data.value match {
-              case SubmitReturn.value => Redirect(appConfig.returnDeadlinesUrl)
-              case ViewReturn.value => Redirect(appConfig.submittedReturnsUrl(DateTime.now(DateTimeZone.UTC).year().get()))
-              case ChangeDetails.value => emailPrefCheck(user)
-              case ViewCertificate.value => Redirect(appConfig.vatCertificateUrl)
-            }
-          ).removeSessionKey(SessionKeys.mtdVatAgentClientName)
-            .removeSessionKey(SessionKeys.mtdVatAgentMandationStatus)
-        )
-      } else {
-        Future.successful(serviceErrorHandler.showInternalServerError)
-      }
+      WhatToDoForm.whatToDoForm.bindFromRequest().fold(
+        error => badRequestResult(error),
+        data => Future.successful(
+          data.value match {
+            case SubmitReturn.value => Redirect(appConfig.returnDeadlinesUrl)
+            case ViewReturn.value => Redirect(appConfig.submittedReturnsUrl(DateTime.now(DateTimeZone.UTC).year().get()))
+            case ChangeDetails.value => emailPrefCheck(user)
+            case ViewCertificate.value => Redirect(appConfig.vatCertificateUrl)
+          }
+        ).removeSessionKey(SessionKeys.mtdVatAgentClientName)
+          .removeSessionKey(SessionKeys.mtdVatAgentMandationStatus)
+      )
   }
 
   private def badRequestResult(error: Form[WhatToDoModel])(implicit user: User[_]): Future[Result] = {

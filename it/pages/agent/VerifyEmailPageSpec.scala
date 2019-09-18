@@ -98,7 +98,7 @@ class VerifyEmailPageSpec extends BasePageISpec {
 
             res should have(
               httpStatus(SEE_OTHER),
-              redirectURI(controllers.agent.routes.SelectClientVrnController.show().url)
+              redirectURI("/homepage")
             )
           }
         }

@@ -34,35 +34,10 @@ class SelectClientVrnController @Inject()(val messagesApi: MessagesApi,
 
   def show(redirectUrl: String): Action[AnyContent] = authenticate { implicit agent =>
 
-      val prefYes: Boolean = agent.session.get(SessionKeys.preference).fold(false)(_ == "yes")
-      val prefNo: Boolean = agent.session.get(SessionKeys.preference).fold(false)(_ == "no")
-      val hasVerifiedEmail: Boolean = agent.session.get(SessionKeys.verifiedAgentEmail).fold(false)(_.nonEmpty)
-      val preferenceLogic: Boolean = prefNo || (prefYes && hasVerifiedEmail)
-
-      if(appConfig.features.whereToGoFeature()) {
-        extractRedirectUrl(redirectUrl).fold(Ok(views.html.agent.selectClientVrn(ClientVrnForm.form))) {
-          url =>
-            Ok(views.html.agent.selectClientVrn(ClientVrnForm.form)).addingToSession(SessionKeys.redirectUrl -> url)
-        }
-      //TODO: all remaining logic will become redundant and should be removed when whereToGoFeature permanently on
-      } else if (preferenceLogic || !appConfig.features.preferenceJourneyEnabled()) {
-        agent.session.get(SessionKeys.redirectUrl) match {
-          case Some(_) =>
-            Ok(views.html.agent.selectClientVrn(ClientVrnForm.form))
-          case None =>
-            val url: String = extractRedirectUrl(redirectUrl).getOrElse(appConfig.manageVatCustomerDetailsUrl)
-            Ok(views.html.agent.selectClientVrn(ClientVrnForm.form)).addingToSession(SessionKeys.redirectUrl -> url)
-        }
-      } else {
-        agent.session.get(SessionKeys.redirectUrl) match {
-          case Some(_) =>
-            Redirect(controllers.agent.routes.CapturePreferenceController.show())
-          case None =>
-            val url: String = extractRedirectUrl(redirectUrl).getOrElse(appConfig.manageVatCustomerDetailsUrl)
-            Redirect(controllers.agent.routes.CapturePreferenceController.show())
-              .addingToSession(SessionKeys.redirectUrl -> url)
-        }
-      }
+    extractRedirectUrl(redirectUrl).fold(Ok(views.html.agent.selectClientVrn(ClientVrnForm.form))) {
+      url =>
+        Ok(views.html.agent.selectClientVrn(ClientVrnForm.form)).addingToSession(SessionKeys.redirectUrl -> url)
+    }
   }
 
   val submit: Action[AnyContent] = authenticate {

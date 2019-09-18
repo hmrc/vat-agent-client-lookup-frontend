@@ -29,7 +29,6 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
 
   override def beforeAll(): Unit = {
     mockConfig.features.preferenceJourneyEnabled(true)
-    mockConfig.features.whereToGoFeature(false)
   }
 
   object TestVerifyEmailController extends VerifyEmailController(
@@ -105,7 +104,7 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
     }
 
     "there is an email in session and the email request is not created as already verified" should {
-      "redirect to the select client VRN page" in {
+      "redirect to manage vat subscription" in {
 
         mockAgentAuthorised()
         mockCreateEmailVerificationRequest(Some(false))
@@ -114,7 +113,7 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
         val result = TestVerifyEmailController.sendVerification(request)
 
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(routes.SelectClientVrnController.show().url)
+        redirectLocation(result) shouldBe Some("/customer-details")
       }
     }
 
@@ -171,10 +170,9 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
       }
     }
 
-    "the whereToGo feature is enabled and an email is in session" should {
+    "the an email is in session" should {
 
       "redirect to the redirectUrl if one exists" in {
-        mockConfig.features.whereToGoFeature(true)
         mockAgentAuthorised()
         mockCreateEmailVerificationRequest(Some(false))
 
@@ -186,7 +184,6 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
       }
 
       "redirect to the manageVat url if no redirect url exists" in {
-        mockConfig.features.whereToGoFeature(true)
         mockAgentAuthorised()
         mockCreateEmailVerificationRequest(Some(false))
 

@@ -82,8 +82,9 @@ class SelectClientVrnPageSpec extends BasePageISpec {
             val res = show
 
             res should have(
-              httpStatus(SEE_OTHER),
-              redirectURI(controllers.agent.routes.CapturePreferenceController.show().url)
+              httpStatus(OK),
+              elementText("h1")("What is your client’s VAT number?"),
+              isElementVisible("#vrn")(isVisible = true)
             )
           }
         }

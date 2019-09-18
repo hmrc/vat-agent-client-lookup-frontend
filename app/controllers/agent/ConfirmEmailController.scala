@@ -74,11 +74,6 @@ class ConfirmEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
       YesPreferenceVerifiedAuditModel(agent.arn, email),
       Some(controllers.agent.routes.ConfirmEmailController.isEmailVerified().url)
     )
-    (if(appConfig.features.whereToGoFeature()) {
-      Redirect(redirectUrl)
-    } else {
-      Redirect(routes.SelectClientVrnController.show(redirectUrl))
-    }).addingToSession(SessionKeys.verifiedAgentEmail -> email)
+    Redirect(redirectUrl).addingToSession(SessionKeys.verifiedAgentEmail -> email)
   }
-
 }

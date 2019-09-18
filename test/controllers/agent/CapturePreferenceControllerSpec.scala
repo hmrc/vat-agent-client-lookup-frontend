@@ -33,7 +33,6 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
   override def beforeEach(): Unit = {
     super.beforeEach()
     mockConfig.features.preferenceJourneyEnabled(true)
-    mockConfig.features.whereToGoFeature(false)
   }
 
   val testRedirectUrl: String     = "/manage-vat-account"
@@ -41,8 +40,6 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
   val testInvalidEmail: String    = "invalidEmail"
   val testYesPreference: String   = "yes"
   val testNoPreference: String    = "no"
-
-  mockConfig.features.whereToGoFeature(false)
 
   def target: CapturePreferenceController = new CapturePreferenceController(
     messagesApi,
@@ -56,146 +53,57 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
 
     "a user is enrolled with a valid enrolment" when {
 
-      "whatToDo feature switch is on" when {
+      "client VRN is in session" should {
 
-        "client VRN is in session" should {
-
-          lazy val result = {
-            mockConfig.features.whereToGoFeature(true)
-            target.show(request.withSession(
-              SessionKeys.clientVRN -> "999999999"
-            ))
-          }
-
-          "return 200" in {
-            mockAgentAuthorised()
-            status(result) shouldBe Status.OK
-          }
-
-          "render capturePreference page" in {
-            Jsoup.parse(bodyOf(result)).title() shouldBe "Would you like to receive email notifications of any changes you make? - Your client’s VAT details - GOV.UK"
-          }
+        lazy val result = {
+          target.show(request.withSession(
+            SessionKeys.clientVRN -> "999999999"
+          ))
         }
 
-        "client VRN is not in session" when {
+        "return 200" in {
+          mockAgentAuthorised()
+          status(result) shouldBe Status.OK
+        }
 
-          "redirect URL is in session" should {
-
-            lazy val result = {
-              mockConfig.features.whereToGoFeature(true)
-              target.show(request.withSession(
-                SessionKeys.redirectUrl -> testRedirectUrl
-              ))
-            }
-
-            "return 303" in {
-              mockAgentAuthorised()
-              status(result) shouldBe Status.SEE_OTHER
-            }
-
-            s"redirect to ${controllers.agent.routes.SelectClientVrnController.show(testRedirectUrl).url}" in {
-              redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show(testRedirectUrl).url)
-            }
-          }
-
-          "redirect URL is not in session" should {
-
-            lazy val result = {
-              mockConfig.features.whereToGoFeature(true)
-              target.show(request)
-            }
-
-            "return 303" in {
-              mockAgentAuthorised()
-              status(result) shouldBe Status.SEE_OTHER
-            }
-
-            s"redirect to ${controllers.agent.routes.SelectClientVrnController.show().url}" in {
-              redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show().url)
-            }
-          }
+        "render capturePreference page" in {
+          Jsoup.parse(bodyOf(result)).title() shouldBe "Would you like to receive email notifications of any changes you make? - Your client’s VAT details - GOV.UK"
         }
       }
 
-      "whatToDo feature switch is off" when {
+      "client VRN is not in session" when {
 
-        "there is no preference or verified email in session" should {
+        "redirect URL is in session" should {
 
-          lazy val result = target.show(request.withSession(
-            SessionKeys.redirectUrl -> testRedirectUrl
-          ))
-
-          "return 200" in {
-            mockAgentAuthorised()
-            status(result) shouldBe Status.OK
+          lazy val result = {
+            target.show(request.withSession(
+              SessionKeys.redirectUrl -> testRedirectUrl
+            ))
           }
-
-          "return HTML" in {
-            contentType(result) shouldBe Some("text/html")
-            charset(result) shouldBe Some("utf-8")
-          }
-        }
-
-        "there is a preference of 'no' in session" should {
-
-          lazy val result = target.show(request.withSession(
-            SessionKeys.redirectUrl -> testRedirectUrl,
-            SessionKeys.preference -> "no"
-          ))
 
           "return 303" in {
             mockAgentAuthorised()
             status(result) shouldBe Status.SEE_OTHER
           }
 
-          "redirect to the Select Client VRN controller" in {
-            redirectLocation(result) shouldBe
-              Some(controllers.agent.routes.SelectClientVrnController.show(testRedirectUrl).url)
+          s"redirect to ${controllers.agent.routes.SelectClientVrnController.show(testRedirectUrl).url}" in {
+            redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show(testRedirectUrl).url)
           }
         }
 
-        "there is a verified email in session" should {
+        "redirect URL is not in session" should {
 
-          lazy val result = target.show(request.withSession(
-            SessionKeys.redirectUrl -> testRedirectUrl,
-            SessionKeys.verifiedAgentEmail -> "pepsi-mac@gmail.com"
-          ))
+          lazy val result = {
+            target.show(request)
+          }
 
           "return 303" in {
             mockAgentAuthorised()
             status(result) shouldBe Status.SEE_OTHER
           }
 
-          "redirect to the Select Client VRN controller" in {
-            redirectLocation(result) shouldBe
-              Some(controllers.agent.routes.SelectClientVrnController.show(testRedirectUrl).url)
-          }
-        }
-
-        "there is a preference of 'Yes' and a notification email in session" should {
-
-          lazy val result = target.show(request.withSession(
-            SessionKeys.preference -> "yes",
-            SessionKeys.notificationsEmail -> "pepsi-mac@test.com"
-          ))
-          lazy val document = Jsoup.parse(bodyOf(result))
-
-          "return 200" in {
-            mockAgentAuthorised()
-            status(result) shouldBe Status.OK
-          }
-
-          "return HTML" in {
-            contentType(result) shouldBe Some("text/html")
-            charset(result) shouldBe Some("utf-8")
-          }
-
-          "prepopulate the form with the preference" in {
-            document.select("#yes_no-yes").attr("checked") shouldBe "checked"
-          }
-
-          "prepopulate the form with the email" in {
-            document.select("#email").attr("value") shouldBe "pepsi-mac@test.com"
+          s"redirect to ${controllers.agent.routes.SelectClientVrnController.show().url}" in {
+            redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show().url)
           }
         }
       }
@@ -242,90 +150,52 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
 
       "the user enters the 'No' option" when {
 
-        "whatToDo feature is enabled" when {
+        "redirect URL is in session" should {
 
-          "redirect URL is in session" should {
+          lazy val testRequest = Agent[AnyContentAsFormUrlEncoded](arn)(request
+            .withSession(SessionKeys.redirectUrl -> testRedirectUrl)
+            .withFormUrlEncodedBody("yes_no" -> testNoPreference)
+          )
 
-            lazy val testRequest = Agent[AnyContentAsFormUrlEncoded](arn)(request
-              .withSession(SessionKeys.redirectUrl -> testRedirectUrl)
-              .withFormUrlEncodedBody("yes_no" -> testNoPreference)
-            )
-
-            lazy val result = {
-              mockConfig.features.whereToGoFeature(true)
-              target.submit(testRequest)
-            }
-
-            "return 303" in {
-              mockAgentAuthorised()
-              status(result) shouldBe Status.SEE_OTHER
-            }
-
-            "redirect to redirect URL" in {
-              redirectLocation(result) shouldBe Some(testRedirectUrl)
-            }
-
-            "add the preference to the session" in {
-              session(result).get(SessionKeys.preference) shouldBe Some(testNoPreference)
-            }
+          lazy val result = {
+            target.submit(testRequest)
           }
-
-          "redirect URL is not in session" should {
-
-            lazy val testRequest = Agent[AnyContentAsFormUrlEncoded](arn)(request
-              .withFormUrlEncodedBody("yes_no" -> testNoPreference)
-            )
-
-            lazy val result = {
-              mockConfig.features.whereToGoFeature(true)
-              target.submit(testRequest)
-            }
-
-            "return 303" in {
-              mockAgentAuthorised()
-              status(result) shouldBe Status.SEE_OTHER
-            }
-
-            s"redirect to ${mockConfig.manageVatCustomerDetailsUrl}" in {
-              redirectLocation(result) shouldBe Some(mockConfig.manageVatCustomerDetailsUrl)
-            }
-
-            "add the preference to the session" in {
-              session(result).get(SessionKeys.preference) shouldBe Some(testNoPreference)
-            }
-          }
-        }
-
-        "whatToDo feature is disabled" should {
-
-          lazy val testRequest =
-            Agent[AnyContentAsFormUrlEncoded](arn)(request
-              .withSession(SessionKeys.redirectUrl -> testRedirectUrl)
-              .withFormUrlEncodedBody("yes_no" -> testNoPreference))
-
-          lazy val result = target.submit(testRequest)
 
           "return 303" in {
             mockAgentAuthorised()
             status(result) shouldBe Status.SEE_OTHER
           }
 
-          "redirect to the select client VRN controller" in {
-            redirectLocation(result) shouldBe
-              Some(controllers.agent.routes.SelectClientVrnController.show(testRedirectUrl).url)
+          "redirect to redirect URL" in {
+            redirectLocation(result) shouldBe Some(testRedirectUrl)
           }
 
           "add the preference to the session" in {
             session(result).get(SessionKeys.preference) shouldBe Some(testNoPreference)
           }
+        }
 
-          "audit the event" in {
+        "redirect URL is not in session" should {
+
+          lazy val testRequest = Agent[AnyContentAsFormUrlEncoded](arn)(request
+            .withFormUrlEncodedBody("yes_no" -> testNoPreference)
+          )
+
+          lazy val result = {
+            target.submit(testRequest)
+          }
+
+          "return 303" in {
             mockAgentAuthorised()
-            await(target.submit(testRequest))
-            verifyExtendedAudit(
-              NoPreferenceAuditModel(arn),
-              Some(controllers.agent.routes.CapturePreferenceController.submit().url)
-            )
+            status(result) shouldBe Status.SEE_OTHER
+          }
+
+          s"redirect to ${mockConfig.manageVatCustomerDetailsUrl}" in {
+            redirectLocation(result) shouldBe Some(mockConfig.manageVatCustomerDetailsUrl)
+          }
+
+          "add the preference to the session" in {
+            session(result).get(SessionKeys.preference) shouldBe Some(testNoPreference)
           }
         }
       }

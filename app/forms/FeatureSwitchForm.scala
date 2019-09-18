@@ -26,8 +26,7 @@ object FeatureSwitchForm {
     mapping(
       ConfigKeys.emailVerificationFeature -> boolean,
       ConfigKeys.preferenceJourneyFeature -> boolean,
-      ConfigKeys.useLanguageSelectorFeature -> boolean,
-      ConfigKeys.whereToGoFeature -> boolean
+      ConfigKeys.useLanguageSelectorFeature -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 }

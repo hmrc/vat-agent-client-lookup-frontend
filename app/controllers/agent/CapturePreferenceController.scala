@@ -42,7 +42,7 @@ class CapturePreferenceController @Inject()(val messagesApi: MessagesApi,
     val clientVrn = user.session.get(SessionKeys.clientVRN)
     val redirectUrl = user.session.get(SessionKeys.redirectUrl)
 
-    if(appConfig.features.whereToGoFeature() && clientVrn.isEmpty) {
+    if (clientVrn.isEmpty) {
       Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectUrl.getOrElse("")))
     } else {
       preference match {
@@ -56,8 +56,8 @@ class CapturePreferenceController @Inject()(val messagesApi: MessagesApi,
 
   def submit: Action[AnyContent] = (authenticate andThen preferenceCheck) { implicit user =>
     preferenceForm.bindFromRequest().fold(
-      error     => BadRequest(views.html.agent.capturePreference(error)),
-      formData  => {
+      error => BadRequest(views.html.agent.capturePreference(error)),
+      formData => {
         if (formData.yesNo.value) {
           auditService.extendedAudit(
             YesPreferenceAttemptedAuditModel(user.arn, formData.email.getOrElse("")),
@@ -73,14 +73,8 @@ class CapturePreferenceController @Inject()(val messagesApi: MessagesApi,
           )
 
           val redirectUrl = user.session.get(SessionKeys.redirectUrl)
-
-          if(appConfig.features.whereToGoFeature()) {
-            Redirect(redirectUrl.getOrElse(appConfig.manageVatCustomerDetailsUrl))
-              .addingToSession(SessionKeys.preference -> no)
-          } else {
-            Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectUrl.getOrElse(appConfig.manageVatCustomerDetailsUrl)))
-              .addingToSession(SessionKeys.preference -> no)
-          }
+          Redirect(redirectUrl.getOrElse(appConfig.manageVatCustomerDetailsUrl))
+            .addingToSession(SessionKeys.preference -> no)
         }
       }
     )
