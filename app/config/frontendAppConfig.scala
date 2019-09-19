@@ -63,6 +63,7 @@ trait AppConfig extends ServicesConfig {
   val submittedReturnsUrl: Int => String
   val returnDeadlinesUrl: String
   val classicServicesSignInUrl: String
+  val accessibilityLinkUrl: String
 }
 
 @Singleton
@@ -142,4 +143,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override lazy val submittedReturnsUrl: Int => String = yearValue => getString(Keys.viewVatReturnsFrontendHost) +
     getString(Keys.submittedReturnsEndpoint) + s"$yearValue"
   override lazy val returnDeadlinesUrl: String = getString(Keys.viewVatReturnsFrontendHost) + getString(Keys.returnDeadlinesEndpoint)
+
+  override val accessibilityLinkUrl: String = getString(ConfigKeys.vatSummaryFrontendHost) + getString(ConfigKeys.vatSummaryAccessibilityUrl)
 }

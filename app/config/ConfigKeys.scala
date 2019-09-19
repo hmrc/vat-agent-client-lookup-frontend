@@ -63,6 +63,7 @@ object ConfigKeys {
 
   val vatSummaryFrontendHost: String = "vat-summary-frontend.host"
   val vatCertificateEndpoint: String = "vat-summary-frontend.endpoints.vat-certificate"
+  val vatSummaryAccessibilityUrl: String = "vat-summary-frontend.endpoints.accessibilityUrl"
 
   val viewVatReturnsFrontendHost: String = "view-vat-returns-frontend.host"
   val submittedReturnsEndpoint: String = "view-vat-returns-frontend.endpoints.submitted-returns"
