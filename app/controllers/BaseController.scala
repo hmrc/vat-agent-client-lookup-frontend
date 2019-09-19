@@ -19,18 +19,24 @@ package controllers
 import config.AppConfig
 import play.api.Logger
 import play.api.i18n.I18nSupport
-import uk.gov.hmrc.play.binders.ContinueUrl
+import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl._
+import uk.gov.hmrc.play.bootstrap.binders.{AbsoluteWithHostnameFromWhitelist, OnlyRelative, RedirectUrl}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 trait BaseController extends FrontendController with I18nSupport {
 
   def extractRedirectUrl(url: String)(implicit appConfig: AppConfig): Option[String] = {
     try {
-      val continueUrl = ContinueUrl(url)
-      if (continueUrl.isRelativeUrl || url.startsWith(appConfig.environmentBase)) {
-        Some(url)
+      if (url.nonEmpty) {
+        RedirectUrl(url).getEither(OnlyRelative | AbsoluteWithHostnameFromWhitelist(Set(appConfig.environmentHost))) match {
+          case Right(value) =>
+            Some(value.toString())
+          case Left(_) =>
+            Logger.warn("[JourneySetupController][journeySetup] redirectUrl was empty or an invalid absolute url")
+            None
+        }
       } else {
-        Logger.warn("[JourneySetupController][journeySetup] redirectUrl was empty or an invalid absolute url")
+        Logger.warn("[JourneySetupController][journeySetup] couldn't create ContinueUrl from empty string.")
         None
       }
     } catch {
@@ -39,5 +45,4 @@ trait BaseController extends FrontendController with I18nSupport {
         None
     }
   }
-
 }

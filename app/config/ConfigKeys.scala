@@ -52,6 +52,8 @@ object ConfigKeys {
   val agentInvitationsFastTrack: String = "agent-invitations-fast-track.url"
 
   val environmentBase: String = "environment-base.url"
+  val environmentHost: String = "environment-base.host"
+
   val emailVerificationBaseUrl: String = "email-verification"
 
   val emailVerificationFeature: String = "features.emailVerification.enabled"
