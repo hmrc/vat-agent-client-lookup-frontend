@@ -53,6 +53,7 @@ trait AppConfig extends ServicesConfig {
   val timeoutCountdown: Int
   val agentInvitationsFastTrack: String
   val environmentBase: String
+  val environmentHost: String
   val feedbackUrl: String
   val selfLookup: String
   val emailVerificationBaseUrl: String
@@ -129,6 +130,8 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override lazy val agentInvitationsFastTrack: String = getString(Keys.agentInvitationsFastTrack)
 
   override lazy val environmentBase: String = getString(Keys.environmentBase)
+
+  override lazy val environmentHost: String = getString(Keys.environmentHost)
 
   override lazy val feedbackUrl: String = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier" +
     s"&backUrl=${ContinueUrl(selfLookup + controllers.agent.routes.SelectClientVrnController.show().url).encodedUrl}"

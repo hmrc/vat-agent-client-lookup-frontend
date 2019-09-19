@@ -28,7 +28,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val selfLookup = ""
 
   override val features: Features = new Features(runModeConfiguration)
-
+  override val environmentHost: String = "localhost"
   override val contactHost = ""
   override val assetsPrefix = ""
   override val analyticsToken = ""
