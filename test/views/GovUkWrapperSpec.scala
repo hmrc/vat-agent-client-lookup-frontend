@@ -16,7 +16,6 @@
 
 package views
 
-import models.User
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
@@ -29,15 +28,15 @@ class GovUkWrapperSpec extends ViewBaseSpec {
 
     "the user is an agent" should {
 
-      lazy val view = views.html.govuk_wrapper()
+      lazy val view = views.html.govuk_wrapper(mockConfig,"Test")(fakeRequestWithMtdVatAgentData,messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have a nav title of 'Your client’s VAT details'" in {
         elementText(navTitleSelector) shouldBe "Your client’s VAT details"
       }
 
-      s"have the correct Accessibility link" in {
-        element(accessibilityLinkSelector).attr("href") shouldBe mockConfig.accessibilityLinkUrl
+      "have the correct Accessibility link" in {
+        element(accessibilityLinkSelector).attr("href") shouldBe "/accessibility-statement"
       }
     }
   }
