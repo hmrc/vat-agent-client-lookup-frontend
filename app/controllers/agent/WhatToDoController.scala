@@ -85,11 +85,13 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
   }
 
   private def emailPrefCheck: User[AnyContent] => Result = { implicit user: User[AnyContent] =>
-    val hasVerifiedEmail = user.session.get(SessionKeys.preference).isDefined
-    if (hasVerifiedEmail) {
-      Redirect(appConfig.manageVatCustomerDetailsUrl)
-    } else {
-      Redirect(routes.CapturePreferenceController.show())
+    val hasVerifiedEmail = user.session.get(SessionKeys.verifiedAgentEmail).isDefined
+    val emailPref = user.session.get(SessionKeys.preference)
+
+    (hasVerifiedEmail, emailPref) match {
+      case (true, _) => Redirect(appConfig.manageVatCustomerDetailsUrl)
+      case (_, Some("no")) => Redirect(appConfig.manageVatCustomerDetailsUrl)
+      case _ => Redirect(routes.CapturePreferenceController.show())
     }
   }
 }

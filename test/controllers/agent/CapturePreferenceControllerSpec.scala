@@ -18,7 +18,7 @@ package controllers.agent
 
 import assets.BaseTestConstants._
 import audit.mocks.MockAuditingService
-import audit.models.{NoPreferenceAuditModel, YesPreferenceAttemptedAuditModel}
+import audit.models.YesPreferenceAttemptedAuditModel
 import common.SessionKeys
 import controllers.ControllerBaseSpec
 import models.Agent
@@ -67,7 +67,8 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
         }
 
         "render capturePreference page" in {
-          Jsoup.parse(bodyOf(result)).title() shouldBe "Would you like to receive email notifications of any changes you make? - Your client’s VAT details - GOV.UK"
+          Jsoup.parse(bodyOf(result)).title() shouldBe "Would you like to receive email notifications of any " +
+            "changes you make? - Your client’s VAT details - GOV.UK"
         }
       }
 
@@ -190,8 +191,8 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
             status(result) shouldBe Status.SEE_OTHER
           }
 
-          s"redirect to ${mockConfig.manageVatCustomerDetailsUrl}" in {
-            redirectLocation(result) shouldBe Some(mockConfig.manageVatCustomerDetailsUrl)
+          "redirect to the change VAT details page" in {
+            redirectLocation(result) shouldBe Some("/customer-details")
           }
 
           "add the preference to the session" in {
@@ -221,7 +222,7 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
           session(result).get(SessionKeys.preference) shouldBe Some(testYesPreference)
         }
 
-        "add the new email to the session" in {
+        "add the provided email address to the session" in {
           session(result).get(SessionKeys.notificationsEmail) shouldBe Some(testValidEmail)
         }
 

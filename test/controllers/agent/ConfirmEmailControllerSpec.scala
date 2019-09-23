@@ -101,33 +101,35 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerifi
   }
 
   "Calling the isEmailVerified action in ConfirmEmailController" when {
-    "there is an email in session and it's verified" should {
+    "there is no redirectUrl in session" when {
+      "there is an email in session and it's verified" should {
 
-      lazy val testRequest =
-        Agent[AnyContentAsEmpty.type](arn)(request.withSession(SessionKeys.notificationsEmail -> testEmail))
-      lazy val result = {
-        mockGetEmailVerificationState(testEmail)(Future(Some(true)))
-        TestConfirmEmailController.isEmailVerified()(testRequest)
-      }
+        lazy val testRequest =
+          Agent[AnyContentAsEmpty.type](arn)(request.withSession(SessionKeys.notificationsEmail -> testEmail))
+        lazy val result = {
+          mockGetEmailVerificationState(testEmail)(Future(Some(true)))
+          TestConfirmEmailController.isEmailVerified()(testRequest)
+        }
 
-      "return 303" in {
-        mockAgentAuthorised()
-        status(result) shouldBe Status.SEE_OTHER
-      }
+        "return 303" in {
+          mockAgentAuthorised()
+          status(result) shouldBe Status.SEE_OTHER
+        }
 
-      "redirect to select client VRN page" in {
-        redirectLocation(result) shouldBe
-          Some("/customer-details")
-      }
+        "redirect to change business details in manage vat subscription frontend" in {
+          redirectLocation(result) shouldBe
+            Some("/customer-details")
+        }
 
-      "audit the event" in {
-        mockAgentAuthorised()
-        mockGetEmailVerificationState(testEmail)(Future(Some(true)))
-        await(TestConfirmEmailController.isEmailVerified()(testRequest))
-        verifyExtendedAudit(
-          YesPreferenceVerifiedAuditModel(arn, testEmail),
-          Some(controllers.agent.routes.ConfirmEmailController.isEmailVerified().url)
-        )
+        "audit the event" in {
+          mockAgentAuthorised()
+          mockGetEmailVerificationState(testEmail)(Future(Some(true)))
+          await(TestConfirmEmailController.isEmailVerified()(testRequest))
+          verifyExtendedAudit(
+            YesPreferenceVerifiedAuditModel(arn, testEmail),
+            Some(controllers.agent.routes.ConfirmEmailController.isEmailVerified().url)
+          )
+        }
       }
     }
 
