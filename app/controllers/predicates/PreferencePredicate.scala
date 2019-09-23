@@ -39,14 +39,12 @@ class PreferencePredicate @Inject()(implicit val appConfig: AppConfig,
     val preference = agent.session.get(SessionKeys.preference)
     val hasVerifiedEmail = agent.session.get(SessionKeys.verifiedAgentEmail).isDefined
 
-    val featureSwitchUrl = redirectUrl
-
     if(appConfig.features.preferenceJourneyEnabled()) {
       preference match {
         case Some("no") =>
-          Future.successful(Left(Redirect(featureSwitchUrl)))
+          Future.successful(Left(Redirect(redirectUrl)))
         case _ if hasVerifiedEmail =>
-          Future.successful(Left(Redirect(featureSwitchUrl)))
+          Future.successful(Left(Redirect(redirectUrl)))
         case _ =>
           Future.successful(Right(agent))
       }

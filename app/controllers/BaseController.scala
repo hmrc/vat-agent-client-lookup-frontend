@@ -26,6 +26,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 trait BaseController extends FrontendController with I18nSupport {
 
   def extractRedirectUrl(url: String)(implicit appConfig: AppConfig): Option[String] = {
+
     try {
       if (url.nonEmpty) {
         RedirectUrl(url).getEither(OnlyRelative | AbsoluteWithHostnameFromWhitelist(Set(appConfig.environmentHost))) match {
