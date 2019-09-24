@@ -41,12 +41,9 @@ class PreferencePredicate @Inject()(implicit val appConfig: AppConfig,
 
     if(appConfig.features.preferenceJourneyEnabled()) {
       preference match {
-        case Some("no") =>
-          Future.successful(Left(Redirect(redirectUrl)))
-        case _ if hasVerifiedEmail =>
-          Future.successful(Left(Redirect(redirectUrl)))
-        case _ =>
-          Future.successful(Right(agent))
+        case Some("no") => Future.successful(Left(Redirect(redirectUrl)))
+        case _ if hasVerifiedEmail => Future.successful(Left(Redirect(redirectUrl)))
+        case _ => Future.successful(Right(agent))
       }
     } else {
       Future.successful(Left(Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectUrl).url)

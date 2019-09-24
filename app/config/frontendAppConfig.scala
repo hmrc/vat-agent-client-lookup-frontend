@@ -52,7 +52,6 @@ trait AppConfig extends ServicesConfig {
   val timeoutPeriod: Int
   val timeoutCountdown: Int
   val agentInvitationsFastTrack: String
-  val environmentBase: String
   val environmentHost: String
   val feedbackUrl: String
   val selfLookup: String
@@ -128,8 +127,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override lazy val timeoutPeriod: Int = getInt(Keys.timeoutPeriod)
   override lazy val timeoutCountdown: Int = getInt(Keys.timeoutCountdown)
   override lazy val agentInvitationsFastTrack: String = getString(Keys.agentInvitationsFastTrack)
-
-  override lazy val environmentBase: String = getString(Keys.environmentBase)
 
   override lazy val environmentHost: String = getString(Keys.environmentHost)
 
