@@ -79,12 +79,9 @@ class ConfirmClientVrnController @Inject()(val messagesApi: MessagesApi,
 
         case Some(changeUrl) if changeUrl.contains("/vat-through-software/account")  =>
           user.session.get(SessionKeys.preference) match {
-            case Some("yes") if hasVerifiedAgentEmail =>
-              Redirect(manageVatUrl).removingFromSession(SessionKeys.redirectUrl)
             case Some("yes") if !hasVerifiedAgentEmail =>
               Redirect(controllers.agent.routes.ConfirmEmailController.isEmailVerified())
-            case Some("no") =>
-              Redirect(manageVatUrl).removingFromSession(SessionKeys.redirectUrl)
+            case Some(_) => Redirect(manageVatUrl).removingFromSession(SessionKeys.redirectUrl)
             case None => Redirect(controllers.agent.routes.CapturePreferenceController.show())
           }
 

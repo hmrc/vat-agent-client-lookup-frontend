@@ -89,8 +89,7 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
     val emailPref = user.session.get(SessionKeys.preference)
 
     (hasVerifiedEmail, emailPref) match {
-      case (true, _) => Redirect(appConfig.manageVatCustomerDetailsUrl)
-      case (_, Some("no")) => Redirect(appConfig.manageVatCustomerDetailsUrl)
+      case (true, _) | (_, Some("no")) => Redirect(appConfig.manageVatCustomerDetailsUrl)
       case _ => Redirect(routes.CapturePreferenceController.show())
     }
   }

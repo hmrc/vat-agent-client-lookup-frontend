@@ -29,20 +29,19 @@ trait BaseController extends FrontendController with I18nSupport {
 
     try {
       if (url.nonEmpty) {
-        RedirectUrl(url).getEither(OnlyRelative | AbsoluteWithHostnameFromWhitelist(Set(appConfig.environmentHost))) match {
+        RedirectUrl(url).getEither(OnlyRelative | AbsoluteWithHostnameFromWhitelist(appConfig.environmentHost)) match {
           case Right(value) =>
             Some(value.toString())
           case Left(_) =>
-            Logger.warn("[JourneySetupController][journeySetup] redirectUrl was empty or an invalid absolute url")
+            Logger.warn("[BaseController][extractRedirectUrl] redirectUrl was an invalid absolute url")
             None
         }
       } else {
-        Logger.warn("[JourneySetupController][journeySetup] couldn't create ContinueUrl from empty string.")
+        Logger.warn("[BaseController][extractRedirectUrl] couldn't create ContinueUrl from empty string.")
         None
       }
     } catch {
-      case e: Exception =>
-        Logger.warn("[JourneySetupController][journeySetup] couldn't create ContinueUrl from what was provided.", e)
+      case _: Exception =>
         None
     }
   }
