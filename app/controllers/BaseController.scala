@@ -37,11 +37,12 @@ trait BaseController extends FrontendController with I18nSupport {
             None
         }
       } else {
-        Logger.warn("[BaseController][extractRedirectUrl] couldn't create ContinueUrl from empty string.")
+        Logger.info("[BaseController][extractRedirectUrl] couldn't create ContinueUrl from empty string.")
         None
       }
     } catch {
-      case _: Exception =>
+      case e: Exception =>
+        Logger.warn("[BaseController][extractRedirectUrl] couldn't create ContinueUrl from what was provided.", e)
         None
     }
   }
