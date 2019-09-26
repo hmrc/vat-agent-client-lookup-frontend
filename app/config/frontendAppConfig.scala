@@ -31,8 +31,6 @@ import uk.gov.hmrc.play.config.ServicesConfig
 trait AppConfig extends ServicesConfig {
   val contactHost: String
   val assetsPrefix: String
-  val analyticsToken: String
-  val analyticsHost: String
   val reportAProblemPartialUrl: String
   val reportAProblemNonJSUrl: String
   val agentServicesGovUkGuidance: String
@@ -81,9 +79,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override lazy val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
 
   override lazy val assetsPrefix: String = getString(Keys.assetsUrl) + getString(Keys.assetsVersion)
-
-  override lazy val analyticsToken: String = getString(Keys.googleAnalyticsToken)
-  override lazy val analyticsHost: String = getString(Keys.googleAnalyticsHost)
 
   override lazy val agentServicesGovUkGuidance: String = getString(Keys.govUkSetupAgentServices)
 

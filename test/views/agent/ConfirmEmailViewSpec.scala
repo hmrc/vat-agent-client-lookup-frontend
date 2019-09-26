@@ -77,20 +77,12 @@ class ConfirmEmailViewSpec extends ViewBaseSpec {
       "has the correct hidden context text" in {
         elementText(Selectors.editLinkContext) shouldBe "Change your email address"
       }
-
-      "has the correct GA tag" in {
-        element(Selectors.editLink).attr("data-journey-click") shouldBe "notification-pref:change:confirm-email"
-      }
     }
 
     "have a continue button" which {
 
       "has the correct text" in {
         elementText(Selectors.continueButton) shouldBe "Confirm and continue"
-      }
-
-      "has the correct GA tag" in {
-        element(Selectors.continueButton).attr("data-journey-click") shouldBe "notification-pref:confirm:confirm-email"
       }
     }
   }

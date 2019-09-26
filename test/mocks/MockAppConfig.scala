@@ -31,8 +31,6 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
 
   override val contactHost = ""
   override val assetsPrefix = ""
-  override val analyticsToken = ""
-  override val analyticsHost = ""
   override val reportAProblemPartialUrl = ""
   override val reportAProblemNonJSUrl = ""
   override val agentServicesGovUkGuidance = "guidance/get-an-hmrc-agent-services-account"

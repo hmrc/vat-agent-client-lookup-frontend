@@ -36,11 +36,10 @@ s"${appConfig.agentInvitationsFastTrack}?continue=${URLEncoder.encode(s"${appCon
       <input type="hidden" name="clientIdentifierType" id="clientIdentifierType" value="@{EnrolmentKeys.vatIdentifierId.toLowerCase}">
       <input type="hidden" name="clientIdentifier" id="clientIdentifier" value="@vrn">
 
-      <p data-journey="agent_unauthorised:view:unauthorised-for-client">
+      <p>
         @messages("unauthorised.agentForClient.useThisService")
 
-        <a data-journey-click="unauthorised:click-authorise-as-agent:unauthorised-for-client"
-           onclick="document.getElementById('agentInviteForm').submit();"
+        <a onclick="document.getElementById('agentInviteForm').submit();"
            href="#"
            type="submit">@messages("unauthorised.agentForClient.authoriseForClient")</a>@messages("common.fullStop")
       </p>
@@ -49,13 +48,11 @@ s"${appConfig.agentInvitationsFastTrack}?continue=${URLEncoder.encode(s"${appCon
     <p>
       @messages("unauthorised.agentForClient.enterDetails")
 
-      <a data-journey-click="unauthorised:try-again:unauthorised-for-client"
-         href="@controllers.agent.routes.SelectClientVrnController.show(redirectUrl)">
+      <a href="@controllers.agent.routes.SelectClientVrnController.show(redirectUrl)">
            @messages("unauthorised.agentForClient.tryAgain")</a>@messages("common.fullStop")
     </p>
 
-    <a data-journey-click="unauthorised:sign-out:unauthorised-for-client"
-       class="button"
+    <a class="button"
        role="button"
        href="@controllers.routes.SignOutController.signOut(feedbackOnSignOut = true)">
          @messages("base.signOut")</a>

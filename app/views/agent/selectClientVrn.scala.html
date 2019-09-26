@@ -33,7 +33,7 @@ if(form.errors.nonEmpty) messages("common.error.prefixTitle", messages("clientsV
 <p>@messages("clientsVrn.p1")</p>
 
 @helpers.form(action = controllers.agent.routes.SelectClientVrnController.submit) {
-<div data-journey="agent_select-client:view:client-vat-number" class="form-group">
+<div class="form-group">
     <label for="vrn" class="visuallyhidden">
         @messages("clientsVrn.label")
     </label>
@@ -48,8 +48,7 @@ if(form.errors.nonEmpty) messages("common.error.prefixTitle", messages("clientsV
     )
 </div>
 
-<button data-journey-click="select-client:submit:client-vat-number"
-        class="button" type="submit">@messages("common.continue")</button>
+<button class="button" type="submit">@messages("common.continue")</button>
 }
 
 }

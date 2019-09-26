@@ -20,9 +20,6 @@ object ConfigKeys {
   val assetsUrl: String = "assets.url"
   val assetsVersion: String = "assets.version"
 
-  val googleAnalyticsToken: String = "google-analytics.token"
-  val googleAnalyticsHost: String = "google-analytics.host"
-
   val contactFrontendHost: String = "contact-frontend.host"
 
   val govUkSetupAgentServices: String = "govuk.guidance.setupAgentServices.url"
