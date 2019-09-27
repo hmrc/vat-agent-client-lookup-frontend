@@ -23,7 +23,7 @@
     title = messages("confirmClientVrn.title"),
     bodyClasses = None) {
 
-    <h1 data-journey="agent_select-client:view:confirm-client-vat-number" class="heading-large">
+    <h1 class="heading-large">
         @messages("confirmClientVrn.heading")
     </h1>
 
@@ -34,14 +34,12 @@
     <p>@vrn</p>
 
     <p>
-        <a data-journey-click="select-client:change:confirm-client-vat-number"
-        href="@controllers.agent.routes.ConfirmClientVrnController.changeClient()">
+        <a href="@controllers.agent.routes.ConfirmClientVrnController.changeClient()">
         @messages("confirmClientVrn.edit")
         </a>
     </p>
 
-    <a data-journey-click="select-client:confirm:confirm-client-vat-number"
-       href="@controllers.agent.routes.ConfirmClientVrnController.redirect()"
+    <a href="@controllers.agent.routes.ConfirmClientVrnController.redirect()"
        class="button form-group"
        role="button">
         @messages("common.confirmAndContinue")

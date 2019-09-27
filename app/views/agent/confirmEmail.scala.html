@@ -25,16 +25,14 @@
 
  <h1 class="heading-large">@messages("confirmEmail.heading")</h1>
 
- <h2 class="lede" data-journey="notification-pref:view:confirm-email">@email</h2>
+ <h2 class="lede">@email</h2>
 
  <p>
-   <a href="@controllers.agent.routes.CapturePreferenceController.show()"
-     data-journey-click="notification-pref:change:confirm-email">
+   <a href="@controllers.agent.routes.CapturePreferenceController.show()">
      <span aria-hidden="true">@messages("confirmEmail.change")</span>
      <span class="visuallyhidden">@messages("confirmEmail.changeContext")</span>
    </a>
  </p>
 
- <a href='@controllers.agent.routes.ConfirmEmailController.isEmailVerified' role="button" tabindex="0" class="button"
-    data-journey-click="notification-pref:confirm:confirm-email">@messages("common.confirmAndContinue")</a>
+ <a href='@controllers.agent.routes.ConfirmEmailController.isEmailVerified' role="button" tabindex="0" class="button">@messages("common.confirmAndContinue")</a>
 }

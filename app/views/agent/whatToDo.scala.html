@@ -30,7 +30,7 @@
 
     @helpers.form(action = controllers.agent.routes.WhatToDoController.submit) {
 
-        <div class="form-group" id="option" data-journey="agent_choose-option:view:agent-action">
+        <div class="form-group" id="option">
 
             @if(form.errors.nonEmpty) {
                 @errorSummary(messages("common.error.heading"), form)
@@ -52,9 +52,7 @@
             )
         </div>
 
-        <button
-            data-journey-click="agent_choose-option:submit:agent-action"
-            class="button"
+        <button class="button"
             type ="submit"
             id="continue">
             @messages("common.continue")

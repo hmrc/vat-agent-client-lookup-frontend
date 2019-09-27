@@ -24,15 +24,13 @@
 
     <h1 class="heading-large">@messages("unauthorised.agent.title")</h1>
 
-    <p data-journey="agent_unauthorised:view:not-enrolled">
+    <p>
         @messages("unauthorised.agent.useThisService")
-        <a data-journey-click="unauthorised:click-agent-services:not-enrolled"
-           href="@appConfig.agentServicesGovUkGuidance">
+        <a href="@appConfig.agentServicesGovUkGuidance">
             @messages("unauthorised.agent.setUpAccount")</a>@messages("common.fullStop")
     </p>
 
-    <a data-journey-click="unauthorised:sign-out:not-enrolled"
-       class="button"
+    <a class="button"
        role="button"
        href="@controllers.routes.SignOutController.signOut(feedbackOnSignOut = false)">
         @messages("base.signOut")
