@@ -74,7 +74,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
   "WhatToDoController.submit" should {
     "render the page" when {
-      "option 1 is selected" in new Test {
+      "submit return is selected" in new Test {
 
         mockAgentAuthorised()
 
@@ -84,7 +84,8 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
         redirectLocation(result) shouldBe Some(mockConfig.returnDeadlinesUrl)
       }
-      "option 2 is selected" in new Test {
+
+      "view return is selected" in new Test {
 
         mockAgentAuthorised()
 
@@ -94,17 +95,44 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
         redirectLocation(result) shouldBe Some(mockConfig.submittedReturnsUrl(1993))
       }
-      "option 3 is selected with email preference in session" in new Test {
+
+      "change details is selected with email pref yes and verified email in session" in new Test {
 
         mockAgentAuthorised()
 
-        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl.withSession(SessionKeys.preference -> "yes")
+        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl.withSession(
+          SessionKeys.preference -> "yes", SessionKeys.verifiedAgentEmail -> "verified@email.com")
           .withFormUrlEncodedBody("option" -> "change-details")
         )
 
         redirectLocation(result) shouldBe Some(mockConfig.manageVatCustomerDetailsUrl)
       }
-      "option 4 is selected" in new Test {
+
+      "change details is selected with email pref yes and no verified email in session" in new Test {
+
+        mockAgentAuthorised()
+
+        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl.withSession(
+          SessionKeys.preference -> "yes")
+          .withFormUrlEncodedBody("option" -> "change-details")
+        )
+
+        redirectLocation(result) shouldBe Some("/vat-through-software/representative/email-notification")
+      }
+
+      "change details is selected with email pref no" in new Test {
+
+        mockAgentAuthorised()
+
+        val result: Future[Result] = controller.submit(fakeRequestWithVrnAndRedirectUrl.withSession(
+          SessionKeys.preference -> "no")
+          .withFormUrlEncodedBody("option" -> "change-details")
+        )
+
+        redirectLocation(result) shouldBe Some(mockConfig.manageVatCustomerDetailsUrl)
+      }
+
+      "view certificate is selected" in new Test {
 
         mockAgentAuthorised()
 

@@ -41,9 +41,6 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wit
   "Calling the .show() action" when {
 
     val testRedirectUrl = "/manage-vat-account"
-    val testYesPreference = "yes"
-    val testNoPreference = "no"
-    val testEmail = "test@example.com"
 
     "redirect URL is supplied" should {
 
@@ -57,7 +54,8 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wit
       }
 
       "render selectClientVrn page" in {
-        Jsoup.parse(bodyOf(result)).title() shouldBe "What is your client’s VAT number? - Your client’s VAT details - GOV.UK"
+        Jsoup.parse(bodyOf(result)).title() shouldBe "What is your client’s VAT number? - " +
+          "Your client’s VAT details - GOV.UK"
       }
 
       "add redirectURL to session" in {
@@ -77,10 +75,11 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wit
       }
 
       "render selectClientVrn page" in {
-        Jsoup.parse(bodyOf(result)).title() shouldBe "What is your client’s VAT number? - Your client’s VAT details - GOV.UK"
+        Jsoup.parse(bodyOf(result)).title() shouldBe "What is your client’s VAT number? - " +
+          "Your client’s VAT details - GOV.UK"
       }
 
-      "not add redirectURL to session" in {
+      "add the what to do redirect url" in {
         session(result).get(SessionKeys.redirectUrl) shouldBe None
       }
     }

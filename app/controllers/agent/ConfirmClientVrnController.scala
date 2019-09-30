@@ -68,16 +68,30 @@ class ConfirmClientVrnController @Inject()(val messagesApi: MessagesApi,
   }
 
   def redirect: Action[AnyContent] = authenticate {
+
     implicit user =>
-      user.session.get(SessionKeys.redirectUrl) match {
-        case Some(redirectUrl) =>
+
+      val redirectUrl = user.session.get(SessionKeys.redirectUrl)
+      val hasVerifiedAgentEmail: Boolean = user.session.get(SessionKeys.verifiedAgentEmail).isDefined
+      val manageVatUrl = appConfig.manageVatCustomerDetailsUrl
+
+       redirectUrl match {
+
+        case Some(changeUrl) if changeUrl.contains("/vat-through-software/account")  =>
           user.session.get(SessionKeys.preference) match {
-            case Some(_) => Redirect(redirectUrl).removingFromSession(SessionKeys.redirectUrl)
+            case Some("yes") if !hasVerifiedAgentEmail =>
+              Redirect(controllers.agent.routes.ConfirmEmailController.isEmailVerified())
+            case Some(_) => Redirect(manageVatUrl).removingFromSession(SessionKeys.redirectUrl)
             case None => Redirect(controllers.agent.routes.CapturePreferenceController.show())
           }
-        case _ =>
-          Logger.debug("[ConfirmClientVrnController][redirect] User has come from portal. Redirecting to 'What To Do' page.")
+
+        case Some("") | None =>
+          Logger.debug("[ConfirmClientVrnController][redirect] Redirect url not provided. " +
+            "Redirecting to 'What To Do' page.")
           Redirect(controllers.agent.routes.WhatToDoController.show())
+
+        case Some(nonChangeUrl) =>
+          Redirect(nonChangeUrl).removingFromSession(SessionKeys.redirectUrl)
       }
   }
 }

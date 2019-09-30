@@ -30,7 +30,6 @@ import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.verify
 import play.api.http.Status
-import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
@@ -191,7 +190,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
             request.withSession(
               SessionKeys.clientVRN -> vrn,
               SessionKeys.redirectUrl -> "/homepage",
-              SessionKeys.notificationsEmail -> "an.email@ahost.com"
+              SessionKeys.notificationsEmail -> "an.email@host.com"
             )
           )
 
@@ -205,12 +204,12 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
               Some(controllers.agent.routes.SelectClientVrnController.show("/homepage").url)
           }
 
-          "the client VRN should be cleared" in {
+          "remove the client VRN" in {
             session(result).get(SessionKeys.clientVRN) shouldBe None
           }
 
-          "the agent email should be retained" in {
-            session(result).get(SessionKeys.notificationsEmail) shouldBe Some("an.email@ahost.com")
+          "retain the agent email" in {
+            session(result).get(SessionKeys.notificationsEmail) shouldBe Some("an.email@host.com")
           }
         }
 
@@ -219,7 +218,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           lazy val result = {
             TestConfirmClientVrnController.changeClient(request.withSession(
               SessionKeys.clientVRN -> vrn,
-              SessionKeys.notificationsEmail -> "an.email@ahost.com"
+              SessionKeys.notificationsEmail -> "an.email@host.com"
             ))
           }
 
@@ -233,12 +232,12 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
               Some(controllers.agent.routes.SelectClientVrnController.show().url)
           }
 
-          "the client VRN should be cleared" in {
+          "remove the client VRN" in {
             session(result).get(SessionKeys.clientVRN) shouldBe None
           }
 
-          "the agent email should be retained" in {
-            session(result).get(SessionKeys.notificationsEmail) shouldBe Some("an.email@ahost.com")
+          "retain the agent email" in {
+            session(result).get(SessionKeys.notificationsEmail) shouldBe Some("an.email@host.com")
           }
         }
       }
@@ -258,68 +257,16 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
 
     "the user is an Agent" when {
 
-      "whatToDo feature is on" when {
+      "redirect URL to a change service (contains /vat-through-software/account) is in session" when {
 
-        "redirect URL is in session" should {
-
-          "notification preference is in session" should {
-
-            lazy val result = {
-              TestConfirmClientVrnController.redirect(FakeRequest().withSession(
-                SessionKeys.clientVRN -> vrn,
-                SessionKeys.redirectUrl -> "/homepage",
-                SessionKeys.preference -> "no",
-                SessionKeys.notificationsEmail -> "an.email@ahost.com"
-              ))
-            }
-
-            "return status SEE_OTHER (303)" in {
-              mockAgentAuthorised()
-              mockCustomerDetailsSuccess(customerDetailsOrganisation)
-              status(result) shouldBe Status.SEE_OTHER
-            }
-
-            "redirect to the redirect URL in session" in {
-              redirectLocation(result) shouldBe Some("/homepage")
-            }
-
-            "the client VRN should be retained" in {
-              session(result).get(SessionKeys.clientVRN) shouldBe Some(vrn)
-            }
-
-            "the agent email should be retained" in {
-              session(result).get(SessionKeys.notificationsEmail) shouldBe Some("an.email@ahost.com")
-            }
-          }
-
-          "notification preference is not in session" should {
-
-            lazy val result = {
-              TestConfirmClientVrnController.redirect(FakeRequest().withSession(
-                SessionKeys.clientVRN -> vrn,
-                SessionKeys.redirectUrl -> "/homepage",
-                SessionKeys.notificationsEmail -> "an.email@ahost.com"
-              ))
-            }
-
-            "return status SEE_OTHER (303)" in {
-              mockAgentAuthorised()
-              mockCustomerDetailsSuccess(customerDetailsOrganisation)
-              status(result) shouldBe Status.SEE_OTHER
-            }
-
-            "redirect to CapturePreference controller" in {
-              redirectLocation(result) shouldBe Some(controllers.agent.routes.CapturePreferenceController.show().url)
-            }
-          }
-        }
-
-        "redirect URL is not in session" should {
+        "notification preference of no is in session" should {
 
           lazy val result = {
             TestConfirmClientVrnController.redirect(FakeRequest().withSession(
               SessionKeys.clientVRN -> vrn,
-              SessionKeys.notificationsEmail -> "an.email@ahost.com"
+              SessionKeys.redirectUrl -> "/vat-through-software/account/change-something-about-vat",
+              SessionKeys.preference -> "no",
+              SessionKeys.notificationsEmail -> "an.email@host.com"
             ))
           }
 
@@ -329,10 +276,150 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
             status(result) shouldBe Status.SEE_OTHER
           }
 
-          "redirect to WhatToDo controller" in {
+          "redirect to manage vat frontend" in {
+            redirectLocation(result) shouldBe Some(mockConfig.manageVatCustomerDetailsUrl)
+          }
+
+          "retain the client VRN" in {
+            session(result).get(SessionKeys.clientVRN) shouldBe Some(vrn)
+          }
+
+          "retain the agent email" in {
+            session(result).get(SessionKeys.notificationsEmail) shouldBe Some("an.email@host.com")
+          }
+        }
+
+        "notification preference of yes is in session and verified agent email" should {
+
+          lazy val result = {
+            TestConfirmClientVrnController.redirect(FakeRequest().withSession(
+              SessionKeys.preference -> "yes",
+              SessionKeys.clientVRN -> vrn,
+              SessionKeys.redirectUrl -> "/vat-through-software/account/change-something-about-vat",
+              SessionKeys.verifiedAgentEmail -> "an.email@host.com"
+            ))
+          }
+
+          "return status SEE_OTHER (303)" in {
+            mockAgentAuthorised()
+            mockCustomerDetailsSuccess(customerDetailsOrganisation)
+            status(result) shouldBe Status.SEE_OTHER
+          }
+
+          "redirect to the manage vat frontend in session" in {
+            redirectLocation(result) shouldBe Some(mockConfig.manageVatCustomerDetailsUrl)
+          }
+
+          "retain the client VRN" in {
+            session(result).get(SessionKeys.clientVRN) shouldBe Some(vrn)
+          }
+
+          "retain the agent email" in {
+            session(result).get(SessionKeys.verifiedAgentEmail) shouldBe Some("an.email@host.com")
+          }
+        }
+
+        "notification preference of yes is in session and no verified agent email" should {
+
+          lazy val result = {
+            TestConfirmClientVrnController.redirect(FakeRequest().withSession(
+              SessionKeys.preference -> "yes",
+              SessionKeys.clientVRN -> vrn,
+              SessionKeys.redirectUrl -> "/vat-through-software/account/change-something-about-vat"
+            ))
+          }
+
+          "return status SEE_OTHER (303)" in {
+            mockAgentAuthorised()
+            mockCustomerDetailsSuccess(customerDetailsOrganisation)
+            status(result) shouldBe Status.SEE_OTHER
+          }
+
+          "redirect to the isEmailVerified action" in {
+            redirectLocation(result) shouldBe Some(
+              controllers.agent.routes.ConfirmEmailController.isEmailVerified().url)
+          }
+        }
+
+        "notification preference is not in session" should {
+
+          lazy val result = {
+            TestConfirmClientVrnController.redirect(FakeRequest().withSession(
+              SessionKeys.clientVRN -> vrn,
+              SessionKeys.redirectUrl -> "/vat-through-software/account/change-something-about-vat"
+            ))
+          }
+
+          "return status SEE_OTHER (303)" in {
+            mockAgentAuthorised()
+            mockCustomerDetailsSuccess(customerDetailsOrganisation)
+            status(result) shouldBe Status.SEE_OTHER
+          }
+
+          "redirect to the capture preference controller" in {
+            redirectLocation(result) shouldBe Some(controllers.agent.routes.CapturePreferenceController.show().url)
+          }
+        }
+
+        "a redirect url to a location which doesn't involve a vat change been provided" should {
+
+          lazy val result = {
+            TestConfirmClientVrnController.redirect(FakeRequest().withSession(
+              SessionKeys.clientVRN -> vrn,
+              SessionKeys.redirectUrl -> "/random-place"
+            ))
+          }
+
+          "return status SEE_OTHER (303)" in {
+            mockAgentAuthorised()
+            mockCustomerDetailsSuccess(customerDetailsOrganisation)
+            status(result) shouldBe Status.SEE_OTHER
+          }
+
+          "redirect to the provided url because preference is not required controller" in {
+            redirectLocation(result) shouldBe Some("/random-place")
+          }
+        }
+
+        "an empty redirect url has been provided" should {
+
+          lazy val result = {
+            TestConfirmClientVrnController.redirect(FakeRequest().withSession(
+              SessionKeys.clientVRN -> vrn,
+              SessionKeys.redirectUrl -> ""
+            ))
+          }
+
+          "return status SEE_OTHER (303)" in {
+            mockAgentAuthorised()
+            mockCustomerDetailsSuccess(customerDetailsOrganisation)
+            status(result) shouldBe Status.SEE_OTHER
+          }
+
+          "redirect to the the what to do page" in {
             redirectLocation(result) shouldBe Some(controllers.agent.routes.WhatToDoController.show().url)
           }
         }
+      }
+    }
+
+    "redirect URL is not in session" should {
+
+      lazy val result = {
+        TestConfirmClientVrnController.redirect(FakeRequest().withSession(
+          SessionKeys.clientVRN -> vrn,
+          SessionKeys.notificationsEmail -> "an.email@host.com"
+        ))
+      }
+
+      "return status SEE_OTHER (303)" in {
+        mockAgentAuthorised()
+        mockCustomerDetailsSuccess(customerDetailsOrganisation)
+        status(result) shouldBe Status.SEE_OTHER
+      }
+
+      "redirect to WhatToDo controller" in {
+        redirectLocation(result) shouldBe Some(controllers.agent.routes.WhatToDoController.show().url)
       }
     }
   }

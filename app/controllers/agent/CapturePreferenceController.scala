@@ -36,14 +36,13 @@ class CapturePreferenceController @Inject()(val messagesApi: MessagesApi,
                                             implicit val appConfig: AppConfig) extends BaseController {
 
   def show: Action[AnyContent] = (authenticate andThen preferenceCheck) { implicit user =>
-
     val preference = user.session.get(SessionKeys.preference)
     val notificationEmail = user.session.get(SessionKeys.notificationsEmail)
     val clientVrn = user.session.get(SessionKeys.clientVRN)
-    val redirectUrl = user.session.get(SessionKeys.redirectUrl)
+    val redirectUrl = user.session.get(SessionKeys.redirectUrl).getOrElse("")
 
     if (clientVrn.isEmpty) {
-      Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectUrl.getOrElse("")))
+      Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectUrl))
     } else {
       preference match {
         case Some(_) =>
@@ -73,8 +72,8 @@ class CapturePreferenceController @Inject()(val messagesApi: MessagesApi,
           )
 
           val redirectUrl = user.session.get(SessionKeys.redirectUrl)
-          Redirect(redirectUrl.getOrElse(appConfig.manageVatCustomerDetailsUrl))
-            .addingToSession(SessionKeys.preference -> no)
+            .getOrElse(appConfig.manageVatCustomerDetailsUrl)
+          Redirect(redirectUrl).addingToSession(SessionKeys.preference -> no)
         }
       }
     )
