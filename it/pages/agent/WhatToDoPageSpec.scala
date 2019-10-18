@@ -69,8 +69,9 @@ class WhatToDoPageSpec extends BasePageISpec {
             res should have(
               httpStatus(OK),
               elementText("h1")(heading("PepsiCo")),
-              elementText(".multiple-choice:nth-of-type(1) label")(changeDetails),
-              elementText(".multiple-choice:nth-of-type(2) label")(viewCertificate)
+              elementText(".multiple-choice:nth-of-type(1) label")(viewReturn),
+              elementText(".multiple-choice:nth-of-type(2) label")(changeDetails),
+              elementText(".multiple-choice:nth-of-type(3) label")(viewCertificate)
             )
           }
         }
