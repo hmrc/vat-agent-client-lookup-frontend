@@ -16,13 +16,12 @@
 
 package controllers.agent
 
+import common.SessionKeys
 import config.{AppConfig, ErrorHandler}
 import controllers.BaseController
 import controllers.predicates.AuthoriseAsAgentWithClient
 import forms.WhatToDoForm
 import javax.inject.{Inject, Singleton}
-import common.MandationStatus.nonMTDfB
-import common.SessionKeys
 import models.User
 import models.agent._
 import org.joda.time.{DateTime, DateTimeZone}
@@ -44,7 +43,7 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
   def show: Action[AnyContent] = authenticate.async { implicit user =>
     customerDetailsService.getCustomerDetails(user.vrn).map {
       case Right(details) =>
-        Ok(views.html.agent.whatToDo(WhatToDoForm.whatToDoForm, details.clientName, details.mandationStatus == nonMTDfB))
+        Ok(views.html.agent.whatToDo(WhatToDoForm.whatToDoForm, details.clientName, details.mandationStatus))
           .addingToSession(SessionKeys.mtdVatAgentClientName -> details.clientName, SessionKeys.mtdVatAgentMandationStatus -> details.mandationStatus)
       case Left(error) =>
         Logger.warn(s"[WhatToDoController][show] - received an error from CustomerDetailsService: $error")
@@ -73,10 +72,10 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
   private def badRequestResult(error: Form[WhatToDoModel])(implicit user: User[_]): Future[Result] = {
     (user.session.get(SessionKeys.mtdVatAgentClientName), user.session.get(SessionKeys.mtdVatAgentMandationStatus)) match {
       case (Some(clientName), Some(mandationStatus)) =>
-        Future.successful(BadRequest(views.html.agent.whatToDo(error, clientName, mandationStatus == nonMTDfB)))
+        Future.successful(BadRequest(views.html.agent.whatToDo(error, clientName, mandationStatus)))
       case _ =>
         customerDetailsService.getCustomerDetails(user.vrn).map {
-          case Right(details) => BadRequest(views.html.agent.whatToDo(error, details.clientName, details.mandationStatus == nonMTDfB))
+          case Right(details) => BadRequest(views.html.agent.whatToDo(error, details.clientName, details.mandationStatus))
           case Left(cdsError) =>
             Logger.warn(s"[WhatToDoController][submit] - received an error from CustomerDetailsService: $cdsError")
             serviceErrorHandler.showInternalServerError

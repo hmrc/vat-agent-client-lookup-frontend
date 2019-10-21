@@ -21,7 +21,19 @@
 @import forms.WhatToDoForm._
 @import uk.gov.hmrc.play.views.html.helpers.errorSummary
 
-@(form: Form[WhatToDoModel], name: String, nonMTDfB: Boolean)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@import common.MandationStatus
+@(form: Form[WhatToDoModel], name: String, mandationStatus: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+
+@validChoices = @{
+    Seq(
+        if(mandationStatus == MandationStatus.nonMTDfB) Some((submitReturn, Messages("whatToDo.submitReturn"))) else None,
+        if(mandationStatus == MandationStatus.nonMTDfB || mandationStatus == MandationStatus.mandated) Some((viewReturn, Messages("whatToDo.viewReturns"))) else None
+    ).flatten ++
+            Seq(
+                (changeDetails, Messages("whatToDo.changeDetails")),
+                (viewCertificate, Messages("whatToDo.viewCertificate"))
+            )
+}
 
 @main_template(
     if(form.errors.nonEmpty) messages("common.error.prefixTitle", messages("whatToDo.heading", name)) else messages("whatToDo.heading", name),
@@ -38,16 +50,7 @@
 
             @radioHelper(
                 field = form("option"),
-                choices = {
-                    (if(nonMTDfB) Seq(
-                        (submitReturn, Messages("whatToDo.submitReturn")),
-                        (viewReturn, Messages("whatToDo.viewReturns"))
-                    ) else Seq()) ++
-                            Seq(
-                                (changeDetails, Messages("whatToDo.changeDetails")),
-                                (viewCertificate, Messages("whatToDo.viewCertificate"))
-                            )
-                },
+                choices = validChoices,
                 question = Messages("whatToDo.heading", name)
             )
         </div>
