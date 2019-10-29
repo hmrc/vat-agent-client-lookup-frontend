@@ -35,7 +35,7 @@ class WhatToDoViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct document title" in {
-        document.title shouldBe ("What would you like to do for l'biz? - Your client’s VAT details - GOV.UK")
+        document.title shouldBe "What would you like to do for l'biz? - Your client’s VAT details - GOV.UK"
       }
 
       "display the correct heading" in {
@@ -60,7 +60,7 @@ class WhatToDoViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct document title" in {
-        document.title shouldBe ("What would you like to do for l'biz? - Your client’s VAT details - GOV.UK")
+        document.title shouldBe "What would you like to do for l'biz? - Your client’s VAT details - GOV.UK"
       }
 
       "display the correct heading" in {
@@ -87,19 +87,19 @@ class WhatToDoViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct document title" in {
-        document.title shouldBe ("What would you like to do for l'biz? - Your client’s VAT details - GOV.UK")
+        document.title shouldBe "What would you like to do for l'biz? - Your client’s VAT details - GOV.UK"
       }
 
       "display the correct heading" in {
         elementText("#page-heading") shouldBe Messages.title("l'biz")
       }
       "display the correct radio options" in {
-        elementText(".multiple-choice:nth-of-type(1) label") shouldBe Messages.changeDetails
-        elementText(".multiple-choice:nth-of-type(2) label") shouldBe Messages.viewCertificate
+        elementText(".multiple-choice:nth-of-type(1) label") shouldBe Messages.viewReturn
+        elementText(".multiple-choice:nth-of-type(2) label") shouldBe Messages.changeDetails
+        elementText(".multiple-choice:nth-of-type(3) label") shouldBe Messages.viewCertificate
       }
       "not display the submit or view return options" in {
         document.getElementById("submit-return") shouldBe null
-        document.getElementById("view-return") shouldBe null
       }
       "display the continue button" in {
         elementText("#continue") shouldBe Messages.continue
