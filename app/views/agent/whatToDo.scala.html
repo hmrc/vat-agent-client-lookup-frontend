@@ -26,10 +26,10 @@
 
 @validChoices = @{
     Seq(
-        if(mandationStatus == MandationStatus.nonMTDfB) Some((submitReturn, Messages("whatToDo.submitReturn"))) else None,
-        if(mandationStatus == MandationStatus.nonMTDfB || mandationStatus == MandationStatus.mandated) Some((viewReturn, Messages("whatToDo.viewReturns"))) else None
+        if(mandationStatus == MandationStatus.nonMTDfB) Some((submitReturn, Messages("whatToDo.submitReturn"))) else None
     ).flatten ++
             Seq(
+                (viewReturn, Messages("whatToDo.viewReturns")),
                 (changeDetails, Messages("whatToDo.changeDetails")),
                 (viewCertificate, Messages("whatToDo.viewCertificate"))
             )
