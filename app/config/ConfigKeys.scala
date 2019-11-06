@@ -58,6 +58,7 @@ object ConfigKeys {
   val emailVerificationFeature: String = "features.emailVerification.enabled"
   val preferenceJourneyFeature: String = "features.preferenceJourney.enabled"
   val useLanguageSelectorFeature: String = "features.useLanguageSelector.enabled"
+  val useAgentHubPageFeature: String = "features.useAgentHubPage.enabled"
 
   val vatSummaryFrontendHost: String = "vat-summary-frontend.host"
   val vatCertificateEndpoint: String = "vat-summary-frontend.endpoints.vat-certificate"
