@@ -54,6 +54,14 @@ confirmEmail.heading = Cadarnhau’r cyfeiriad e-bost
 confirmEmail.change = Newid
 confirmEmail.changeContext = Newid eich cyfeiriad e-bost
 
+clientDetailsCard.title = Manylion cleient
+clientDetailsCard.info = Newid manylion busnes, cyswllt a TAW cleient
+clientDetailsCard.link = Bwrw golwg ar fanylion TAW eich cleient
+
+VatCertificateCard.title = Tystysgrif TAW
+VatCertificateCard.info = Bwrw golwg dros dystysgrif TAW eich cleient a’i hargraffu
+VatCertificateCard.link = Bwrw golwg dros y dystysgrif TAW
+
 verifyEmail.title = Dilysu’ch cyfeiriad e-bost
 verifyEmail.heading = Dilysu’ch cyfeiriad e-bost
 verifyEmail.lineOne = Rydym wedi anfon e-bost at {0}. Cliciwch ar y cysylltiad yn yr e-bost i ddilysu’ch cyfeiriad e-bost.
