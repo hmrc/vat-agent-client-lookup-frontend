@@ -32,7 +32,8 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit v
       FeatureSwitchModel(
         emailVerificationEnabled = appConfig.features.emailVerificationEnabled(),
         preferenceJourneyEnabled = appConfig.features.preferenceJourneyEnabled(),
-        useLanguageFeatureEnabled = appConfig.features.useLanguageSelector()
+        useLanguageFeatureEnabled = appConfig.features.useLanguageSelector(),
+        useAgentHubPageFeature = appConfig.features.useAgentHubPageFeature()
       )
     )))
   }
@@ -48,6 +49,7 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit v
     appConfig.features.emailVerificationEnabled(model.emailVerificationEnabled)
     appConfig.features.preferenceJourneyEnabled(model.preferenceJourneyEnabled)
     appConfig.features.useLanguageSelector(model.useLanguageFeatureEnabled)
+    appConfig.features.useAgentHubPageFeature(model.useAgentHubPageFeature)
     Redirect(routes.FeatureSwitchController.featureSwitch())
   }
 }
