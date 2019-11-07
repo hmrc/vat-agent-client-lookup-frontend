@@ -56,10 +56,10 @@ confirmEmail.changeContext = Change your email address
 
 clientDetailsCard.title = Client details
 clientDetailsCard.info = Change client business, contact and VAT details.
-clientDetailsCard.link = View your client'''s VAT details
+clientDetailsCard.link = View your client’s VAT details
 
 VatCertificateCard.title = VAT certificate
-VatCertificateCard.info = View and print your client'''s VAT certificate.
+VatCertificateCard.info = View and print your client’s VAT certificate.
 VatCertificateCard.link = View VAT certificate
 
 verifyEmail.title = Verify your email address
