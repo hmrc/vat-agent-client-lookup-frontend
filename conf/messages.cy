@@ -105,4 +105,6 @@ whatToDo.changeDetails = Newid manylion TAW
 whatToDo.viewCertificate = Bwrw golwg dros y dystysgrif TAW
 whatToDo.error.mandatoryRadioOption = Dewiswch beth ydych am ei wneud ar gyfer y cleient hwn
 
-
+vatReturnsPartial.heading = Ffurflenni TAW
+vatReturnsPartial.paragraph = Bwrw golwg dros Ffurflenni TAW eich cleient a gyflwynwyd.
+vatReturnsPartial.viewReturnsLink = Bwrw golwg dros y Ffurflenni TAW a gyflwynwyd

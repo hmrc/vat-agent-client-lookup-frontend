@@ -96,3 +96,7 @@ whatToDo.viewReturns = View submitted returns
 whatToDo.changeDetails = Change VAT details
 whatToDo.viewCertificate = View VAT certificate
 whatToDo.error.mandatoryRadioOption = Select what you would like to do for this client
+
+vatReturnsPartial.heading = VAT Returns
+vatReturnsPartial.paragraph = View your client's submitted returns.
+vatReturnsPartial.viewReturnsLink = View submitted returns
