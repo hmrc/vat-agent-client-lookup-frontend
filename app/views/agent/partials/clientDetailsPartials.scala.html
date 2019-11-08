@@ -18,12 +18,12 @@
 
 @()(implicit messages: Messages, appConfig: AppConfig) {
 
-<div class="card" id="cardAmount">
+<div class="card">
     <div class="card-body">
 
         <h2 class="heading-medium">@messages("clientDetailsCard.title")</h2>
-        <p id="card-info">@messages("clientDetailsCard.info")</p>
-        <p><a id=card-link href="@{appConfig.manageVatCustomerDetailsUrl}">@messages("clientDetailsCard.link")</a></p>
+        <p> @messages("clientDetailsCard.info")</p>
+        <p> <a href="@{appConfig.manageVatCustomerDetailsUrl}">@messages("clientDetailsCard.link")</a> </p>
 
     </div>
 </div>

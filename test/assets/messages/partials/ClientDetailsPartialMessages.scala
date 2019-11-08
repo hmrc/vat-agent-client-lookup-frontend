@@ -20,6 +20,6 @@ object ClientDetailsPartialMessages {
 
     val heading = "Client details"
     val paragraphOne = "Change client business, contact and VAT details."
-    val link = "View your client’s VAT details"
+    val linkText = "View your client’s VAT details"
 
 }

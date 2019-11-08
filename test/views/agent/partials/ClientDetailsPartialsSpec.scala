@@ -21,7 +21,7 @@ import org.jsoup.nodes.Document
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import views.ViewBaseSpec
-import assets.messages.partials.{ClientDetailsPartialMessages => Messages}
+import assets.messages.partials.ClientDetailsPartialMessages
 
 class ClientDetailsPartialsSpec extends ViewBaseSpec {
 
@@ -31,20 +31,20 @@ class ClientDetailsPartialsSpec extends ViewBaseSpec {
     lazy val view = views.html.agent.partials.clientDetailsPartials()(messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct card heading" in {
-      elementText(".heading-medium") shouldBe Messages.heading
+    s"have the correct card heading of ${ClientDetailsPartialMessages.heading}" in {
+      elementText(".heading-medium") shouldBe ClientDetailsPartialMessages.heading
     }
 
-    "display the correct line 1" in {
-      elementText("#card-info") shouldBe Messages.paragraphOne
+    s"display the correct line 1 of ${ClientDetailsPartialMessages.paragraphOne}" in {
+      elementText("p") shouldBe ClientDetailsPartialMessages.paragraphOne
     }
 
-    "display the correct line 2" in {
-      elementText("#card-link") shouldBe Messages.link
+    s"display the correct link text of ${ClientDetailsPartialMessages.linkText}" in {
+      elementText("a") shouldBe ClientDetailsPartialMessages.linkText
     }
 
-    "display the correct line 2 with the correct link" in {
-      element("#card-link").attr("href") shouldBe "/customer-details"
+    s"display the correct link of ${mockConfig.manageVatCustomerDetailsUrl}" in {
+      element("a").attr("href") shouldBe mockConfig.manageVatCustomerDetailsUrl
     }
   }
 

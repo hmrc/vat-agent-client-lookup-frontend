@@ -18,12 +18,12 @@
 
 @()(implicit messages: Messages, appConfig: AppConfig) {
 
-<div class="card" id="cardAmount">
+<div class="card">
     <div class="card-body">
 
         <h2 class="heading-medium">@messages("VatCertificateCard.title")</h2>
-        <p id="card-info">@messages("VatCertificateCard.info")</p>
-        <p><a id=card-link href="@{appConfig.vatCertificateUrl}">@messages("VatCertificateCard.link")</a></p>
+        <p> @messages("VatCertificateCard.info")</p>
+        <p> <a id=card-link href="@{appConfig.vatCertificateUrl}">@messages("VatCertificateCard.link")</a> </p>
 
     </div>
 </div>

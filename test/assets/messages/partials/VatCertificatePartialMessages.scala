@@ -20,6 +20,6 @@ object VatCertificatePartialMessages {
 
     val heading = "VAT certificate"
     val paragraphOne = "View and print your client’s VAT certificate."
-    val link = "View VAT certificate"
+    val linkText = "View VAT certificate"
 
 }
