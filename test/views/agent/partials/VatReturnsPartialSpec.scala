@@ -42,7 +42,7 @@ class VatReturnsPartialSpec extends ViewBaseSpec {
       }
 
       "display the correct text in link 1" in {
-        elementText("li:nth-child(1)") // shouldBe Messages.submitVatReturns
+        elementText("li:nth-child(1)") shouldBe Messages.submitVatReturns
       }
 
       "have the correct url for the 1st link" in {
