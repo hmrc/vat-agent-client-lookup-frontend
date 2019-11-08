@@ -38,6 +38,7 @@ trait MockAuth extends TestUtil with BeforeAndAfterEach with MockitoSugar {
     super.beforeEach()
     reset(mockAuthConnector)
     mockIndividualAuthorised()
+    mockConfig.features.useAgentHubPageFeature(false)
   }
 
   lazy val mockAuthConnector: AuthConnector = mock[AuthConnector]
