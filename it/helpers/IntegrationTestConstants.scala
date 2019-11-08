@@ -45,7 +45,8 @@ object IntegrationTestConstants {
     lastName = None,
     tradingName = Some("Vatmobile Taxi"),
     organisationName = Some("Vatmobile Taxi LTD"),
-    mandationStatus = nonMTDfB
+    mandationStatus = nonMTDfB,
+    deregistration = None
   )
 
   val individual = CustomerDetails(
@@ -53,7 +54,8 @@ object IntegrationTestConstants {
     lastName = Some("Mac"),
     tradingName = Some("PepsiCo"),
     organisationName = None,
-    mandationStatus = nonMTDfB
+    mandationStatus = nonMTDfB,
+    deregistration = None
   )
 
   val individualMandatedJson: JsObject = Json.obj(

@@ -16,7 +16,9 @@
 
 package assets
 
-import models.CustomerDetails
+import java.time.LocalDate
+
+import models.{CustomerDetails, Deregistration}
 import play.api.libs.json.{JsObject, Json}
 
 object CustomerDetailsTestConstants {
@@ -37,7 +39,10 @@ object CustomerDetailsTestConstants {
     "lastName" -> lastName,
     "organisationName" -> orgName,
     "tradingName" -> tradingName,
-    "mandationStatus" -> mandationStatus
+    "mandationStatus" -> mandationStatus,
+    "deregistration" -> Json.obj(
+      "effectDateOfCancellation" -> "2019-01-01"
+    )
   )
 
   val customerDetailsAllInfo = CustomerDetails(
@@ -45,7 +50,8 @@ object CustomerDetailsTestConstants {
     Some(lastName),
     Some(orgName),
     Some(tradingName),
-    mandationStatus
+    mandationStatus,
+    Some(Deregistration(Some(LocalDate.parse("2019-01-01"))))
   )
 
   val customerDetailsNoInfo = CustomerDetails(
@@ -53,7 +59,8 @@ object CustomerDetailsTestConstants {
     None,
     None,
     None,
-    mandationStatus
+    mandationStatus,
+    None
   )
 
   val customerDetailsFnameOnly = CustomerDetails(
@@ -61,7 +68,8 @@ object CustomerDetailsTestConstants {
     None,
     None,
     None,
-    mandationStatus
+    mandationStatus,
+    None
   )
 
   val customerDetailsLnameOnly = CustomerDetails(
@@ -69,7 +77,8 @@ object CustomerDetailsTestConstants {
     Some(lastName),
     None,
     None,
-    mandationStatus
+    mandationStatus,
+    None
   )
 
   val customerDetailsNoTradingName = CustomerDetails(
@@ -77,7 +86,8 @@ object CustomerDetailsTestConstants {
     None,
     Some(orgName),
     None,
-    mandationStatus
+    mandationStatus,
+    None
   )
 
   val customerDetailsIndividual = CustomerDetails(
@@ -85,7 +95,8 @@ object CustomerDetailsTestConstants {
     Some(lastName),
     None,
     None,
-    mandationStatus
+    mandationStatus,
+    None
   )
 
   val customerDetailsOrganisation = CustomerDetails(
@@ -93,6 +104,7 @@ object CustomerDetailsTestConstants {
     None,
     Some(orgName),
     Some(tradingName),
-    mandationStatus
+    mandationStatus,
+    None
   )
 }
