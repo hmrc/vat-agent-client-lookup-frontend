@@ -106,7 +106,7 @@ whatToDo.viewCertificate = Bwrw golwg dros y dystysgrif TAW
 whatToDo.error.mandatoryRadioOption = Dewiswch beth ydych am ei wneud ar gyfer y cleient hwn
 
 vatReturnsPartial.heading = Ffurflenni TAW
-vatReturnsPartial.paragraph = Bwrw golwg dros Ffurflenni TAW eich cleient a gyflwynwyd.
+vatReturnsPartial.paragraphMandated = Bwrw golwg dros Ffurflenni TAW eich cleient a gyflwynwyd.
 vatReturnsPartial.paragraphNonMandated = Cyflwyno Ffurflenni TAW eich cleient a bwrw golwg dros y Ffurflenni TAW a gyflwynwyd.
 vatReturnsPartial.viewReturnsLink = Bwrw golwg dros y Ffurflenni TAW a gyflwynwyd
 vatReturnsPartial.submitReturnsLink = Cyflwyno Ffurflen TAW

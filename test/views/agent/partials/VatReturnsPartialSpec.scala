@@ -25,7 +25,7 @@ import views.ViewBaseSpec
 
 class VatReturnsPartialSpec extends ViewBaseSpec {
 
-  "VatReturnsPartial" should {
+  "VatReturnsPartial" when {
 
     "passed a mandation status of 'Non MTDfB'" should {
 
@@ -38,23 +38,23 @@ class VatReturnsPartialSpec extends ViewBaseSpec {
       }
 
       "display the body of text for the card" in {
-        elementText("#card-info") shouldBe Messages.paragraphOneNonMandated
+        elementText("p:nth-of-type(1)") shouldBe Messages.paragraphOneNonMandated
       }
 
       "display the correct text in link 1" in {
-        elementText("#card-link-submit-returns") shouldBe Messages.submitVatReturns
+        elementText("li:nth-child(1)") // shouldBe Messages.submitVatReturns
       }
 
-      "the 1st link has the correct url" in {
-        element("#card-link-submit-returns").attr("href") shouldBe "guidance/submit-vat-returns"
+      "have the correct url for the 1st link" in {
+        element("li:nth-child(1)").getAllElements().attr("href") shouldBe "guidance/submit-vat-returns"
       }
 
       "display the correct text in link 2" in {
-        elementText("#card-link-view-returns") shouldBe Messages.submittedReturns
+        elementText("li:nth-child(2)") shouldBe Messages.submittedReturns
       }
 
-      "the 2nd link has the correct url" in {
-        element("#card-link-view-returns").attr("href") shouldBe "/submitted-returns"
+      "have the correct url for the 2nd link" in {
+        element("li:nth-child(2)").getAllElements().attr("href") shouldBe "/submitted-returns"
       }
     }
 
@@ -69,17 +69,16 @@ class VatReturnsPartialSpec extends ViewBaseSpec {
       }
 
       "display the correct body of text for the card" in {
-        elementText("#card-info") shouldBe Messages.paragraphOneMandated
+        elementText("p:nth-of-type(1)") shouldBe Messages.paragraphOneMandated
       }
 
-      "display the correct line 2" in {
-        elementText("#card-link-view-returns") shouldBe Messages.submittedReturns
+      "display the correct text in link 1" in {
+        elementText("li") shouldBe Messages.submittedReturns
       }
 
-      "display the correct line 2 with the correct link" in {
-        element("#card-link-view-returns").attr("href")
+      "have the correct url for the 1st link" in {
+        element("li").getAllElements().attr("href") shouldBe "/submitted-returns"
       }
-
     }
   }
 }
