@@ -62,6 +62,9 @@ VatCertificateCard.title = Tystysgrif TAW
 VatCertificateCard.info = Bwrw golwg dros dystysgrif TAW eich cleient a’i hargraffu
 VatCertificateCard.link = Bwrw golwg dros y dystysgrif TAW
 
+optOutCard.heading = Optio allan o’r cynllun Troi Treth yn Ddigidol ar gyfer TAW
+optOutCard.content = Ni allwch optio allan os yw trosiant trethadwy eich cleient wedi bod dros £85,000 ar unrhyw adeg ers 1 Ebrill 2019.
+
 verifyEmail.title = Dilysu’ch cyfeiriad e-bost
 verifyEmail.heading = Dilysu’ch cyfeiriad e-bost
 verifyEmail.lineOne = Rydym wedi anfon e-bost at {0}. Cliciwch ar y cysylltiad yn yr e-bost i ddilysu’ch cyfeiriad e-bost.

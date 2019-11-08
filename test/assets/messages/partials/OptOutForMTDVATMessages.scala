@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package common
+package assets.messages.partials
 
-object MandationStatus {
+object OptOutForMTDVATMessages {
 
-  val nonMTDfB = "Non MTDfB"
-  val mandated = "MTDfb"
+  val title = "Opt out of Making Tax Digital for VAT"
+  val description = "You cannot opt out if your client’s taxable turnover has been above £85,000 since 1 April 2019."
 
 }

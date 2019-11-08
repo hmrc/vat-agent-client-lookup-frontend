@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,13 +12,28 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package common
+@import config.AppConfig
+@import common.MandationStatus
 
-object MandationStatus {
+@(mandationStatus: String)(implicit messages: Messages, appConfig: AppConfig)
 
-  val nonMTDfB = "Non MTDfB"
-  val mandated = "MTDfb"
+@OptOutCard = {
+<div class="card">
 
+    <div class="card-body">
+        <h2 class="heading-medium">
+            <a href="@{appConfig.optOutMtdVatUrl}" >@messages("optOutCard.heading")</a>
+        </h2>
+        <p>@messages("optOutCard.content")</p>
+    </div>
+</div>
+}
+
+@{
+mandationStatus match {
+    case MandationStatus.mandated => OptOutCard
+    case _ => {}
+    }
 }
