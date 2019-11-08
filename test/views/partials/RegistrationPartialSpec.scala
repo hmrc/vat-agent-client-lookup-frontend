@@ -54,7 +54,7 @@ class RegistrationPartialSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display nothing" in {
-        document.select("card") shouldBe empty
+        document.select(".card") shouldBe empty
       }
     }
   }
