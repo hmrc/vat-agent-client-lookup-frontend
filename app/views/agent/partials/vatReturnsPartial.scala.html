@@ -1,31 +1,38 @@
 @*
-* Copyright 2019 HM Revenue & Customs
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*@
+ * Copyright 2019 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
 
 @import config.AppConfig
+@import common.MandationStatus
+@import java.time.Year
 
-@()(implicit messages: Messages,appConfig: AppConfig){
-<div class="card" id="cardAmount" >
-    <div class="card-body" >
-        <h2 class="heading-medium" >@messages("vatReturnsPartial.heading")</h2>
-        <p id="card-info">@messages("vatReturnsPartial.paragraph")</p>
-        <ul class="list">
-            <li>
-                <a href="@{appConfig.submittedReturnsUrl}">@messages("vatReturnsPartial.viewReturnsLink")</a>
-            </li>
-        </ul>
+@(mandationStatus: String)(implicit messages: Messages,appConfig: AppConfig){
+<div class="card" id="cardAmount">
+    <div class="card-body">
+        <h2 class="heading-medium">@messages("vatReturnsPartial.heading")</h2>
+        @if(mandationStatus==MandationStatus.nonMTDfB){
+        <p id="card-info">@messages("vatReturnsPartial.paragraphNonMandated")</p>
+        <p>
+            <a id="card-link-submit-returns" href="@{appConfig.submitVatReturnsUrl}">@messages("vatReturnsPartial.submitReturnsLink")</a>
+        </p>
+        } else {
+        <p id="card-info">@messages("vatReturnsPartial.paragraphMandated")</p>
+        }
+        <p>
+            <a id="card-link-view-returns" href="@{appConfig.submittedReturnsUrl(Year.now.getValue)}">@messages("vatReturnsPartial.viewReturnsLink")</a>
+        </p>
     </div>
 </div>
 }

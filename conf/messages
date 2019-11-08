@@ -98,5 +98,7 @@ whatToDo.viewCertificate = View VAT certificate
 whatToDo.error.mandatoryRadioOption = Select what you would like to do for this client
 
 vatReturnsPartial.heading = VAT Returns
-vatReturnsPartial.paragraph = View your client’s submitted returns.
+vatReturnsPartial.paragraphMandated = View your client’s submitted returns.
+vatReturnsPartial.paragraphNonMandated = Submit your client’s VAT returns and view submitted returns.
 vatReturnsPartial.viewReturnsLink = View submitted returns
+vatReturnsPartial.submitReturnsLink = Submit VAT Returns
