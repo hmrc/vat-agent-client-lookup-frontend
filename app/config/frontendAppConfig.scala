@@ -64,6 +64,8 @@ trait AppConfig extends ServicesConfig {
   val accessibilityLinkUrl: String
   val cancelRegistrationUrl: String
   val optOutMtdVatUrl: String
+  val agentServicesHost: String
+  val agentServicesUrl: String
 }
 
 @Singleton
@@ -146,4 +148,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override val accessibilityLinkUrl: String = getString(ConfigKeys.vatSummaryFrontendHost) + getString(ConfigKeys.vatSummaryAccessibilityUrl)
 
   override val cancelRegistrationUrl: String = getString(ConfigKeys.deregisterVatFrontendHost) + getString(ConfigKeys.deregisterVatFrontendUrl)
+
+  override val agentServicesHost: String = getString(ConfigKeys.agentServicesHost)
+  override val agentServicesUrl: String = agentServicesHost + getString(ConfigKeys.agentServicesUrl)
 }

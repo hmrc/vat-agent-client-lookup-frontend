@@ -38,7 +38,7 @@ class AgentHubController @Inject()(val messagesApi: MessagesApi,
     if(appConfig.features.useAgentHubPageFeature()){
       customerDetailsService.getCustomerDetails(user.vrn).map {
         case Right(details) =>
-          Ok(views.html.agent.confirmClientVrn(user.vrn, details)) //TODO - change to "Client Vat Account" view once implemented
+          Ok(views.html.agent.agentHub(details, user.vrn))
         case Left(error) =>
           Logger.warn(s"[AgentHubController][show] - received an error from CustomerDetailsService: $error")
           serviceErrorHandler.showInternalServerError

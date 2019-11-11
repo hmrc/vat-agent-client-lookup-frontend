@@ -115,3 +115,10 @@ vatReturnsPartial.paragraphMandated = View your client’s submitted returns.
 vatReturnsPartial.paragraphNonMandated = Submit your client’s VAT returns and view submitted returns.
 vatReturnsPartial.viewReturnsLink = View submitted returns
 vatReturnsPartial.submitReturnsLink = Submit VAT Returns
+
+agentHub.heading = Your client’s VAT account
+agentHub.vrn = VAT registration number (VRN): {0}
+agentHub.changeClient = Change client
+
+breadcrumb.agentServices = Agent Services Account
+breadcrumb.clientVatAccount = Your client’s VAT account

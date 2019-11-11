@@ -75,4 +75,7 @@ object ConfigKeys {
 
   val deregisterVatFrontendHost: String = "deregister-vat-frontend.host"
   val deregisterVatFrontendUrl: String = "deregister-vat-frontend.endpoints.deregister"
+
+  val agentServicesHost: String = "agent-services.host"
+  val agentServicesUrl: String = "agent-services.url"
 }
