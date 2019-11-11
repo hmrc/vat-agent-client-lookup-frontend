@@ -30,7 +30,7 @@ class OptOutForMTDVATPartialSpec extends ViewBaseSpec {
 
     "with a mandated status" should {
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = views.html.agent.partials.optOutForMTDVATPartial(MandationStatus.mandated)(messages,mockConfig)
+      lazy val view = views.html.agent.partials.optOutForMTDVATPartial("MTDfB Mandated")(messages,mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct title of ${OptOutForMTDVATMessages.title}" in {

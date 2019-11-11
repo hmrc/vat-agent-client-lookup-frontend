@@ -62,11 +62,8 @@ trait AppConfig extends ServicesConfig {
   val returnDeadlinesUrl: String
   val classicServicesSignInUrl: String
   val accessibilityLinkUrl: String
-<<<<<<< HEAD
   val cancelRegistrationUrl: String
-=======
   val optOutMtdVatUrl: String
->>>>>>> BTAT-7008 Added Opt out partial
 }
 
 @Singleton

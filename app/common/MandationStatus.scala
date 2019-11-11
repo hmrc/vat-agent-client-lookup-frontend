@@ -19,6 +19,5 @@ package common
 object MandationStatus {
 
   val nonMTDfB = "Non MTDfB"
-  val mandated = "MTDfb"
 
 }

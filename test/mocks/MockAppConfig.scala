@@ -72,9 +72,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val returnDeadlinesUrl: String = "/vat-through-software/vat-returns/return-deadlines"
 
   override val classicServicesSignInUrl: String = "/classic-services-sign-in"
-<<<<<<< HEAD
   override val cancelRegistrationUrl: String = "/vat-through-software/account/deregister"
-=======
+
   override val optOutMtdVatUrl: String = "/optOutMtdVatUrl"
->>>>>>> BTAT-7008 Added Opt out partial
 }
