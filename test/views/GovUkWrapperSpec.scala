@@ -31,6 +31,10 @@ class GovUkWrapperSpec extends ViewBaseSpec {
       lazy val view = views.html.govuk_wrapper(mockConfig,"Test")(fakeRequestWithMtdVatAgentData,messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
+      "not be shown a logo" in {
+        document.select(".organisation-logo") shouldBe empty
+      }
+
       "have a nav title of 'Your client’s VAT details'" in {
         elementText(navTitleSelector) shouldBe "Your client’s VAT details"
       }
