@@ -54,6 +54,14 @@ confirmEmail.heading = Confirm the email address
 confirmEmail.change = Change
 confirmEmail.changeContext = Change your email address
 
+clientDetailsCard.title = Client details
+clientDetailsCard.info = Change client business, contact and VAT details.
+clientDetailsCard.link = View your client’s VAT details
+
+VatCertificateCard.title = VAT certificate
+VatCertificateCard.info = View and print your client’s VAT certificate.
+VatCertificateCard.link = View VAT certificate
+
 verifyEmail.title = Verify your email address
 verifyEmail.heading = Verify your email address
 verifyEmail.lineOne = We’ve sent an email to {0}. Click on the link in the email to verify your email address.
