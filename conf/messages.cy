@@ -114,3 +114,8 @@ whatToDo.error.mandatoryRadioOption = Dewiswch beth ydych am ei wneud ar gyfer y
 registrationPartial.cancelRegistration.title = Canslo cofrestriad TAW
 registrationPartial.cancelRegistration.content = Canslo cofrestriad TAW eich cleient os ydych yn cau’r busnes, yn trosglwyddo perchnogaeth neu os nad oes angen i’r cleient fod wedi cofrestru ar gyfer TAW.
 
+vatReturnsPartial.heading = Ffurflenni TAW
+vatReturnsPartial.paragraphMandated = Bwrw golwg dros Ffurflenni TAW eich cleient a gyflwynwyd.
+vatReturnsPartial.paragraphNonMandated = Cyflwyno Ffurflenni TAW eich cleient a bwrw golwg dros y Ffurflenni TAW a gyflwynwyd.
+vatReturnsPartial.viewReturnsLink = Bwrw golwg dros y Ffurflenni TAW a gyflwynwyd
+vatReturnsPartial.submitReturnsLink = Cyflwyno Ffurflen TAW
