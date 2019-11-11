@@ -69,4 +69,7 @@ object ConfigKeys {
   val returnDeadlinesEndpoint: String = "view-vat-returns-frontend.endpoints.return-deadlines"
 
   val classicServicesSignIn: String = "classic-services.sign-in-url"
+
+  val deregisterVatFrontendHost: String = "deregister-vat-frontend.host"
+  val deregisterVatFrontendUrl: String = "deregister-vat-frontend.endpoints.deregister"
 }

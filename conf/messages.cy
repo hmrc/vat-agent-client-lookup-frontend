@@ -96,8 +96,6 @@ notSignedUp.paragraph2Text1 = Gallwch
 notSignedUp.paragraph2Text2 = gyflwyno Ffurflenni TAW a rheoli manylion busnes eich cleient.
 notSignedUp.paragraph2Link = allgofnodi a defnyddio’ch cyfrif Gwasanaethau Ar-lein CThEM presennol
 
-
-
 whatToDo.heading = Beth ydych am ei wneud ar gyfer {0}?
 whatToDo.submitReturn = Cyflwyno Ffurflen TAW
 whatToDo.viewReturns = Bwrw golwg dros y Ffurflenni TAW a gyflwynwyd
@@ -105,4 +103,6 @@ whatToDo.changeDetails = Newid manylion TAW
 whatToDo.viewCertificate = Bwrw golwg dros y dystysgrif TAW
 whatToDo.error.mandatoryRadioOption = Dewiswch beth ydych am ei wneud ar gyfer y cleient hwn
 
+registrationPartial.cancelRegistration.title = Canslo cofrestriad TAW
+registrationPartial.cancelRegistration.content = Canslo cofrestriad TAW eich cleient os ydych yn cau’r busnes, yn trosglwyddo perchnogaeth neu os nad oes angen i’r cleient fod wedi cofrestru ar gyfer TAW.
 

@@ -96,3 +96,6 @@ whatToDo.viewReturns = View submitted returns
 whatToDo.changeDetails = Change VAT details
 whatToDo.viewCertificate = View VAT certificate
 whatToDo.error.mandatoryRadioOption = Select what you would like to do for this client
+
+registrationPartial.cancelRegistration.title = Cancel VAT registration
+registrationPartial.cancelRegistration.content = Cancel your client’s VAT registration if you’re closing the business, transferring ownership or do not need to be VAT registered.
