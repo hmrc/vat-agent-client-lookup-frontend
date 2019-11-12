@@ -22,17 +22,17 @@ import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import views.ViewBaseSpec
 import assets.BaseTestConstants.vrn
-import assets.CustomerDetailsTestConstants.customerDetailsAllInfo
+import assets.CustomerDetailsTestConstants._
 import assets.messages.{AgentHubMessages => Messages}
 
 class AgentHubViewSpec extends ViewBaseSpec {
 
   "AgentHubPage" when {
 
-    "the user is a valid agent" should {
+    "the user is a valid agent for an opted-in client" should {
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = views.html.agent.agentHub(customerDetailsAllInfo, vrn)
+      lazy val view = views.html.agent.agentHub(customerDetailsFnameOnly, vrn)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {
@@ -45,7 +45,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
 
       "display the correct client details" in {
         elementText(".form-hint") should include(Messages.vatNo(vrn))
-        elementText(".form-hint") should include(customerDetailsAllInfo.clientName)
+        elementText(".form-hint") should include(customerDetailsFnameOnly.clientName)
         elementText(".form-hint > a") shouldBe Messages.changeClient
       }
 
@@ -56,6 +56,48 @@ class AgentHubViewSpec extends ViewBaseSpec {
       "have a breadcrumb link to agent services" in {
         elementText("#breadcrumb-asa") shouldBe Messages.agentServicesAccount
         element("#breadcrumb-asa").attr("href") shouldBe mockConfig.agentServicesUrl
+      }
+
+      "display the client details partial" in {
+        elementText("#client-details > h2") shouldBe Messages.clientDetails
+      }
+
+      "display the VAT Returns partial" in {
+        elementText("#vat-returns > h2") shouldBe Messages.vatReturns
+      }
+
+      "display the VAT Certificate partial" in {
+        elementText("#vat-certificate > h2") shouldBe Messages.vatCertificate
+      }
+
+      "display the Opt Out partial" in {
+        elementText("#opt-out > h3") shouldBe Messages.optOut
+      }
+
+      "display the Cancel VAT registration partial" in {
+        elementText("#cancel-vat > h3") shouldBe Messages.cancelVat
+      }
+    }
+
+    "the user is an agent for an opted out client" should {
+
+      lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
+      lazy val view = views.html.agent.agentHub(customerDetailsOptedOut, vrn)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "not display the opt-out partial" in {
+        elementExtinct("#opt-out")
+      }
+    }
+
+    "the user is an agent for a deregistered client" should {
+
+      lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
+      lazy val view = views.html.agent.agentHub(customerDetailsAllInfo, vrn)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "not display the 'cancel vat registration' partial" in {
+        elementExtinct("#cancel-vat")
       }
     }
   }

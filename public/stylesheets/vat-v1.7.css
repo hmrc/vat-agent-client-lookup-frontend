@@ -60,3 +60,7 @@ html[data-useragent*='MSIE 10.0'] .flex-container {
 .tile .tile-body *:last-child {
   margin-bottom: 0;
 }
+
+.bottom-pad {
+  margin-bottom: 60px;
+}

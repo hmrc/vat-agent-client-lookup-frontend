@@ -19,11 +19,9 @@
 @()(implicit messages: Messages, appConfig: AppConfig)
 
 <div class="tile tile-no-border">
-    <div class="tile-body">
-
+    <div id="vat-certificate" class="tile-body">
         <h2 class="heading-medium push--top">@messages("VatCertificateCard.title")</h2>
         <p> @messages("VatCertificateCard.info")</p>
         <p> <a id=card-link href="@{appConfig.vatCertificateUrl}">@messages("VatCertificateCard.link")</a> </p>
-
     </div>
 </div>

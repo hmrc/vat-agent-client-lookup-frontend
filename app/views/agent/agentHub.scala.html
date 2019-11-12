@@ -31,7 +31,7 @@
 
  <header class="page-heading push--top">
   <h1 class="heading-xlarge">@messages("agentHub.heading")</h1>
-  <span class="form-hint">@messages("agentHub.vrn", vrn)</br>
+  <span class="form-hint bottom-pad">@messages("agentHub.vrn", vrn)</br>
    @details.clientName</br>
    <a href="@controllers.agent.routes.ConfirmClientVrnController.changeClient()">
    @messages("agentHub.changeClient")
@@ -47,8 +47,9 @@
   @vatCertificatePartials()
  </div>
 
- 
- @registrationPartial(Registered)
+ <div class="grid-row">
+  @optOutForMTDVATPartial(details.mandationStatus)
 
-
+  @registrationPartial(if(details.deregistration.isDefined) Deregistered else Registered)
+ </div>
 }

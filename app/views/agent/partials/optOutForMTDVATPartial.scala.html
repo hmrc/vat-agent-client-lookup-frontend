@@ -20,13 +20,10 @@
 @(mandationStatus: String)(implicit messages: Messages, appConfig: AppConfig)
 
 @if(mandationStatus != MandationStatus.nonMTDfB) {
-<div class="card">
-
-    <div class="card-body">
-        <h2 class="heading-medium">
-            <a href="@{appConfig.optOutMtdVatUrl}" >@messages("optOutCard.heading")</a>
-        </h2>
-        <p>@messages("optOutCard.content")</p>
-    </div>
+<div id="opt-out" class="column-one-third">
+    <h3 class="heading-small">
+        <a href="@{appConfig.optOutMtdVatUrl}" >@messages("optOutCard.heading")</a>
+    </h3>
+    <p>@messages("optOutCard.content")</p>
 </div>
 }

@@ -20,7 +20,7 @@
 
 @(mandationStatus: String)(implicit messages: Messages,appConfig: AppConfig)
 <div class="tile tile-no-border">
-    <div class="tile-body">
+    <div id="vat-returns" class="tile-body">
         <h2 class="heading-medium push--top">@messages("vatReturnsPartial.heading")</h2>
         @if(mandationStatus==MandationStatus.nonMTDfB){
         <p>@messages("vatReturnsPartial.paragraphNonMandated")</p>

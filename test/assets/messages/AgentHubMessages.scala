@@ -23,4 +23,9 @@ object AgentHubMessages {
   val vatNo: String => String = vrn => s"VAT registration number (VRN): $vrn"
   val changeClient = "Change client"
   val agentServicesAccount = "Agent Services Account"
+  val clientDetails = "Client details"
+  val vatReturns = "VAT Returns"
+  val vatCertificate = "VAT certificate"
+  val optOut = "Opt out of Making Tax Digital for VAT"
+  val cancelVat = "Cancel VAT registration"
 }

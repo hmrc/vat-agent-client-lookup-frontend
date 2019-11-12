@@ -34,7 +34,7 @@ class OptOutForMTDVATPartialSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct title of ${OptOutForMTDVATMessages.title}" in {
-        elementText(".heading-medium") shouldBe OptOutForMTDVATMessages.title
+        elementText(".heading-small") shouldBe OptOutForMTDVATMessages.title
       }
 
       s"have the correct link of ${mockConfig.optOutMtdVatUrl}" in {
