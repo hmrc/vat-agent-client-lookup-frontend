@@ -18,10 +18,10 @@
 @import common.MandationStatus
 @import java.time.LocalDate
 
-@(mandationStatus: String)(implicit messages: Messages,appConfig: AppConfig){
-<div class="card">
-    <div class="card-body">
-        <h2 class="heading-medium">@messages("vatReturnsPartial.heading")</h2>
+@(mandationStatus: String)(implicit messages: Messages,appConfig: AppConfig)
+<div class="tile tile-no-border">
+    <div class="tile-body">
+        <h2 class="heading-medium push--top">@messages("vatReturnsPartial.heading")</h2>
         @if(mandationStatus==MandationStatus.nonMTDfB){
         <p>@messages("vatReturnsPartial.paragraphNonMandated")</p>
         <ul>
@@ -39,4 +39,3 @@
             </ul>
     </div>
 </div>
-}

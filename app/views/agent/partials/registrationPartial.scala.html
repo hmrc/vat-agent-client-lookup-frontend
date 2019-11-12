@@ -19,13 +19,11 @@
 @(registrationStatus: RegistrationStatus)(implicit messages: Messages, appConfig: AppConfig)
 
 @cancelRegistration = {
-    <div class="card">
-        <div class="card-body">
-            <h2 class="heading-medium">
-                <a href="@appConfig.cancelRegistrationUrl">@messages("registrationPartial.cancelRegistration.title")</a>
-            </h2>
-            <p>@messages("registrationPartial.cancelRegistration.content")</p>
-        </div>
+    <div class="column-one-third">
+        <h2 class="heading-medium">
+            <a href="@appConfig.cancelRegistrationUrl">@messages("registrationPartial.cancelRegistration.title")</a>
+        </h2>
+        <p>@messages("registrationPartial.cancelRegistration.content")</p>
     </div>
 }
 
