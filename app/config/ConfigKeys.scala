@@ -55,6 +55,9 @@ object ConfigKeys {
 
   val emailVerificationBaseUrl: String = "email-verification"
 
+  val optOutMtdVatHost:String = "vat-opt-out-frontend.host"
+  val optOutMtdVatUrl:String = "vat-opt-out-frontend.url"
+
   val emailVerificationFeature: String = "features.emailVerification.enabled"
   val preferenceJourneyFeature: String = "features.preferenceJourney.enabled"
   val useLanguageSelectorFeature: String = "features.useLanguageSelector.enabled"

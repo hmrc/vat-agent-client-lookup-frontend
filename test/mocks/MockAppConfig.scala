@@ -73,4 +73,6 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
 
   override val classicServicesSignInUrl: String = "/classic-services-sign-in"
   override val cancelRegistrationUrl: String = "/vat-through-software/account/deregister"
+
+  override val optOutMtdVatUrl: String = "/optOutMtdVatUrl"
 }

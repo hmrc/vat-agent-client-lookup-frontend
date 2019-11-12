@@ -61,6 +61,8 @@ clientDetailsCard.link = View your client’s VAT details
 VatCertificateCard.title = VAT certificate
 VatCertificateCard.info = View and print your client’s VAT certificate.
 VatCertificateCard.link = View VAT certificate
+optOutCard.heading = Opt out of Making Tax Digital for VAT
+optOutCard.content = You cannot opt out if your client’s taxable turnover has been above £85,000 since 1 April 2019.
 
 verifyEmail.title = Verify your email address
 verifyEmail.heading = Verify your email address

@@ -63,6 +63,7 @@ trait AppConfig extends ServicesConfig {
   val classicServicesSignInUrl: String
   val accessibilityLinkUrl: String
   val cancelRegistrationUrl: String
+  val optOutMtdVatUrl: String
 }
 
 @Singleton
@@ -134,6 +135,8 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override lazy val submitVatReturnsUrl: String = getString(Keys.submitVatReturnsUrl)
 
   override lazy val emailVerificationBaseUrl: String = baseUrl(Keys.emailVerificationBaseUrl)
+
+  override lazy val optOutMtdVatUrl : String = getString(Keys.optOutMtdVatHost) + getString(Keys.optOutMtdVatUrl)
 
   override lazy val vatCertificateUrl: String = getString(Keys.vatSummaryFrontendHost) + getString(Keys.vatCertificateEndpoint)
   override lazy val submittedReturnsUrl: Int => String = yearValue => getString(Keys.viewVatReturnsFrontendHost) +
