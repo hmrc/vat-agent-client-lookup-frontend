@@ -122,3 +122,10 @@ vatReturnsPartial.paragraphMandated = Bwrw golwg dros Ffurflenni TAW eich cleien
 vatReturnsPartial.paragraphNonMandated = Cyflwyno Ffurflenni TAW eich cleient a bwrw golwg dros y Ffurflenni TAW a gyflwynwyd.
 vatReturnsPartial.viewReturnsLink = Bwrw golwg dros y Ffurflenni TAW a gyflwynwyd
 vatReturnsPartial.submitReturnsLink = Cyflwyno Ffurflen TAW
+
+agentHub.heading = Cyfrif TAW eich cleient
+agentHub.vrn = Rhif cofrestru TAW (VRN): {0}
+agentHub.changeClient = Newid cleient
+
+breadcrumb.agentServices = Agent Services Account
+breadcrumb.clientVatAccount = Cyfrif TAW eich cleient
