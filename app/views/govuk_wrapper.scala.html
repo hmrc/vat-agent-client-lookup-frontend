@@ -52,6 +52,7 @@
 @linksElement = {
 <link rel="stylesheet" type="text/css" href='@routes.Assets.at("stylesheets/palette.css")'>
 <link rel="stylesheet" type="text/css" href='@routes.Assets.at("stylesheets/focus.css")'>
+<link rel="stylesheet" type="text/css" href='@routes.Assets.at("stylesheets/vat-v1.0.css")'>
 }
 
 @head = {
@@ -118,7 +119,7 @@
 
 @mainContentHeader = {
     @if(appConfig.features.useLanguageSelector()){
-    <div class="float--right">@views.html.language_selection(
+    <div class="text--right">@views.html.language_selection(
         appConfig.languageMap,
         appConfig.routeToSwitchLanguage,
         customClass = None

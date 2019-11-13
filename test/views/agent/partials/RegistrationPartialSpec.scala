@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package views.partials
+package views.agent.partials
 
-import assets.messages.RegistrationPartialMessages
+import assets.messages.partials.RegistrationPartialMessages
 import models.{Deregistered, Registered}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -35,11 +35,11 @@ class RegistrationPartialSpec extends ViewBaseSpec {
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         s"should have the correct title of ${RegistrationPartialMessages.cancelRegistrationTitle}" in {
-          elementText("h2") shouldBe RegistrationPartialMessages.cancelRegistrationTitle
+          elementText("h3") shouldBe RegistrationPartialMessages.cancelRegistrationTitle
         }
 
         s"link to ${mockConfig.cancelRegistrationUrl}" in {
-          element("h2 > a").attr("href") shouldBe mockConfig.cancelRegistrationUrl
+          element("h3 > a").attr("href") shouldBe mockConfig.cancelRegistrationUrl
         }
 
         s"have correct content of ${RegistrationPartialMessages.cancelRegistrationContent}" in {

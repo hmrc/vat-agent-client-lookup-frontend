@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,18 +12,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import config.AppConfig
-@import common.MandationStatus
+package assets.messages.partials
 
-@(mandationStatus: String)(implicit messages: Messages, appConfig: AppConfig)
+object RegistrationPartialMessages {
 
-@if(mandationStatus != MandationStatus.nonMTDfB) {
-<div id="opt-out" class="column-one-third">
-    <h3 class="heading-small">
-        <a href="@{appConfig.optOutMtdVatUrl}" >@messages("optOutCard.heading")</a>
-    </h3>
-    <p>@messages("optOutCard.content")</p>
-</div>
+  val cancelRegistrationTitle: String = "Cancel VAT registration"
+  val cancelRegistrationContent: String =
+    "Cancel your client’s VAT registration if you’re closing the business, transferring ownership or do not need to be VAT registered."
+
 }

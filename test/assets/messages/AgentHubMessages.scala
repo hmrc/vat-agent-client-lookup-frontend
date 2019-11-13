@@ -16,10 +16,16 @@
 
 package assets.messages
 
-object RegistrationPartialMessages {
+object AgentHubMessages {
 
-  val cancelRegistrationTitle: String = "Cancel VAT registration"
-  val cancelRegistrationContent: String =
-    "Cancel your client’s VAT registration if you’re closing the business, transferring ownership or do not need to be VAT registered."
-
+  val title = "Your client’s VAT account - Your client’s VAT details - GOV.UK"
+  val heading = "Your client’s VAT account"
+  val vatNo: String => String = vrn => s"VAT registration number (VRN): $vrn"
+  val changeClient = "Change client"
+  val agentServicesAccount = "Agent Services Account"
+  val clientDetails = "Client details"
+  val vatReturns = "VAT Returns"
+  val vatCertificate = "VAT certificate"
+  val optOut = "Opt out of Making Tax Digital for VAT"
+  val cancelVat = "Cancel VAT registration"
 }

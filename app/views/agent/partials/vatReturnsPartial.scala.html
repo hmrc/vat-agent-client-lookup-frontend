@@ -18,25 +18,23 @@
 @import common.MandationStatus
 @import java.time.LocalDate
 
-@(mandationStatus: String)(implicit messages: Messages,appConfig: AppConfig){
-<div class="card">
-    <div class="card-body">
-        <h2 class="heading-medium">@messages("vatReturnsPartial.heading")</h2>
+@(mandationStatus: String)(implicit messages: Messages,appConfig: AppConfig)
+<div class="tile tile-no-border">
+    <div id="vat-returns" class="tile-body">
+        <h2 class="heading-medium push--top">@messages("vatReturnsPartial.heading")</h2>
         @if(mandationStatus==MandationStatus.nonMTDfB){
         <p>@messages("vatReturnsPartial.paragraphNonMandated")</p>
         <ul>
-            <li>
-                <a href="@{appConfig.submitVatReturnsUrl}">@messages("vatReturnsPartial.submitReturnsLink")</a>
+            <li class="link-bottom-margin">
+                <a id="submit-vat-returns-link" href="@{appConfig.submitVatReturnsUrl}">@messages("vatReturnsPartial.submitReturnsLink")</a>
             </li>
-
-            } else {
+        } else {
             <p>@messages("vatReturnsPartial.paragraphMandated")</p>
             <ul>
-                }
-                <li>
-                    <a href="@{appConfig.submittedReturnsUrl(LocalDate.now().getYear)}">@messages("vatReturnsPartial.viewReturnsLink")</a>
-                </li>
-            </ul>
+        }
+            <li>
+                <a id="view-submitted-returns-link" href="@{appConfig.submittedReturnsUrl(LocalDate.now().getYear)}">@messages("vatReturnsPartial.viewReturnsLink")</a>
+            </li>
+        </ul>
     </div>
 </div>
-}

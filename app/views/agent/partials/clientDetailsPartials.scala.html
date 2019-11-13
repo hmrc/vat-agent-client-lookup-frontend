@@ -16,16 +16,12 @@
 
 @import config.AppConfig
 
-@()(implicit messages: Messages, appConfig: AppConfig) {
+@()(implicit messages: Messages, appConfig: AppConfig)
 
-<div class="card">
-    <div class="card-body">
-
-        <h2 class="heading-medium">@messages("clientDetailsCard.title")</h2>
+<div class="tile tile-no-border">
+    <div id="client-details" class="tile-body">
+        <h2 class="heading-medium push--top">@messages("clientDetailsCard.title")</h2>
         <p> @messages("clientDetailsCard.info")</p>
         <p> <a href="@{appConfig.manageVatCustomerDetailsUrl}">@messages("clientDetailsCard.link")</a> </p>
-
     </div>
 </div>
-
-}

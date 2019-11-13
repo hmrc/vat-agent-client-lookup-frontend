@@ -107,4 +107,13 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None
   )
+
+  val customerDetailsOptedOut = CustomerDetails(
+    Some(firstName),
+    Some(lastName),
+    Some(orgName),
+    Some(tradingName),
+    nonMTDfB,
+    Some(Deregistration(Some(LocalDate.parse("2019-01-01"))))
+  )
 }
