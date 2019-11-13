@@ -25,17 +25,16 @@
         @if(mandationStatus==MandationStatus.nonMTDfB){
         <p>@messages("vatReturnsPartial.paragraphNonMandated")</p>
         <ul>
-            <li>
-                <a href="@{appConfig.submitVatReturnsUrl}">@messages("vatReturnsPartial.submitReturnsLink")</a>
+            <li class="link-bottom-margin">
+                <a id="submit-vat-returns-link" href="@{appConfig.submitVatReturnsUrl}">@messages("vatReturnsPartial.submitReturnsLink")</a>
             </li>
-
-            } else {
+        } else {
             <p>@messages("vatReturnsPartial.paragraphMandated")</p>
             <ul>
-                }
-                <li>
-                    <a href="@{appConfig.submittedReturnsUrl(LocalDate.now().getYear)}">@messages("vatReturnsPartial.viewReturnsLink")</a>
-                </li>
-            </ul>
+        }
+            <li>
+                <a id="view-submitted-returns-link" href="@{appConfig.submittedReturnsUrl(LocalDate.now().getYear)}">@messages("vatReturnsPartial.viewReturnsLink")</a>
+            </li>
+        </ul>
     </div>
 </div>

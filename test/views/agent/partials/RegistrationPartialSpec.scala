@@ -16,7 +16,7 @@
 
 package views.agent.partials
 
-import assets.messages.RegistrationPartialMessages
+import assets.messages.partials.RegistrationPartialMessages
 import models.{Deregistered, Registered}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document

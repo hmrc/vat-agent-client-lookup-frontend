@@ -121,4 +121,3 @@ agentHub.vrn = VAT registration number (VRN): {0}
 agentHub.changeClient = Change client
 
 breadcrumb.agentServices = Agent Services Account
-breadcrumb.clientVatAccount = Your client’s VAT account

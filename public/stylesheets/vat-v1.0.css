@@ -14,8 +14,7 @@
   flex-grow: 0;
   flex-basis: 100%;
   margin-bottom: 2em;
-  border: 1px solid #dee0e2;
-  background: #f3f2f1;
+  background: #f8f8f8;
 }
 
 @media screen and (min-width:600px) and (max-width:900px) {
@@ -40,20 +39,14 @@
   }
 }
 
-html[data-useragent*='MSIE 10.0'] .flex-container {
-  .tile {
-    flex-basis: 31%;
-    margin: 3%;
-  }
-}
-
-.tile-no-border {
-    border: 0;
+html[data-useragent*='MSIE 10.0'] .flex-container.tile {
+  flex-basis: 31%;
+  margin: 3%;
 }
 
 .tile .tile-body {
   border-bottom: 0px;
-  padding: 12px;
+  padding: 1em;
 
 }
 
@@ -61,6 +54,10 @@ html[data-useragent*='MSIE 10.0'] .flex-container {
   margin-bottom: 0;
 }
 
-.bottom-pad {
-  margin-bottom: 60px;
+.bottom-margin {
+  margin-bottom: 2em;
+}
+
+.link-bottom-margin {
+  margin-bottom: 0.5em;
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package assets.messages
+package assets.messages.partials
 
 object RegistrationPartialMessages {
 

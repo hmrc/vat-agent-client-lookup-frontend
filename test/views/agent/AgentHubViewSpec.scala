@@ -24,6 +24,7 @@ import views.ViewBaseSpec
 import assets.BaseTestConstants.vrn
 import assets.CustomerDetailsTestConstants._
 import assets.messages.{AgentHubMessages => Messages}
+import assets.messages.partials._
 
 class AgentHubViewSpec extends ViewBaseSpec {
 
@@ -59,23 +60,23 @@ class AgentHubViewSpec extends ViewBaseSpec {
       }
 
       "display the client details partial" in {
-        elementText("#client-details > h2") shouldBe Messages.clientDetails
+        elementText("#client-details > h2") shouldBe ClientDetailsPartialMessages.heading
       }
 
       "display the VAT Returns partial" in {
-        elementText("#vat-returns > h2") shouldBe Messages.vatReturns
+        elementText("#vat-returns > h2") shouldBe VatReturnsPartialMessages.heading
       }
 
       "display the VAT Certificate partial" in {
-        elementText("#vat-certificate > h2") shouldBe Messages.vatCertificate
+        elementText("#vat-certificate > h2") shouldBe VatCertificatePartialMessages.heading
       }
 
       "display the Opt Out partial" in {
-        elementText("#opt-out > h3") shouldBe Messages.optOut
+        elementText("#opt-out > h3") shouldBe OptOutForMTDVATMessages.title
       }
 
       "display the Cancel VAT registration partial" in {
-        elementText("#cancel-vat > h3") shouldBe Messages.cancelVat
+        elementText("#cancel-vat > h3") shouldBe RegistrationPartialMessages.cancelRegistrationTitle
       }
     }
 

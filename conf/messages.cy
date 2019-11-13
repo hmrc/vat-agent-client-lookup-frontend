@@ -128,4 +128,3 @@ agentHub.vrn = Rhif cofrestru TAW (VRN): {0}
 agentHub.changeClient = Newid cleient
 
 breadcrumb.agentServices = Cyfrif Gwasanaethau Asiant
-breadcrumb.clientVatAccount = Cyfrif TAW eich cleient

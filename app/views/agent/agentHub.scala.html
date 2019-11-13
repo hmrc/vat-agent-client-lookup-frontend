@@ -25,13 +25,13 @@
   <ol class="push--top">
    <li><a id="breadcrumb-asa"
    href="@{appConfig.agentServicesUrl}">@messages("breadcrumb.agentServices")</a></li>
-   <li aria-current="page" id="clients-vat-account">@messages("breadcrumb.clientVatAccount")</li>
+   <li aria-current="page" id="clients-vat-account">@messages("agentHub.heading")</li>
   </ol>
  </div>
 
  <header class="page-heading push--top">
   <h1 class="heading-xlarge">@messages("agentHub.heading")</h1>
-  <span class="form-hint bottom-pad">@messages("agentHub.vrn", vrn)</br>
+  <span class="form-hint bottom-margin">@messages("agentHub.vrn", vrn)</br>
    @details.clientName</br>
    <a href="@controllers.agent.routes.ConfirmClientVrnController.changeClient()">
    @messages("agentHub.changeClient")
