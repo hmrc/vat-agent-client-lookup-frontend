@@ -403,23 +403,48 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
       }
     }
 
-    "redirect URL is not in session" should {
+    "redirect URL is not in session" when {
 
-      lazy val result = {
-        TestConfirmClientVrnController.redirect(FakeRequest().withSession(
-          SessionKeys.clientVRN -> vrn,
-          SessionKeys.notificationsEmail -> "an.email@host.com"
-        ))
+      "useAgentHub feature is enabled" should {
+
+        lazy val result = {
+          TestConfirmClientVrnController.redirect(FakeRequest().withSession(
+            SessionKeys.clientVRN -> vrn,
+            SessionKeys.notificationsEmail -> "an.email@host.com"
+          ))
+        }
+
+        "return status SEE_OTHER (303)" in {
+          mockConfig.features.useAgentHubPageFeature(true)
+          mockAgentAuthorised()
+          mockCustomerDetailsSuccess(customerDetailsOrganisation)
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        "redirect to WhatToDo controller" in {
+          redirectLocation(result) shouldBe Some(controllers.agent.routes.AgentHubController.show().url)
+        }
       }
 
-      "return status SEE_OTHER (303)" in {
-        mockAgentAuthorised()
-        mockCustomerDetailsSuccess(customerDetailsOrganisation)
-        status(result) shouldBe Status.SEE_OTHER
-      }
+      "useAgentHub feature is disabled" should {
+        
+        lazy val result = {
+          TestConfirmClientVrnController.redirect(FakeRequest().withSession(
+            SessionKeys.clientVRN -> vrn,
+            SessionKeys.notificationsEmail -> "an.email@host.com"
+          ))
+        }
 
-      "redirect to WhatToDo controller" in {
-        redirectLocation(result) shouldBe Some(controllers.agent.routes.WhatToDoController.show().url)
+        "return status SEE_OTHER (303)" in {
+          mockConfig.features.useAgentHubPageFeature(false)
+          mockAgentAuthorised()
+          mockCustomerDetailsSuccess(customerDetailsOrganisation)
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        "redirect to WhatToDo controller" in {
+          redirectLocation(result) shouldBe Some(controllers.agent.routes.WhatToDoController.show().url)
+        }
       }
     }
   }

@@ -50,7 +50,8 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
           val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
-          status(result) shouldBe OK //TODO - add test to check page title when AgentHubPage has been implemented
+          status(result) shouldBe OK
+          Jsoup.parse(bodyOf(result)).title() shouldBe "Your client’s VAT account - Your client’s VAT details - GOV.UK"
         }
       }
 
