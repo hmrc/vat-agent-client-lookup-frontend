@@ -16,35 +16,96 @@
 
 package views.agent.partials
 
+import assets.BaseTestConstants.vrn
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import views.ViewBaseSpec
 import assets.messages.partials.ClientDetailsPartialMessages
+import common.SessionKeys
+import controllers.agent.routes
+import models.User
 
 class ClientDetailsPartialsSpec extends ViewBaseSpec {
 
-  "ClientDetailsPartials" should {
+  "ClientDetailsPartials" when {
 
-    lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-    lazy val view = views.html.agent.partials.clientDetailsPartials()(messages,mockConfig)
-    lazy implicit val document: Document = Jsoup.parse(view.body)
+    "when the user has no contact preference in session" should {
 
-    s"have the correct card heading of ${ClientDetailsPartialMessages.heading}" in {
-      elementText(".heading-medium") shouldBe ClientDetailsPartialMessages.heading
+      lazy val view = views.html.agent.partials.clientDetailsPartials()(messages, mockConfig, user)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      s"have the correct card heading of ${ClientDetailsPartialMessages.heading}" in {
+        elementText(".heading-medium") shouldBe ClientDetailsPartialMessages.heading
+      }
+
+      s"display the correct line 1 of ${ClientDetailsPartialMessages.paragraphOne}" in {
+        elementText("p") shouldBe ClientDetailsPartialMessages.paragraphOne
+      }
+
+      s"display the correct link text of ${ClientDetailsPartialMessages.linkText}" in {
+        elementText("a") shouldBe ClientDetailsPartialMessages.linkText
+      }
+
+      s"display the correct link of ${controllers.agent.routes.CapturePreferenceController.show().url}" in {
+        element("a").attr("href") shouldBe controllers.agent.routes.CapturePreferenceController.show().url
+      }
     }
 
-    s"display the correct line 1 of ${ClientDetailsPartialMessages.paragraphOne}" in {
-      elementText("p") shouldBe ClientDetailsPartialMessages.paragraphOne
+
+    "when the user has a valid agent email in session" should {
+
+      lazy val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
+        .withSession(SessionKeys.verifiedAgentEmail -> "exampleemail@email.com")
+
+      lazy val testuser: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn, active = true)(testGetRequest)
+
+      lazy val view = views.html.agent.partials.clientDetailsPartials()(messages, mockConfig, testuser)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      s"have the correct card heading of ${ClientDetailsPartialMessages.heading}" in {
+        elementText(".heading-medium") shouldBe ClientDetailsPartialMessages.heading
+      }
+
+      s"display the correct line 1 of ${ClientDetailsPartialMessages.paragraphOne}" in {
+        elementText("p") shouldBe ClientDetailsPartialMessages.paragraphOne
+      }
+
+      s"display the correct link text of ${ClientDetailsPartialMessages.linkText}" in {
+        elementText("a") shouldBe ClientDetailsPartialMessages.linkText
+      }
+
+      s"display the correct link of ${mockConfig.manageVatCustomerDetailsUrl}" in {
+        element("a").attr("href") shouldBe mockConfig.manageVatCustomerDetailsUrl
+      }
     }
 
-    s"display the correct link text of ${ClientDetailsPartialMessages.linkText}" in {
-      elementText("a") shouldBe ClientDetailsPartialMessages.linkText
-    }
+    "when the user has email notification in session as no" should {
 
-    s"display the correct link of ${mockConfig.manageVatCustomerDetailsUrl}" in {
-      element("a").attr("href") shouldBe mockConfig.manageVatCustomerDetailsUrl
+      lazy val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
+        .withSession(SessionKeys.preference -> "no")
+
+      lazy val testuser: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn, active = true)(testGetRequest)
+
+      lazy val view = views.html.agent.partials.clientDetailsPartials()(messages, mockConfig, testuser)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      s"have the correct card heading of ${ClientDetailsPartialMessages.heading}" in {
+        elementText(".heading-medium") shouldBe ClientDetailsPartialMessages.heading
+      }
+
+      s"display the correct line 1 of ${ClientDetailsPartialMessages.paragraphOne}" in {
+        elementText("p") shouldBe ClientDetailsPartialMessages.paragraphOne
+      }
+
+      s"display the correct link text of ${ClientDetailsPartialMessages.linkText}" in {
+        elementText("a") shouldBe ClientDetailsPartialMessages.linkText
+      }
+
+      s"display the correct link of ${mockConfig.manageVatCustomerDetailsUrl}" in {
+        element("a").attr("href") shouldBe mockConfig.manageVatCustomerDetailsUrl
+      }
     }
   }
 
