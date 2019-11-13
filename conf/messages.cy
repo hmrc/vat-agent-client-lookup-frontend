@@ -127,5 +127,5 @@ agentHub.heading = Cyfrif TAW eich cleient
 agentHub.vrn = Rhif cofrestru TAW (VRN): {0}
 agentHub.changeClient = Newid cleient
 
-breadcrumb.agentServices = Agent Services Account
+breadcrumb.agentServices = Cyfrif Gwasanaethau Asiant
 breadcrumb.clientVatAccount = Cyfrif TAW eich cleient
