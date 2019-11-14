@@ -21,10 +21,11 @@ import org.jsoup.nodes.Document
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import views.ViewBaseSpec
-import assets.BaseTestConstants.vrn
+import assets.BaseTestConstants.{arn, vrn}
 import assets.CustomerDetailsTestConstants._
 import assets.messages.{AgentHubMessages => Messages}
 import assets.messages.partials._
+import models.User
 
 class AgentHubViewSpec extends ViewBaseSpec {
 
@@ -32,8 +33,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
 
     "the user is a valid agent for an opted-in client" should {
 
-      lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = views.html.agent.agentHub(customerDetailsFnameOnly, vrn)
+      lazy val view = views.html.agent.agentHub(customerDetailsFnameOnly, vrn)(request,messages,mockConfig,user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {
@@ -83,7 +83,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
     "the user is an agent for an opted out client" should {
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = views.html.agent.agentHub(customerDetailsOptedOut, vrn)
+      lazy val view = views.html.agent.agentHub(customerDetailsOptedOut, vrn)(request,messages,mockConfig,user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not display the opt-out partial" in {
@@ -94,7 +94,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
     "the user is an agent for a deregistered client" should {
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = views.html.agent.agentHub(customerDetailsAllInfo, vrn)
+      lazy val view = views.html.agent.agentHub(customerDetailsAllInfo, vrn)(request,messages,mockConfig,user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not display the 'cancel vat registration' partial" in {

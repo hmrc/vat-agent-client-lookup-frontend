@@ -24,7 +24,6 @@ import play.api.test.FakeRequest
 import views.ViewBaseSpec
 import assets.messages.partials.ClientDetailsPartialMessages
 import common.SessionKeys
-import controllers.agent.routes
 import models.User
 
 class ClientDetailsPartialsSpec extends ViewBaseSpec {
