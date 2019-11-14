@@ -15,13 +15,21 @@
  *@
 
 @import config.AppConfig
+@import models.User
+@import common.SessionKeys
 
-@()(implicit messages: Messages, appConfig: AppConfig)
+@()(implicit messages: Messages, appConfig: AppConfig ,user: User[_])
 
 <div class="tile tile-no-border">
     <div id="client-details" class="tile-body">
         <h2 class="heading-medium push--top">@messages("clientDetailsCard.title")</h2>
         <p> @messages("clientDetailsCard.info")</p>
+
+        @if(user.session.get(SessionKeys.verifiedAgentEmail).isDefined | user.session.get(SessionKeys.preference) == Some("no")) {
         <p> <a href="@{appConfig.manageVatCustomerDetailsUrl}">@messages("clientDetailsCard.link")</a> </p>
+        } else {
+        <p> <a href="@{controllers.agent.routes.CapturePreferenceController.show().url}">@messages("clientDetailsCard.link")</a> </p>
+        }
+
     </div>
 </div>
