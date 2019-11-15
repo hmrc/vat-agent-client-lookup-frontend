@@ -16,6 +16,8 @@
 
 package views.agent
 
+import java.time.LocalDate
+
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.mvc.AnyContentAsEmpty
@@ -31,9 +33,11 @@ class AgentHubViewSpec extends ViewBaseSpec {
 
   "AgentHubPage" when {
 
+    val date: LocalDate = LocalDate.parse("2018-05-01")
+
     "the user is a valid agent for an opted-in client" should {
 
-      lazy val view = views.html.agent.agentHub(customerDetailsFnameOnly, vrn)(request,messages,mockConfig,user)
+      lazy val view = views.html.agent.agentHub(customerDetailsFnameOnly, vrn, date)(request,messages,mockConfig,user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {
@@ -83,7 +87,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
     "the user is an agent for an opted out client" should {
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = views.html.agent.agentHub(customerDetailsOptedOut, vrn)(request,messages,mockConfig,user)
+      lazy val view = views.html.agent.agentHub(customerDetailsOptedOut, vrn, date)(request,messages,mockConfig,user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not display the opt-out partial" in {
@@ -94,7 +98,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
     "the user is an agent for a deregistered client" should {
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = views.html.agent.agentHub(customerDetailsAllInfo, vrn)(request,messages,mockConfig,user)
+      lazy val view = views.html.agent.agentHub(customerDetailsAllInfo, vrn, date)(request,messages,mockConfig,user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not display the 'cancel vat registration' partial" in {

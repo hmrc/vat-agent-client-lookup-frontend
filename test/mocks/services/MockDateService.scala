@@ -14,11 +14,23 @@
  * limitations under the License.
  */
 
-package models
+package mocks.services
 
-case class FeatureSwitchModel(emailVerificationEnabled: Boolean,
-                              preferenceJourneyEnabled: Boolean,
-                              useLanguageFeatureEnabled: Boolean,
-                              useAgentHubPageFeature: Boolean,
-                              useStaticDateFeature: Boolean
-                             )
+import java.time.LocalDate
+
+import org.mockito.stubbing.OngoingStubbing
+import org.scalatest.BeforeAndAfterEach
+import org.scalatest.mockito.MockitoSugar
+import services.DateService
+import uk.gov.hmrc.play.test.UnitSpec
+import org.mockito.Mockito._
+
+trait MockDateService extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
+
+  val mockDateService: DateService = mock[DateService]
+
+  def setupMockDateService(date: LocalDate): OngoingStubbing[LocalDate] = {
+    when(mockDateService.now()).thenReturn(date)
+  }
+
+}

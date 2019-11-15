@@ -16,6 +16,8 @@
 
 package views.agent.partials
 
+import java.time.LocalDate
+
 import assets.messages.partials.{VatReturnsPartialMessages => Messages}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -27,10 +29,12 @@ class VatReturnsPartialSpec extends ViewBaseSpec {
 
   "VatReturnsPartial" when {
 
+    val date: LocalDate = LocalDate.parse("2018-05-01")
+
     "passed a mandation status of 'Non MTDfB'" should {
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = views.html.agent.partials.vatReturnsPartial("Non MTDfB")(messages, mockConfig)
+      lazy val view = views.html.agent.partials.vatReturnsPartial("Non MTDfB", date)(messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct card heading" in {
@@ -54,14 +58,14 @@ class VatReturnsPartialSpec extends ViewBaseSpec {
       }
 
       "have the correct url for the 2nd link" in {
-        element("li:nth-child(2)").getAllElements().attr("href") shouldBe "/submitted-returns"
+        element("li:nth-child(2)").getAllElements().attr("href") shouldBe "/submitted-returns/2018"
       }
     }
 
     "passed a mandation status of 'MTDfB Mandated'" should {
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = views.html.agent.partials.vatReturnsPartial("MTDfB Mandated")(messages, mockConfig)
+      lazy val view = views.html.agent.partials.vatReturnsPartial("MTDfB Mandated", date)(messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct card heading" in {
@@ -77,7 +81,7 @@ class VatReturnsPartialSpec extends ViewBaseSpec {
       }
 
       "have the correct url for the 1st link" in {
-        element("li").getAllElements().attr("href") shouldBe "/submitted-returns"
+        element("li").getAllElements().attr("href") shouldBe "/submitted-returns/2018"
       }
     }
   }

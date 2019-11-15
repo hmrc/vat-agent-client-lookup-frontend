@@ -26,4 +26,5 @@ class Features @Inject()(config: Configuration) {
   val preferenceJourneyEnabled = new Feature(ConfigKeys.preferenceJourneyFeature, config)
   val useLanguageSelector = new Feature(ConfigKeys.useLanguageSelectorFeature, config)
   val useAgentHubPageFeature = new Feature(ConfigKeys.useAgentHubPageFeature, config)
+  val useStaticDateFeature = new Feature(ConfigKeys.useStaticDateFeature, config)
 }

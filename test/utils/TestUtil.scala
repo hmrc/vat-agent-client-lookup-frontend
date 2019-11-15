@@ -22,6 +22,7 @@ import common.MandationStatus.nonMTDfB
 import config.ErrorHandler
 import mocks.MockAppConfig
 import models.{Agent, User}
+import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
@@ -34,7 +35,11 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.ExecutionContext
 
-trait TestUtil extends UnitSpec with GuiceOneAppPerSuite {
+trait TestUtil extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach {
+
+  override def beforeEach(): Unit = {
+    mockConfig.features.useStaticDateFeature(true)
+  }
 
   lazy val injector: Injector = app.injector
   lazy val messagesApi: MessagesApi = injector.instanceOf[MessagesApi]

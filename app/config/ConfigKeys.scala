@@ -62,6 +62,9 @@ object ConfigKeys {
   val preferenceJourneyFeature: String = "features.preferenceJourney.enabled"
   val useLanguageSelectorFeature: String = "features.useLanguageSelector.enabled"
   val useAgentHubPageFeature: String = "features.useAgentHubPage.enabled"
+  val useStaticDateFeature: String = "features.useStaticDate.enabled"
+
+  val staticDateValue: String = "date-service.staticDate.value"
 
   val vatSummaryFrontendHost: String = "vat-summary-frontend.host"
   val vatCertificateEndpoint: String = "vat-summary-frontend.endpoints.vat-certificate"
