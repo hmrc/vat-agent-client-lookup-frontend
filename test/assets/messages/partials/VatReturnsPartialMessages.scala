@@ -21,7 +21,7 @@ object VatReturnsPartialMessages {
   val heading = "VAT Returns"
   val paragraphOneMandated = "View your client’s submitted returns."
   val paragraphOneNonMandated = "Submit your client’s VAT returns and view submitted returns."
-  val submitVatReturns = "Submit VAT Returns"
+  val submitVatReturn = "Submit VAT Return"
   val submittedReturns = "View submitted returns"
 
 }

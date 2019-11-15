@@ -42,11 +42,11 @@ class VatReturnsPartialSpec extends ViewBaseSpec {
       }
 
       "display the correct text in link 1" in {
-        elementText("li:nth-child(1)") shouldBe Messages.submitVatReturns
+        elementText("li:nth-child(1)") shouldBe Messages.submitVatReturn
       }
 
       "have the correct url for the 1st link" in {
-        element("li:nth-child(1)").getAllElements().attr("href") shouldBe "guidance/submit-vat-returns"
+        element("li:nth-child(1)").getAllElements().attr("href") shouldBe "/vat-through-software/vat-returns/return-deadlines"
       }
 
       "display the correct text in link 2" in {
