@@ -45,35 +45,62 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
     )
   }
 
-  "WhatToDoController.show" should {
-    "render the page" when {
-      "user is an agent" in new Test {
+  "WhatToDoController.show" when {
 
-        mockAgentAuthorised()
-        mockCustomerDetailsSuccess(customerDetailsFnameOnly)
+    "useAgentHubFeature is disabled" should {
 
-        val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
+      "render the page" when {
 
-        status(result) shouldBe OK
-        Jsoup.parse(bodyOf(result)).title() shouldBe (title(firstName) + " - Your client’s VAT details - GOV.UK")
+        "user is an agent" in new Test {
+
+          mockAgentAuthorised()
+          mockCustomerDetailsSuccess(customerDetailsFnameOnly)
+
+          val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
+
+          status(result) shouldBe OK
+          Jsoup.parse(bodyOf(result)).title() shouldBe (title(firstName) + " - Your client’s VAT details - GOV.UK")
+        }
+      }
+
+      "render the error page" when {
+
+        "an error is returned in customer details" in new Test {
+
+          mockAgentAuthorised()
+          mockCustomerDetailsError(BaseTestConstants.unexpectedError)
+
+          val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
+
+          status(result) shouldBe INTERNAL_SERVER_ERROR
+          Jsoup.parse(bodyOf(result)).title() shouldBe "There is a problem with the service - Your client’s VAT details - GOV.UK"
+        }
       }
     }
-    "render the error page" when {
-      "an error is returned in customer details" in new Test {
 
-        mockAgentAuthorised()
-        mockCustomerDetailsError(BaseTestConstants.unexpectedError)
+    "useAgentHubFeature is enabled" should {
 
-        val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
+      "redirect to Agent Hub controller route" in new Test {
 
-        status(result) shouldBe INTERNAL_SERVER_ERROR
-        Jsoup.parse(bodyOf(result)).title() shouldBe "There is a problem with the service - Your client’s VAT details - GOV.UK"
+        val result: Future[Result] = {
+          mockConfig.features.useAgentHubPageFeature(true)
+
+          mockAgentAuthorised()
+          mockCustomerDetailsSuccess(customerDetailsFnameOnly)
+
+          controller.show()(fakeRequestWithVrnAndRedirectUrl)
+        }
+
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some(controllers.agent.routes.AgentHubController.show().url)
       }
     }
   }
 
   "WhatToDoController.submit" should {
+
     "render the page" when {
+
       "submit return is selected" in new Test {
 
         mockAgentAuthorised()
@@ -145,6 +172,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
     }
     
     "render the page with an error" when {
+
       "the form submitted is incorrect" in new Test {
 
         mockAgentAuthorised()
@@ -160,7 +188,6 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
       "the form submitted is incorrect, there's no session data and customerDetailService call is successful" in new Test {
 
-
         mockAgentAuthorised()
         mockCustomerDetailsSuccess(customerDetailsFnameOnly)
 
@@ -173,7 +200,9 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
         parsedBody.body().toString should include(error)
       }
     }
+
     "redirect to the capture preferences page" when {
+
       "the email preference is not present in the session" in new Test {
         mockAgentAuthorised()
 
@@ -184,6 +213,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
         redirectLocation(result) shouldBe Some("/vat-through-software/representative/email-notification")
       }
     }
+
     "return an ISE" when {
 
       "an incorrect form is submitted with no session data and customerDetailsService returns an error" in new Test{

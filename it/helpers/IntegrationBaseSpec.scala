@@ -44,6 +44,7 @@ trait IntegrationBaseSpec extends TestSuite with CustomMatchers
 
   override def beforeEach() {
     mockAppConfig.features.emailVerificationEnabled(true)
+    mockAppConfig.features.useAgentHubPageFeature(false)
     super.beforeEach()
   }
 

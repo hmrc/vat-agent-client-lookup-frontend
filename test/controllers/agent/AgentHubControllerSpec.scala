@@ -43,12 +43,14 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
       "the customerDetailsService returns the customer details" should {
 
         "render the AgentHubPage" in new Test {
-          mockConfig.features.useAgentHubPageFeature(true)
 
           mockAgentAuthorised()
           mockCustomerDetailsSuccess(customerDetailsFnameOnly)
 
-          val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
+          val result: Future[Result] = {
+            mockConfig.features.useAgentHubPageFeature(true)
+            controller.show()(fakeRequestWithVrnAndRedirectUrl)
+          }
 
           status(result) shouldBe OK
           Jsoup.parse(bodyOf(result)).title() shouldBe "Your client’s VAT account - Your client’s VAT details - GOV.UK"
@@ -62,7 +64,10 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
           mockAgentAuthorised()
           mockCustomerDetailsError(BaseTestConstants.unexpectedError)
 
-          val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
+          val result: Future[Result] = {
+            mockConfig.features.useAgentHubPageFeature(true)
+            controller.show()(fakeRequestWithVrnAndRedirectUrl)
+          }
 
           status(result) shouldBe INTERNAL_SERVER_ERROR
           Jsoup.parse(bodyOf(result)).title() shouldBe "There is a problem with the service - Your client’s VAT details - GOV.UK"

@@ -41,13 +41,17 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
                                    implicit val appConfig: AppConfig) extends BaseController {
 
   def show: Action[AnyContent] = authenticate.async { implicit user =>
-    customerDetailsService.getCustomerDetails(user.vrn).map {
-      case Right(details) =>
-        Ok(views.html.agent.whatToDo(WhatToDoForm.whatToDoForm, details.clientName, details.mandationStatus))
-          .addingToSession(SessionKeys.mtdVatAgentClientName -> details.clientName, SessionKeys.mtdVatAgentMandationStatus -> details.mandationStatus)
-      case Left(error) =>
-        Logger.warn(s"[WhatToDoController][show] - received an error from CustomerDetailsService: $error")
-        serviceErrorHandler.showInternalServerError
+    if(appConfig.features.useAgentHubPageFeature()) {
+      Future(Redirect(controllers.agent.routes.AgentHubController.show()))
+    } else {
+      customerDetailsService.getCustomerDetails(user.vrn).map {
+        case Right(details) =>
+          Ok(views.html.agent.whatToDo(WhatToDoForm.whatToDoForm, details.clientName, details.mandationStatus))
+            .addingToSession(SessionKeys.mtdVatAgentClientName -> details.clientName, SessionKeys.mtdVatAgentMandationStatus -> details.mandationStatus)
+        case Left(error) =>
+          Logger.warn(s"[WhatToDoController][show] - received an error from CustomerDetailsService: $error")
+          serviceErrorHandler.showInternalServerError
+      }
     }
   }
 
