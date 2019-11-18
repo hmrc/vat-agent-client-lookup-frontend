@@ -14,11 +14,23 @@
  * limitations under the License.
  */
 
-package models
+package services
 
-case class FeatureSwitchModel(emailVerificationEnabled: Boolean,
-                              preferenceJourneyEnabled: Boolean,
-                              useLanguageFeatureEnabled: Boolean,
-                              useAgentHubPageFeature: Boolean,
-                              useStaticDateFeature: Boolean
-                             )
+import java.time.LocalDate
+
+import javax.inject.{Inject, Singleton}
+
+@Singleton
+class DateService @Inject()(appConfig: config.AppConfig) {
+
+  def now(): LocalDate = {
+
+    val staticDateEnabled: Boolean = appConfig.features.useStaticDateFeature()
+
+    staticDateEnabled match {
+      case true => LocalDate.parse(appConfig.staticDateValue)
+      case false => LocalDate.now()
+    }
+  }
+
+}

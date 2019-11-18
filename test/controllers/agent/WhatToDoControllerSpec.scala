@@ -16,6 +16,7 @@
 
 package controllers.agent
 
+import java.time.LocalDate
 import java.util.concurrent.TimeUnit
 
 import akka.util.Timeout
@@ -24,7 +25,7 @@ import assets.CustomerDetailsTestConstants._
 import assets.messages.WhatToDoMessages._
 import common.SessionKeys
 import controllers.ControllerBaseSpec
-import mocks.services.MockCustomerDetailsService
+import mocks.services.{MockCustomerDetailsService, MockDateService}
 import models.errors.UnexpectedError
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -35,10 +36,10 @@ import play.mvc.Http.Status._
 
 import scala.concurrent.Future
 
-class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetailsService{
+class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetailsService with MockDateService {
 
   trait Test {
-    lazy val controller = new WhatToDoController(messagesApi, mockAuthAsAgentWithClient, mockErrorHandler, mockCustomerDetailsService, mockConfig)
+    lazy val controller = new WhatToDoController(messagesApi, mockAuthAsAgentWithClient, mockErrorHandler, mockCustomerDetailsService, mockDateService, mockConfig)
     implicit val timeout: Timeout = Timeout.apply(60, TimeUnit.SECONDS)
     val fakeRequestWithEmailPref: FakeRequest[AnyContentAsEmpty.type] = fakeRequestWithVrnAndRedirectUrl.withSession(
       SessionKeys.preference -> "true"
@@ -99,6 +100,8 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
   "WhatToDoController.submit" should {
 
+    setupMockDateService(LocalDate.parse(mockConfig.staticDateValue))
+
     "render the page" when {
 
       "submit return is selected" in new Test {
@@ -120,7 +123,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
           .withFormUrlEncodedBody("option" -> "view-return")
         )
 
-        redirectLocation(result) shouldBe Some(mockConfig.submittedReturnsUrl(1993))
+        redirectLocation(result) shouldBe Some(mockConfig.submittedReturnsUrl(2018))
       }
 
       "change details is selected with email pref yes and verified email in session" in new Test {

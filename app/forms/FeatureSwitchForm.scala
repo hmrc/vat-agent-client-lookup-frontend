@@ -27,7 +27,8 @@ object FeatureSwitchForm {
       ConfigKeys.emailVerificationFeature -> boolean,
       ConfigKeys.preferenceJourneyFeature -> boolean,
       ConfigKeys.useLanguageSelectorFeature -> boolean,
-      ConfigKeys.useAgentHubPageFeature -> boolean
+      ConfigKeys.useAgentHubPageFeature -> boolean,
+      ConfigKeys.useStaticDateFeature -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 }

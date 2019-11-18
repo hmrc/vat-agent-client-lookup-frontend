@@ -66,6 +66,7 @@ trait AppConfig extends ServicesConfig {
   val optOutMtdVatUrl: String
   val agentServicesHost: String
   val agentServicesUrl: String
+  val staticDateValue: String
 }
 
 @Singleton
@@ -151,4 +152,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
 
   override val agentServicesHost: String = getString(ConfigKeys.agentServicesHost)
   override val agentServicesUrl: String = agentServicesHost + getString(ConfigKeys.agentServicesUrl)
+
+  override lazy val staticDateValue: String = getString(Keys.staticDateValue)
 }

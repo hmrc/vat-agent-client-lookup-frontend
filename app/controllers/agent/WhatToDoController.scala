@@ -29,7 +29,7 @@ import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Action, AnyContent, Result}
-import services.CustomerDetailsService
+import services.{CustomerDetailsService, DateService}
 
 import scala.concurrent.Future
 
@@ -38,6 +38,7 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
                                    val authenticate: AuthoriseAsAgentWithClient,
                                    val serviceErrorHandler: ErrorHandler,
                                    val customerDetailsService: CustomerDetailsService,
+                                   val dateService: DateService,
                                    implicit val appConfig: AppConfig) extends BaseController {
 
   def show: Action[AnyContent] = authenticate.async { implicit user =>
@@ -64,7 +65,7 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
         data => Future.successful(
           data.value match {
             case SubmitReturn.value => Redirect(appConfig.returnDeadlinesUrl)
-            case ViewReturn.value => Redirect(appConfig.submittedReturnsUrl(DateTime.now(DateTimeZone.UTC).year().get()))
+            case ViewReturn.value => Redirect(appConfig.submittedReturnsUrl(dateService.now().getYear))
             case ChangeDetails.value => emailPrefCheck(user)
             case ViewCertificate.value => Redirect(appConfig.vatCertificateUrl)
           }

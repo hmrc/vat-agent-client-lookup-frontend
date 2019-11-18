@@ -16,6 +16,7 @@
 
 package controllers.agent
 
+import java.time.LocalDate
 import java.util.concurrent.TimeUnit
 
 import akka.util.Timeout
@@ -23,17 +24,24 @@ import assets.BaseTestConstants
 import assets.CustomerDetailsTestConstants.{customerDetailsFnameOnly, firstName}
 import assets.messages.WhatToDoMessages.title
 import controllers.ControllerBaseSpec
-import mocks.services.MockCustomerDetailsService
+import mocks.services._
 import org.jsoup.Jsoup
 import play.api.mvc.Result
 import play.mvc.Http.Status._
 
 import scala.concurrent.Future
 
-class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetailsService {
+class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetailsService with MockDateService {
 
   trait Test {
-    lazy val controller = new AgentHubController(messagesApi, mockAuthAsAgentWithClient, mockErrorHandler, mockCustomerDetailsService, mockConfig)
+    lazy val controller = new AgentHubController(
+      messagesApi,
+      mockAuthAsAgentWithClient,
+      mockErrorHandler,
+      mockCustomerDetailsService,
+      mockDateService,
+      mockConfig
+    )
     implicit val timeout: Timeout = Timeout.apply(60, TimeUnit.SECONDS)
   }
 
@@ -43,7 +51,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
       "the customerDetailsService returns the customer details" should {
 
         "render the AgentHubPage" in new Test {
-
+          setupMockDateService(LocalDate.parse(mockConfig.staticDateValue))
           mockAgentAuthorised()
           mockCustomerDetailsSuccess(customerDetailsFnameOnly)
 

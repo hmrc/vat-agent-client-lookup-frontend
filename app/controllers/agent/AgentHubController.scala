@@ -23,7 +23,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.Logger
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Action, AnyContent}
-import services.CustomerDetailsService
+import services.{CustomerDetailsService, DateService}
 
 import scala.concurrent.Future
 
@@ -32,13 +32,14 @@ class AgentHubController @Inject()(val messagesApi: MessagesApi,
                                    val authenticate: AuthoriseAsAgentWithClient,
                                    val serviceErrorHandler: ErrorHandler,
                                    val customerDetailsService: CustomerDetailsService,
+                                   val dateService: DateService,
                                    implicit val appConfig: AppConfig) extends BaseController {
 
   def show: Action[AnyContent] = authenticate.async { implicit user =>
     if(appConfig.features.useAgentHubPageFeature()){
       customerDetailsService.getCustomerDetails(user.vrn).map {
         case Right(details) =>
-          Ok(views.html.agent.agentHub(details, user.vrn))
+          Ok(views.html.agent.agentHub(details, user.vrn, dateService.now()))
         case Left(error) =>
           Logger.warn(s"[AgentHubController][show] - received an error from CustomerDetailsService: $error")
           serviceErrorHandler.showInternalServerError
