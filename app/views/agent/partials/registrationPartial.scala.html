@@ -41,12 +41,23 @@
     </div>
 }
 
+@futureDeregistration(date: LocalDate) = {
+<div id="cancel-vat" class="column-one-third">
+    <h3 class="heading-small">
+        @messages("registrationPartial.futureDeregistration.title")
+    </h3>
+    <p>@messages("registrationPartial.futureDeregistration.content", date.toLongDate)</p>
+    <p><a href="@appConfig.onlineAgentServicesUrl">@messages("registrationPartial.futureDeregistration.link")</a></p>
+</div>
+}
+
 @{
     if(details.deregistration.isDefined){
         details.deregistration.flatMap(_.effectDateOfCancellation) match {
             case Some(date) => date match {
-                case future if future.isAfter(currentDate) => {}
+                case future if future.isAfter(currentDate) => {futureDeregistration(future)}
                 case historic => historicDeregistration(historic)
+                case _ => {}
             }
             case _ => {
                 Logger.warn("[registrationPartial][deregistrationDate] - 'deregistration' contained no 'effectDateOfCancellation'")
