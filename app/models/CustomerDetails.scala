@@ -26,7 +26,8 @@ case class CustomerDetails(firstName: Option[String],
                            organisationName: Option[String],
                            tradingName: Option[String],
                            mandationStatus: String,
-                           deregistration: Option[Deregistration]) {
+                           deregistration: Option[Deregistration],
+                           inFlightInformation: Option[InFlightInformation] = None) {
 
   val userName: Option[String] = {
     val name = s"${firstName.getOrElse("")} ${lastName.getOrElse("")}".trim
