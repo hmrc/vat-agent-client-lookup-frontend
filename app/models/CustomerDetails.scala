@@ -27,7 +27,7 @@ case class CustomerDetails(firstName: Option[String],
                            tradingName: Option[String],
                            mandationStatus: String,
                            deregistration: Option[Deregistration],
-                           inFlightInformation: Option[InFlightInformation] = None) {
+                           changeIndicators: Option[ChangeIndicators] = None) {
 
   val userName: Option[String] = {
     val name = s"${firstName.getOrElse("")} ${lastName.getOrElse("")}".trim
@@ -52,6 +52,7 @@ object CustomerDetails {
   private val tradingNamePath = __ \\ "tradingName"
   private val mandationStatusPath = __ \ "mandationStatus"
   private val deregistrationPath = __ \ "deregistration"
+  private val changeIndicatorsPath = __ \ "changeIndicators"
 
   implicit val reads: Reads[CustomerDetails] = (
     firstNamePath.readNullable[String] and
@@ -59,6 +60,7 @@ object CustomerDetails {
     organisationNamePath.readNullable[String] and
     tradingNamePath.readNullable[String] and
     mandationStatusPath.read[String] and
-    deregistrationPath.readNullable[Deregistration]
+    deregistrationPath.readNullable[Deregistration] and
+      changeIndicatorsPath.readNullable[ChangeIndicators]
   ) (CustomerDetails.apply _)
 }

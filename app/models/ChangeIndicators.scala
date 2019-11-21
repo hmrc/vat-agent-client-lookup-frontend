@@ -16,8 +16,10 @@
 
 package models
 
-case class InFlightInformation(deregistration: Option[Boolean])
+import play.api.libs.json.{Format, Json}
 
-object InFlightInformation{
-  ???
+case class ChangeIndicators(deregister: Boolean)
+
+object ChangeIndicators{
+  implicit val format: Format[ChangeIndicators] = Json.format[ChangeIndicators]
 }

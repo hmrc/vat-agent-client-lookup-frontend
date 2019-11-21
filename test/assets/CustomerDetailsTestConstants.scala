@@ -18,7 +18,7 @@ package assets
 
 import java.time.LocalDate
 
-import models.{CustomerDetails, Deregistration, InFlightInformation}
+import models.{CustomerDetails, Deregistration, ChangeIndicators}
 import play.api.libs.json.{JsObject, Json}
 
 object CustomerDetailsTestConstants {
@@ -124,7 +124,7 @@ object CustomerDetailsTestConstants {
     None,
     mandationStatus,
     None,
-    Some(InFlightInformation(Some(true)))
+    Some(ChangeIndicators(true))
   )
 
   val customerDetailsFutureDeregisterOptedOut = CustomerDetails(
