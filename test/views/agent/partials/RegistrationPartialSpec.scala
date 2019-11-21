@@ -22,6 +22,8 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
 import views.html.agent.partials.registrationPartial
+import assets.CustomerDetailsTestConstants._
+import utils.ImplicitDateFormatter._
 
 class RegistrationPartialSpec extends ViewBaseSpec {
 
@@ -31,7 +33,7 @@ class RegistrationPartialSpec extends ViewBaseSpec {
 
       "display a section for cancelling registration" which {
 
-        lazy val view = registrationPartial(Registered)
+        lazy val view = registrationPartial(customerDetailsNoInfo, toLocalDate("2019-01-01"))
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         s"should have the correct title of ${RegistrationPartialMessages.cancelRegistrationTitle}" in {
@@ -50,7 +52,7 @@ class RegistrationPartialSpec extends ViewBaseSpec {
 
     "client is not registered" should {
 
-      lazy val view = registrationPartial(Deregistered)
+      lazy val view = registrationPartial(customerDetailsAllInfo, toLocalDate("2019-01-01"))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display nothing" in {
