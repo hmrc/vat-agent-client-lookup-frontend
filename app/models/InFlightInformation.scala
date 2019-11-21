@@ -16,10 +16,8 @@
 
 package models
 
-case class InFlightInformation(deregistration: Option[Boolean]) {
+case class InFlightInformation(deregistration: Option[Boolean])
 
-  object InFlightInformation{
-    ???
-  }
-
+object InFlightInformation{
+  ???
 }
