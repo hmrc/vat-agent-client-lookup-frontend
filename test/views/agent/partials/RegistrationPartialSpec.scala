@@ -29,23 +29,47 @@ class RegistrationPartialSpec extends ViewBaseSpec {
 
   "Rendering the partial" when {
 
-    "client is registered" should {
+    "client is registered" when {
 
-      "display a section for cancelling registration" which {
+      "client is not pending deregistration or cancelled registration" should {
 
         lazy val view = registrationPartial(customerDetailsNoInfo, toLocalDate("2019-01-01"))
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
-        s"should have the correct title of ${RegistrationPartialMessages.cancelRegistrationTitle}" in {
-          elementText("h3") shouldBe RegistrationPartialMessages.cancelRegistrationTitle
-        }
+        "display a section for cancelling registration" which {
 
-        s"link to ${mockConfig.cancelRegistrationUrl}" in {
-          element("h3 > a").attr("href") shouldBe mockConfig.cancelRegistrationUrl
-        }
+          s"should have the correct title of ${RegistrationPartialMessages.cancelRegistrationTitle}" in {
+            elementText("h3") shouldBe RegistrationPartialMessages.cancelRegistrationTitle
+          }
 
-        s"have correct content of ${RegistrationPartialMessages.cancelRegistrationContent}" in {
-          elementText("p") shouldBe RegistrationPartialMessages.cancelRegistrationContent
+          s"link to ${mockConfig.cancelRegistrationUrl}" in {
+            element("h3 > a").attr("href") shouldBe mockConfig.cancelRegistrationUrl
+          }
+
+          s"have correct content of ${RegistrationPartialMessages.cancelRegistrationContent}" in {
+            elementText("p") shouldBe RegistrationPartialMessages.cancelRegistrationContent
+          }
+        }
+      }
+
+      "client is pending deregistration" should {
+
+        lazy val view = registrationPartial(Registered) //TODO registrationPartial to have pending passed in (in flight information deregistration true)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        "display a section for pending deregistration" which {
+
+          lazy val view=registrationPartial(Registered)
+          lazy implicit val document: Document = Jsoup.parse(view.body)
+
+          s"should have the correct title of ${}" in {
+            elementText("h3") shouldBe RegistrationPartialMessages.pendingRegistrationTitle
+          }
+
+          s"should have x" in {
+            elementText("p") shouldBe RegistrationPartialMessages.pendingRegistrationContent
+          }
+
         }
       }
     }
