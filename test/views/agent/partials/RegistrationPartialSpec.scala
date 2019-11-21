@@ -16,6 +16,9 @@
 
 package views.agent.partials
 
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 import assets.messages.partials.RegistrationPartialMessages
 import models.{Deregistered, Registered}
 import org.jsoup.Jsoup
@@ -42,15 +45,15 @@ class RegistrationPartialSpec extends ViewBaseSpec {
             elementText("h3") shouldBe RegistrationPartialMessages.cancelRegistrationTitle
           }
 
-          s"link to ${mockConfig.cancelRegistrationUrl}" in {
-            element("h3 > a").attr("href") shouldBe mockConfig.cancelRegistrationUrl
-          }
+        s"link to ${mockConfig.cancelRegistrationUrl}" in {
+          element("h3 > a").attr("href") shouldBe mockConfig.cancelRegistrationUrl
+        }
 
-          s"have correct content of ${RegistrationPartialMessages.cancelRegistrationContent}" in {
-            elementText("p") shouldBe RegistrationPartialMessages.cancelRegistrationContent
-          }
+        s"have correct content of ${RegistrationPartialMessages.cancelRegistrationContent}" in {
+          elementText("p") shouldBe RegistrationPartialMessages.cancelRegistrationContent
         }
       }
+    }
 
       "client is pending deregistration" should {
 

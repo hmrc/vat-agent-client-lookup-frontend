@@ -18,7 +18,6 @@ package assets.messages.partials
 
 import assets.CustomerDetailsTestConstants._
 
-
 object RegistrationPartialMessages {
 
   val cancelRegistrationTitle: String = "Cancel VAT registration"
