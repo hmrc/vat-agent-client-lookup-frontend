@@ -23,37 +23,49 @@
 @(details: CustomerDetails, currentDate: LocalDate)(implicit messages: Messages, appConfig: AppConfig, lang: Lang)
 
 @cancelRegistration = {
-    <div id="cancel-vat" class="column-one-third">
-        <h3 class="heading-small">
-            <a href="@appConfig.cancelRegistrationUrl">@messages("registrationPartial.cancelRegistration.title")</a>
-        </h3>
-        <p>@messages("registrationPartial.cancelRegistration.content")</p>
-    </div>
+<div id="cancel-vat" class="column-one-third">
+    <h3 class="heading-small">
+        <a href="@appConfig.cancelRegistrationUrl">@messages("registrationPartial.cancelRegistration.title")</a>
+    </h3>
+    <p>@messages("registrationPartial.cancelRegistration.content")</p>
+</div>
 }
 
 @historicDeregistration(date: LocalDate) = {
-    <div id="cancel-vat" class="column-one-third">
-        <h3 class="heading-small">
-            @messages("registrationPartial.historicDeregistration.title")
-        </h3>
-        <p>@messages("registrationPartial.historicDeregistration.content", displayDate(date))</p>
-        <p><a href="@appConfig.onlineAgentServicesUrl" target="_blank">@messages("registrationPartial.historicDeregistration.link")</a></p>
-    </div>
+<div id="cancel-vat" class="column-one-third">
+    <h3 class="heading-small">
+        @messages("registrationPartial.historicDeregistration.title")
+    </h3>
+    <p>@messages("registrationPartial.historicDeregistration.content", displayDate(date))</p>
+    <p><a href="@appConfig.onlineAgentServicesUrl" target="_blank">@messages("registrationPartial.historicDeregistration.link")</a></p>
+</div>
+}
+
+@pendingDeregistration()={
+<div class="column-one-third" id="cancel-vat">
+    <h3 class="heading-small">
+        @messages("registrationPartial.pendingDeregistration.title")
+    </h3>
+    <p>@messages("registrationPartial.pendingDeregistration.content")</p>
+</div>
 }
 
 @{
-    if(details.deregistration.isDefined){
-        details.deregistration.flatMap(_.effectDateOfCancellation) match {
-            case Some(date) => date match {
-                case future if future.isAfter(currentDate) => {}
-                case historic => historicDeregistration(historic)
-            }
-            case _ => {
-                Logger.warn("[registrationPartial][deregistrationDate] - 'deregistration' contained no 'effectDateOfCancellation'")
-            }
-        }
+if(details.deregistration.isDefined){
+details.deregistration.flatMap(_.effectDateOfCancellation) match {
+case Some(date) => date match {
+case future if future.isAfter(currentDate) => {}
+case historic => historicDeregistration(historic)
+}
+case _ => {
+Logger.warn("[registrationPartial][deregistrationDate] - 'deregistration' contained no 'effectDateOfCancellation'")
+}
     } else {
-
-        cancelRegistration
+        if (details.changeIndicators.isDefined) {
+            details.changeIndicators.map(_.deregister) match {
+                case Some(true) => pendingDeregistration
+                case _ => cancelRegistration
+            }
+        } else cancelRegistration
     }
 }

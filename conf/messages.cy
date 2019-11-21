@@ -145,6 +145,8 @@ registrationPartial.cancelRegistration.content = Canslo cofrestriad TAW eich cle
 registrationPartial.historicDeregistration.title = Cofrestriad TAW eich cleient
 registrationPartial.historicDeregistration.content = Cafodd cofrestriad TAW eich cleient ei ganslo ar {0}.
 registrationPartial.historicDeregistration.link = Gwasanaethau TAW ar-lein ar gyfer asiantau (yn agor ffenestr neu dab newydd).
+registrationPartial.pendingDeregistration.title = Canslo cofrestriad TAW
+registrationPartial.pendingDeregistration.content = Mae’r cais i ganslo’ch cofrestriad TAW ar y gweill.
 
 vatReturnsPartial.heading = Ffurflenni TAW
 vatReturnsPartial.paragraphMandated = Bwrw golwg dros Ffurflenni TAW eich cleient a gyflwynwyd.

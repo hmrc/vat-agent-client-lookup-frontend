@@ -31,5 +31,4 @@ object RegistrationPartialMessages {
   val historicDeregTitle: String = "Your client’s VAT registration"
   val historicDeregContent: String  = s"Your client’s VAT registration was cancelled on 1 January 2019."
   val historicDeregLink: String  = "VAT online services for agents (opens in new tab)."
-
 }
