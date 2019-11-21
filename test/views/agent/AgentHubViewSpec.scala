@@ -114,8 +114,8 @@ class AgentHubViewSpec extends ViewBaseSpec {
       lazy val view = views.html.agent.agentHub(customerDetailsAllInfo, vrn, date)(request,messages,mockConfig,user, Lang("en"))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "not display the Cancel VAT registration partial" in {
-        elementExtinct("#cancel-vat")
+      "display the 'cancel vat registration' partial with the correct future of historic date" in {
+        elementText("#cancel-vat > h3") shouldBe RegistrationPartialMessages.futureDeregisterTitle
       }
     }
   }
