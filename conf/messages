@@ -112,6 +112,8 @@ registrationPartial.cancelRegistration.content = Cancel your client’s VAT regi
 registrationPartial.historicDeregistration.title = Your client’s VAT registration
 registrationPartial.historicDeregistration.content = Your client’s VAT registration was cancelled on {0}.
 registrationPartial.historicDeregistration.link = VAT online services for agents (opens in new tab).
+registrationPartial.pendingDeregistration.title = Cancel VAT registration
+registrationPartial.pendingDeregistration.content = The request to cancel your client’s VAT registration is pending.
 
 registrationPartial.futureDeregistration.title = Your client’s VAT registration
 registrationPartial.futureDeregistration.content = Your client’s VAT registration will be cancelled on {0}.
