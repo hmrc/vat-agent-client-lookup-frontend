@@ -56,6 +56,7 @@ trait AppConfig extends ServicesConfig {
   val emailVerificationBaseUrl: String
   val agentSignUpUrl: String
   val submitVatReturnsUrl: String
+  val onlineAgentServicesUrl: String
   val features: Features
   val vatCertificateUrl: String
   val submittedReturnsUrl: Int => String
@@ -136,6 +137,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
 
   override lazy val agentSignUpUrl: String = getString(Keys.agentSignUpUrl)
   override lazy val submitVatReturnsUrl: String = getString(Keys.submitVatReturnsUrl)
+  override lazy val onlineAgentServicesUrl: String = getString(Keys.onlineAgentServicesUrl)
 
   override lazy val emailVerificationBaseUrl: String = baseUrl(Keys.emailVerificationBaseUrl)
 

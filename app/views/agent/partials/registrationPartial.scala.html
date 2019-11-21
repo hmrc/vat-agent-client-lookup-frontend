@@ -15,8 +15,10 @@
  *@
 
 @import config.AppConfig
+@import services.DateService
+@import java.time.LocalDate
 
-@(registrationStatus: RegistrationStatus)(implicit messages: Messages, appConfig: AppConfig)
+@(deregistration: Option[Deregistration], currentDate: LocalDate)(implicit messages: Messages, appConfig: AppConfig)
 
 @cancelRegistration = {
     <div id="cancel-vat" class="column-one-third">
@@ -27,9 +29,25 @@
     </div>
 }
 
+@historicDeregistration = {
+    <div id="cancel-vat" class="column-one-third">
+        <h3 class="heading-small">
+            @messages("registrationPartial.historicDeregistration.title")
+        </h3>
+        <p>@messages("registrationPartial.historicDeregistration.content")</p>
+        <p><a href="@appConfig.onlineAgentServicesUrl">@messages("registrationPartial.historicDeregistration.link")</a></p>
+    </div>
+}
+
 @{
-    registrationStatus match {
-        case Registered => cancelRegistration
-        case _ => {}
+    if(deregistration.isDefined){
+        deregistration.flatMap(_.effectDateOfCancellation) match {
+            case Some(date) => date match {
+                case historic if historic.isBefore(currentDate) => historicDeregistration
+            }
+            case _ => {}
+        }
+    } else {
+        cancelRegistration
     }
 }

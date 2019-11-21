@@ -51,6 +51,6 @@
  <div class="grid-row">
   @optOutForMTDVATPartial(details.mandationStatus)
 
-  @registrationPartial(if(details.deregistration.isDefined) Deregistered else Registered)
+  @registrationPartial(details.deregistration, currentDate)
  </div>
 }
