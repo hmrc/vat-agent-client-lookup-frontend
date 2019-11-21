@@ -54,19 +54,19 @@ class RegistrationPartialSpec extends ViewBaseSpec {
 
       "client is pending deregistration" should {
 
-        lazy val view = registrationPartial(Registered) //TODO registrationPartial to have pending passed in (in flight information deregistration true)
+        lazy val view = registrationPartial(customerDetailsPendingDeregestrationNoInfo, toLocalDate("2019-01-01"))
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "display a section for pending deregistration" which {
 
-          lazy val view=registrationPartial(Registered)
+          lazy val view=registrationPartial(customerDetailsPendingDeregestrationNoInfo, toLocalDate("2019-01-01"))
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
-          s"should have the correct title of ${}" in {
+          s"should have the correct title of ${RegistrationPartialMessages.pendingRegistrationTitle}" in {
             elementText("h3") shouldBe RegistrationPartialMessages.pendingRegistrationTitle
           }
 
-          s"should have x" in {
+          s"have the correct content" in {
             elementText("p") shouldBe RegistrationPartialMessages.pendingRegistrationContent
           }
 
