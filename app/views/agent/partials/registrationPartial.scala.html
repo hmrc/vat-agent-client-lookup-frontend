@@ -23,12 +23,12 @@
 @(details: CustomerDetails, currentDate: LocalDate)(implicit messages: Messages, appConfig: AppConfig, lang: Lang)
 
 @cancelRegistration = {
-    <div id="cancel-vat" class="column-one-third">
-        <h3 class="heading-small">
-            <a href="@appConfig.cancelRegistrationUrl">@messages("registrationPartial.cancelRegistration.title")</a>
-        </h3>
-        <p>@messages("registrationPartial.cancelRegistration.content")</p>
-    </div>
+<div id="cancel-vat" class="column-one-third">
+    <h3 class="heading-small">
+        <a href="@appConfig.cancelRegistrationUrl">@messages("registrationPartial.cancelRegistration.title")</a>
+    </h3>
+    <p>@messages("registrationPartial.cancelRegistration.content")</p>
+</div>
 }
 
 @historicDeregistration(date: LocalDate) = {
