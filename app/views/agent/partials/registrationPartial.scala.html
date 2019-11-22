@@ -37,7 +37,7 @@
             @messages("registrationPartial.historicDeregistration.title")
         </h3>
         <p>@messages("registrationPartial.historicDeregistration.content", displayDate(date))</p>
-        <p><a href="@appConfig.onlineAgentServicesUrl" target="_blank">@messages("registrationPartial.historicDeregistration.link")</a></p>
+        <p><a id="agent-services-link" href="@appConfig.onlineAgentServicesUrl" target="_blank">@messages("registrationPartial.historicDeregistration.link")</a></p>
     </div>
 }
 
@@ -46,8 +46,8 @@
     <h3 class="heading-small">
         @messages("registrationPartial.futureDeregistration.title")
     </h3>
-    <p>@messages("registrationPartial.futureDeregistration.content", date.toLongDate)</p>
-    <p><a href="@appConfig.onlineAgentServicesUrl">@messages("registrationPartial.futureDeregistration.link")</a></p>
+    <p>@messages("registrationPartial.futureDeregistration.content", displayDate(date))</p>
+    <p><a id="agent-services-link" href="@appConfig.onlineAgentServicesUrl" target="_blank">@messages("registrationPartial.futureDeregistration.link")</a></p>
 </div>
 }
 
@@ -55,7 +55,7 @@
     if(details.deregistration.isDefined){
         details.deregistration.flatMap(_.effectDateOfCancellation) match {
             case Some(date) => date match {
-                case future if future.isAfter(currentDate) => {futureDeregistration(future)}
+                case future if future.isAfter(currentDate) => futureDeregistration(future)
                 case historic => historicDeregistration(historic)
                 case _ => {}
             }

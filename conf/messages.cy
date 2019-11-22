@@ -148,7 +148,7 @@ registrationPartial.historicDeregistration.link = Gwasanaethau TAW ar-lein ar gy
 
 registrationPartial.futureDeregistration.title = Cofrestriad TAW eich cleient
 registrationPartial.futureDeregistration.content = Bydd cofrestriad TAW eich cleient yn cael ei ganslo ar {0}.
-registrationPartial.futureDeregistration.link = Sut i gofrestru ar gyfer TAW (yn agor ffenestr neu dab newydd).
+registrationPartial.futureDeregistration.link = Gwasanaethau TAW ar-lein ar gyfer asiantau (yn agor ffenestr neu dab newydd)
 
 vatReturnsPartial.heading = Ffurflenni TAW
 vatReturnsPartial.paragraphMandated = Bwrw golwg dros Ffurflenni TAW eich cleient a gyflwynwyd.

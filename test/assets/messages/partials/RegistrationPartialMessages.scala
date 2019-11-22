@@ -24,13 +24,12 @@ object RegistrationPartialMessages {
   val cancelRegistrationContent: String =
     "Cancel your client’s VAT registration if you’re closing the business, transferring ownership or do not need to be VAT registered."
 
-<<<<<<< HEAD
   val historicDeregTitle: String = "Your client’s VAT registration"
-  val historicDeregContent: String  = s"Your client’s VAT registration was cancelled on 1 January 2019."
+  val historicDeregContent: String  = "Your client’s VAT registration was cancelled on 1 January 2019."
   val historicDeregLink: String  = "VAT online services for agents (opens in new tab)."
-=======
+
   val futureDeregisterTitle: String = "Your client’s VAT registration"
-    val futureDeregisterContent: String = "Your client’s VAT registration will be cancelled on 1 January 2020."
->>>>>>> BTAT-7263 Added futureDeregistration partial logic and tests
+  val futureDeregisterContent: String = "Your client’s VAT registration will be cancelled on 1 January 2020."
+  val futureDeregLink: String  = "VAT online services for agents (opens in new tab)."
 
 }
