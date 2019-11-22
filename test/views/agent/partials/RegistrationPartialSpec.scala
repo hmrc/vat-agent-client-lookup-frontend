@@ -16,6 +16,9 @@
 
 package views.agent.partials
 
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 import assets.messages.partials.RegistrationPartialMessages
 import models.{Deregistered, Registered}
 import org.jsoup.Jsoup
@@ -50,13 +53,27 @@ class RegistrationPartialSpec extends ViewBaseSpec {
       }
     }
 
-    "client is not registered" should {
+    "client is not registered" when {
 
-      lazy val view = registrationPartial(customerDetailsAllInfo, toLocalDate("2019-01-01"))
-      lazy implicit val document: Document = Jsoup.parse(view.body)
+      "the effectDateOfCancellation is before the currentDate" should {
 
-      "display nothing" in {
-        document.select(".card") shouldBe empty
+        "display the historic dereg partial" which {
+
+          lazy val view = registrationPartial(customerDetailsAllInfo, toLocalDate("2019-01-02"))
+          lazy implicit val document: Document = Jsoup.parse(view.body)
+
+          s"should have the correct title of ${RegistrationPartialMessages.historicDeregTitle}" in {
+            elementText("h3") shouldBe RegistrationPartialMessages.historicDeregTitle
+          }
+
+          s"have correct content of ${RegistrationPartialMessages.historicDeregContent}" in {
+            elementText("p") shouldBe RegistrationPartialMessages.historicDeregContent
+          }
+
+          s"have a link to ${mockConfig.onlineAgentServicesUrl}" in {
+            element("p > a").attr("href") shouldBe mockConfig.onlineAgentServicesUrl
+          }
+        }
       }
     }
   }

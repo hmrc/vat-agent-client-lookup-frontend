@@ -95,13 +95,25 @@ class AgentHubViewSpec extends ViewBaseSpec {
       }
     }
 
-    "the user is an agent for a deregistered client" should {
+    "the user is an agent for a deregistered client with a dereg date in the past" should {
+      val otherDate: LocalDate = LocalDate.parse("2020-01-01")
+
+      lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
+      lazy val view = views.html.agent.agentHub(customerDetailsAllInfo, vrn, otherDate)(request,messages,mockConfig,user)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "display the Cancel VAT registration historic partial" in {
+        elementText("#cancel-vat > h3") shouldBe RegistrationPartialMessages.historicDeregTitle
+      }
+    }
+
+    "the user is an agent for a deregistered client with a dereg date in the future" should {
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
       lazy val view = views.html.agent.agentHub(customerDetailsAllInfo, vrn, date)(request,messages,mockConfig,user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "not display the 'cancel vat registration' partial" in {
+      "display the Cancel VAT registration historic partial" in {
         elementExtinct("#cancel-vat")
       }
     }

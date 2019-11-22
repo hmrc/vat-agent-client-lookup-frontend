@@ -16,10 +16,16 @@
 
 package assets.messages.partials
 
+import assets.CustomerDetailsTestConstants._
+
 object RegistrationPartialMessages {
 
   val cancelRegistrationTitle: String = "Cancel VAT registration"
   val cancelRegistrationContent: String =
     "Cancel your client’s VAT registration if you’re closing the business, transferring ownership or do not need to be VAT registered."
+
+  val historicDeregTitle: String = "Your client’s VAT registration"
+  val historicDeregContent: String  = s"Your client’s VAT registration was cancelled on 1 January 2019."
+  val historicDeregLink: String  = "VAT online services for agents (opens in new tab)."
 
 }

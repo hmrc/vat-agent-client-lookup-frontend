@@ -18,6 +18,7 @@
 @import services.DateService
 @import java.time.LocalDate
 @import utils.ImplicitDateFormatter._
+@import play.api.Logger
 
 @(details: CustomerDetails, currentDate: LocalDate)(implicit messages: Messages, appConfig: AppConfig)
 
@@ -36,7 +37,7 @@
             @messages("registrationPartial.historicDeregistration.title")
         </h3>
         <p>@messages("registrationPartial.historicDeregistration.content", date.toLongDate)</p>
-        <p><a href="@appConfig.onlineAgentServicesUrl">@messages("registrationPartial.historicDeregistration.link")</a></p>
+        <p><a href="@appConfig.onlineAgentServicesUrl" target="_blank">@messages("registrationPartial.historicDeregistration.link")</a></p>
     </div>
 }
 
@@ -44,9 +45,12 @@
     if(details.deregistration.isDefined){
         details.deregistration.flatMap(_.effectDateOfCancellation) match {
             case Some(date) => date match {
-                case historic if historic.isBefore(currentDate) => historicDeregistration(historic)
+                case future if future.isAfter(currentDate) => {}
+                case historic => historicDeregistration(historic)
             }
-            case _ => {}
+            case _ => {
+                Logger.warn("[registrationPartial][deregistrationDate] - 'deregistration' contained no 'effectDateOfCancellation'")
+            }
         }
     } else {
         cancelRegistration

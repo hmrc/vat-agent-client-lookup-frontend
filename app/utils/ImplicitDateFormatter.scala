@@ -26,7 +26,7 @@ trait ImplicitDateFormatter {
   val currentDate: LocalDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
   implicit class localDate(s: String) {
-    def toLocalDate: LocalDate = LocalDate.parse(s, DateTimeFormatter.ofPattern("uuuu-M-d"))
+    def toLocalDate: LocalDate = LocalDate.parse(s, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
   }
 
   implicit class longDate(d: LocalDate) {
