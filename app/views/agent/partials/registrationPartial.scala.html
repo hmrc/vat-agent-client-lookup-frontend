@@ -17,10 +17,10 @@
 @import config.AppConfig
 @import services.DateService
 @import java.time.LocalDate
-@import utils.ImplicitDateFormatter._
 @import play.api.Logger
+@import views.html.helpers.displayDate
 
-@(details: CustomerDetails, currentDate: LocalDate)(implicit messages: Messages, appConfig: AppConfig)
+@(details: CustomerDetails, currentDate: LocalDate)(implicit messages: Messages, appConfig: AppConfig, lang: Lang)
 
 @cancelRegistration = {
     <div id="cancel-vat" class="column-one-third">
@@ -36,7 +36,7 @@
         <h3 class="heading-small">
             @messages("registrationPartial.historicDeregistration.title")
         </h3>
-        <p>@messages("registrationPartial.historicDeregistration.content", date.toLongDate)</p>
+        <p>@messages("registrationPartial.historicDeregistration.content", displayDate(date))</p>
         <p><a href="@appConfig.onlineAgentServicesUrl" target="_blank">@messages("registrationPartial.historicDeregistration.link")</a></p>
     </div>
 }

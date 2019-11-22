@@ -28,6 +28,7 @@ import assets.CustomerDetailsTestConstants._
 import assets.messages.{AgentHubMessages => Messages}
 import assets.messages.partials._
 import models.User
+import play.api.i18n.Lang
 
 class AgentHubViewSpec extends ViewBaseSpec {
 
@@ -37,7 +38,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
 
     "the user is a valid agent for an opted-in client" should {
 
-      lazy val view = views.html.agent.agentHub(customerDetailsFnameOnly, vrn, date)(request,messages,mockConfig,user)
+      lazy val view = views.html.agent.agentHub(customerDetailsFnameOnly, vrn, date)(request,messages,mockConfig,user, Lang("en"))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {
@@ -87,7 +88,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
     "the user is an agent for an opted out client" should {
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = views.html.agent.agentHub(customerDetailsOptedOut, vrn, date)(request,messages,mockConfig,user)
+      lazy val view = views.html.agent.agentHub(customerDetailsOptedOut, vrn, date)(request,messages,mockConfig,user, Lang("en"))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not display the opt-out partial" in {
@@ -99,7 +100,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
       val otherDate: LocalDate = LocalDate.parse("2020-01-01")
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = views.html.agent.agentHub(customerDetailsAllInfo, vrn, otherDate)(request,messages,mockConfig,user)
+      lazy val view = views.html.agent.agentHub(customerDetailsAllInfo, vrn, otherDate)(request,messages,mockConfig,user, Lang("en"))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the Cancel VAT registration historic partial" in {
@@ -110,10 +111,10 @@ class AgentHubViewSpec extends ViewBaseSpec {
     "the user is an agent for a deregistered client with a dereg date in the future" should {
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = views.html.agent.agentHub(customerDetailsAllInfo, vrn, date)(request,messages,mockConfig,user)
+      lazy val view = views.html.agent.agentHub(customerDetailsAllInfo, vrn, date)(request,messages,mockConfig,user, Lang("en"))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "display the Cancel VAT registration historic partial" in {
+      "not display the Cancel VAT registration partial" in {
         elementExtinct("#cancel-vat")
       }
     }
