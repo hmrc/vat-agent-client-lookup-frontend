@@ -51,15 +51,16 @@
 }
 
 @{
-if(details.deregistration.isDefined){
-details.deregistration.flatMap(_.effectDateOfCancellation) match {
-case Some(date) => date match {
-case future if future.isAfter(currentDate) => {}
-case historic => historicDeregistration(historic)
-}
-case _ => {
-Logger.warn("[registrationPartial][deregistrationDate] - 'deregistration' contained no 'effectDateOfCancellation'")
-}
+    if(details.deregistration.isDefined){
+        details.deregistration.flatMap(_.effectDateOfCancellation) match {
+            case Some(date) => date match {
+                case future if future.isAfter(currentDate) => {}
+                case historic => historicDeregistration(historic)
+            }
+            case _ => {
+                Logger.warn("[registrationPartial][deregistrationDate] - 'deregistration' contained no 'effectDateOfCancellation'")
+            }
+        }
     } else {
         if (details.changeIndicators.isDefined) {
             details.changeIndicators.map(_.deregister) match {
