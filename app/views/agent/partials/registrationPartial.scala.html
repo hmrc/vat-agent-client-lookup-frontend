@@ -23,12 +23,12 @@
 @(details: CustomerDetails, currentDate: LocalDate)(implicit messages: Messages, appConfig: AppConfig, lang: Lang)
 
 @cancelRegistration = {
-    <div id="cancel-vat" class="column-one-third">
-        <h3 class="heading-small">
-            <a href="@appConfig.cancelRegistrationUrl">@messages("registrationPartial.cancelRegistration.title")</a>
-        </h3>
-        <p>@messages("registrationPartial.cancelRegistration.content")</p>
-    </div>
+<div id="cancel-vat" class="column-one-third">
+    <h3 class="heading-small">
+        <a href="@appConfig.cancelRegistrationUrl">@messages("registrationPartial.cancelRegistration.title")</a>
+    </h3>
+    <p>@messages("registrationPartial.cancelRegistration.content")</p>
+</div>
 }
 
 @historicDeregistration(date: LocalDate) = {
@@ -51,6 +51,7 @@
 </div>
 }
 
+
 @pendingDeregistration()={
 <div class="column-one-third" id="cancel-vat">
     <h3 class="heading-small">
@@ -63,11 +64,11 @@
 @{
     if(details.deregistration.isDefined){
         details.deregistration.flatMap(_.effectDateOfCancellation) match {
-                case Some(date) => date match {
-                case future if future.isAfter(currentDate) => futureDeregistration(future)
-                case historic => historicDeregistration(historic)
-            }
-            case _ => {
+            case Some(date) => date match {
+            case future if future.isAfter(currentDate) => futureDeregistration(future)
+            case historic => historicDeregistration(historic)
+        }
+        case _ => {
                 Logger.warn("[registrationPartial][deregistrationDate] - 'deregistration' contained no 'effectDateOfCancellation'")
             }
         }
