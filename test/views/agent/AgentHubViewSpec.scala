@@ -110,6 +110,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
 
     "the user is an agent for a deregistered client with a dereg date in the future" should {
 
+      val date: LocalDate = LocalDate.parse("2010-01-01")
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
       lazy val view = views.html.agent.agentHub(customerDetailsAllInfo, vrn, date)(request,messages,mockConfig,user, Lang("en"))
       lazy implicit val document: Document = Jsoup.parse(view.body)

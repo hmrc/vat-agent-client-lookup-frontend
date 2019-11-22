@@ -16,9 +16,6 @@
 
 package views.agent.partials
 
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-
 import assets.messages.partials.RegistrationPartialMessages
 import models.{Deregistered, Registered}
 import org.jsoup.Jsoup
@@ -89,6 +86,10 @@ class RegistrationPartialSpec extends ViewBaseSpec {
 
           s"have correct content of ${RegistrationPartialMessages.futureDeregisterContent}" in {
             elementText("p") shouldBe RegistrationPartialMessages.futureDeregisterContent
+          }
+
+          s"link with text of ${RegistrationPartialMessages.futureDeregLink}" in {
+            element("a").text shouldBe RegistrationPartialMessages.futureDeregLink
           }
 
           s"link to ${mockConfig.onlineAgentServicesUrl}" in {
