@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,15 +12,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package common
+@import config.AppConfig
+@import common.MandationStatus
+@import java.time.LocalDate
 
-object MandationStatus {
+@(mandationStatus: String)(implicit messages: Messages,appConfig: AppConfig)
+<div class="tile tile-no-border">
 
-  val manMTDfB = "MTDfB Mandated"
-  val volMTDfB = "MTDfB Voluntary"
-  val nonMTDfB = "Non MTDfB"
-  val nonDigital= "Non Digital"
-
-}
+</div>

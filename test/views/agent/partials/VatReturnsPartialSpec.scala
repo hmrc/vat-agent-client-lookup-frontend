@@ -34,7 +34,7 @@ class VatReturnsPartialSpec extends ViewBaseSpec {
     "passed a mandation status of 'Non MTDfB'" should {
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = views.html.agent.partials.vatReturnsPartial("Non MTDfB", date)(messages, mockConfig)
+      lazy val view = views.html.agent.partials.vatReturnsPartial(, date)(messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct card heading" in {

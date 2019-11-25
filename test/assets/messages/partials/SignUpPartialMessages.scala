@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package common
+package assets.messages.partials
 
-object MandationStatus {
+object SignUpPartialMessages {
 
-  val manMTDfB = "MTDfB Mandated"
-  val volMTDfB = "MTDfB Voluntary"
-  val nonMTDfB = "Non MTDfB"
-  val nonDigital= "Non Digital"
+  val signUpLinkText = "Sign up for Making Tax Digital for VAT"
+  val signUpBody = "If your client’s taxable turnover exceeds the VAT threshold, they must sign up to Making Tax Digital for VAT."
 
 }
