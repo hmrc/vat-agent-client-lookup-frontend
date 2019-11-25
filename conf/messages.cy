@@ -144,7 +144,7 @@ registrationPartial.cancelRegistration.title = Canslo cofrestriad TAW
 registrationPartial.cancelRegistration.content = Canslo cofrestriad TAW eich cleient os ydych yn cau’r busnes, yn trosglwyddo perchnogaeth neu os nad oes angen i’r cleient fod wedi cofrestru ar gyfer TAW.
 registrationPartial.historicDeregistration.title = Cofrestriad TAW eich cleient
 registrationPartial.historicDeregistration.content = Cafodd cofrestriad TAW eich cleient ei ganslo ar {0}.
-registrationPartial.historicDeregistration.link = VAT online services for agents (opens in new tab).
+registrationPartial.historicDeregistration.link = Gwasanaethau TAW ar-lein ar gyfer asiantau (yn agor ffenestr neu dab newydd).
 
 vatReturnsPartial.heading = Ffurflenni TAW
 vatReturnsPartial.paragraphMandated = Bwrw golwg dros Ffurflenni TAW eich cleient a gyflwynwyd.
