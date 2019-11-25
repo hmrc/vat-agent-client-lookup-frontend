@@ -24,7 +24,7 @@ import views.ViewBaseSpec
 import assets.messages.partials.{SignUpPartialMessages => Messages}
 import common.MandationStatus
 
-class SignUpPartial extends ViewBaseSpec {
+class SignUpPartialSpec extends ViewBaseSpec {
 
   "sign up partial" when {
 
@@ -38,10 +38,13 @@ class SignUpPartial extends ViewBaseSpec {
         elementText("a") shouldBe Messages.signUpLinkText
       }
 
+      s"display the correct link of ${mockConfig.signUpServiceUrl(user.vrn)}" in {
+        element("a").attr("href") shouldBe mockConfig.signUpServiceUrl(user.vrn)
+      }
+
       "display the correct body of text" in {
         elementText("p") shouldBe Messages.signUpBody
       }
-
     }
 
     "passed a mandation status of 'Non Digital'" should {
@@ -52,6 +55,10 @@ class SignUpPartial extends ViewBaseSpec {
 
       "display the correct link text" in {
         elementText("a") shouldBe Messages.signUpLinkText
+      }
+
+      s"display the correct link of ${mockConfig.signUpServiceUrl(user.vrn)}" in {
+        element("a").attr("href") shouldBe mockConfig.signUpServiceUrl(user.vrn)
       }
 
       "display the correct body of text" in {
@@ -67,13 +74,12 @@ class SignUpPartial extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not display link text" in {
-        elementExtinct("a") shouldBe Messages.signUpLinkText
+        elementExtinct("a")
       }
 
       "not display body of text" in {
-        elementExtinct("p") shouldBe Messages.signUpBody
+        elementExtinct("p")
       }
-
     }
 
     "passed a mandation status of 'MTDfB Voluntary'" should {
@@ -83,11 +89,11 @@ class SignUpPartial extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not display link text" in {
-        elementExtinct("a") shouldBe Messages.signUpLinkText
+        elementExtinct("a")
       }
 
       "not display body of text" in {
-        elementExtinct("p") shouldBe Messages.signUpBody
+        elementExtinct("p")
       }
 
     }

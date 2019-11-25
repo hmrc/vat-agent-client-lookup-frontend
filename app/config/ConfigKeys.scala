@@ -56,8 +56,8 @@ object ConfigKeys {
 
   val emailVerificationBaseUrl: String = "email-verification"
 
-  val optOutMtdVatHost:String = "vat-opt-out-frontend.host"
-  val optOutMtdVatUrl:String = "vat-opt-out-frontend.url"
+  val optOutMtdVatHost: String = "vat-opt-out-frontend.host"
+  val optOutMtdVatUrl: String = "vat-opt-out-frontend.url"
 
   val emailVerificationFeature: String = "features.emailVerification.enabled"
   val preferenceJourneyFeature: String = "features.preferenceJourney.enabled"
@@ -82,4 +82,7 @@ object ConfigKeys {
 
   val agentServicesHost: String = "agent-services.host"
   val agentServicesUrl: String = "agent-services.url"
+
+  val signUpServiceHost: String = "vat-sign-up-frontend.host"
+  val signUpServiceUrl: String = "vat-sign-up-frontend.url"
 }
