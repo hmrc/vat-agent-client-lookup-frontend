@@ -161,3 +161,6 @@ agentHub.vrn = Rhif cofrestru TAW (VRN): {0}
 agentHub.changeClient = Newid cleient
 
 breadcrumb.agentServices = Cyfrif Gwasanaethau Asiant
+
+signUpPartial.LinkText = cofrestru ar gyfer Troi Treth yn Ddigidol ar gyfer TAW
+signUpPartial.Body = Os yw trosiant trethadwy eich cleient yn mynd dros £85,000, mae’n rhaid i chi ei gofrestru eto ar gyfer y cynllun Troi Treth yn Ddigidol.

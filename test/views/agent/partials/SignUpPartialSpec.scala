@@ -31,7 +31,7 @@ class SignUpPartialSpec extends ViewBaseSpec {
     "passed a mandation status of 'Non-MTD'" should {
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = views.html.agent.partials.signUpPartial(MandationStatus.nonMTDfB)(messages, mockConfig)
+      lazy val view = views.html.agent.partials.signUpPartial(MandationStatus.nonMTDfB,user.vrn)(messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the correct link text" in {
@@ -50,7 +50,7 @@ class SignUpPartialSpec extends ViewBaseSpec {
     "passed a mandation status of 'Non Digital'" should {
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = views.html.agent.partials.signUpPartial(MandationStatus.nonDigital)(messages, mockConfig)
+      lazy val view = views.html.agent.partials.signUpPartial(MandationStatus.nonDigital,user.vrn)(messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the correct link text" in {
@@ -70,7 +70,7 @@ class SignUpPartialSpec extends ViewBaseSpec {
     "passed a mandation status of 'MTD Mandated'" should {
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = views.html.agent.partials.signUpPartial(MandationStatus.manMTDfB)(messages, mockConfig)
+      lazy val view = views.html.agent.partials.signUpPartial(MandationStatus.manMTDfB,user.vrn)(messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not display link text" in {
@@ -85,7 +85,7 @@ class SignUpPartialSpec extends ViewBaseSpec {
     "passed a mandation status of 'MTDfB Voluntary'" should {
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = views.html.agent.partials.signUpPartial(MandationStatus.volMTDfB)(messages, mockConfig)
+      lazy val view = views.html.agent.partials.signUpPartial(MandationStatus.volMTDfB,user.vrn)(messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not display link text" in {

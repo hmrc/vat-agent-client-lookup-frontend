@@ -18,8 +18,21 @@
 @import common.MandationStatus
 @import java.time.LocalDate
 
-@(mandationStatus: String)(implicit messages: Messages,appConfig: AppConfig)
-<div id ="sign-up-partial" class="tile tile-no-border">
+@(mandationStatus: String, vrn: String)(implicit messages: Messages,appConfig: AppConfig)
 
-
+@signUp = {
+<div id ="sign-up-partial" class="column-one-third">
+    <h3 class="heading-small">
+        <a href="@{appConfig.signUpServiceUrl(vrn)}" >@messages("signUpPartial.LinkText")</a>
+    </h3>
+    <p>@messages("signUpPartial.Body")</p>
 </div>
+}
+
+@{
+   mandationStatus match {
+        case MandationStatus.nonMTDfB => signUp
+        case MandationStatus.nonDigital => signUp
+        case _ => {}
+   }
+}
