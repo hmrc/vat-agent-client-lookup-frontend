@@ -26,7 +26,7 @@ import views.ViewBaseSpec
 import assets.BaseTestConstants.{arn, vrn}
 import assets.CustomerDetailsTestConstants._
 import assets.messages.{AgentHubMessages => Messages}
-import assets.messages.partials._
+import assets.messages.partials.{SignUpPartialMessages, _}
 import models.User
 import play.api.i18n.Lang
 
@@ -83,6 +83,10 @@ class AgentHubViewSpec extends ViewBaseSpec {
       "display the Cancel VAT registration partial" in {
         elementText("#cancel-vat > h3") shouldBe RegistrationPartialMessages.cancelRegistrationTitle
       }
+
+      "not display the sign-up partial" in {
+        elementExtinct("#sign-up-partial")
+      }
     }
 
     "the user is an agent for an opted out client" should {
@@ -93,6 +97,21 @@ class AgentHubViewSpec extends ViewBaseSpec {
 
       "not display the opt-out partial" in {
         elementExtinct("#opt-out")
+      }
+
+      "display the sign-up partial" in {
+        elementText("#sign-up-partial > h3") shouldBe SignUpPartialMessages.signUpLinkText
+      }
+    }
+
+    "the user is an agent for a 'Non-Digital' client" should {
+
+      lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
+      lazy val view = views.html.agent.agentHub(customerDetailsNonDigital, vrn, date)(request,messages,mockConfig,user, Lang("en"))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "display the sign-up partial" in {
+        elementText("#sign-up-partial > h3") shouldBe SignUpPartialMessages.signUpLinkText
       }
     }
 
