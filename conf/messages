@@ -113,6 +113,10 @@ registrationPartial.historicDeregistration.title = Your client’s VAT registrat
 registrationPartial.historicDeregistration.content = Your client’s VAT registration was cancelled on {0}.
 registrationPartial.historicDeregistration.link = VAT online services for agents (opens in new tab).
 
+registrationPartial.futureDeregistration.title = Your client’s VAT registration
+registrationPartial.futureDeregistration.content = Your client’s VAT registration will be cancelled on {0}.
+registrationPartial.futureDeregistration.link = VAT online services for agents (opens in new tab).
+
 vatReturnsPartial.heading = VAT Returns
 vatReturnsPartial.paragraphMandated = View your client’s submitted returns.
 vatReturnsPartial.paragraphNonMandated = Submit your client’s VAT returns and view submitted returns.

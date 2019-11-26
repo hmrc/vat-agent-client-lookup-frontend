@@ -16,9 +16,6 @@
 
 package views.agent.partials
 
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-
 import assets.messages.partials.RegistrationPartialMessages
 import models.{Deregistered, Registered}
 import org.jsoup.Jsoup
@@ -72,6 +69,31 @@ class RegistrationPartialSpec extends ViewBaseSpec {
 
           s"have a link to ${mockConfig.onlineAgentServicesUrl}" in {
             element("p > a").attr("href") shouldBe mockConfig.onlineAgentServicesUrl
+          }
+        }
+      }
+
+      "client has a deregister date in the future" should {
+
+        "display a section for future registration" which {
+
+          lazy val view = registrationPartial(customerDetailsFutureDeregisterOptedOut, toLocalDate("2019-01-01"))
+          lazy implicit val document: Document = Jsoup.parse(view.body)
+
+          s"should have the correct title of ${RegistrationPartialMessages.futureDeregisterTitle}" in {
+            elementText("h3") shouldBe RegistrationPartialMessages.futureDeregisterTitle
+          }
+
+          s"have correct content of ${RegistrationPartialMessages.futureDeregisterContent}" in {
+            elementText("p") shouldBe RegistrationPartialMessages.futureDeregisterContent
+          }
+
+          s"link with text of ${RegistrationPartialMessages.futureDeregLink}" in {
+            element("a").text shouldBe RegistrationPartialMessages.futureDeregLink
+          }
+
+          s"link to ${mockConfig.onlineAgentServicesUrl}" in {
+            element("a").attr("href") shouldBe mockConfig.onlineAgentServicesUrl
           }
         }
       }

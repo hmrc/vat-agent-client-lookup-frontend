@@ -146,6 +146,10 @@ registrationPartial.historicDeregistration.title = Cofrestriad TAW eich cleient
 registrationPartial.historicDeregistration.content = Cafodd cofrestriad TAW eich cleient ei ganslo ar {0}.
 registrationPartial.historicDeregistration.link = Gwasanaethau TAW ar-lein ar gyfer asiantau (yn agor ffenestr neu dab newydd).
 
+registrationPartial.futureDeregistration.title = Cofrestriad TAW eich cleient
+registrationPartial.futureDeregistration.content = Bydd cofrestriad TAW eich cleient yn cael ei ganslo ar {0}.
+registrationPartial.futureDeregistration.link = Gwasanaethau TAW ar-lein ar gyfer asiantau (yn agor ffenestr neu dab newydd)
+
 vatReturnsPartial.heading = Ffurflenni TAW
 vatReturnsPartial.paragraphMandated = Bwrw golwg dros Ffurflenni TAW eich cleient a gyflwynwyd.
 vatReturnsPartial.paragraphNonMandated = Cyflwyno Ffurflenni TAW eich cleient a bwrw golwg dros y Ffurflenni TAW a gyflwynwyd.
