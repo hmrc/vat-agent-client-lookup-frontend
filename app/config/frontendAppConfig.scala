@@ -161,5 +161,5 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override lazy val staticDateValue: String = getString(Keys.staticDateValue)
 
   override lazy val signUpServiceHost: String = getString(Keys.signUpServiceHost)
-  override lazy val signUpServiceUrl: String => String = vatNumber =>  getString(Keys.signUpServiceUrl) + s"$vatNumber"
+  override lazy val signUpServiceUrl: String => String = vatNumber =>  signUpServiceHost + getString(Keys.signUpServiceUrl) + s"$vatNumber"
 }
