@@ -15,8 +15,12 @@
  *@
 
 @import config.AppConfig
+@import services.DateService
+@import java.time.LocalDate
+@import play.api.Logger
+@import views.html.helpers.displayDate
 
-@(registrationStatus: RegistrationStatus)(implicit messages: Messages, appConfig: AppConfig)
+@(details: CustomerDetails, currentDate: LocalDate)(implicit messages: Messages, appConfig: AppConfig, lang: Lang)
 
 @cancelRegistration = {
     <div id="cancel-vat" class="column-one-third">
@@ -27,9 +31,28 @@
     </div>
 }
 
+@historicDeregistration(date: LocalDate) = {
+    <div id="cancel-vat" class="column-one-third">
+        <h3 class="heading-small">
+            @messages("registrationPartial.historicDeregistration.title")
+        </h3>
+        <p>@messages("registrationPartial.historicDeregistration.content", displayDate(date))</p>
+        <p><a id="agent-services-link" href="@appConfig.onlineAgentServicesUrl" target="_blank">@messages("registrationPartial.historicDeregistration.link")</a></p>
+    </div>
+}
+
 @{
-    registrationStatus match {
-        case Registered => cancelRegistration
-        case _ => {}
+    if(details.deregistration.isDefined){
+        details.deregistration.flatMap(_.effectDateOfCancellation) match {
+            case Some(date) => date match {
+                case future if future.isAfter(currentDate) => {}
+                case historic => historicDeregistration(historic)
+            }
+            case _ => {
+                Logger.warn("[registrationPartial][deregistrationDate] - 'deregistration' contained no 'effectDateOfCancellation'")
+            }
+        }
+    } else {
+        cancelRegistration
     }
 }

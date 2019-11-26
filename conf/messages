@@ -109,6 +109,9 @@ whatToDo.error.mandatoryRadioOption = Select what you would like to do for this 
 
 registrationPartial.cancelRegistration.title = Cancel VAT registration
 registrationPartial.cancelRegistration.content = Cancel your client’s VAT registration if you’re closing the business, transferring ownership or do not need to be VAT registered.
+registrationPartial.historicDeregistration.title = Your client’s VAT registration
+registrationPartial.historicDeregistration.content = Your client’s VAT registration was cancelled on {0}.
+registrationPartial.historicDeregistration.link = VAT online services for agents (opens in new tab).
 
 vatReturnsPartial.heading = VAT Returns
 vatReturnsPartial.paragraphMandated = View your client’s submitted returns.
