@@ -147,10 +147,6 @@ registrationPartial.historicDeregistration.content = Cafodd cofrestriad TAW eich
 registrationPartial.historicDeregistration.link = Gwasanaethau TAW ar-lein ar gyfer asiantau (yn agor ffenestr neu dab newydd).
 registrationPartial.pendingDeregistration.title = Canslo cofrestriad TAW
 registrationPartial.pendingDeregistration.content = Mae’r cais i ganslo’ch cofrestriad TAW ar y gweill.
-
-registrationPartial.pendingDeregistration.title = Canslo cofrestriad TAW
-registrationPartial.pendingDeregistration.content = Mae’r cais i ganslo’ch cofrestriad TAW ar y gweill.
-
 registrationPartial.futureDeregistration.title = Cofrestriad TAW eich cleient
 registrationPartial.futureDeregistration.content = Bydd cofrestriad TAW eich cleient yn cael ei ganslo ar {0}.
 registrationPartial.futureDeregistration.link = Gwasanaethau TAW ar-lein ar gyfer asiantau (yn agor ffenestr neu dab newydd)
