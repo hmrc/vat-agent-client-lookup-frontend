@@ -128,3 +128,6 @@ agentHub.vrn = VAT registration number (VRN): {0}
 agentHub.changeClient = Change client
 
 breadcrumb.agentServices = Agent Services Account
+
+signUpPartial.LinkText = Sign up for Making Tax Digital for VAT
+signUpPartial.Body = If your client’s taxable turnover exceeds the VAT threshold, they must sign up to Making Tax Digital for VAT.

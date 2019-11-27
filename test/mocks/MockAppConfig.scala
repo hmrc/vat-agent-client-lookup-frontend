@@ -84,4 +84,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val agentServicesUrl = "/agent-service-account"
 
   override val staticDateValue = "2018-05-01"
+
+  override val signUpServiceHost: String = ""
+  override val signUpServiceUrl: String => String = vatNumber => s"/vat-through-software/sign-up/client/vat-number/$vatNumber"
 }

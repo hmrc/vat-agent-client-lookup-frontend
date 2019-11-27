@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,15 +12,27 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package common
+@import config.AppConfig
+@import common.MandationStatus
+@import java.time.LocalDate
 
-object MandationStatus {
+@(mandationStatus: String, vrn: String)(implicit messages: Messages,appConfig: AppConfig)
 
-  val manMTDfB = "MTDfB Mandated"
-  val volMTDfB = "MTDfB Voluntary"
-  val nonMTDfB = "Non MTDfB"
-  val nonDigital= "Non Digital"
+@signUp = {
+<div id ="sign-up-partial" class="column-one-third">
+    <h3 class="heading-small">
+        <a href="@{appConfig.signUpServiceUrl(vrn)}" >@messages("signUpPartial.LinkText")</a>
+    </h3>
+    <p>@messages("signUpPartial.Body")</p>
+</div>
+}
 
+@{
+   mandationStatus match {
+        case MandationStatus.nonMTDfB => signUp
+        case MandationStatus.nonDigital => signUp
+        case _ => {}
+   }
 }

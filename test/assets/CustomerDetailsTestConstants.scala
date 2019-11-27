@@ -29,6 +29,7 @@ object CustomerDetailsTestConstants {
   val lastName = "Flintstone"
   val mandationStatus = "MTDfB Mandated"
   val nonMTDfB = "Non MTDfB"
+  val nonDigital = "Non Digital"
 
   val noOptionalInfoJson: JsObject = Json.obj(
     "mandationStatus" -> mandationStatus
@@ -105,6 +106,15 @@ object CustomerDetailsTestConstants {
     Some(orgName),
     Some(tradingName),
     mandationStatus,
+    None
+  )
+
+  val customerDetailsNonDigital = CustomerDetails(
+    Some(firstName),
+    Some(lastName),
+    Some(orgName),
+    Some(tradingName),
+    nonDigital,
     None
   )
 

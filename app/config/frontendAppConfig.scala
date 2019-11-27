@@ -68,6 +68,8 @@ trait AppConfig extends ServicesConfig {
   val agentServicesHost: String
   val agentServicesUrl: String
   val staticDateValue: String
+  val signUpServiceHost: String
+  val signUpServiceUrl: String => String
 }
 
 @Singleton
@@ -108,14 +110,15 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override lazy val classicServicesSignInUrl: String = s"$governmentGatewayHost/gg/sign-out?continue=${getString(Keys.classicServicesSignIn)}"
 
   override def routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchToLanguage(lang)
+
   override def languageMap: Map[String, Lang] = Map(
     "english" -> Lang("en"),
     "cymraeg" -> Lang("cy")
   )
 
   private def whitelistConfig(key: String): Seq[String] = Some(new String(Base64.getDecoder
-   .decode(getString(key)), "UTF-8"))
-   .map(_.split(",")).getOrElse(Array.empty).toSeq
+    .decode(getString(key)), "UTF-8"))
+    .map(_.split(",")).getOrElse(Array.empty).toSeq
 
   override lazy val whitelistEnabled: Boolean = getBoolean(Keys.whitelistEnabled)
   override lazy val whitelistedIps: Seq[String] = whitelistConfig(Keys.whitelistedIps)
@@ -141,7 +144,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
 
   override lazy val emailVerificationBaseUrl: String = baseUrl(Keys.emailVerificationBaseUrl)
 
-  override lazy val optOutMtdVatUrl : String = getString(Keys.optOutMtdVatHost) + getString(Keys.optOutMtdVatUrl)
+  override lazy val optOutMtdVatUrl: String = getString(Keys.optOutMtdVatHost) + getString(Keys.optOutMtdVatUrl)
 
   override lazy val vatCertificateUrl: String = getString(Keys.vatSummaryFrontendHost) + getString(Keys.vatCertificateEndpoint)
   override lazy val submittedReturnsUrl: Int => String = yearValue => getString(Keys.viewVatReturnsFrontendHost) +
@@ -156,4 +159,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override val agentServicesUrl: String = agentServicesHost + getString(ConfigKeys.agentServicesUrl)
 
   override lazy val staticDateValue: String = getString(Keys.staticDateValue)
+
+  override lazy val signUpServiceHost: String = getString(Keys.signUpServiceHost)
+  override lazy val signUpServiceUrl: String => String = vatNumber =>  signUpServiceHost + getString(Keys.signUpServiceUrl) + s"$vatNumber"
 }
