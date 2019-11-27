@@ -24,6 +24,9 @@ object RegistrationPartialMessages {
   val cancelRegistrationContent: String =
     "Cancel your client’s VAT registration if you’re closing the business, transferring ownership or do not need to be VAT registered."
 
+  val pendingRegistrationTitle: String = "Cancel VAT registration"
+  val pendingRegistrationContent: String = "The request to cancel your client’s VAT registration is pending."
+
   val historicDeregTitle: String = "Your client’s VAT registration"
   val historicDeregContent: String  = "Your client’s VAT registration was cancelled on 1 January 2019."
   val historicDeregLink: String  = "VAT online services for agents (opens in new tab)."

@@ -18,7 +18,7 @@ package assets
 
 import java.time.LocalDate
 
-import models.{CustomerDetails, Deregistration}
+import models.{CustomerDetails, Deregistration, ChangeIndicators}
 import play.api.libs.json.{JsObject, Json}
 
 object CustomerDetailsTestConstants {
@@ -125,6 +125,16 @@ object CustomerDetailsTestConstants {
     Some(tradingName),
     nonMTDfB,
     Some(Deregistration(Some(LocalDate.parse("2019-01-01"))))
+  )
+
+  val customerDetailsPendingDeregestrationNoInfo = CustomerDetails(
+    None,
+    None,
+    None,
+    None,
+    mandationStatus,
+    None,
+    Some(ChangeIndicators(true))
   )
 
   val customerDetailsFutureDeregisterOptedOut = CustomerDetails(
