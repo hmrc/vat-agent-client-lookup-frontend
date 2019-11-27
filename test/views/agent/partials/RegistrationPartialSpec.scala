@@ -35,7 +35,7 @@ class RegistrationPartialSpec extends ViewBaseSpec {
 
     "client is registered" when {
 
-      "client is not pending deregistration or cancelled registration" should {
+      "client is not pending deregistration" should {
 
         lazy val view = registrationPartial(customerDetailsNoInfo, toLocalDate("2019-01-01"))
         lazy implicit val document: Document = Jsoup.parse(view.body)

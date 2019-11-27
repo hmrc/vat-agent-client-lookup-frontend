@@ -21,7 +21,7 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 class ChangeIndicatorsSpec extends UnitSpec {
 
-  "InFlightInformationModel" should {
+  "ChangeindicatorsModel" should {
 
     "deserialize from JSON" when {
       "deregister is true" in {

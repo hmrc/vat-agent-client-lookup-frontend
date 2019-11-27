@@ -23,42 +23,42 @@
 @(details: CustomerDetails, currentDate: LocalDate)(implicit messages: Messages, appConfig: AppConfig, lang: Lang)
 
 @cancelRegistration = {
-<div id="cancel-vat" class="column-one-third">
-    <h3 class="heading-small">
-        <a href="@appConfig.cancelRegistrationUrl">@messages("registrationPartial.cancelRegistration.title")</a>
-    </h3>
-    <p>@messages("registrationPartial.cancelRegistration.content")</p>
-</div>
+    <div id="cancel-vat" class="column-one-third">
+        <h3 class="heading-small">
+            <a href="@appConfig.cancelRegistrationUrl">@messages("registrationPartial.cancelRegistration.title")</a>
+        </h3>
+        <p>@messages("registrationPartial.cancelRegistration.content")</p>
+    </div>
 }
 
 @historicDeregistration(date: LocalDate) = {
-<div id="cancel-vat" class="column-one-third">
-    <h3 class="heading-small">
-        @messages("registrationPartial.historicDeregistration.title")
-    </h3>
-    <p>@messages("registrationPartial.historicDeregistration.content", displayDate(date))</p>
-    <p><a id="agent-services-link" href="@appConfig.onlineAgentServicesUrl" target="_blank">@messages("registrationPartial.historicDeregistration.link")</a></p>
-</div>
+    <div id="cancel-vat" class="column-one-third">
+        <h3 class="heading-small">
+            @messages("registrationPartial.historicDeregistration.title")
+        </h3>
+        <p>@messages("registrationPartial.historicDeregistration.content", displayDate(date))</p>
+        <p><a id="agent-services-link" href="@appConfig.onlineAgentServicesUrl" target="_blank">@messages("registrationPartial.historicDeregistration.link")</a></p>
+    </div>
 }
 
 @futureDeregistration(date: LocalDate) = {
-<div id="cancel-vat" class="column-one-third">
-    <h3 class="heading-small">
-        @messages("registrationPartial.futureDeregistration.title")
-    </h3>
-    <p>@messages("registrationPartial.futureDeregistration.content", displayDate(date))</p>
-    <p><a id="agent-services-link" href="@appConfig.onlineAgentServicesUrl" target="_blank">@messages("registrationPartial.futureDeregistration.link")</a></p>
-</div>
+    <div id="cancel-vat" class="column-one-third">
+        <h3 class="heading-small">
+          @messages("registrationPartial.futureDeregistration.title")
+        </h3>
+        <p>@messages("registrationPartial.futureDeregistration.content", displayDate(date))</p>
+        <p><a id="agent-services-link" href="@appConfig.onlineAgentServicesUrl" target="_blank">@messages("registrationPartial.futureDeregistration.link")</a></p>
+    </div>
 }
 
 
 @pendingDeregistration()={
-<div class="column-one-third" id="cancel-vat">
-    <h3 class="heading-small">
-        @messages("registrationPartial.pendingDeregistration.title")
-    </h3>
-    <p>@messages("registrationPartial.pendingDeregistration.content")</p>
-</div>
+    <div class="column-one-third" id="cancel-vat">
+        <h3 class="heading-small">
+            @messages("registrationPartial.pendingDeregistration.title")
+        </h3>
+        <p>@messages("registrationPartial.pendingDeregistration.content")</p>
+    </div>
 }
 
 @{
@@ -67,8 +67,8 @@
             case Some(date) => date match {
                 case future if future.isAfter(currentDate) => futureDeregistration(future)
                 case historic => historicDeregistration(historic)
-        }
-        case _ => {
+            }
+            case _ => {
                 Logger.warn("[registrationPartial][deregistrationDate] - 'deregistration' contained no 'effectDateOfCancellation'")
             }
         }
@@ -78,6 +78,6 @@
                 case Some(true) => pendingDeregistration
                 case _ => cancelRegistration
             }
-        } else cancelRegistration
+        }
     }
 }
