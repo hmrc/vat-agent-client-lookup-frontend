@@ -73,11 +73,9 @@
             }
         }
     } else {
-        if (details.changeIndicators.isDefined) {
             details.changeIndicators.map(_.deregister) match {
                 case Some(true) => pendingDeregistration
                 case _ => cancelRegistration
             }
-        }
     }
 }
