@@ -27,11 +27,13 @@
         @messages("confirmClientVrn.heading")
     </h1>
 
-    <h2 class="bold-medium">@messages("confirmClientVrn.name")</h2>
-    <p>@customerDetails.clientName</p>
+    <dl>
+            <dt class="bold-medium bottom-padding">@messages("confirmClientVrn.name")</dt>
+            <dd class="link-bottom-margin">@customerDetails.clientName</dd>
 
-    <h3 class="bold-medium">@messages("confirmClientVrn.vrn")</h3>
-    <p>@vrn</p>
+            <dt class="bold-medium bottom-padding">@messages("confirmClientVrn.vrn")</dt>
+            <dd class="bottom-margin">@vrn</dd>
+    </dl>
 
     <p>
         <a href="@controllers.agent.routes.ConfirmClientVrnController.changeClient()">

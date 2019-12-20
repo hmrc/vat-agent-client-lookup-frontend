@@ -46,13 +46,13 @@ class ConfirmClientVrnViewSpec extends ViewBaseSpec {
       }
 
       "have the correct heading and text for the business name section" in {
-        elementText("h2") shouldBe viewMessages.name
-        elementText("article > p:nth-of-type(1)") shouldBe CustomerDetailsTestConstants.customerDetailsIndividual.userName.get
+        elementText("article > dl > dt:nth-of-type(1)") shouldBe viewMessages.name
+        elementText("article > dl > dd.link-bottom-margin:nth-of-type(1)") shouldBe CustomerDetailsTestConstants.customerDetailsIndividual.userName.get
       }
 
       "have the correct heading and text for the VAT number section" in {
-        elementText("h3") shouldBe viewMessages.vrn
-        elementText("article > p:nth-of-type(2)") shouldBe BaseTestConstants.vrn
+        elementText("article > dl > dt:nth-of-type(2)") shouldBe viewMessages.vrn
+        elementText("article > dl > dd.bottom-margin:nth-of-type(2)") shouldBe BaseTestConstants.vrn
       }
 
       "have a confirm button" which {
@@ -97,8 +97,8 @@ class ConfirmClientVrnViewSpec extends ViewBaseSpec {
       }
 
       "have the correct heading and text for the client name section" in {
-        elementText("h2") shouldBe viewMessages.name
-        elementText("article > p:nth-of-type(1)") shouldBe CustomerDetailsTestConstants.customerDetailsAllInfo.tradingName.get
+        elementText("article > dl > dt:nth-of-type(1)") shouldBe viewMessages.name
+        elementText("article > dl > dd.link-bottom-margin:nth-of-type(1)") shouldBe CustomerDetailsTestConstants.customerDetailsAllInfo.tradingName.get
       }
     }
   }
