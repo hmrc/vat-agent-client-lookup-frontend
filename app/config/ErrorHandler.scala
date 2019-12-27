@@ -18,27 +18,22 @@ package config
 
 import javax.inject.Inject
 import play.api.i18n.MessagesApi
-import play.api.mvc.{Request, RequestHeader, Result}
+import play.api.mvc.{Request, Result}
 import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
 import play.api.mvc.Results.InternalServerError
-import views.html.errors.ErrorTemplate
-
-import scala.concurrent.Future
+import views.html.errors.ErrorTemplate_Scope0.ErrorTemplate_Scope1.ErrorTemplate
 
 class ErrorHandler @Inject()(val messagesApi: MessagesApi,
-                             implicit val appConfig: AppConfig) extends FrontendErrorHandler {
+                             implicit val appConfig: AppConfig,
+                             errorTemplate: ErrorTemplate) extends FrontendErrorHandler {
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)
                                     (implicit request: Request[_]): HtmlFormat.Appendable =
-    views.html.errors.ErrorTemplate(pageTitle, heading, message)
+    errorTemplate("standardError.title", "standardError.heading", "standardError.message")
 
   override def notFoundTemplate(implicit request: Request[_]): Html =
-    standardErrorTemplate("notFound.title", "notFound.heading", "notFound.message")
-
-
-  override def internalServerErrorTemplate(implicit request: Request[_]): Html =
-    standardErrorTemplate("standardError.title", "standardError.heading", "standardError.message")
+    errorTemplate("notFound.title", "notFound.heading", "notFound.message")
 
   def showInternalServerError(implicit request: Request[_]): Result =
     InternalServerError(internalServerErrorTemplate)
