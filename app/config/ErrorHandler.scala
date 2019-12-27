@@ -22,6 +22,7 @@ import play.api.mvc.{Request, RequestHeader, Result}
 import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
 import play.api.mvc.Results.InternalServerError
+import views.html.errors.ErrorTemplate
 
 import scala.concurrent.Future
 
@@ -30,7 +31,7 @@ class ErrorHandler @Inject()(val messagesApi: MessagesApi,
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)
                                     (implicit request: Request[_]): HtmlFormat.Appendable =
-    views.html.errors.standardError(appConfig, pageTitle, heading, message)
+    views.html.errors.ErrorTemplate(pageTitle, heading, message)
 
   override def notFoundTemplate(implicit request: Request[_]): Html =
     standardErrorTemplate("notFound.title", "notFound.heading", "notFound.message")
