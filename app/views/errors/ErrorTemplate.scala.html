@@ -14,11 +14,7 @@
  * limitations under the License.
  *@
 
-@import config.AppConfig
-
-@this(govukWrapper: GovukWrapper)
-
-@(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(appConfig: config.AppConfig, pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages)
 
 @contentHeader = {
   <h1>@messages(heading)</h1>
@@ -28,8 +24,5 @@
   <p>@messages(message)</p>
 }
 
-@govukWrapper(appConfig = appConfig,
-  title = messages(pageTitle),
-  contentHeader = Some(contentHeader),
-  mainBody = mainContent,
-  afterFeedbackRedirect = appConfig.manageVatSubscriptionServicePath)
+@govuk_wrapper(appConfig = appConfig, title = pageTitle, contentHeader = Some(contentHeader), mainContent = mainContent)
+
