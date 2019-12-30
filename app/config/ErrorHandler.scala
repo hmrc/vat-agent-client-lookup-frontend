@@ -28,10 +28,10 @@ class ErrorHandler @Inject()(val messagesApi: MessagesApi,
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)
                                     (implicit request: Request[_]): Html =
-    views.html.errors.standardError(appConfig,"standardError.title", "standardError.heading", "standardError.message")
+    views.html.errors.standardError(appConfig,messagesApi("standardError.title"), messagesApi("standardError.heading"), messagesApi("standardError.message"))
 
   override def notFoundTemplate(implicit request: Request[_]): Html =
-    views.html.errors.standardError(appConfig,"notFound.title", "notFound.heading", "notFound.message")
+    views.html.errors.standardError(appConfig,messagesApi("notFound.title"), messagesApi("notFound.heading"), messagesApi("notFound.message"))
 
   def showInternalServerError(implicit request: Request[_]): Result =
     InternalServerError(internalServerErrorTemplate)
