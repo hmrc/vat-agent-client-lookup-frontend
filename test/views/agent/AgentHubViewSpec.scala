@@ -110,6 +110,10 @@ class AgentHubViewSpec extends ViewBaseSpec {
       lazy val view = views.html.agent.agentHub(customerDetailsNonDigital, vrn, date)(request,messages,mockConfig,user, Lang("en"))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
+      "not display the opt-out partial" in {
+        elementExtinct("#opt-out")
+      }
+
       "display the sign-up partial" in {
         elementText("#sign-up-partial > h3") shouldBe SignUpPartialMessages.signUpLinkText
       }

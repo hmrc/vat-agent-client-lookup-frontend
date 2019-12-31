@@ -19,7 +19,7 @@
 
 @(mandationStatus: String)(implicit messages: Messages, appConfig: AppConfig)
 
-@if(mandationStatus != MandationStatus.nonMTDfB) {
+@if(!List(MandationStatus.nonMTDfB, MandationStatus.nonDigital).contains(mandationStatus)) {
 <div id="opt-out" class="column-one-third">
     <h3 class="heading-small">
         <a href="@{appConfig.optOutMtdVatUrl}" >@messages("optOutCard.heading")</a>
