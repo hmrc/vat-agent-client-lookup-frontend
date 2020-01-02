@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,31 +18,20 @@ package config
 
 import javax.inject.Inject
 import play.api.i18n.MessagesApi
-import play.api.mvc.{Request, RequestHeader, Result}
+import play.api.mvc.{Request, Result}
 import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
 import play.api.mvc.Results.InternalServerError
-import scala.concurrent.Future
 
 class ErrorHandler @Inject()(val messagesApi: MessagesApi,
                              implicit val appConfig: AppConfig) extends FrontendErrorHandler {
 
-  private implicit def rhToRequest(rh: RequestHeader) : Request[_] = Request(rh, "")
-
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)
                                     (implicit request: Request[_]): Html =
-    views.html.errors.standardError(appConfig,messagesApi("standardError.title"), messagesApi("standardError.heading"), messagesApi("standardError.message"))
+    views.html.errors.standardError(appConfig, "standardError.title", "standardError.heading", "standardError.message")
 
   override def notFoundTemplate(implicit request: Request[_]): Html =
-    views.html.errors.standardError(appConfig,messagesApi("notFound.title"), messagesApi("notFound.heading"), messagesApi("notFound.message"))
-
-  override def onClientError(request: RequestHeader, statusCode: Int, message: String): Future[Result] = statusCode match {
-    case _ => Future.successful(showInternalServerError(request))
-  }
-
-  override def onServerError(request: RequestHeader, exception: Throwable): Future[Result] = exception match {
-    case _ => Future.successful(showInternalServerError(request))
-  }
+    views.html.errors.standardError(appConfig, "notFound.title", "notFound.heading", "notFound.message")
 
   def showInternalServerError(implicit request: Request[_]): Result =
     InternalServerError(internalServerErrorTemplate)
