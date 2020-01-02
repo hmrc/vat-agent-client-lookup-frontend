@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ class LanguageControllerSpec extends ControllerBaseSpec {
 
       "use the English language" in {
         cookies(result).get(Play.langCookieName(messagesApi)) shouldBe
-          Some(Cookie("PLAY_LANG", "en", None, "/", None, secure = false, httpOnly = false))
+          Some(Cookie("PLAY_LANG", "en", None, "/", None, secure = false, httpOnly = true))
       }
     }
 
@@ -53,7 +53,7 @@ class LanguageControllerSpec extends ControllerBaseSpec {
 
       "use the Welsh language" in {
         cookies(result).get(Play.langCookieName(messagesApi)) shouldBe
-          Some(Cookie("PLAY_LANG", "cy", None, "/", None, secure = false, httpOnly = false))
+          Some(Cookie("PLAY_LANG", "cy", None, "/", None, secure = false, httpOnly = true))
       }
     }
 
@@ -68,7 +68,7 @@ class LanguageControllerSpec extends ControllerBaseSpec {
 
       "keep the current language" in {
         cookies(result).get(Play.langCookieName(messagesApi)) shouldBe
-          Some(Cookie("PLAY_LANG", "en", None, "/", None, secure = false, httpOnly = false))
+          Some(Cookie("PLAY_LANG", "en", None, "/", None, secure = false, httpOnly = true))
       }
     }
   }

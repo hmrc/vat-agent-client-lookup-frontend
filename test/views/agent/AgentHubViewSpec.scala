@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -109,6 +109,10 @@ class AgentHubViewSpec extends ViewBaseSpec {
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
       lazy val view = views.html.agent.agentHub(customerDetailsNonDigital, vrn, date)(request,messages,mockConfig,user, Lang("en"))
       lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "not display the opt-out partial" in {
+        elementExtinct("#opt-out")
+      }
 
       "display the sign-up partial" in {
         elementText("#sign-up-partial > h3") shouldBe SignUpPartialMessages.signUpLinkText

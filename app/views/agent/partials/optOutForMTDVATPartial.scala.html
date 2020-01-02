@@ -1,5 +1,5 @@
 @*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
 
 @(mandationStatus: String)(implicit messages: Messages, appConfig: AppConfig)
 
-@if(mandationStatus != MandationStatus.nonMTDfB) {
+@if(!List(MandationStatus.nonMTDfB, MandationStatus.nonDigital).contains(mandationStatus)) {
 <div id="opt-out" class="column-one-third">
     <h3 class="heading-small">
         <a href="@{appConfig.optOutMtdVatUrl}" >@messages("optOutCard.heading")</a>
