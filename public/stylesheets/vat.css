@@ -61,3 +61,7 @@ html[data-useragent*='MSIE 10.0'] .flex-container.tile {
 .link-bottom-margin {
   margin-bottom: 0.5em;
 }
+
+.bottom-padding {
+  padding-bottom: 0.25em;
+}

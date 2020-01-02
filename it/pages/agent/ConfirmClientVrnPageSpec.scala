@@ -51,8 +51,7 @@ class ConfirmClientVrnPageSpec extends BasePageISpec {
 
               res should have(
                 httpStatus(OK),
-                elementText("article p:nth-of-type(1)")(individual.tradingName.get),
-                elementText("article p:nth-of-type(2)")(clientVRN)
+                pageTitle(Messages("confirmClientVrn.title") + " - Your client’s VAT details - GOV.UK")
               )
             }
           }
