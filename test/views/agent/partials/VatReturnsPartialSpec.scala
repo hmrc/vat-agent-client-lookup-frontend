@@ -62,6 +62,37 @@ class VatReturnsPartialSpec extends ViewBaseSpec {
       }
     }
 
+    "passed a mandation status of 'Non Digital'" should {
+
+      lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
+      lazy val view = views.html.agent.partials.vatReturnsPartial("Non Digital", date)(messages, mockConfig)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      s"have the correct card heading" in {
+        elementText(".heading-medium") shouldBe Messages.heading
+      }
+
+      "display the body of text for the card" in {
+        elementText("p:nth-of-type(1)") shouldBe Messages.paragraphOneNonMandated
+      }
+
+      "display the correct text in link 1" in {
+        elementText("li:nth-child(1)") shouldBe Messages.submitVatReturn
+      }
+
+      "have the correct url for the 1st link" in {
+        element("li:nth-child(1)").getAllElements().attr("href") shouldBe "/vat-through-software/vat-returns/return-deadlines"
+      }
+
+      "display the correct text in link 2" in {
+        elementText("li:nth-child(2)") shouldBe Messages.submittedReturns
+      }
+
+      "have the correct url for the 2nd link" in {
+        element("li:nth-child(2)").getAllElements().attr("href") shouldBe "/submitted-returns/2018"
+      }
+    }
+
     "passed a mandation status of 'MTDfB Mandated'" should {
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
