@@ -20,14 +20,19 @@ package views.agent.partials
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+import assets.BaseTestConstants.vrn
 import assets.messages.partials.RegistrationPartialMessages
-import models.{Deregistered, Registered}
+import models.{Deregistered, Registered, User}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
 import views.html.agent.partials.registrationPartial
 import assets.CustomerDetailsTestConstants._
+import common.SessionKeys
+import play.api.i18n.Lang
 import utils.ImplicitDateFormatter._
+import play.api.mvc.AnyContentAsEmpty
+import play.api.test.FakeRequest
 
 class RegistrationPartialSpec extends ViewBaseSpec {
 
@@ -35,35 +40,62 @@ class RegistrationPartialSpec extends ViewBaseSpec {
 
     "client is registered" when {
 
-      "client is not pending deregistration" should {
+      "client is not pending deregistration" when {
 
-        lazy val view = registrationPartial(customerDetailsNoInfo, toLocalDate("2019-01-01"))
-        lazy implicit val document: Document = Jsoup.parse(view.body)
+        "agent has not entered their contact preference" should {
 
-        "display a section for cancelling registration" which {
+          lazy val view = registrationPartial(customerDetailsNoInfo, toLocalDate("2019-01-01"))(messages, mockConfig, Lang("en"), user)
+          lazy implicit val document: Document = Jsoup.parse(view.body)
 
-          s"should have the correct title of ${RegistrationPartialMessages.cancelRegistrationTitle}" in {
-            elementText("h3") shouldBe RegistrationPartialMessages.cancelRegistrationTitle
+          "display a section for cancelling registration" which {
+
+            s"should have the correct title of ${RegistrationPartialMessages.cancelRegistrationTitle}" in {
+              elementText("h3") shouldBe RegistrationPartialMessages.cancelRegistrationTitle
+            }
+
+            s"link to ${controllers.agent.routes.CapturePreferenceController.show().url}" in {
+              element("h3 > a").attr("href") shouldBe controllers.agent.routes.CapturePreferenceController.show().url
+            }
+
+            s"have correct content of ${RegistrationPartialMessages.cancelRegistrationContent}" in {
+              elementText("p") shouldBe RegistrationPartialMessages.cancelRegistrationContent
+            }
           }
-
-        s"link to ${mockConfig.cancelRegistrationUrl}" in {
-          element("h3 > a").attr("href") shouldBe mockConfig.cancelRegistrationUrl
         }
 
-        s"have correct content of ${RegistrationPartialMessages.cancelRegistrationContent}" in {
-          elementText("p") shouldBe RegistrationPartialMessages.cancelRegistrationContent
+        "agent has entered their contact preference" should {
+
+          lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
+            .withSession(SessionKeys.verifiedAgentEmail -> "exampleemail@email.com")
+          lazy val testUser: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn, active = true)(testGetRequest)
+          lazy val view = registrationPartial(customerDetailsNoInfo, toLocalDate("2019-01-01"))(messages, mockConfig, Lang("en"), testUser)
+          lazy implicit val document: Document = Jsoup.parse(view.body)
+
+          "display a section for cancelling registration" which {
+
+            s"should have the correct title of ${RegistrationPartialMessages.cancelRegistrationTitle}" in {
+              elementText("h3") shouldBe RegistrationPartialMessages.cancelRegistrationTitle
+            }
+
+            s"link to ${mockConfig.cancelRegistrationUrl}" in {
+              element("h3 > a").attr("href") shouldBe mockConfig.cancelRegistrationUrl
+            }
+
+            s"have correct content of ${RegistrationPartialMessages.cancelRegistrationContent}" in {
+              elementText("p") shouldBe RegistrationPartialMessages.cancelRegistrationContent
+            }
+          }
         }
       }
-    }
 
       "client is pending deregistration" should {
 
-        lazy val view = registrationPartial(customerDetailsPendingDeregestrationNoInfo, toLocalDate("2019-01-01"))
+        lazy val view = registrationPartial(customerDetailsPendingDeregestrationNoInfo, toLocalDate("2019-01-01"))(messages, mockConfig, Lang("en"), user)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "display a section for pending deregistration" which {
 
-          lazy val view=registrationPartial(customerDetailsPendingDeregestrationNoInfo, toLocalDate("2019-01-01"))
+          lazy val view=registrationPartial(customerDetailsPendingDeregestrationNoInfo, toLocalDate("2019-01-01"))(messages, mockConfig, Lang("en"), user)
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           s"should have the correct title of ${RegistrationPartialMessages.pendingRegistrationTitle}" in {
@@ -73,7 +105,6 @@ class RegistrationPartialSpec extends ViewBaseSpec {
           s"have the correct content" in {
             elementText("p") shouldBe RegistrationPartialMessages.pendingRegistrationContent
           }
-
         }
       }
     }
@@ -84,7 +115,7 @@ class RegistrationPartialSpec extends ViewBaseSpec {
 
         "display the historic dereg partial" which {
 
-          lazy val view = registrationPartial(customerDetailsAllInfo, toLocalDate("2019-01-02"))
+          lazy val view = registrationPartial(customerDetailsAllInfo, toLocalDate("2019-01-02"))(messages, mockConfig, Lang("en"), user)
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           s"should have the correct title of ${RegistrationPartialMessages.historicDeregTitle}" in {
@@ -105,7 +136,7 @@ class RegistrationPartialSpec extends ViewBaseSpec {
 
         "display a section for future registration" which {
 
-          lazy val view = registrationPartial(customerDetailsFutureDeregisterOptedOut, toLocalDate("2019-01-01"))
+          lazy val view = registrationPartial(customerDetailsFutureDeregisterOptedOut, toLocalDate("2019-01-01"))(messages, mockConfig, Lang("en"), user)
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           s"should have the correct title of ${RegistrationPartialMessages.futureDeregisterTitle}" in {

@@ -16,40 +16,66 @@
 
 package views.agent.partials
 
+import assets.BaseTestConstants.vrn
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import views.ViewBaseSpec
 import assets.messages.partials.OptOutForMTDVATMessages
-import common.MandationStatus
+import common.{MandationStatus, SessionKeys}
+import models.User
 
 class OptOutForMTDVATPartialSpec extends ViewBaseSpec {
 
   "OptOutForMTDVATPartial view" when {
 
-    "with a mandated status" should {
-      lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = views.html.agent.partials.optOutForMTDVATPartial("MTDfB Mandated")(messages,mockConfig)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
+    "with a mandated status" when {
 
-      s"have the correct title of ${OptOutForMTDVATMessages.title}" in {
-        elementText(".heading-small") shouldBe OptOutForMTDVATMessages.title
+      "agent has not entered their contact preference" should {
+
+        lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
+        lazy val view = views.html.agent.partials.optOutForMTDVATPartial("MTDfB Mandated")(messages, mockConfig, user)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        s"have the correct title of ${OptOutForMTDVATMessages.title}" in {
+          elementText(".heading-small") shouldBe OptOutForMTDVATMessages.title
+        }
+
+        s"have the correct link of ${controllers.agent.routes.CapturePreferenceController.show().url}" in {
+          element("a").attr("href") shouldBe controllers.agent.routes.CapturePreferenceController.show().url
+        }
+
+        s"have the correct card information of ${OptOutForMTDVATMessages.description}" in {
+          elementText("p") shouldBe OptOutForMTDVATMessages.description
+        }
       }
 
-      s"have the correct link of ${mockConfig.optOutMtdVatUrl}" in {
-        element("a").attr("href") shouldBe mockConfig.optOutMtdVatUrl
-      }
+      "agent has entered their contact preference" should {
 
-      s"have the correct card information of ${OptOutForMTDVATMessages.description}" in {
-        elementText("p") shouldBe OptOutForMTDVATMessages.description
-      }
+        lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
+          .withSession(SessionKeys.verifiedAgentEmail -> "exampleemail@email.com")
+        lazy val testUser: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn, active = true)(testGetRequest)
+        lazy val view = views.html.agent.partials.optOutForMTDVATPartial("MTDfB Mandated")(messages, mockConfig, testUser)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
 
+        s"have the correct title of ${OptOutForMTDVATMessages.title}" in {
+          elementText(".heading-small") shouldBe OptOutForMTDVATMessages.title
+        }
+
+        s"have the correct link of ${mockConfig.optOutMtdVatUrl}" in {
+          element("a").attr("href") shouldBe mockConfig.optOutMtdVatUrl
+        }
+
+        s"have the correct card information of ${OptOutForMTDVATMessages.description}" in {
+          elementText("p") shouldBe OptOutForMTDVATMessages.description
+        }
+      }
     }
 
     "with a mandation status of nonMTDfB" should {
 
-      lazy val view = views.html.agent.partials.optOutForMTDVATPartial(MandationStatus.nonMTDfB)(messages ,mockConfig)
+      lazy val view = views.html.agent.partials.optOutForMTDVATPartial(MandationStatus.nonMTDfB)(messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not be displayed" in {
