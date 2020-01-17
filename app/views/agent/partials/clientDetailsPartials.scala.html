@@ -17,7 +17,7 @@
 @import config.AppConfig
 @import models.User
 @import common.SessionKeys
-@import templates.inputs.CapturePreferenceHelper
+@import helpers.capturePreferenceHelper
 
 @()(implicit messages: Messages, appConfig: AppConfig ,user: User[_])
 
@@ -26,7 +26,7 @@
         <h2 class="heading-medium push--top">@messages("clientDetailsCard.title")</h2>
         <p> @messages("clientDetailsCard.info")</p>
 
-        @CapturePreferenceHelper(messages("clientDetailsCard.link"), appConfig.manageVatCustomerDetailsUrl)
+        @capturePreferenceHelper(messages("clientDetailsCard.link"), appConfig.manageVatCustomerDetailsUrl)
 
     </div>
 </div>

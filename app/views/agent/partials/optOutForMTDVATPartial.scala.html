@@ -17,14 +17,14 @@
 @import config.AppConfig
 @import common.MandationStatus
 @import models.User
-@import templates.inputs.CapturePreferenceHelper
+@import helpers.capturePreferenceHelper
 
 @(mandationStatus: String)(implicit messages: Messages, appConfig: AppConfig, user: User[_])
 
 @if(!List(MandationStatus.nonMTDfB, MandationStatus.nonDigital).contains(mandationStatus)) {
 <div id="opt-out" class="column-one-third">
     <h3 class="heading-small">
-        @CapturePreferenceHelper(messages("optOutCard.heading"), appConfig.optOutMtdVatUrl)
+        @capturePreferenceHelper(messages("optOutCard.heading"), appConfig.optOutMtdVatUrl)
     </h3>
     <p>@messages("optOutCard.content")</p>
 </div>
