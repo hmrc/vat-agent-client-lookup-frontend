@@ -27,7 +27,7 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
   object Selectors {
     val pageHeading         = "#content h1"
     val subtext             = "fieldset > p"
-    val backLink            = "#content > article > a"
+    val backLink            = ".link-back"
     val emailQuestionText   = "#hiddenContent > label > span.form-field"
     val emailHintText       = "#hiddenContent > label > span.form-hint"
     val form                = "form"
@@ -57,6 +57,17 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
         "have the correct page heading" in {
           elementText(Selectors.pageHeading) shouldBe
             "Would you like to receive email notifications of any changes you make?"
+        }
+
+        "have a back link" which {
+
+          "has the correct text" in {
+            elementText(Selectors.backLink) shouldBe "Back"
+          }
+
+          "has the correct link location" in {
+            element(Selectors.backLink).attr("href") shouldBe controllers.agent.routes.AgentHubController.show().url
+          }
         }
 
         "have the correct subtext" in {
