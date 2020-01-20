@@ -17,16 +17,11 @@
 @import config.AppConfig
 @import models.User
 @import common.SessionKeys
-@import helpers.capturePreferenceHelper
 
-@()(implicit messages: Messages, appConfig: AppConfig ,user: User[_])
+@(heading: String, location: String)(implicit appConfig: AppConfig, user: User[_])
 
-<div class="tile tile-no-border">
-    <div id="client-details" class="tile-body">
-        <h2 class="heading-medium push--top">@messages("clientDetailsCard.title")</h2>
-        <p> @messages("clientDetailsCard.info")</p>
-
-        @capturePreferenceHelper(messages("clientDetailsCard.link"), appConfig.manageVatCustomerDetailsUrl)
-
-    </div>
-</div>
+@if(user.session.get(SessionKeys.verifiedAgentEmail).isDefined | user.session.get(SessionKeys.preference).contains("no")) {
+    <a href="@location">@heading</a>
+} else {
+    <a href="@{controllers.agent.routes.CapturePreferenceController.show().url}">@heading</a>
+}

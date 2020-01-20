@@ -19,13 +19,15 @@
 @import java.time.LocalDate
 @import play.api.Logger
 @import views.html.helpers.displayDate
+@import models.User
+@import helpers.capturePreferenceHelper
 
-@(details: CustomerDetails, currentDate: LocalDate)(implicit messages: Messages, appConfig: AppConfig, lang: Lang)
+@(details: CustomerDetails, currentDate: LocalDate)(implicit messages: Messages, appConfig: AppConfig, lang: Lang, user: User[_])
 
 @cancelRegistration = {
     <div id="cancel-vat" class="column-one-third">
         <h3 class="heading-small">
-            <a href="@appConfig.cancelRegistrationUrl">@messages("registrationPartial.cancelRegistration.title")</a>
+            @capturePreferenceHelper(messages("registrationPartial.cancelRegistration.title"), appConfig.cancelRegistrationUrl)
         </h3>
         <p>@messages("registrationPartial.cancelRegistration.content")</p>
     </div>
