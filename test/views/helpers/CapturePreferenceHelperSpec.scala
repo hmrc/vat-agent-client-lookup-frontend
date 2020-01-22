@@ -74,7 +74,7 @@ class CapturePreferenceHelperSpec extends ViewBaseSpec {
       }
 
       "link to the capture preference page" in {
-        element("a").attr("href") shouldBe controllers.agent.routes.CapturePreferenceController.show().url
+        element("a").attr("href").split('?')(0) shouldBe controllers.agent.routes.CapturePreferenceController.show().url
       }
     }
 

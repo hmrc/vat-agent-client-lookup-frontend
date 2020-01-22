@@ -13,7 +13,7 @@ GET        /change-client-vat-number                    controllers.agent.Confir
 GET        /confirm-client-vat-number                   controllers.agent.ConfirmClientVrnController.show
 GET        /redirect                                    controllers.agent.ConfirmClientVrnController.redirect
 
-GET        /email-notification                          controllers.agent.CapturePreferenceController.show
+GET        /email-notification                          controllers.agent.CapturePreferenceController.show(altRedirectUrl: String ?= "")
 POST       /email-notification                          controllers.agent.CapturePreferenceController.submit
 
 GET        /email-confirmation                          controllers.agent.ConfirmEmailController.show
