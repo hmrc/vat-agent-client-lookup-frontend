@@ -48,7 +48,9 @@ class ClientDetailsPartialsSpec extends ViewBaseSpec {
       }
 
       s"display the correct link of ${controllers.agent.routes.CapturePreferenceController.show().url}" in {
-        element("a").attr("href") shouldBe controllers.agent.routes.CapturePreferenceController.show().url
+        element("a").attr("href") shouldBe
+          controllers.agent.routes.CapturePreferenceController.show().url +
+            s"?altRedirectUrl=%2F${mockConfig.manageVatCustomerDetailsUrl.substring(1)}"
       }
     }
 

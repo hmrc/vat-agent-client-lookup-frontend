@@ -16,13 +16,9 @@
 
 package views.agent.partials
 
-
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-
 import assets.BaseTestConstants.vrn
 import assets.messages.partials.RegistrationPartialMessages
-import models.{Deregistered, Registered, User}
+import models.User
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
@@ -54,7 +50,9 @@ class RegistrationPartialSpec extends ViewBaseSpec {
             }
 
             s"link to ${controllers.agent.routes.CapturePreferenceController.show().url}" in {
-              element("h3 > a").attr("href") shouldBe controllers.agent.routes.CapturePreferenceController.show().url
+              element("h3 > a").attr("href") shouldBe
+                controllers.agent.routes.CapturePreferenceController.show().url +
+                  s"?altRedirectUrl=%2F${mockConfig.cancelRegistrationUrl.substring(1)}"
             }
 
             s"have correct content of ${RegistrationPartialMessages.cancelRegistrationContent}" in {

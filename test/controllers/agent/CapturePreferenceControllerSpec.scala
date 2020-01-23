@@ -56,7 +56,7 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
       "client VRN is in session" should {
 
         lazy val result = {
-          target.show(request.withSession(
+          target.show()(request.withSession(
             SessionKeys.clientVRN -> "999999999"
           ))
         }
@@ -77,7 +77,7 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
         "redirect URL is in session" should {
 
           lazy val result = {
-            target.show(request.withSession(
+            target.show()(request.withSession(
               SessionKeys.redirectUrl -> testRedirectUrl
             ))
           }
@@ -95,7 +95,7 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
         "redirect URL is not in session" should {
 
           lazy val result = {
-            target.show(request)
+            target.show()(request)
           }
 
           "return 303" in {
@@ -112,7 +112,7 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
 
     "a user does not have a valid enrolment" should {
 
-      lazy val result = target.show(request.withSession(
+      lazy val result = target.show()(request.withSession(
         SessionKeys.redirectUrl -> testRedirectUrl
       ))
 

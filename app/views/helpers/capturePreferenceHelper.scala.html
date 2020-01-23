@@ -23,5 +23,5 @@
 @if(user.session.get(SessionKeys.verifiedAgentEmail).isDefined | user.session.get(SessionKeys.preference).contains("no")) {
     <a href="@location">@heading</a>
 } else {
-    <a href="@{controllers.agent.routes.CapturePreferenceController.show().url}">@heading</a>
+    <a href="@{controllers.agent.routes.CapturePreferenceController.show(location).url}">@heading</a>
 }

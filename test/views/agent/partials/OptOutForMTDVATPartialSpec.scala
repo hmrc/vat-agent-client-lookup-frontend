@@ -43,7 +43,9 @@ class OptOutForMTDVATPartialSpec extends ViewBaseSpec {
         }
 
         s"have the correct link of ${controllers.agent.routes.CapturePreferenceController.show().url}" in {
-          element("a").attr("href") shouldBe controllers.agent.routes.CapturePreferenceController.show().url
+          element("a").attr("href") shouldBe
+            controllers.agent.routes.CapturePreferenceController.show().url +
+              s"?altRedirectUrl=%2F${mockConfig.optOutMtdVatUrl.substring(1)}"
         }
 
         s"have the correct card information of ${OptOutForMTDVATMessages.description}" in {
