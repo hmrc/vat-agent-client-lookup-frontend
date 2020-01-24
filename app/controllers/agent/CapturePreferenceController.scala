@@ -39,8 +39,7 @@ class CapturePreferenceController @Inject()(val messagesApi: MessagesApi,
     val preference = user.session.get(SessionKeys.preference)
     val notificationEmail = user.session.get(SessionKeys.notificationsEmail)
     val clientVrn = user.session.get(SessionKeys.clientVRN)
-    val redirectUrl = user.session.get(SessionKeys.redirectUrl).getOrElse(altRedirectUrl)
-
+    val redirectUrl = if(altRedirectUrl.nonEmpty) altRedirectUrl else user.session.get(SessionKeys.redirectUrl).getOrElse("")
     if (clientVrn.isEmpty) {
       Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectUrl))
     } else {
