@@ -53,22 +53,30 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
 
     "a user is enrolled with a valid enrolment" when {
 
-      "client VRN is in session" should {
+      "client VRN is in session" when {
 
-        lazy val result = {
-          target.show()(request.withSession(
-            SessionKeys.clientVRN -> "999999999"
-          ))
-        }
+        "a redirectUrl is in session and another is passed through in the 'show' method" should {
 
-        "return 200" in {
-          mockAgentAuthorised()
-          status(result) shouldBe Status.OK
-        }
+          lazy val result = {
+            target.show("newRedirectUrl")(request.withSession(
+              SessionKeys.clientVRN -> "999999999",
+              SessionKeys.redirectUrl -> testRedirectUrl
+            ))
+          }
 
-        "render capturePreference page" in {
-          Jsoup.parse(bodyOf(result)).title() shouldBe "Would you like to receive email notifications of any " +
-            "changes you make? - Your client’s VAT details - GOV.UK"
+          "return 200" in {
+            mockAgentAuthorised()
+            status(result) shouldBe Status.OK
+          }
+
+          "render capturePreference page" in {
+            Jsoup.parse(bodyOf(result)).title() shouldBe "Would you like to receive email notifications of any " +
+              "changes you make? - Your client’s VAT details - GOV.UK"
+          }
+
+          "store the new redirectUrl in session" in {
+            session(result).get(SessionKeys.redirectUrl) shouldBe Some("newRedirectUrl")
+          }
         }
       }
 
