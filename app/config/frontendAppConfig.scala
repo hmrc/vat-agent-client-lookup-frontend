@@ -59,7 +59,7 @@ trait AppConfig extends ServicesConfig {
   val onlineAgentServicesUrl: String
   val features: Features
   val vatCertificateUrl: String
-  val submittedReturnsUrl: Int => String
+  val submittedReturnsUrl: String
   val returnDeadlinesUrl: String
   val classicServicesSignInUrl: String
   val accessibilityLinkUrl: String
@@ -147,8 +147,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override lazy val optOutMtdVatUrl: String = getString(Keys.optOutMtdVatHost) + getString(Keys.optOutMtdVatUrl)
 
   override lazy val vatCertificateUrl: String = getString(Keys.vatSummaryFrontendHost) + getString(Keys.vatCertificateEndpoint)
-  override lazy val submittedReturnsUrl: Int => String = yearValue => getString(Keys.viewVatReturnsFrontendHost) +
-    getString(Keys.submittedReturnsEndpoint) + s"$yearValue"
+  override lazy val submittedReturnsUrl: String = getString(Keys.viewVatReturnsFrontendHost) + getString(Keys.submittedReturnsEndpoint)
   override lazy val returnDeadlinesUrl: String = getString(Keys.viewVatReturnsFrontendHost) + getString(Keys.returnDeadlinesEndpoint)
 
   override val accessibilityLinkUrl: String = getString(ConfigKeys.vatSummaryFrontendHost) + getString(ConfigKeys.vatSummaryAccessibilityUrl)

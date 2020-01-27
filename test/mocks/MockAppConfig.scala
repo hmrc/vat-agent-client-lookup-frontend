@@ -16,8 +16,6 @@
 
 package mocks
 
-import java.time.LocalDate
-
 import config.AppConfig
 import config.features.Features
 import play.api.Mode.Mode
@@ -71,7 +69,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val emailVerificationBaseUrl: String = "mockEmailBaseUrl"
   override val vatCertificateUrl: String = "/certificate"
   override val onlineAgentServicesUrl: String = "/onlineAgentServices"
-  override val submittedReturnsUrl: Int => String = year => s"/submitted-returns/$year"
+  override val submittedReturnsUrl: String = "/submitted-returns"
   override val returnDeadlinesUrl: String = "/vat-through-software/vat-returns/return-deadlines"
 
   override val classicServicesSignInUrl: String = "/classic-services-sign-in"

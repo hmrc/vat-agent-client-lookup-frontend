@@ -18,7 +18,7 @@
 @import common.MandationStatus
 @import java.time.LocalDate
 
-@(mandationStatus: String, currentDate: LocalDate)(implicit messages: Messages,appConfig: AppConfig)
+@(mandationStatus: String)(implicit messages: Messages,appConfig: AppConfig)
 <div class="tile tile-no-border">
     <div id="vat-returns" class="tile-body">
         <h2 class="heading-medium push--top">@messages("vatReturnsPartial.heading")</h2>
@@ -33,7 +33,7 @@
             <ul>
         }
             <li>
-                <a id="view-submitted-returns-link" href="@{appConfig.submittedReturnsUrl(currentDate.getYear)}">@messages("vatReturnsPartial.viewReturnsLink")</a>
+                <a id="view-submitted-returns-link" href="@{appConfig.submittedReturnsUrl}">@messages("vatReturnsPartial.viewReturnsLink")</a>
             </li>
         </ul>
     </div>
