@@ -39,7 +39,14 @@ import scala.concurrent.Future
 class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetailsService with MockDateService {
 
   trait Test {
-    lazy val controller = new WhatToDoController(messagesApi, mockAuthAsAgentWithClient, mockErrorHandler, mockCustomerDetailsService, mockDateService, mockConfig)
+    lazy val controller = new WhatToDoController(
+      messagesApi,
+      mockAuthAsAgentWithClient,
+      mockErrorHandler,
+      mockCustomerDetailsService,
+      mockDateService,
+      mockConfig
+    )
     implicit val timeout: Timeout = Timeout.apply(60, TimeUnit.SECONDS)
     val fakeRequestWithEmailPref: FakeRequest[AnyContentAsEmpty.type] = fakeRequestWithVrnAndRedirectUrl.withSession(
       SessionKeys.preference -> "true"
@@ -123,7 +130,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
           .withFormUrlEncodedBody("option" -> "view-return")
         )
 
-        redirectLocation(result) shouldBe Some(mockConfig.submittedReturnsUrl(2018))
+        redirectLocation(result) shouldBe Some(mockConfig.submittedReturnsUrl)
       }
 
       "change details is selected with email pref yes and verified email in session" in new Test {

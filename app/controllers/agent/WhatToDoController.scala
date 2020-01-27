@@ -65,7 +65,7 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
         data => Future.successful(
           data.value match {
             case SubmitReturn.value => Redirect(appConfig.returnDeadlinesUrl)
-            case ViewReturn.value => Redirect(appConfig.submittedReturnsUrl(dateService.now().getYear))
+            case ViewReturn.value => Redirect(appConfig.submittedReturnsUrl)
             case ChangeDetails.value => emailPrefCheck(user)
             case ViewCertificate.value => Redirect(appConfig.vatCertificateUrl)
           }
