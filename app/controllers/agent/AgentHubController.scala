@@ -21,25 +21,28 @@ import controllers.BaseController
 import controllers.predicates.AuthoriseAsAgentWithClient
 import javax.inject.{Inject, Singleton}
 import play.api.Logger
-import play.api.i18n.MessagesApi
-import play.api.mvc.{Action, AnyContent}
+import play.api.i18n.Lang
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{CustomerDetailsService, DateService}
+import views.html.agent.AgentHubView
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AgentHubController @Inject()(val messagesApi: MessagesApi,
-                                   val authenticate: AuthoriseAsAgentWithClient,
+class AgentHubController @Inject()(val authenticate: AuthoriseAsAgentWithClient,
                                    val serviceErrorHandler: ErrorHandler,
                                    val customerDetailsService: CustomerDetailsService,
                                    val dateService: DateService,
-                                   implicit val appConfig: AppConfig) extends BaseController {
+                                   mcc: MessagesControllerComponents,
+                                   agentHubView: AgentHubView,
+                                   implicit val appConfig: AppConfig,
+                                   implicit val executionContext: ExecutionContext) extends BaseController(mcc) {
 
   def show: Action[AnyContent] = authenticate.async { implicit user =>
     if(appConfig.features.useAgentHubPageFeature()){
       customerDetailsService.getCustomerDetails(user.vrn).map {
         case Right(details) =>
-          Ok(views.html.agent.agentHub(details, user.vrn, dateService.now()))
+          Ok(agentHubView(details, user.vrn, dateService.now()))
         case Left(error) =>
           Logger.warn(s"[AgentHubController][show] - received an error from CustomerDetailsService: $error")
           serviceErrorHandler.showInternalServerError

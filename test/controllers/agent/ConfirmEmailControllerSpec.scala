@@ -28,6 +28,7 @@ import org.scalatest.BeforeAndAfterAll
 import play.api.http.Status
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.Helpers._
+import views.html.agent.ConfirmEmailView
 
 import scala.concurrent.Future
 
@@ -39,10 +40,12 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerifi
   object TestConfirmEmailController extends ConfirmEmailController(
     mockAgentOnlyAuthPredicate,
     mockPreferencePredicate,
-    messagesApi,
     mockEmailVerificationService,
     mockErrorHandler,
     mockAuditingService,
+    mcc,
+    inject[ConfirmEmailView],
+    ec,
     mockConfig
   )
 

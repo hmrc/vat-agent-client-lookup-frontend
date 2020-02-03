@@ -20,15 +20,16 @@ import config.AppConfig
 import forms.FeatureSwitchForm
 import javax.inject.Inject
 import models.FeatureSwitchModel
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Result}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import testOnly.views.html.FeatureSwitchView
 
-class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit val appConfig: AppConfig)
-  extends FrontendController with I18nSupport {
+class FeatureSwitchController @Inject()(featureSwitchView: FeatureSwitchView, mcc: MessagesControllerComponents, implicit val appConfig: AppConfig)
+  extends FrontendController(mcc) with I18nSupport {
 
   def featureSwitch: Action[AnyContent] = Action { implicit request =>
-    Ok(testOnly.views.html.featureSwitch(FeatureSwitchForm.form.fill(
+    Ok(featureSwitchView(FeatureSwitchForm.form.fill(
       FeatureSwitchModel(
         emailVerificationEnabled = appConfig.features.emailVerificationEnabled(),
         preferenceJourneyEnabled = appConfig.features.preferenceJourneyEnabled(),

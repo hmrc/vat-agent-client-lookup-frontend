@@ -18,13 +18,15 @@
 @import common.EnrolmentKeys
 @import java.net.URLEncoder
 
+@this(mainTemplate: MainTemplate)
+
 @(vrn: String, redirectUrl: String)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @postToInvitations = @{
 s"${appConfig.agentInvitationsFastTrack}?continue=${URLEncoder.encode(s"${appConfig.signInContinueBaseUrl}${controllers.agent.routes.ConfirmClientVrnController.show().url}", "UTF-8")}"
 }
 
-@views.html.main_template(
+@mainTemplate(
     title = messages("unauthorised.agentForClient.title"),
     bodyClasses = None
 ) {

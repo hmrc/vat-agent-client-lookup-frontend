@@ -29,8 +29,11 @@ import assets.messages.{AgentHubMessages => Messages}
 import assets.messages.partials.{SignUpPartialMessages, _}
 import models.User
 import play.api.i18n.Lang
+import views.html.agent.AgentHubView
 
 class AgentHubViewSpec extends ViewBaseSpec {
+
+  val injectedView: AgentHubView = inject[AgentHubView]
 
   "AgentHubPage" when {
 
@@ -38,7 +41,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
 
     "the user is a valid agent for an opted-in client" should {
 
-      lazy val view = views.html.agent.agentHub(customerDetailsFnameOnly, vrn, date)(request,messages,mockConfig,user, Lang("en"))
+      lazy val view = injectedView(customerDetailsFnameOnly, vrn, date)(request,messages,mockConfig,user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {
@@ -92,7 +95,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
     "the user is an agent for an opted out client" should {
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = views.html.agent.agentHub(customerDetailsOptedOut, vrn, date)(request,messages,mockConfig,user, Lang("en"))
+      lazy val view = injectedView(customerDetailsOptedOut, vrn, date)(request,messages,mockConfig,user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not display the opt-out partial" in {
@@ -107,7 +110,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
     "the user is an agent for a 'Non-Digital' client" should {
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = views.html.agent.agentHub(customerDetailsNonDigital, vrn, date)(request,messages,mockConfig,user, Lang("en"))
+      lazy val view = injectedView(customerDetailsNonDigital, vrn, date)(request,messages,mockConfig,user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not display the opt-out partial" in {
@@ -123,7 +126,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
       val otherDate: LocalDate = LocalDate.parse("2020-01-01")
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = views.html.agent.agentHub(customerDetailsAllInfo, vrn, otherDate)(request,messages,mockConfig,user, Lang("en"))
+      lazy val view = injectedView(customerDetailsAllInfo, vrn, otherDate)(request,messages,mockConfig,user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the Cancel VAT registration historic partial" in {
@@ -135,7 +138,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
 
       val date: LocalDate = LocalDate.parse("2010-01-01")
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = views.html.agent.agentHub(customerDetailsAllInfo, vrn, date)(request,messages,mockConfig,user, Lang("en"))
+      lazy val view = injectedView(customerDetailsAllInfo, vrn, date)(request,messages,mockConfig,user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'cancel vat registration' partial with the correct future of historic date" in {

@@ -24,7 +24,7 @@ sealed trait WhatToDoModel {
 
 object WhatToDoModel {
 
-  val id = "whatToDo"
+  val id = "WhatToDoView"
 
   implicit val reads: Reads[WhatToDoModel] = (__ \ id).read[String].map {
     case SubmitReturn.value => SubmitReturn

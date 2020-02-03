@@ -27,6 +27,7 @@ import org.scalatest.BeforeAndAfterAll
 import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.Helpers._
+import views.html.agent.CapturePreferenceView
 
 class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditingService with BeforeAndAfterAll {
 
@@ -42,10 +43,12 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
   val testNoPreference: String    = "no"
 
   def target: CapturePreferenceController = new CapturePreferenceController(
-    messagesApi,
     mockAgentOnlyAuthPredicate,
     mockPreferencePredicate,
     mockAuditingService,
+    mcc,
+    inject[CapturePreferenceView],
+    ec,
     mockConfig
   )
 
@@ -69,9 +72,8 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
             status(result) shouldBe Status.OK
           }
 
-          "render capturePreference page" in {
-            Jsoup.parse(bodyOf(result)).title() shouldBe "Would you like to receive email notifications of any " +
-              "changes you make? - Your client’s VAT details - GOV.UK"
+          "render CapturePreferenceView page" in {
+            messages(Jsoup.parse(bodyOf(result)).select("h1").text()) shouldBe "Would you like to receive email notifications of any changes you make?"
           }
 
           "store the new redirectUrl in session" in {

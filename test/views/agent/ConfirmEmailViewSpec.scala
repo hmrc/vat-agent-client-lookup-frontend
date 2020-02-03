@@ -21,8 +21,11 @@ import org.jsoup.nodes.Document
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import views.ViewBaseSpec
+import views.html.agent.ConfirmEmailView
 
 class ConfirmEmailViewSpec extends ViewBaseSpec {
+
+  val injectedView: ConfirmEmailView = inject[ConfirmEmailView]
 
   val testEmail: String = "test@email.com"
 
@@ -38,7 +41,7 @@ class ConfirmEmailViewSpec extends ViewBaseSpec {
 
   "The Confirm Email view" should {
     lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-    lazy val view = views.html.agent.confirmEmail(testEmail)
+    lazy val view = injectedView(testEmail)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct title" in {

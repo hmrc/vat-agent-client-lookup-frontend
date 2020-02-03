@@ -19,11 +19,12 @@ package views.helpers
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.Matchers._
-import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
+import org.scalatestplus.play.guice.GuiceOneServerPerSuite
+import org.scalatestplus.play.PlaySpec
 import play.twirl.api.Html
 
 
-class AccordionHelperSpec extends PlaySpec with OneServerPerSuite {
+class AccordionHelperSpec extends PlaySpec with GuiceOneServerPerSuite {
 
   val testLabel: String = "test label"
   val testFeature: String = "test-feature"

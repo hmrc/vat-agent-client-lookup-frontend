@@ -29,6 +29,8 @@ import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import utils.TestUtil
 import assets.BaseTestConstants._
 import org.scalatestplus.mockito.MockitoSugar
+import views.html.errors.agent.UnauthorisedNoEnrolmentView
+import views.html.errors.{SessionTimeoutView, StandardErrorView}
 
 import scala.concurrent.Future
 
@@ -52,28 +54,34 @@ trait MockAuth extends TestUtil with BeforeAndAfterEach with MockitoSugar {
 
   val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
 
-  val mockErrorHandler: ErrorHandler = new ErrorHandler(messagesApi, mockConfig)
+  val mockErrorHandler: ErrorHandler = new ErrorHandler(messagesApi, inject[StandardErrorView], mockConfig)
 
   val mockAuthAsAgentWithClient: AuthoriseAsAgentWithClient =
     new AuthoriseAsAgentWithClient(
       mockEnrolmentsAuthService,
-      injector.instanceOf[AuditService],
-      injector.instanceOf[ErrorHandler],
-      messagesApi,
-      mockConfig
+      inject[AuditService],
+      inject[ErrorHandler],
+      mcc,
+      inject[SessionTimeoutView],
+      mockConfig,
+      ec
     )
 
   val mockAgentOnlyAuthPredicate: AuthoriseAsAgentOnly =
     new AuthoriseAsAgentOnly(
       mockEnrolmentsAuthService,
-      messagesApi,
-      injector.instanceOf[ErrorHandler],
-      mockConfig
+      inject[ErrorHandler],
+      mcc,
+      inject[UnauthorisedNoEnrolmentView],
+      inject[SessionTimeoutView],
+      mockConfig,
+      ec
     )
 
-  val mockPreferencePredicate: PreferencePredicate = new PreferencePredicate()(
+  val mockPreferencePredicate: PreferencePredicate = new PreferencePredicate(
+    mcc,
     mockConfig,
-    messagesApi
+    ec
   )
 
   def mockIndividualAuthorised(): OngoingStubbing[Future[~[Option[AffinityGroup], Enrolments]]] =

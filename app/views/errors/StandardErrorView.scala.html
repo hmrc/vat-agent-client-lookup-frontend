@@ -14,6 +14,8 @@
  * limitations under the License.
  *@
 
+ @this(govukWrapper: GovukWrapper)
+
 @(appConfig: config.AppConfig, pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages)
 
 @contentHeader = {
@@ -24,4 +26,4 @@
   <p class="lede">@messages(message)</p>
 }
 
-@govuk_wrapper(appConfig = appConfig, title = messages(pageTitle), contentHeader = Some(contentHeader), mainContent = mainContent)
+@govukWrapper(appConfig = appConfig, title = messages(pageTitle), contentHeader = Some(contentHeader), mainBody = mainContent)

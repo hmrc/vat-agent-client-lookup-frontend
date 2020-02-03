@@ -22,7 +22,7 @@
 @import models.User
 @import helpers.capturePreferenceHelper
 
-@(details: CustomerDetails, currentDate: LocalDate)(implicit messages: Messages, appConfig: AppConfig, lang: Lang, user: User[_])
+@(details: CustomerDetails, currentDate: LocalDate)(implicit messages: Messages, appConfig: AppConfig, user: User[_])
 
 @cancelRegistration = {
     <div id="cancel-vat" class="column-one-third">

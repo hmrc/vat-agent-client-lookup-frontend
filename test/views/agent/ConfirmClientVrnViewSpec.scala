@@ -21,8 +21,11 @@ import assets.messages.{BaseMessages, ConfirmClientVrnPageMessages => viewMessag
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
+import views.html.agent.ConfirmClientVrnView
 
 class ConfirmClientVrnViewSpec extends ViewBaseSpec {
+
+  val injectedView: ConfirmClientVrnView = inject[ConfirmClientVrnView]
 
   "The Confirm Change Client VRN page" when {
 
@@ -30,7 +33,7 @@ class ConfirmClientVrnViewSpec extends ViewBaseSpec {
 
     "given an individual with no trading name" should {
 
-      lazy val view = views.html.agent.confirmClientVrn(
+      lazy val view = injectedView(
         BaseTestConstants.vrn,
         CustomerDetailsTestConstants.customerDetailsIndividual
       )(request, messages, mockConfig)
@@ -81,7 +84,7 @@ class ConfirmClientVrnViewSpec extends ViewBaseSpec {
 
     "given an individual with a trading name" should {
 
-      lazy val view = views.html.agent.confirmClientVrn(
+      lazy val view = injectedView(
         BaseTestConstants.vrn,
         CustomerDetailsTestConstants.customerDetailsAllInfo
       )(request, messages, mockConfig)

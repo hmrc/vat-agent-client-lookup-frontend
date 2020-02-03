@@ -33,18 +33,24 @@ import play.api.http.Status
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
+import views.html.agent.ConfirmClientVrnView
+import views.html.errors.{AccountMigrationView, NotSignedUpView}
 
 import scala.concurrent.ExecutionContext
 
 class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustomerDetailsService with MockAuditingService {
 
   object TestConfirmClientVrnController extends ConfirmClientVrnController(
-    messagesApi,
     mockAuthAsAgentWithClient,
     mockCustomerDetailsService,
     serviceErrorHandler,
     mockAuditingService,
-    mockConfig
+    mcc,
+    inject[ConfirmClientVrnView],
+    inject[AccountMigrationView],
+    inject[NotSignedUpView],
+    mockConfig,
+    ec
   )
 
   "Calling the .show action" when {
@@ -90,7 +96,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
             }
 
             "render the Confirm Client Vrn Page" in {
-              document.select("h1").text shouldBe Messages.heading
+              messages(document.select("h1").text) shouldBe Messages.heading
             }
           }
 
@@ -111,7 +117,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
 
             "return the migration error page" in {
               lazy val document = Jsoup.parse(bodyOf(result))
-              document.select("h1").text shouldBe "You cannot make changes for that client’s business right now"
+              messages(document.select("h1").text) shouldBe "You cannot make changes for that client’s business right now"
             }
           }
 
@@ -132,7 +138,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
 
             "return the not signed up error page" in {
               lazy val document = Jsoup.parse(bodyOf(result))
-              document.select("h1").text shouldBe "The business has not signed up to Making Tax Digital for VAT"
+              messages(document.select("h1").text) shouldBe "The business has not signed up to Making Tax Digital for VAT"
             }
           }
 

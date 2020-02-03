@@ -28,6 +28,7 @@ import mocks.services._
 import org.jsoup.Jsoup
 import play.api.mvc.Result
 import play.mvc.Http.Status._
+import views.html.agent.AgentHubView
 
 import scala.concurrent.Future
 
@@ -35,12 +36,14 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
   trait Test {
     lazy val controller = new AgentHubController(
-      messagesApi,
       mockAuthAsAgentWithClient,
       mockErrorHandler,
       mockCustomerDetailsService,
       mockDateService,
-      mockConfig
+      mcc,
+      inject[AgentHubView],
+      mockConfig,
+      ec
     )
     implicit val timeout: Timeout = Timeout.apply(60, TimeUnit.SECONDS)
   }
@@ -61,7 +64,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
           }
 
           status(result) shouldBe OK
-          Jsoup.parse(bodyOf(result)).title() shouldBe "Your client’s VAT account - Your client’s VAT details - GOV.UK"
+          messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client’s VAT account"
         }
       }
 

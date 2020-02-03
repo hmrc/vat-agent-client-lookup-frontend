@@ -25,15 +25,18 @@ import controllers.predicates.{AuthoriseAsAgentOnly, PreferencePredicate}
 import forms.PreferenceForm._
 import javax.inject.{Inject, Singleton}
 import models.{PreferenceModel, Yes}
-import play.api.i18n.MessagesApi
 import play.api.mvc._
+import views.html.agent.CapturePreferenceView
+import scala.concurrent.ExecutionContext
 
 @Singleton
-class CapturePreferenceController @Inject()(val messagesApi: MessagesApi,
-                                            val authenticate: AuthoriseAsAgentOnly,
+class CapturePreferenceController @Inject()(val authenticate: AuthoriseAsAgentOnly,
                                             val preferenceCheck: PreferencePredicate,
                                             val auditService: AuditService,
-                                            implicit val appConfig: AppConfig) extends BaseController {
+                                            mcc: MessagesControllerComponents,
+                                            capturePreferenceView: CapturePreferenceView,
+                                            implicit val executionContext: ExecutionContext,
+                                            implicit val appConfig: AppConfig) extends BaseController(mcc) {
 
   def show(altRedirectUrl: String = ""): Action[AnyContent] = (authenticate andThen preferenceCheck) { implicit user =>
     val preference = user.session.get(SessionKeys.preference)
@@ -45,10 +48,10 @@ class CapturePreferenceController @Inject()(val messagesApi: MessagesApi,
     } else {
       preference match {
         case Some(_) =>
-          Ok(views.html.agent.capturePreference(preferenceForm.fill(PreferenceModel(Yes, notificationEmail))))
+          Ok(capturePreferenceView(preferenceForm.fill(PreferenceModel(Yes, notificationEmail))))
             .addingToSession(SessionKeys.redirectUrl -> redirectUrl)
         case None =>
-          Ok(views.html.agent.capturePreference(preferenceForm))
+          Ok(capturePreferenceView(preferenceForm))
             .addingToSession(SessionKeys.redirectUrl -> redirectUrl)
       }
     }
@@ -56,7 +59,7 @@ class CapturePreferenceController @Inject()(val messagesApi: MessagesApi,
 
   def submit: Action[AnyContent] = (authenticate andThen preferenceCheck) { implicit user =>
     preferenceForm.bindFromRequest().fold(
-      error => BadRequest(views.html.agent.capturePreference(error)),
+      error => BadRequest(capturePreferenceView(error)),
       formData => {
         if (formData.yesNo.value) {
           auditService.extendedAudit(

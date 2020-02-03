@@ -21,20 +21,26 @@ import config.{AppConfig, ErrorHandler}
 import javax.inject.{Inject, Singleton}
 import models.Agent
 import play.api.Logger
-import play.api.i18n.MessagesApi
 import play.api.mvc._
 import services.EnrolmentsAuthService
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.{Retrievals, ~}
+import views.html.errors.SessionTimeoutView
+import views.html.errors.agent.UnauthorisedNoEnrolmentView
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AuthoriseAsAgentOnly @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
-                                     val messagesApi: MessagesApi,
                                      val errorHandler: ErrorHandler,
-                                     implicit val appConfig: AppConfig)
-  extends AuthBasePredicate with ActionBuilder[Agent] with ActionFunction[Request, Agent] {
+                                     mcc: MessagesControllerComponents,
+                                     unauthorisedNoEnrolmentView: UnauthorisedNoEnrolmentView,
+                                     sessionTimeoutView: SessionTimeoutView,
+                                     implicit val appConfig: AppConfig,
+                                     override implicit val executionContext: ExecutionContext)
+  extends AuthBasePredicate(mcc) with ActionBuilder[Agent, AnyContent] with ActionFunction[Request, Agent] {
+
+  override val parser: BodyParser[AnyContent] = mcc.parsers.defaultBodyParser
 
   override def invokeBlock[A](request: Request[A], block: Agent[A] => Future[Result]): Future[Result] = {
 
@@ -56,7 +62,7 @@ class AuthoriseAsAgentOnly @Inject()(enrolmentsAuthService: EnrolmentsAuthServic
     } recover {
       case _: NoActiveSession =>
         Logger.debug("[AuthoriseAsAgentOnly][invokeBlock] - No Active Session, rendering Session Timeout view")
-        Unauthorized(views.html.errors.sessionTimeout())
+        Unauthorized(sessionTimeoutView())
       case _: AuthorisationException =>
         Logger.warn("[AuthoriseAsAgentOnly][invokeBlock] - Authorisation Exception, rendering Technical Difficulties view")
         errorHandler.showInternalServerError
@@ -71,6 +77,6 @@ class AuthoriseAsAgentOnly @Inject()(enrolmentsAuthService: EnrolmentsAuthServic
     else {
       Logger.debug(s"[AuthoriseAsAgentOnly][checkAgentEnrolment] - Agent without HMRC-AS-AGENT enrolment. Enrolments: $enrolments")
       Logger.warn(s"[AuthoriseAsAgentOnly][checkAgentEnrolment] - Agent without HMRC-AS-AGENT enrolment")
-      Future.successful(Forbidden(views.html.errors.agent.unauthorisedNoEnrolment()))
+      Future.successful(Forbidden(unauthorisedNoEnrolmentView()))
     }
 }

@@ -22,16 +22,18 @@ import play.api.mvc.{Request, Result}
 import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
 import play.api.mvc.Results.InternalServerError
+import views.html.errors.StandardErrorView
 
 class ErrorHandler @Inject()(val messagesApi: MessagesApi,
+                             standardErrorView: StandardErrorView,
                              implicit val appConfig: AppConfig) extends FrontendErrorHandler {
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)
                                     (implicit request: Request[_]): Html =
-    views.html.errors.standardError(appConfig, "standardError.title", "standardError.heading", "standardError.message")
+    standardErrorView(appConfig, "standardError.title", "standardError.heading", "standardError.message")
 
   override def notFoundTemplate(implicit request: Request[_]): Html =
-    views.html.errors.standardError(appConfig, "notFound.title", "notFound.heading", "notFound.message")
+    standardErrorView(appConfig, "notFound.title", "notFound.heading", "notFound.message")
 
   def showInternalServerError(implicit request: Request[_]): Result =
     InternalServerError(internalServerErrorTemplate)

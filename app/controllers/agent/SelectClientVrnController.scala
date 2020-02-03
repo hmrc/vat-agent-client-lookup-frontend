@@ -23,20 +23,21 @@ import controllers.predicates.AuthoriseAsAgentOnly
 import forms.ClientVrnForm
 import javax.inject.{Inject, Singleton}
 import play.api.Logger
-import play.api.i18n.MessagesApi
 import play.api.mvc._
+import views.html.agent.SelectClientVrnView
 
 @Singleton
-class SelectClientVrnController @Inject()(val messagesApi: MessagesApi,
-                                          val authenticate: AuthoriseAsAgentOnly,
+class SelectClientVrnController @Inject()(val authenticate: AuthoriseAsAgentOnly,
                                           val serviceErrorHandler: ErrorHandler,
-                                          implicit val appConfig: AppConfig) extends BaseController {
+                                          mcc: MessagesControllerComponents,
+                                          selectClientVrnView: SelectClientVrnView,
+                                          implicit val appConfig: AppConfig) extends BaseController(mcc) {
 
   def show(redirectUrl: String): Action[AnyContent] = authenticate { implicit agent =>
 
-    extractRedirectUrl(redirectUrl).fold(Ok(views.html.agent.selectClientVrn(ClientVrnForm.form))) {
+    extractRedirectUrl(redirectUrl).fold(Ok(selectClientVrnView(ClientVrnForm.form))) {
       url =>
-        Ok(views.html.agent.selectClientVrn(ClientVrnForm.form)).addingToSession(SessionKeys.redirectUrl -> url)
+        Ok(selectClientVrnView(ClientVrnForm.form)).addingToSession(SessionKeys.redirectUrl -> url)
     }
   }
 
@@ -45,7 +46,7 @@ class SelectClientVrnController @Inject()(val messagesApi: MessagesApi,
       ClientVrnForm.form.bindFromRequest().fold(
         error => {
           Logger.debug("[SelectClientVrnController][submit] Error")
-          BadRequest(views.html.agent.selectClientVrn(error))
+          BadRequest(selectClientVrnView(error))
         },
         data => {
           Logger.debug("[SelectClientVrnController][submit] Success")

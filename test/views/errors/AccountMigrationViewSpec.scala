@@ -19,12 +19,15 @@ package views.errors
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
+import views.html.errors.AccountMigrationView
 
 class AccountMigrationViewSpec extends ViewBaseSpec {
 
+  val injectedView: AccountMigrationView = inject[AccountMigrationView]
+
   "Rendering the Account Migration error page" should {
 
-    lazy val view = views.html.errors.accountMigration()(request, messages, mockConfig)
+    lazy val view = injectedView()(request, messages, mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct title" in {

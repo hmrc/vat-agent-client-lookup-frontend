@@ -24,22 +24,23 @@ import forms.WhatToDoForm
 import javax.inject.{Inject, Singleton}
 import models.User
 import models.agent._
-import org.joda.time.{DateTime, DateTimeZone}
 import play.api.Logger
 import play.api.data.Form
-import play.api.i18n.MessagesApi
-import play.api.mvc.{Action, AnyContent, Result}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import services.{CustomerDetailsService, DateService}
+import views.html.agent.WhatToDoView
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class WhatToDoController @Inject()(val messagesApi: MessagesApi,
-                                   val authenticate: AuthoriseAsAgentWithClient,
+class WhatToDoController @Inject()(val authenticate: AuthoriseAsAgentWithClient,
                                    val serviceErrorHandler: ErrorHandler,
                                    val customerDetailsService: CustomerDetailsService,
                                    val dateService: DateService,
-                                   implicit val appConfig: AppConfig) extends BaseController {
+                                   mcc: MessagesControllerComponents,
+                                   whatToDoView: WhatToDoView,
+                                   implicit val appConfig: AppConfig,
+                                   implicit val executionContext: ExecutionContext) extends BaseController(mcc) {
 
   def show: Action[AnyContent] = authenticate.async { implicit user =>
     if(appConfig.features.useAgentHubPageFeature()) {
@@ -47,7 +48,7 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
     } else {
       customerDetailsService.getCustomerDetails(user.vrn).map {
         case Right(details) =>
-          Ok(views.html.agent.whatToDo(WhatToDoForm.whatToDoForm, details.clientName, details.mandationStatus))
+          Ok(whatToDoView(WhatToDoForm.whatToDoForm, details.clientName, details.mandationStatus))
             .addingToSession(SessionKeys.mtdVatAgentClientName -> details.clientName, SessionKeys.mtdVatAgentMandationStatus -> details.mandationStatus)
         case Left(error) =>
           Logger.warn(s"[WhatToDoController][show] - received an error from CustomerDetailsService: $error")
@@ -69,18 +70,20 @@ class WhatToDoController @Inject()(val messagesApi: MessagesApi,
             case ChangeDetails.value => emailPrefCheck(user)
             case ViewCertificate.value => Redirect(appConfig.vatCertificateUrl)
           }
-        ).removeSessionKey(SessionKeys.mtdVatAgentClientName)
-          .removeSessionKey(SessionKeys.mtdVatAgentMandationStatus)
+        ).map(redirect => redirect.removingFromSession(
+          SessionKeys.mtdVatAgentClientName,
+          SessionKeys.mtdVatAgentMandationStatus)
+        )
       )
   }
 
   private def badRequestResult(error: Form[WhatToDoModel])(implicit user: User[_]): Future[Result] = {
     (user.session.get(SessionKeys.mtdVatAgentClientName), user.session.get(SessionKeys.mtdVatAgentMandationStatus)) match {
       case (Some(clientName), Some(mandationStatus)) =>
-        Future.successful(BadRequest(views.html.agent.whatToDo(error, clientName, mandationStatus)))
+        Future.successful(BadRequest(whatToDoView(error, clientName, mandationStatus)))
       case _ =>
         customerDetailsService.getCustomerDetails(user.vrn).map {
-          case Right(details) => BadRequest(views.html.agent.whatToDo(error, details.clientName, details.mandationStatus))
+          case Right(details) => BadRequest(whatToDoView(error, details.clientName, details.mandationStatus))
           case Left(cdsError) =>
             Logger.warn(s"[WhatToDoController][submit] - received an error from CustomerDetailsService: $cdsError")
             serviceErrorHandler.showInternalServerError

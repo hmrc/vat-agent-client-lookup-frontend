@@ -23,15 +23,18 @@ import org.jsoup.nodes.Document
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import views.ViewBaseSpec
+import views.html.agent.WhatToDoView
 
 class WhatToDoViewSpec extends ViewBaseSpec {
+
+  val injectedView: WhatToDoView = inject[WhatToDoView]
 
   "WhatToDo view" when {
 
     "passed a mandation status of 'Non MTDfB'" should {
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = views.html.agent.whatToDo(WhatToDoForm.whatToDoForm, "l'biz", "Non MTDfB")
+      lazy val view = injectedView(WhatToDoForm.whatToDoForm, "l'biz", "Non MTDfB")
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct document title" in {
@@ -56,7 +59,7 @@ class WhatToDoViewSpec extends ViewBaseSpec {
     "passed a mandation status of 'MTDfB Mandated'" should {
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = views.html.agent.whatToDo(WhatToDoForm.whatToDoForm, "l'biz", "MTDfB Mandated")
+      lazy val view = injectedView(WhatToDoForm.whatToDoForm, "l'biz", "MTDfB Mandated")
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct document title" in {
@@ -83,7 +86,7 @@ class WhatToDoViewSpec extends ViewBaseSpec {
     "passed a mandation status that is not valid" should {
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = views.html.agent.whatToDo(WhatToDoForm.whatToDoForm, "l'biz", "Some other value")
+      lazy val view = injectedView(WhatToDoForm.whatToDoForm, "l'biz", "Some other value")
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct document title" in {
@@ -104,7 +107,32 @@ class WhatToDoViewSpec extends ViewBaseSpec {
       "display the continue button" in {
         elementText("#continue") shouldBe Messages.continue
       }
+    }
 
+    "there are errors in the form" should {
+
+      lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
+      lazy val view = injectedView(WhatToDoForm.whatToDoForm.bind(Map("option" -> "")), "l'biz", "MTDfB Mandated")
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      s"have the correct document title with 'Error'" in {
+        document.title shouldBe "Error: What would you like to do for l'biz? - Your client’s VAT details - GOV.UK"
+      }
+
+      "display the correct heading" in {
+        elementText("#page-heading") shouldBe Messages.title("l'biz")
+      }
+      "display the correct radio options" in {
+        elementText(".multiple-choice:nth-of-type(1) label") shouldBe Messages.viewReturn
+        elementText(".multiple-choice:nth-of-type(2) label") shouldBe Messages.changeDetails
+        elementText(".multiple-choice:nth-of-type(3) label") shouldBe Messages.viewCertificate
+      }
+      "not display the submit or view return options" in {
+        document.getElementById("submit-return") shouldBe null
+      }
+      "display the continue button" in {
+        elementText("#continue") shouldBe Messages.continue
+      }
     }
   }
 
