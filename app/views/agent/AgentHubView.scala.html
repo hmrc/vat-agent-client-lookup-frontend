@@ -18,9 +18,11 @@
 @import views.html.agent.partials._
 @import java.time.LocalDate
 
-@(details: CustomerDetails, vrn: String, currentDate: LocalDate)(implicit request: Request[_], messages: Messages, appConfig: AppConfig ,user: User[_], lang: Lang)
+@this(mainTemplate: MainTemplate)
 
-@main_template(title = messages("agentHub.heading"), bodyClasses = None, mainClass = Some("full-width")) {
+@(details: CustomerDetails, vrn: String, currentDate: LocalDate)(implicit request: Request[_], messages: Messages, appConfig: AppConfig ,user: User[_])
+
+@mainTemplate(title = messages("agentHub.heading"), bodyClasses = None, mainClass = Some("full-width")) {
 
  <div id="breadcrumb" class="breadcrumbs soft--top">
   <ol class="push--top">

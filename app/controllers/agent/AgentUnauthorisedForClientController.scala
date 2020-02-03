@@ -23,15 +23,19 @@ import config.{AppConfig, ErrorHandler}
 import controllers.BaseController
 import controllers.predicates.AuthoriseAsAgentOnly
 import javax.inject.{Inject, Singleton}
-import play.api.i18n.MessagesApi
 import play.api.mvc._
+import views.html.errors.agent.NotAuthorisedForClientView
+
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class AgentUnauthorisedForClientController @Inject()(val authenticate: AuthoriseAsAgentOnly,
                                                      val serviceErrorHandler: ErrorHandler,
                                                      val auditService: AuditService,
-                                                     implicit val appConfig: AppConfig,
-                                                     implicit val messagesApi: MessagesApi) extends BaseController {
+                                                     mcc: MessagesControllerComponents,
+                                                     notAuthorisedForClientView: NotAuthorisedForClientView,
+                                                     implicit val executionContext: ExecutionContext,
+                                                     implicit val appConfig: AppConfig) extends BaseController(mcc) {
 
   def show(redirectUrl: String = ""): Action[AnyContent] = authenticate {
     implicit agent => {
@@ -42,7 +46,7 @@ class AgentUnauthorisedForClientController @Inject()(val authenticate: Authorise
             AuthenticateAgentAuditModel(agent.arn, vrn, isAuthorisedForClient = false),
             Some(controllers.agent.routes.ConfirmClientVrnController.show().url)
           )
-          Ok(views.html.errors.agent.notAuthorisedForClient(vrn, redirectLink))
+          Ok(notAuthorisedForClientView(vrn, redirectLink))
 
         case _ =>
           Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectLink))

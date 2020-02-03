@@ -24,36 +24,39 @@ import sbt.Tests.{Group, SubProcess}
 
 val appName = "vat-agent-client-lookup-frontend"
 
-val bootstrapPlayVersion       = "5.1.0"
-val govTemplateVersion         = "5.48.0-play-25"
-val playPartialsVersion        = "6.9.0-play-25"
-val authClientVersion          = "2.32.2-play-25"
-val playUiVersion              = "8.7.0-play-25"
-val playLanguageVersion        = "3.4.0"
-val playWhiteListFilterVersion = "3.1.0-play-25"
-val scalaTestPlusVersion       = "2.0.1"
-val hmrcTestVersion            = "3.9.0-play-25"
+val bootstrapPlayVersion       = "1.3.0"
+val govTemplateVersion         = "5.48.0-play-26"
+val playPartialsVersion        = "6.9.0-play-26"
+val authClientVersion          = "2.32.2-play-26"
+val playUiVersion              = "8.7.0-play-26"
+val playLanguageVersion        = "4.2.0-play-26"
+val playWhiteListFilterVersion = "3.1.0-play-26"
+val scalaTestPlusVersion       = "3.1.2"
+val hmrcTestVersion            = "3.9.0-play-26"
 val scalatestVersion           = "3.0.6"
 val pegdownVersion             = "1.6.0"
-val jsoupVersion               = "1.11.3"
-val mockitoVersion             = "2.25.0"
+val jsoupVersion               = "1.12.1"
+val mockitoVersion             = "2.28.2"
 val scalaMockVersion           = "3.6.0"
-val wiremockVersion            = "2.21.0"
+val wiremockVersion            = "2.25.1"
 val referenceCheckerVersion    = "2.4.0"
+val playJodaVersion            = "2.6.0-RC1"
 
 val compile = Seq(
   ws,
-  "uk.gov.hmrc" %% "bootstrap-play-25" % bootstrapPlayVersion,
+  "uk.gov.hmrc" %% "bootstrap-play-26" % bootstrapPlayVersion,
   "uk.gov.hmrc" %% "govuk-template" % govTemplateVersion,
   "uk.gov.hmrc" %% "play-ui" % playUiVersion,
   "uk.gov.hmrc" %% "play-partials" % playPartialsVersion,
   "uk.gov.hmrc" %% "auth-client" % authClientVersion,
   "uk.gov.hmrc" %% "play-language" % playLanguageVersion,
   "uk.gov.hmrc" %% "play-whitelist-filter" % playWhiteListFilterVersion,
-  "uk.gov.hmrc" %% "reference-checker" % referenceCheckerVersion
+  "uk.gov.hmrc" %% "reference-checker" % referenceCheckerVersion,
+  "com.typesafe.play" %% "play-json-joda" % playJodaVersion
 )
 
 def test(scope: String = "test,it"): Seq[ModuleID] = Seq(
+  "uk.gov.hmrc" %% "bootstrap-play-26" % bootstrapPlayVersion % scope classifier "tests",
   "uk.gov.hmrc" %% "hmrctest" % hmrcTestVersion % scope,
   "org.scalatest" %% "scalatest" % scalatestVersion % scope,
   "org.scalatestplus.play" %% "scalatestplus-play" % scalaTestPlusVersion % scope,
@@ -62,7 +65,7 @@ def test(scope: String = "test,it"): Seq[ModuleID] = Seq(
   "org.jsoup" % "jsoup" % jsoupVersion % scope,
   "com.typesafe.play" %% "play-test" % PlayVersion.current % scope,
   "org.mockito" % "mockito-core" % mockitoVersion % scope,
-  "com.github.tomakehurst" % "wiremock" % wiremockVersion % scope
+  "com.github.tomakehurst" % "wiremock-jre8" % wiremockVersion % scope
 )
 
 lazy val coverageSettings: Seq[Setting[_]] = {

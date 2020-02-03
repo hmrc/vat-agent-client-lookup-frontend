@@ -21,6 +21,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.Html
 import views.ViewBaseSpec
+import views.html.agent.CapturePreferenceView
 
 class CapturePreferenceViewSpec extends ViewBaseSpec {
 
@@ -41,13 +42,15 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
     val emailFormGroup      = "#hiddenContent"
   }
 
+  val injectedView: CapturePreferenceView = inject[CapturePreferenceView]
+
   "Rendering the capture preference page" when {
 
     "the form has no errors" when {
 
       "the user has no radio option selected" should {
 
-        lazy val view: Html = views.html.agent.capturePreference(preferenceForm)(request, messages, mockConfig)
+        lazy val view: Html = injectedView(preferenceForm)(request, messages, mockConfig)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the correct document title" in {
@@ -116,7 +119,7 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
       "the user has the 'Yes' radio option selected" should {
 
         lazy val view: Html =
-          views.html.agent.capturePreference(preferenceForm.bind(Map(yesNo -> "yes")))(request, messages, mockConfig)
+          injectedView(preferenceForm.bind(Map(yesNo -> "yes")))(request, messages, mockConfig)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the 'Yes' radio option checked" in {
@@ -131,7 +134,7 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
       "the user has the 'No' radio option selected" should {
 
         lazy val view: Html =
-          views.html.agent.capturePreference(preferenceForm.bind(Map(yesNo -> "no")))(request, messages, mockConfig)
+          injectedView(preferenceForm.bind(Map(yesNo -> "no")))(request, messages, mockConfig)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the 'No' radio option checked" in {
@@ -146,7 +149,7 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
 
     "the form has an option error" should {
       lazy val view =
-        views.html.agent.capturePreference(preferenceForm.bind(Map(yesNo -> "")))(request, messages, mockConfig)
+        injectedView(preferenceForm.bind(Map(yesNo -> "")))(request, messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -159,7 +162,7 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
     }
 
     "the form has an email error" should {
-      lazy val view = views.html.agent.capturePreference(
+      lazy val view = injectedView(
         preferenceForm.bind(Map(yesNo -> yes, email -> "invalid")))(request, messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 

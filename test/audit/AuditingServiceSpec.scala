@@ -21,9 +21,10 @@ import config.FrontendAppConfig
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.HeaderNames
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.audit.http.connector.AuditResult.Success
 import utils.TestUtil
 
@@ -32,7 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AuditingServiceSpec extends TestUtil with MockitoSugar with BeforeAndAfterEach {
 
   val appName: String = "vat-agent-client-lookup-frontend"
-  val mockAuditConnector: FrontendAuditConnector = mock[FrontendAuditConnector]
+  val mockAuditConnector: AuditConnector = mock[AuditConnector]
   val mockConfiguration: FrontendAppConfig = mock[FrontendAppConfig]
 
   val testAuditingService = new AuditService(mockConfiguration, mockAuditConnector)

@@ -19,14 +19,16 @@ package testOnly.controllers
 import controllers.ControllerBaseSpec
 import play.api.http.Status
 import play.api.test.Helpers._
+import testOnly.views.html.FeatureSwitchView
+import play.api.test.CSRFTokenHelper._
 
 class FeatureSwitchControllerSpec extends ControllerBaseSpec {
 
-  private lazy val target = new FeatureSwitchController(messagesApi, mockConfig)
+  private lazy val target = new FeatureSwitchController(inject[FeatureSwitchView], mcc, mockConfig)
 
   "Calling the .featureSwitch action" should {
 
-    lazy val result = target.featureSwitch(request.addToken())
+    lazy val result = target.featureSwitch(request.withCSRFToken)
 
     "return 200" in {
       status(result) shouldBe Status.OK
@@ -43,7 +45,7 @@ class FeatureSwitchControllerSpec extends ControllerBaseSpec {
 
   "Calling the .submitFeatureSwitch action" should {
 
-    lazy val result = target.submitFeatureSwitch(request.addToken())
+    lazy val result = target.submitFeatureSwitch(request.withCSRFToken)
 
     "return 303" in {
       status(result) shouldBe Status.SEE_OTHER

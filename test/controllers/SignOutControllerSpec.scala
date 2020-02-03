@@ -24,7 +24,7 @@ import scala.concurrent.Future
 class SignOutControllerSpec extends ControllerBaseSpec {
 
 
-  object TestSignOutController extends SignOutController(messagesApi, mockConfig)
+  object TestSignOutController extends SignOutController(mcc, mockConfig)
 
   "Navigating to sign out page" when {
 

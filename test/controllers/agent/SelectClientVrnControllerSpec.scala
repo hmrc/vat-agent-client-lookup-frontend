@@ -24,13 +24,15 @@ import org.scalatest.BeforeAndAfterEach
 import play.api.http.Status
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import views.html.agent.SelectClientVrnView
 
 class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth with BeforeAndAfterEach {
 
   object TestClientVrnController extends SelectClientVrnController(
-    messagesApi,
     mockAgentOnlyAuthPredicate,
     serviceErrorHandler,
+    mcc,
+    inject[SelectClientVrnView],
     mockConfig
   )
 
@@ -53,9 +55,8 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wit
         status(result) shouldBe Status.OK
       }
 
-      "render selectClientVrn page" in {
-        Jsoup.parse(bodyOf(result)).title() shouldBe "What is your client’s VAT number? - " +
-          "Your client’s VAT details - GOV.UK"
+      "render SelectClientVrnView page" in {
+        messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "What is your client’s VAT number?"
       }
 
       "add redirectURL to session" in {
@@ -74,9 +75,8 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wit
         status(result) shouldBe Status.OK
       }
 
-      "render selectClientVrn page" in {
-        Jsoup.parse(bodyOf(result)).title() shouldBe "What is your client’s VAT number? - " +
-          "Your client’s VAT details - GOV.UK"
+      "render SelectClientVrnView page" in {
+        messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "What is your client’s VAT number?"
       }
 
       "add the what to do redirect url" in {
@@ -96,7 +96,7 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wit
           .withSession(SessionKeys.clientMandationStatus -> "Non MTDfB")
 
         "original request should contain mandation status in cookie" in {
-          request.headers.get("Cookie").get should include("mtdVatMandationStatus=Non+MTDfB")
+          request.session.get(SessionKeys.clientMandationStatus).get shouldBe "Non MTDfB"
         }
 
         lazy val result = TestClientVrnController.submit(request)
@@ -111,11 +111,11 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wit
         }
 
         "add Client VRN to session cookie" in {
-          result.header.headers("Set-Cookie") should include("CLIENT_VRN=999969202")
+          result.session(request).get(SessionKeys.clientVRN).get shouldBe "999969202"
         }
 
         "remove mandation status from session cookie" in {
-          result.header.headers("Set-Cookie") shouldNot include("mtdVatMandationStatus=Non+MTDfB")
+          result.session(request).get(SessionKeys.clientMandationStatus) shouldBe None
         }
       }
 

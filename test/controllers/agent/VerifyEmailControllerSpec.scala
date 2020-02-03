@@ -24,6 +24,7 @@ import org.scalatest.BeforeAndAfterAll
 import play.api.http.Status
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import views.html.agent.VerifyEmailView
 
 class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerificationService with BeforeAndAfterAll {
 
@@ -34,9 +35,11 @@ class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerific
   object TestVerifyEmailController extends VerifyEmailController(
     mockAgentOnlyAuthPredicate,
     mockPreferencePredicate,
-    messagesApi,
     mockEmailVerificationService,
     mockErrorHandler,
+    mcc,
+    inject[VerifyEmailView],
+    ec,
     mockConfig
   )
 

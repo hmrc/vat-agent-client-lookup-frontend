@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import org.mockito.stubbing.OngoingStubbing
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import services.DateService
 import uk.gov.hmrc.play.test.UnitSpec
 import org.mockito.Mockito._

@@ -24,18 +24,26 @@ import controllers.predicates.AuthoriseAsAgentWithClient
 import javax.inject.{Inject, Singleton}
 import models.errors._
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services.CustomerDetailsService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.agent.ConfirmClientVrnView
+import views.html.errors.{AccountMigrationView, NotSignedUpView}
+
+import scala.concurrent.ExecutionContext
 
 @Singleton
-class ConfirmClientVrnController @Inject()(val messagesApi: MessagesApi,
-                                           val authenticate: AuthoriseAsAgentWithClient,
+class ConfirmClientVrnController @Inject()(val authenticate: AuthoriseAsAgentWithClient,
                                            val customerDetailsService: CustomerDetailsService,
                                            val errorHandler: ErrorHandler,
                                            val auditService: AuditService,
-                                           implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                           mcc: MessagesControllerComponents,
+                                           confirmClientVrnView: ConfirmClientVrnView,
+                                           accountMigrationView: AccountMigrationView,
+                                           notSignedUpView: NotSignedUpView,
+                                           implicit val appConfig: AppConfig,
+                                           implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport {
 
   def show: Action[AnyContent] = authenticate.async {
     implicit user =>
@@ -50,9 +58,9 @@ class ConfirmClientVrnController @Inject()(val messagesApi: MessagesApi,
             Some(controllers.agent.routes.ConfirmClientVrnController.show().url)
           )
 
-          Ok(views.html.agent.confirmClientVrn(user.vrn, customerDetails))
-        case Left(Migration) => PreconditionFailed(views.html.errors.accountMigration())
-        case Left(NotSignedUp) => NotFound(views.html.errors.notSignedUp())
+          Ok(confirmClientVrnView(user.vrn, customerDetails))
+        case Left(Migration) => PreconditionFailed(accountMigrationView())
+        case Left(NotSignedUp) => NotFound(notSignedUpView())
         case _ =>
           Logger.warn("[ConfirmClientVrnController][show] Error returned from GetCustomerDetails")
           errorHandler.showInternalServerError

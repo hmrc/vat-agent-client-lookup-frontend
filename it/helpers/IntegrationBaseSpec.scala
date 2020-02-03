@@ -24,7 +24,7 @@ import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, TestSuite
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.data.Form
 import play.api.http.HeaderNames
-import play.api.i18n.{Lang, Messages, MessagesApi}
+import play.api.i18n.{Lang, Messages, MessagesApi, MessagesImpl}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.JsValue
 import play.api.libs.ws.{WSRequest, WSResponse}
@@ -39,16 +39,15 @@ trait IntegrationBaseSpec extends TestSuite with CustomMatchers
   val mockPort: String = WireMockHelper.wmPort.toString
   val appContextRoute: String = "/vat-through-software/representative"
 
-  lazy val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
   lazy val mockAppConfig: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
+  lazy val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
+  implicit lazy val messages: Messages = MessagesImpl(Lang("en-GB"), messagesApi)
 
   override def beforeEach() {
     mockAppConfig.features.emailVerificationEnabled(true)
     mockAppConfig.features.useAgentHubPageFeature(false)
     super.beforeEach()
   }
-
-  implicit lazy val messages: Messages = Messages(Lang("en-GB"), messagesApi)
 
   class PreconditionBuilder {
     implicit val builder: PreconditionBuilder = this
@@ -148,7 +147,7 @@ trait IntegrationBaseSpec extends TestSuite with CustomMatchers
 
   def buildRequest(path: String, additionalCookies: Map[String, String] = Map.empty): WSRequest =
     client.url(s"http://localhost:$port$appContextRoute$path")
-      .withHeaders(HeaderNames.COOKIE -> SessionCookieBaker.bakeSessionCookie(additionalCookies), "Csrf-Token" -> "nocheck")
+      .withHttpHeaders(HeaderNames.COOKIE -> SessionCookieBaker.bakeSessionCookie(additionalCookies), "Csrf-Token" -> "nocheck")
       .withFollowRedirects(false)
 
   def document(response: WSResponse): Document = Jsoup.parse(response.body)

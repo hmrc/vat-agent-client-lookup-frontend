@@ -21,19 +21,22 @@ import org.jsoup.nodes.Document
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import views.ViewBaseSpec
+import views.html.agent.VerifyEmailView
 
 class VerifyEmailViewSpec extends ViewBaseSpec {
 
+  val injectedView: VerifyEmailView = inject[VerifyEmailView]
+
   lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
   val testEmail: String = "test@email.com"
-  lazy val view = views.html.agent.verifyEmail(testEmail)
+  lazy val view = injectedView(testEmail)
 
   lazy implicit val document: Document = Jsoup.parse(view.body)
 
   "The Verify Email view" should {
 
     s"have the correct document title" in {
-      document.title shouldBe ("Verify your email address - Your client’s VAT details - GOV.UK")
+      document.title shouldBe "Verify your email address - Your client’s VAT details - GOV.UK"
     }
 
     "have the correct heading" in {

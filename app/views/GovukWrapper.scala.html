@@ -15,9 +15,22 @@
  *@
 
 @import config.AppConfig
-@import layouts.{govuk_template => hmrcGovUkTemplate}
-@import uk.gov.hmrc.play.views.html.{layouts => uiLayouts}
-@import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
+@import layouts.GovUkTemplate
+@import play.twirl.api.HtmlFormat
+@import uk.gov.hmrc.play.views.html.layouts.{Head, HeaderNav, Footer, ServiceInfo, MainContentHeader, MainContent, Sidebar, Article, FooterLinks}
+@import uk.gov.hmrc.play.views.html.helpers.ReportAProblemLink
+
+@this(head: Head,
+headerNav: HeaderNav,
+footer: Footer,
+serviceInfo: ServiceInfo,
+mainContentHeader: MainContentHeader,
+mainContent: MainContent,
+sidebar: Sidebar,
+article: Article,
+reportAProblemLink: ReportAProblemLink,
+footerLinks: FooterLinks,
+hmrcGovUkTemplate: GovUkTemplate)
 
 @(appConfig: AppConfig,
   title: String,
@@ -26,11 +39,12 @@
   bodyClasses: Option[String] = None,
   sidebar: Html = HtmlFormat.empty,
   contentHeader: Option[Html] = None,
-  mainContent: Html = HtmlFormat.empty,
+  mainBody: Html = HtmlFormat.empty,
   serviceInfoContent: Html = HtmlFormat.empty,
   scriptElem: Option[Html] = None,
   showSignOut: Boolean = true,
-  feedbackOnSignOut: Boolean = true)(implicit request: Request[_], messages: Messages)
+  feedbackOnSignOut: Boolean = true
+  )(implicit request: Request[_], messages: Messages)
 
 @scriptElement = {
   <script type="text/javascript" src=@routes.Assets.at("javascript/errorFocus.js")></script>
@@ -56,8 +70,8 @@
 <link rel="stylesheet" type="text/css" href='@routes.Assets.at("stylesheets/vat.css?v=0.1")'>
 }
 
-@head = {
-    @uiLayouts.head(
+@headContent = {
+    @head(
       linkElem = Some(linksElement),
       headScripts = None)
     <meta name="format-detection" content="telephone=no" />
@@ -74,7 +88,7 @@
 }
 
 @insideHeader = {
-    @uiLayouts.header_nav(
+    @headerNav(
       navTitle = Some(messages("common.agentService")),
       navTitleLink = None,
       showBetaLink = false,
@@ -84,7 +98,7 @@
 @afterHeader = {}
 
 @bodyEnd = {
-    @uiLayouts.footer(
+    @footer(
       analyticsToken = None,
       analyticsHost = "",
       ssoUrl = None,
@@ -94,31 +108,28 @@
 
 @footerTop = {}
 
-@footerLinks = {
-    @uiLayouts.footer_links(
-        accessibilityFooterUrl = Some(appConfig.accessibilityLinkUrl))
-    }
+@footerLinksContent = {}
 
-    @phaseBanner = {
-        <div class="beta-banner">
-            <p>
-                <strong id="phase" class="phase-tag">@messages("banner.phaseName")</strong>
-                <span>@messages("banner.newService")
-                    <a id="beta-banner-feedback" href="@appConfig.feedbackUrl">@messages("banner.feedback")</a>
-                @messages("banner.feedbackImprove")</span>
-            </p>
-        </div>
-    }
+@phaseBanner = {
+    <div class="beta-banner">
+        <p>
+            <strong id="phase" class="phase-tag">@messages("banner.phaseName")</strong>
+            <span>@messages("banner.newService")
+                <a id="beta-banner-feedback" href="@appConfig.feedbackUrl">@messages("banner.feedback")</a>
+            @messages("banner.feedbackImprove")</span>
+        </p>
+    </div>
+}
 
-@serviceInfo = {
-    @uiLayouts.serviceInfo(
+@serviceInfoHtml = {
+    @serviceInfo(
       betaBanner = phaseBanner,
       includeGridWrapper = false,
       includeHMRCBranding = false,
       serviceInfoContent = Some(serviceInfoContent))
 }
 
-@mainContentHeader = {
+@mainContentHeaderContent = {
     @if(appConfig.features.useLanguageSelector()){
     <div class="text--right">@views.html.language_selection(
         appConfig.languageMap,
@@ -127,19 +138,19 @@
     )</div>
     }
     @if(contentHeader.isDefined) {
-        @uiLayouts.main_content_header(contentHeader = contentHeader.get)
+        @mainContentHeader(contentHeader = contentHeader.get)
     }
 }
 
-@getHelpForm = @{uiHelpers.reportAProblemLink(appConfig.reportAProblemPartialUrl, appConfig.reportAProblemNonJSUrl)}
+@getHelpForm = @{reportAProblemLink(appConfig.reportAProblemPartialUrl, appConfig.reportAProblemNonJSUrl)}
 
 @content = {
-    @uiLayouts.main_content(
-      article = mainContent,
+    @mainContent(
+      article = mainBody,
       mainClass = mainClass,
       mainDataAttributes = mainDataAttributes,
-      mainContentHeader = mainContentHeader,
-      serviceInfo = serviceInfo,
+      mainContentHeader = mainContentHeaderContent,
+      serviceInfo = serviceInfoHtml,
       getHelpForm = getHelpForm,
       sidebar = sidebar)
 }
@@ -148,4 +159,4 @@
 messages("base.pageTitle", title, messages("common.agentService"))
 }
 
-@hmrcGovUkTemplate(Some(pageTitle), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(footerLinks), true)(content)
+@hmrcGovUkTemplate(Some(pageTitle), bodyClasses)(headContent, bodyEnd, insideHeader, afterHeader, footerTop, Some(footerLinks(accessibilityFooterUrl = Some(appConfig.accessibilityLinkUrl))), true)(content)

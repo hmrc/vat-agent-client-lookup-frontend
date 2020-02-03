@@ -20,9 +20,11 @@
 @import models.PreferenceModel
 @import forms.PreferenceForm._
 
+@this(mainTemplate: MainTemplate)
+
 @(preferenceForm: Form[PreferenceModel])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-  @main_template(if(preferenceForm.errors.nonEmpty) messages("common.error.prefixTitle", messages("capturePref.title")) else messages("capturePref.title")) {
+  @mainTemplate(if(preferenceForm.errors.nonEmpty) messages("common.error.prefixTitle", messages("capturePref.title")) else messages("capturePref.title")) {
 
   <a class="link-back" href='@controllers.agent.routes.AgentHubController.show()'>@messages("base.back")</a>
 

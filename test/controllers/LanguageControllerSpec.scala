@@ -25,7 +25,7 @@ import play.api.mvc.Cookie
 class LanguageControllerSpec extends ControllerBaseSpec {
 
 
-  val controller = new LanguageController(mockConfig, messagesApi)
+  val controller = new LanguageController(mockConfig, mcc)
 
   "Calling the .switchToLanguage function" when {
 
@@ -38,8 +38,7 @@ class LanguageControllerSpec extends ControllerBaseSpec {
       }
 
       "use the English language" in {
-        cookies(result).get(Play.langCookieName(messagesApi)) shouldBe
-          Some(Cookie("PLAY_LANG", "en", None, "/", None, secure = false, httpOnly = true))
+        cookies(result).get("PLAY_LANG").get.value shouldBe "en"
       }
     }
 
@@ -52,8 +51,7 @@ class LanguageControllerSpec extends ControllerBaseSpec {
       }
 
       "use the Welsh language" in {
-        cookies(result).get(Play.langCookieName(messagesApi)) shouldBe
-          Some(Cookie("PLAY_LANG", "cy", None, "/", None, secure = false, httpOnly = true))
+        cookies(result).get("PLAY_LANG").get.value shouldBe "cy"
       }
     }
 
@@ -67,8 +65,7 @@ class LanguageControllerSpec extends ControllerBaseSpec {
       }
 
       "keep the current language" in {
-        cookies(result).get(Play.langCookieName(messagesApi)) shouldBe
-          Some(Cookie("PLAY_LANG", "en", None, "/", None, secure = false, httpOnly = true))
+        cookies(result).get("PLAY_LANG").get.value shouldBe "en"
       }
     }
   }

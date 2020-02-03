@@ -29,6 +29,7 @@ import play.api.http.Status
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 import assets.BaseTestConstants._
+import views.html.errors.agent.NotAuthorisedForClientView
 
 import scala.concurrent.ExecutionContext
 
@@ -36,10 +37,12 @@ class AgentUnauthorisedForClientControllerSpec extends ControllerBaseSpec with M
 
   object TestUnauthorisedForClientController extends AgentUnauthorisedForClientController(
     mockAgentOnlyAuthPredicate,
-    app.injector.instanceOf[ErrorHandler],
+    inject[ErrorHandler],
     mockAuditingService,
-    mockConfig,
-    messagesApi
+    mcc,
+    inject[NotAuthorisedForClientView],
+    ec,
+    mockConfig
   )
 
   "Calling the .show action" when {
@@ -71,7 +74,7 @@ class AgentUnauthorisedForClientControllerSpec extends ControllerBaseSpec with M
       }
 
       "render the Unauthorised for client Vrn Page" in {
-        document.select("h1").text shouldBe Messages.pageHeading
+        messages(document.select("h1").text) shouldBe Messages.pageHeading
       }
     }
 

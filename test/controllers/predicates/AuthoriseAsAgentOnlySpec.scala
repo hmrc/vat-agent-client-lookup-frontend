@@ -62,7 +62,7 @@ class AuthoriseAsAgentOnlySpec extends ControllerBaseSpec {
         }
 
         "render the Unauthorised Agent page" in {
-          Jsoup.parse(bodyOf(result)).title shouldBe (AgentUnauthorisedPageMessages.title + " - Your client’s VAT details - GOV.UK")
+          messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe AgentUnauthorisedPageMessages.title
         }
       }
     }

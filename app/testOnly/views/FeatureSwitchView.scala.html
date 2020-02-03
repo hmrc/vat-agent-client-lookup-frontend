@@ -17,9 +17,11 @@
 @import config.ConfigKeys
 @import helper.CSRF
 
+@this(mainTemplate: MainTemplate)
+
 @(form: Form[FeatureSwitchModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-@views.html.main_template(title = "Feature switches", bodyClasses = None) {
+@mainTemplate(title = "Feature switches", bodyClasses = None) {
 
   @helper.form(action = testOnly.controllers.routes.FeatureSwitchController.submitFeatureSwitch) {
     @CSRF.formField

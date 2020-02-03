@@ -21,25 +21,28 @@ import config.{AppConfig, ErrorHandler}
 import controllers.predicates.{AuthoriseAsAgentOnly, PreferencePredicate}
 import javax.inject.{Inject, Singleton}
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.EmailVerificationService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.agent.VerifyEmailView
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class VerifyEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
                                       val preferenceCheck: PreferencePredicate,
-                                      val messagesApi: MessagesApi,
                                       val emailVerificationService: EmailVerificationService,
                                       val errorHandler: ErrorHandler,
-                                      implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                      mcc: MessagesControllerComponents,
+                                      verifyEmailView: VerifyEmailView,
+                                      implicit val executionContext: ExecutionContext,
+                                      implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   def show: Action[AnyContent] = (authenticate andThen preferenceCheck) { implicit agent =>
 
     agent.session.get(SessionKeys.notificationsEmail) match {
-      case Some(email) => Ok(views.html.agent.verifyEmail(email))
+      case Some(email) => Ok(verifyEmailView(email))
       case _ => Redirect(routes.CapturePreferenceController.show())
     }
   }

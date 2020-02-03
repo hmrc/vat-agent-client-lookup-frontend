@@ -21,14 +21,17 @@ import forms.ClientVrnForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
+import views.html.agent.SelectClientVrnView
 
 class SelectClientVrnViewSpec extends ViewBaseSpec {
+
+  val injectedView: SelectClientVrnView = inject[SelectClientVrnView]
 
   "Rendering the Select Client VRN page" when {
 
     "there are no errors in the form" should {
 
-      lazy val view = views.html.agent.selectClientVrn(ClientVrnForm.form)(request, messages, mockConfig)
+      lazy val view = injectedView(ClientVrnForm.form)(request, messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct document title of '${viewMessages.title}'" in {
@@ -75,8 +78,7 @@ class SelectClientVrnViewSpec extends ViewBaseSpec {
 
     "there are errors in the form" should {
 
-      lazy val view =
-        views.html.agent.selectClientVrn(ClientVrnForm.form.bind(Map("vrn" -> "9")))(request, messages, mockConfig)
+      lazy val view = injectedView(ClientVrnForm.form.bind(Map("vrn" -> "9")))(request, messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {

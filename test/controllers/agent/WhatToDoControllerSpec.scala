@@ -33,20 +33,23 @@ import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers.redirectLocation
 import play.mvc.Http.Status._
+import views.html.agent.WhatToDoView
 
 import scala.concurrent.Future
 
 class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetailsService with MockDateService {
 
   trait Test {
-    lazy val controller = new WhatToDoController(
-      messagesApi,
-      mockAuthAsAgentWithClient,
-      mockErrorHandler,
-      mockCustomerDetailsService,
-      mockDateService,
-      mockConfig
-    )
+    lazy val controller =
+      new WhatToDoController(
+        mockAuthAsAgentWithClient,
+        mockErrorHandler,
+        mockCustomerDetailsService,
+        mockDateService,
+        mcc,
+        inject[WhatToDoView],
+        mockConfig,
+        ec)
     implicit val timeout: Timeout = Timeout.apply(60, TimeUnit.SECONDS)
     val fakeRequestWithEmailPref: FakeRequest[AnyContentAsEmpty.type] = fakeRequestWithVrnAndRedirectUrl.withSession(
       SessionKeys.preference -> "true"
@@ -67,7 +70,6 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
           val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
           status(result) shouldBe OK
-          Jsoup.parse(bodyOf(result)).title() shouldBe (title(firstName) + " - Your client’s VAT details - GOV.UK")
         }
       }
 
@@ -191,9 +193,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
         val parsedBody: Document = Jsoup.parse(bodyOf(result))
 
         status(result) shouldBe BAD_REQUEST
-        parsedBody.title() shouldBe "Error: " + (title("l'biz") + " - Your client’s VAT details - GOV.UK")
-
-        parsedBody.body().toString should include(error)
+        messages(parsedBody.select("#option-error-summary").text) shouldBe error
       }
 
       "the form submitted is incorrect, there's no session data and customerDetailService call is successful" in new Test {
@@ -205,9 +205,7 @@ class WhatToDoControllerSpec extends ControllerBaseSpec with MockCustomerDetails
         val parsedBody: Document = Jsoup.parse(bodyOf(result))
 
         status(result) shouldBe BAD_REQUEST
-        parsedBody.title() shouldBe "Error: " + (title(firstName) + " - Your client’s VAT details - GOV.UK")
-
-        parsedBody.body().toString should include(error)
+        messages(parsedBody.select("#option-error-summary").text) shouldBe error
       }
     }
 

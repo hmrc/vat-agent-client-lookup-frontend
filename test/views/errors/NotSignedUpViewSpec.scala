@@ -19,12 +19,15 @@ package views.errors
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
+import views.html.errors.NotSignedUpView
 
 class NotSignedUpViewSpec extends ViewBaseSpec {
 
+  val injectedView: NotSignedUpView = inject[NotSignedUpView]
+
   "Rendering the Not Signed Up error page" should {
 
-    lazy val view = views.html.errors.notSignedUp()(request, messages, mockConfig)
+    lazy val view = injectedView()(request, messages, mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct title" in {

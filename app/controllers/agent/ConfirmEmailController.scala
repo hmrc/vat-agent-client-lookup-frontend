@@ -25,25 +25,28 @@ import audit.models.YesPreferenceVerifiedAuditModel
 import models.Agent
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, RequestHeader, Result}
+import play.api.mvc._
 import services.EmailVerificationService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.agent.ConfirmEmailView
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ConfirmEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
                                        val preferenceCheck: PreferencePredicate,
-                                       val messagesApi: MessagesApi,
                                        val emailVerificationService: EmailVerificationService,
                                        val errorHandler: ErrorHandler,
                                        val auditService: AuditService,
-                                       implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                       mcc: MessagesControllerComponents,
+                                       confirmEmailView: ConfirmEmailView,
+                                       implicit val executionContext: ExecutionContext,
+                                       implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   def show: Action[AnyContent] = (authenticate andThen preferenceCheck) { implicit agent =>
     agent.session.get(SessionKeys.notificationsEmail) match {
       case Some(email) =>
-        Ok(views.html.agent.confirmEmail(email))
+        Ok(confirmEmailView(email))
       case _ =>
         Redirect(routes.CapturePreferenceController.show())
     }

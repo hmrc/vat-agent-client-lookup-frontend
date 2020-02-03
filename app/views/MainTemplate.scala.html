@@ -15,7 +15,12 @@
  *@
 
 @import config.AppConfig
-@import uk.gov.hmrc.play.views.html.layouts
+@import uk.gov.hmrc.play.views.html.layouts.Article
+@import uk.gov.hmrc.play.views.html.layouts.Sidebar
+@import play.twirl.api.HtmlFormat
+
+@this(govukWrapper: GovukWrapper, article: Article, sidebar: Sidebar)
+
 
 @(title: String,
   sidebarLinks: Option[Html] = None,
@@ -28,19 +33,19 @@
 
 @serviceInfoContent = {}
 
-@sidebar = {
+@sidebarContent = {
     @if(sidebarLinks.isDefined) {
-        @layouts.sidebar(sidebarLinks.get, Some("sidebar"))
+        @sidebar(sidebarLinks.get, Some("sidebar"))
     }
 }
 
-@govuk_wrapper(appConfig = appConfig,
+@govukWrapper(appConfig = appConfig,
                title = title,
                mainClass = mainClass,
                bodyClasses = bodyClasses,
-               sidebar = sidebar,
+               sidebar = sidebarContent,
                contentHeader = contentHeader,
-               mainContent = layouts.article(mainContent),
+               mainBody = article(mainContent),
                serviceInfoContent = serviceInfoContent,
                scriptElem = scriptElem,
                showSignOut = showSignOut,

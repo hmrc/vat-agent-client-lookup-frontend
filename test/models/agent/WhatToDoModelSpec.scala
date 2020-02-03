@@ -25,7 +25,7 @@ class WhatToDoModelSpec extends UnitSpec {
 
   inputValues.foreach { input =>
     val validJson = Json.obj(
-      "whatToDo" -> input.value
+      "WhatToDoView" -> input.value
     )
 
     s"When trying to read a ${input.value}" should {

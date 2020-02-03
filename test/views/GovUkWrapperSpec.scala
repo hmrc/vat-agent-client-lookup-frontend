@@ -18,8 +18,11 @@ package views
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import views.html.GovukWrapper
 
 class GovUkWrapperSpec extends ViewBaseSpec {
+
+  val injectedView: GovukWrapper = inject[GovukWrapper]
 
   val navTitleSelector = ".header__menu__proposition-name"
   val accessibilityLinkSelector = "#footer > div > div > div.footer-meta-inner > ul > li:nth-child(2) > a"
@@ -28,7 +31,7 @@ class GovUkWrapperSpec extends ViewBaseSpec {
 
     "the user is an agent" should {
 
-      lazy val view = views.html.govuk_wrapper(mockConfig,"Test")(fakeRequestWithMtdVatAgentData,messages)
+      lazy val view = injectedView(mockConfig,"Test")(fakeRequestWithMtdVatAgentData,messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not be shown a logo" in {

@@ -25,8 +25,11 @@ import assets.messages.BaseMessages
 import assets.messages.{AgentUnauthorisedForClientPageMessages => Messages}
 import assets.BaseTestConstants.vrn
 import common.EnrolmentKeys
+import views.html.errors.agent.NotAuthorisedForClientView
 
 class NotAuthorisedForClientViewSpec extends ViewBaseSpec {
+
+  val injectedView: NotAuthorisedForClientView = inject[NotAuthorisedForClientView]
 
   "Rendering the unauthorised page" should {
 
@@ -46,7 +49,7 @@ class NotAuthorisedForClientViewSpec extends ViewBaseSpec {
 
     val redirectUrl = "/Some/Redirect"
 
-    lazy val view = views.html.errors.agent.notAuthorisedForClient(vrn, redirectUrl)(request, messages, mockConfig)
+    lazy val view = injectedView(vrn, redirectUrl)(request, messages, mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
