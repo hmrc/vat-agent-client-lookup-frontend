@@ -40,7 +40,7 @@ val mockitoVersion             = "2.28.2"
 val scalaMockVersion           = "3.6.0"
 val wiremockVersion            = "2.25.1"
 val referenceCheckerVersion    = "2.4.0"
-val playJodaVersion            = "2.6.0-RC1"
+val playJodaVersion            = "2.6.14"
 
 val compile = Seq(
   ws,
