@@ -40,7 +40,7 @@ class NotAuthorisedForClientViewSpec extends ViewBaseSpec {
       val instructionsLink = "#content form > p > a"
       val tryAgain = "#content article > p"
       val tryAgainLink = "#content article > p > a"
-      val form = "#agentInviteForm"
+      val form = "#content form"
       val hiddenService = s"$form input[name=service]"
       val hiddenIdentifierType = s"$form input[name=clientIdentifierType]"
       val hiddenIdentifier = s"$form input[name=clientIdentifier]"
@@ -105,7 +105,7 @@ class NotAuthorisedForClientViewSpec extends ViewBaseSpec {
 
       "has a link which submits the form" in {
         val input = element(Selectors.instructionsLink)
-        input.attr("onClick").contains("document.getElementById('agentInviteForm').submit();") shouldBe true
+        input.attr("onClick").contains("document.getElementsByTagName('form')[0].submit();") shouldBe true
       }
     }
 
