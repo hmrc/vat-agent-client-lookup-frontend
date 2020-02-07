@@ -33,19 +33,19 @@ s"${appConfig.agentInvitationsFastTrack}?continue=${URLEncoder.encode(s"${appCon
 
     <h1 class="heading-large">@messages("unauthorised.agentForClient.title")</h1>
 
-    <form method="POST" action="@postToInvitations" id="agentInviteForm">
-      <input type="hidden" name="service" id="service" value="@{EnrolmentKeys.vatEnrolmentId}">
-      <input type="hidden" name="clientIdentifierType" id="clientIdentifierType" value="@{EnrolmentKeys.vatIdentifierId.toLowerCase}">
-      <input type="hidden" name="clientIdentifier" id="clientIdentifier" value="@vrn">
+    @form(action = Call("POST", postToInvitations)) {
+        <input type="hidden" name="service" id="service" value="@{EnrolmentKeys.vatEnrolmentId}">
+        <input type="hidden" name="clientIdentifierType" id="clientIdentifierType" value="@{EnrolmentKeys.vatIdentifierId.toLowerCase}">
+        <input type="hidden" name="clientIdentifier" id="clientIdentifier" value="@vrn">
 
-      <p>
-        @messages("unauthorised.agentForClient.useThisService")
+        <p>
+            @messages("unauthorised.agentForClient.useThisService")
 
-        <a onclick="document.getElementById('agentInviteForm').submit();"
-           href="#"
-           type="submit">@messages("unauthorised.agentForClient.authoriseForClient")</a>@messages("common.fullStop")
-      </p>
-    </form>
+            <a onclick="document.getElementsByTagName('form')[0].submit();"
+            href="#"
+            type="submit">@messages("unauthorised.agentForClient.authoriseForClient")</a>@messages("common.fullStop")
+        </p>
+    }
 
     <p>
       @messages("unauthorised.agentForClient.enterDetails")
