@@ -16,106 +16,80 @@
 
 package views.errors.agent
 
-import java.net.URLEncoder
-
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
 import assets.messages.BaseMessages
 import assets.messages.{AgentUnauthorisedForClientPageMessages => Messages}
 import assets.BaseTestConstants.vrn
-import common.EnrolmentKeys
 import views.html.errors.agent.NotAuthorisedForClientView
 
 class NotAuthorisedForClientViewSpec extends ViewBaseSpec {
 
   val injectedView: NotAuthorisedForClientView = inject[NotAuthorisedForClientView]
 
-  "Rendering the unauthorised page" should {
+  "Rendering the unauthorised for client page" should {
 
     object Selectors {
       val serviceName = ".header__menu__proposition-name"
-      val pageHeading = "#content h1"
-      val instructions = "#content form > p"
-      val instructionsLink = "#content form > p > a"
-      val tryAgain = "#content article > p"
-      val tryAgainLink = "#content article > p > a"
-      val form = "#content form"
-      val hiddenService = s"$form input[name=service]"
-      val hiddenIdentifierType = s"$form input[name=clientIdentifierType]"
-      val hiddenIdentifier = s"$form input[name=clientIdentifier]"
-      val button = "#content .button"
+      val pageHeading = "article h1"
+      val information = "article > p:nth-child(3)"
+      val agentServicesLink = "article > p:nth-child(3) > a:nth-child(1)"
+      val button = "article .button"
+      val backLink = ".link-back"
     }
 
-    val redirectUrl = "/Some/Redirect"
-
-    lazy val view = injectedView(vrn, redirectUrl)(request, messages, mockConfig)
+    lazy val view = injectedView()(request, messages, mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe (Messages.title + " - Your client’s VAT details - GOV.UK")
     }
 
-    s"have the correct service name" in {
+    "have the correct service name" in {
       elementText(Selectors.serviceName) shouldBe BaseMessages.agentServiceName
     }
 
-    s"have a the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe Messages.pageHeading
+    "have a the correct page heading" in {
+      elementText(Selectors.pageHeading) shouldBe Messages.title
     }
 
-    s"have the correct instructions on the page" in {
-      elementText(Selectors.instructions) shouldBe Messages.instructions
+    "have the correct paragraph on the page" in {
+      elementText(Selectors.information) shouldBe Messages.information
     }
 
-    s"have the correct content for trying again" in {
-      elementText(Selectors.tryAgain) shouldBe Messages.tryAgain
-    }
+    "have a link in the paragraph" which {
 
-    s"have a link to '${controllers.agent.routes.SelectClientVrnController.show(redirectUrl).url}'" in {
-      element(Selectors.tryAgainLink).attr("href") shouldBe controllers.agent.routes.SelectClientVrnController.show(redirectUrl).url
-    }
-
-    "have a form" which {
-
-      s"has a POST action to ${mockConfig.agentInvitationsFastTrack}" in {
-        val form = element(Selectors.form)
-        form.attr("method") shouldBe "POST"
-        form.attr("action") shouldBe s"${mockConfig.agentInvitationsFastTrack}?continue=" +
-          s"${URLEncoder.encode(s"${mockConfig.signInContinueBaseUrl}${controllers.agent.routes.ConfirmClientVrnController.show().url}", "UTF-8")}"
+      "has the correct link text" in {
+        elementText(Selectors.agentServicesLink) shouldBe Messages.agentServicesAccount
       }
 
-      "has a hidden field for the VAT service enrolment id" in {
-        val input = element(Selectors.hiddenService)
-        input.attr("value") shouldBe EnrolmentKeys.vatEnrolmentId
-        input.attr("type") shouldBe "hidden"
-      }
-
-      "has a hidden field for the VAT service identifier id" in {
-        val input = element(Selectors.hiddenIdentifierType)
-        input.attr("value") shouldBe EnrolmentKeys.vatIdentifierId.toLowerCase
-        input.attr("type") shouldBe "hidden"
-      }
-
-      "has a hidden field for the VRN" in {
-        val input = element(Selectors.hiddenIdentifier)
-        input.attr("value") shouldBe vrn
-        input.attr("type") shouldBe "hidden"
-      }
-
-      "has a link which submits the form" in {
-        val input = element(Selectors.instructionsLink)
-        input.attr("onClick").contains("document.getElementsByTagName('form')[0].submit();") shouldBe true
+      "has the correct link location" in {
+        element(Selectors.agentServicesLink).attr("href") shouldBe mockConfig.agentServicesUrl
       }
     }
 
-    s"have a Sign out button" in {
-      elementText(Selectors.button) shouldBe BaseMessages.signOut
+    "have a Back link" which {
+
+      "has the correct link text" in {
+        elementText(Selectors.backLink) shouldBe BaseMessages.back
+      }
+
+      "has the correct link location" in {
+        element(Selectors.backLink).attr("href") shouldBe controllers.agent.routes.SelectClientVrnController.show().url
+      }
     }
 
-    s"have a link to sign out" in {
-      element(Selectors.button).attr("href") shouldBe
-        controllers.routes.SignOutController.signOut(feedbackOnSignOut = true).url
+    "have a Sign out button" which {
+
+      "has the correct text" in {
+        elementText(Selectors.button) shouldBe BaseMessages.signOut
+      }
+
+      "have the correct link location" in {
+        element(Selectors.button).attr("href") shouldBe
+          controllers.routes.SignOutController.signOut(feedbackOnSignOut = true).url
+      }
     }
   }
 }

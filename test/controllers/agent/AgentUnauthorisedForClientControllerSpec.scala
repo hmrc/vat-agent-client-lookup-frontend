@@ -74,7 +74,7 @@ class AgentUnauthorisedForClientControllerSpec extends ControllerBaseSpec with M
       }
 
       "render the Unauthorised for client Vrn Page" in {
-        messages(document.select("h1").text) shouldBe Messages.pageHeading
+        messages(document.select("h1").text) shouldBe Messages.title
       }
     }
 
