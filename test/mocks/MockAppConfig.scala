@@ -18,7 +18,6 @@ package mocks
 
 import config.AppConfig
 import config.features.Features
-import play.api.Mode.Mode
 import play.api.i18n.Lang
 import play.api.mvc.Call
 import play.api.{Configuration, Mode}
@@ -61,8 +60,6 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
 
   override val timeoutPeriod: Int = 1800
   override val timeoutCountdown: Int = 20
-
-  override val agentInvitationsFastTrack: String = "/agent-invitations-frontend"
 
   override val feedbackUrl: String = "/feedback"
 

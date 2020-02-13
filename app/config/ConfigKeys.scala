@@ -50,8 +50,6 @@ object ConfigKeys {
   val timeoutPeriod: String = "timeout.period"
   val timeoutCountdown: String = "timeout.countdown"
 
-  val agentInvitationsFastTrack: String = "agent-invitations-fast-track.url"
-
   val environmentHost: String = "environment-base.host"
 
   val emailVerificationBaseUrl: String = "email-verification"
