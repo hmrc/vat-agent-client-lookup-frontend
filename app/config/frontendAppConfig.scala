@@ -22,7 +22,6 @@ import javax.inject.{Inject, Singleton}
 import config.features.Features
 import config.{ConfigKeys => Keys}
 import play.api.{Configuration, Environment}
-import play.api.Mode.Mode
 import play.api.i18n.Lang
 import play.api.mvc.Call
 import uk.gov.hmrc.play.binders.ContinueUrl
@@ -49,7 +48,6 @@ trait AppConfig {
   val manageVatCustomerDetailsUrl: String
   val timeoutPeriod: Int
   val timeoutCountdown: Int
-  val agentInvitationsFastTrack: String
   val environmentHost: String
   val feedbackUrl: String
   val selfLookup: String
@@ -129,7 +127,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override lazy val manageVatCustomerDetailsUrl: String = manageVatBase + sc.getString(Keys.manageVatContext)
   override lazy val timeoutPeriod: Int = sc.getInt(Keys.timeoutPeriod)
   override lazy val timeoutCountdown: Int = sc.getInt(Keys.timeoutCountdown)
-  override lazy val agentInvitationsFastTrack: String = sc.getString(Keys.agentInvitationsFastTrack)
 
   override lazy val environmentHost: String = sc.getString(Keys.environmentHost)
 

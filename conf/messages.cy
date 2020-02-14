@@ -50,11 +50,10 @@ banner.phaseName = BETA
 unauthorised.agent.title = Ni allwch ddefnyddio’r gwasanaeth hwn eto
 unauthorised.agent.useThisService = I ddefnyddio’r gwasanaeth hwn, bydd angen i chi
 unauthorised.agent.setUpAccount = agor cyfrif gwasanaethau asiantau
-unauthorised.agentForClient.title = Nid ydych wedi’ch awdurdodi ar gyfer y cleient hwn
-unauthorised.agentForClient.useThisService = I ddefnyddio’r gwasanaeth hwn, mae angen i’ch cleient
-unauthorised.agentForClient.authoriseForClient = eich awdurdodi fel ei asiant
-unauthorised.agentForClient.enterDetails = Os ydych yn credu eich bod wedi nodi’r manylion anghywir, gallwch
-unauthorised.agentForClient.tryAgain = roi cynnig arall arni
+
+unauthorised.agentForClient.title = Ni allwch reoli manylion TAW y cleient hwn
+unauthorised.agentForClient.forMoreInformation = I gael rhagor o wybodaeth,
+unauthorised.agentForClient.agentServicesAccount = ewch i’ch Cyfrif Gwasanaethau Asiant
 
 common.confirmAndContinue = Cadarnhau ac yn eich blaen
 common.agentService = Manylion TAW eich cleient
