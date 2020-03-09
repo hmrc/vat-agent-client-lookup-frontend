@@ -69,7 +69,7 @@ class ConfirmClientVrnViewSpec extends ViewBaseSpec {
         }
       }
 
-      "have an edit different client link" which {
+      "have a change client link" which {
 
         s"has the text '${viewMessages.edit}'" in {
           elementText("article > p > a") shouldBe viewMessages.edit
