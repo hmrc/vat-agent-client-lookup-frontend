@@ -61,11 +61,11 @@ common.errorSummary.heading = Mae gennych un neu fwy o wallau
 common.continue = Yn eich blaen
 common.fullStop = .
 
-confirmClientVrn.title = Cadarnhau rhif TAW eich cleient
-confirmClientVrn.heading = Cadarnhau rhif TAW eich cleient
+confirmClientVrn.title = Cadarnhau manylion eich cleient
+confirmClientVrn.heading = Cadarnhau manylion eich cleient
 confirmClientVrn.name = Enw’r cleient
 confirmClientVrn.vrn = Rhif TAW
-confirmClientVrn.edit = Golygu cleient gwahanol
+confirmClientVrn.edit = Newid cleient
 
 clientsVrn.title = Beth yw rhif TAW eich cleient?
 clientsVrn.heading = Beth yw rhif TAW eich cleient?

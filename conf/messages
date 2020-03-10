@@ -35,11 +35,11 @@ common.errorSummary.heading = You have one or more errors
 common.continue = Continue
 common.fullStop = .
 
-confirmClientVrn.title = Confirm your client’s VAT number
-confirmClientVrn.heading = Confirm your client’s VAT number
+confirmClientVrn.title = Confirm your client’s details
+confirmClientVrn.heading = Confirm your client’s details
 confirmClientVrn.name = Client name
 confirmClientVrn.vrn = VAT number
-confirmClientVrn.edit = Edit different client
+confirmClientVrn.edit = Change client
 
 clientsVrn.title = What is your client’s VAT number?
 clientsVrn.heading = What is your client’s VAT number?
