@@ -18,18 +18,15 @@ package views.agent
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.mvc.AnyContentAsEmpty
-import play.api.test.FakeRequest
+import play.twirl.api.Html
 import views.ViewBaseSpec
 import views.html.agent.VerifyEmailView
 
 class VerifyEmailViewSpec extends ViewBaseSpec {
 
   val injectedView: VerifyEmailView = inject[VerifyEmailView]
-
-  lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
   val testEmail: String = "test@email.com"
-  lazy val view = injectedView(testEmail)
+  lazy val view: Html = injectedView(testEmail)(request, messages, mockConfig)
 
   lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -44,34 +41,25 @@ class VerifyEmailViewSpec extends ViewBaseSpec {
     }
 
     "have the correct text for the first paragraph" in {
-      elementText("#content article p") shouldBe
+      elementText("#content article p:nth-of-type(1)") shouldBe
         "We’ve sent an email to test@email.com. Click on the link in the email to verify your email address."
     }
 
     "have the correct text for the second paragraph" in {
-      elementText("#content article p:nth-of-type(2)") shouldBe "You can change your email address if it is not correct."
-    }
-
-    "have a link element in the first paragraph that links to the Capture your email page" in {
-      element("#content > article > p > a").attr("href") shouldBe
-        controllers.agent.routes.CapturePreferenceController.show().url
-    }
-
-    "have an accordion which" should {
-
-      "have a span with the correct text" in {
-        elementText("#content span") shouldBe "I did not get the email"
-      }
-
-      "have a paragraph with the correct text" in {
-        elementText(".panel.panel-border-narrow") shouldBe "Check your junk folder. If it’s not there we can" +
-          " send it again. If we send it again, any previous link will stop working."
+      elementText("#content article p:nth-of-type(2)") shouldBe "Check your junk folder. If it’s not there we can" +
+        " send it again. If we send it again, any previous link will stop working."
       }
       
-      "have a link element which calls the send email controller action" in {
-        element("#content > article > details > div > p > a").attr("href") shouldBe
-          controllers.agent.routes.VerifyEmailController.sendVerification().url
-      }
+      "have a link" which {
+
+        "has the correct link text" in {
+          elementText("#content > article > p:nth-of-type(2) > a") shouldBe "send it again"
+        }
+
+        "has the correct href" in {
+          element("#content > article > p:nth-of-type(2) > a").attr("href") shouldBe
+            controllers.agent.routes.VerifyEmailController.sendVerification().url
+        }
     }
   }
 }
