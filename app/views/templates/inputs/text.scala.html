@@ -14,15 +14,25 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.helpers
+@(field: Field, heading: String, additionalContent: Option[Html] = None)(implicit messages: Messages)
 
-@(field: Field, label: String, hint: Option[String] = None, hintId: String = "")(implicit messages: Messages)
+<div class="form-field@if(field.hasErrors){--error}">
 
-<div class="form-field">
+  <h1>@heading</h1>
 
-    @helpers.input(
-        field,
-        '_inputClass -> "form-control input--no-spinner",
-        '_hintId -> hintId
-    )
+  @additionalContent.map { content => @content }
+
+  <label for="@field.id" class="form-label visuallyhidden">@heading</label>
+
+  @field.errors.headOption.map { error =>
+    <span class="error-message" role="tooltip">
+      @messages(error.message, error.args: _*)
+    </span>
+  }
+
+  <input type="text"
+         class="form-control input--no-spinner"
+         name="@field.name"
+         id="@field.name"
+         value="@field.value.getOrElse("")"/>
 </div>

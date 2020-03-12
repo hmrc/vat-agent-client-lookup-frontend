@@ -47,7 +47,7 @@ class SelectClientVrnViewSpec extends ViewBaseSpec {
       }
 
       s"have the correct p1 of '${viewMessages.p1}'" in {
-        elementText("article > p") shouldBe viewMessages.p1
+        elementText(".form-field p") shouldBe viewMessages.p1
       }
 
       s"have the correct form hint of '${viewMessages.hint}'" in {
@@ -97,7 +97,7 @@ class SelectClientVrnViewSpec extends ViewBaseSpec {
       }
 
       "have the correct error notification text above the input box" in {
-        elementText(".error-notification") shouldBe viewMessages.formErrorNotEnoughNumbers
+        elementText(".error-message") shouldBe viewMessages.formErrorNotEnoughNumbers
       }
     }
   }

@@ -175,8 +175,8 @@ class SelectClientVrnPageSpec extends BasePageISpec {
               elementWithLinkTo("#vrn-error-summary")("#vrn"),
 
               //Error against Input Label
-              isElementVisible(".form-field--error .error-notification")(isVisible = true),
-              elementText(".form-field--error .error-notification")("Enter a VAT number in the correct format")
+              isElementVisible(".form-field--error .error-message")(isVisible = true),
+              elementText(".form-field--error .error-message")("Enter a VAT number in the correct format")
             )
           }
         }

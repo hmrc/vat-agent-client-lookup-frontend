@@ -27,7 +27,7 @@ class TextTemplateSpec extends TemplateBaseSpec {
 
     val fieldName = "fieldName"
     val labelText = "labelText"
-    val hintText = "hintText"
+    val additionalContent = Html("<p>Content</p>")
     val errorMessage = "error message"
 
     "the field is not populated" should {
@@ -38,9 +38,9 @@ class TextTemplateSpec extends TemplateBaseSpec {
         s"""
            |
            |<div class="form-field">
-           |  <label for="$fieldName" class="  ">
-           |      <input type="text" class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="" aria-describedby=""/>
-           |  </label>
+           |  <h1>labelText</h1>
+           |  <label for="$fieldName" class="form-label visuallyhidden">labelText</label>
+           |  <input type="text" class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value=""/>
            |</div>
            |
         """.stripMargin
@@ -62,15 +62,16 @@ class TextTemplateSpec extends TemplateBaseSpec {
         s"""
            |
            |<div class="form-field">
-           |  <label for="$fieldName" class="  ">
-           |    <input type="text" class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="$value" aria-describedby=""/>
-           |  </label>
+           |  <h1>labelText</h1>
+           |  <p>Content</p>
+           |  <label for="$fieldName" class="form-label visuallyhidden">labelText</label>
+           |  <input type="text" class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="$value"/>
            |</div>
            |
         """.stripMargin
       )
 
-      val markup = views.html.templates.inputs.text(field, labelText, Some(hintText))
+      val markup = views.html.templates.inputs.text(field, labelText, Some(additionalContent))
 
       "generate the correct markup" in {
         formatHtml(markup) shouldBe formatHtml(expectedMarkup)
@@ -84,19 +85,20 @@ class TextTemplateSpec extends TemplateBaseSpec {
       val expectedMarkup = Html(
         s"""
            |
-           |<div class="form-field">
-           |  <label for="$fieldName" class="  form-field--error">
-           |      <span class="error-notification" role="tooltip" data-journey="search-page:error:$fieldName">
-           |          $errorMessage
-           |      </span>
-           |      <input type="text" class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="" aria-describedby=""/>
-           |  </label>
+           |<div class="form-field--error">
+           |  <h1>labelText</h1>
+           |  <p>Content</p>
+           |  <label for="$fieldName" class="form-label visuallyhidden">labelText</label>
+           |  <span class="error-message" role="tooltip">
+           |    $errorMessage
+           |  </span>
+           |  <input type="text" class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value=""/>
            |</div>
            |
         """.stripMargin
       )
 
-      val markup = views.html.templates.inputs.text(field, labelText, Some(hintText))
+      val markup = views.html.templates.inputs.text(field, labelText, Some(additionalContent))
 
       "generate the correct markup" in {
         formatHtml(markup) shouldBe formatHtml(expectedMarkup)

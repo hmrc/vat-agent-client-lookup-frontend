@@ -31,7 +31,7 @@
   @errorSummary(messages("common.error.heading"), preferenceForm, forceDivToAppear = false)
 
   @form(action = controllers.agent.routes.CapturePreferenceController.submit) {
-    <div id="@yesNo">
+    <div id="@yesNo" class="link-bottom-margin">
       @optionRevealHelper(
         choices = Seq(
           (yes, messages("common.yes")),

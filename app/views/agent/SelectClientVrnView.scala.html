@@ -15,7 +15,7 @@
  *@
 
 @import views.html.templates.errors.errorSummary
-@import templates.inputs._
+@import views.html.templates.inputs._
 @import models.agent.ClientVrnModel
 @import play.api.data.Form
 @import uk.gov.hmrc.play.views.html.helpers
@@ -24,33 +24,30 @@
 
 @(form: Form[ClientVrnModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-@mainTemplate(
-if(form.errors.nonEmpty) messages("common.error.prefixTitle", messages("clientsVrn.title")) else messages("clientsVrn.title")
-) {
-
-@errorSummary("common.error.heading", form)
-
-<h1 class="heading-large">@messages("clientsVrn.heading")</h1>
-
-<p>@messages("clientsVrn.p1")</p>
-
-@helpers.form(action = controllers.agent.routes.SelectClientVrnController.submit) {
-<div class="form-group">
-    <label for="vrn" class="visuallyhidden">
-        @messages("clientsVrn.label")
-    </label>
+@additionalContent = {
+    <p>@messages("clientsVrn.p1")</p>
     <span id="vrn-hint" class="form-hint">
         @messages("clientsVrn.example")
     </span>
-    @text(
-        form("vrn"),
-        messages(""),
-        None,
-        "vrn-hint"
-    )
-</div>
-
-<button class="button" type="submit">@messages("common.continue")</button>
 }
+
+@mainTemplate(
+    if(form.errors.nonEmpty) messages("common.error.prefixTitle", messages("clientsVrn.heading")) else messages("clientsVrn.heading")
+) {
+
+    @errorSummary("common.error.heading", form)
+
+    @helpers.form(action = controllers.agent.routes.SelectClientVrnController.submit) {
+
+        <div class="form-group">
+            @text(
+                form("vrn"),
+                messages("clientsVrn.heading"),
+                Some(additionalContent)
+            )
+        </div>
+
+        <button class="button" type="submit">@messages("common.continue")</button>
+    }
 
 }
