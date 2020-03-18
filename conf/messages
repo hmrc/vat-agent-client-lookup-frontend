@@ -43,7 +43,7 @@ confirmClientVrn.edit = Change client
 
 clientsVrn.heading = What is your client’s VAT number?
 clientsVrn.p1 = This is the 9-digit number they received when they registered for VAT.
-clientsVrn.example = For example, ''123456789''
+clientsVrn.example = For example, 123456789.
 clientsVrn.label = What is your client’s VAT number?
 
 clientVrnForm.error.missing = Enter your client’s VAT number
@@ -123,7 +123,7 @@ vatReturnsPartial.paragraphNonMandated = Submit your client’s VAT returns and 
 vatReturnsPartial.viewReturnsLink = View submitted returns
 vatReturnsPartial.submitReturnLink = Submit VAT Return
 
-agentHub.heading = Your client’s VAT account
+agentHub.heading = Your client’s VAT details
 agentHub.vrn = VAT registration number (VRN): {0}
 agentHub.changeClient = Change client
 

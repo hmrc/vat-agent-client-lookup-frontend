@@ -46,12 +46,8 @@ class SelectClientVrnViewSpec extends ViewBaseSpec {
         elementText("h1") shouldBe viewMessages.heading
       }
 
-      s"have the correct p1 of '${viewMessages.p1}'" in {
-        elementText(".form-field p") shouldBe viewMessages.p1
-      }
-
       s"have the correct form hint of '${viewMessages.hint}'" in {
-        elementText(".form-hint") shouldBe viewMessages.hint
+        elementText(".form-hint") shouldBe s"${viewMessages.p1} ${viewMessages.hint}"
       }
 
       s"have an input box for the VRN" in {

@@ -18,8 +18,8 @@ package assets.messages
 
 object AgentHubMessages {
 
-  val title = "Your client’s VAT account - Your client’s VAT details - GOV.UK"
-  val heading = "Your client’s VAT account"
+  val heading = "Your client’s VAT details"
+  val title = s"$heading - Your client’s VAT details - GOV.UK"
   val vatNo: String => String = vrn => s"VAT registration number (VRN): $vrn"
   val changeClient = "Change client"
   val agentServicesAccount = "Agent Services Account"
