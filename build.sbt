@@ -117,7 +117,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     Keys.fork in Test := true,
     javaOptions in Test += "-Dlogger.resource=logback-test.xml",
-    scalaVersion := "2.11.11",
+    scalaVersion := "2.11.12",
     majorVersion := 0,
     libraryDependencies ++= appDependencies,
     retrieveManaged := true,

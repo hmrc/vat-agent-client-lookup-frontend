@@ -25,8 +25,8 @@
 @(form: Form[ClientVrnModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @additionalContent = {
-    <p>@messages("clientsVrn.p1")</p>
     <span id="vrn-hint" class="form-hint">
+        @messages("clientsVrn.p1")
         @messages("clientsVrn.example")
     </span>
 }

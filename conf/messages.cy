@@ -69,7 +69,7 @@ confirmClientVrn.edit = Newid cleient
 
 clientsVrn.heading = Beth yw rhif TAW eich cleient?
 clientsVrn.p1 = Dyma’r rhif 9 digid a gafodd wrth gofrestru ar gyfer TAW.
-clientsVrn.example = Er enghraifft, ‘123456789’
+clientsVrn.example = Er enghraifft, 123456789.
 clientsVrn.label = Beth yw rhif TAW eich cleient?
 
 clientVrnForm.error.missing = Nodwch rif TAW eich cleient
@@ -149,7 +149,7 @@ vatReturnsPartial.paragraphNonMandated = Cyflwyno Ffurflenni TAW eich cleient a 
 vatReturnsPartial.viewReturnsLink = Bwrw golwg dros y Ffurflenni TAW a gyflwynwyd
 vatReturnsPartial.submitReturnLink = Cyflwyno Ffurflen TAW
 
-agentHub.heading = Cyfrif TAW eich cleient
+agentHub.heading = Manylion TAW eich cleient
 agentHub.vrn = Rhif cofrestru TAW (VRN): {0}
 agentHub.changeClient = Newid cleient
 

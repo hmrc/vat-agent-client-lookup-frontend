@@ -64,7 +64,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
           }
 
           status(result) shouldBe OK
-          messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client’s VAT account"
+          messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client’s VAT details"
         }
       }
 
