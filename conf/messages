@@ -124,7 +124,7 @@ vatReturnsPartial.viewReturnsLink = View submitted returns
 vatReturnsPartial.submitReturnLink = Submit VAT Return
 
 agentHub.heading = Your client’s VAT details
-agentHub.vrn = VAT registration number (VRN): {0}
+agentHub.vrn = VAT registration number: {0}
 agentHub.changeClient = Change client
 
 breadcrumb.agentServices = Agent Services Account

@@ -150,7 +150,7 @@ vatReturnsPartial.viewReturnsLink = Bwrw golwg dros y Ffurflenni TAW a gyflwynwy
 vatReturnsPartial.submitReturnLink = Cyflwyno Ffurflen TAW
 
 agentHub.heading = Manylion TAW eich cleient
-agentHub.vrn = Rhif cofrestru TAW (VRN): {0}
+agentHub.vrn = Rhif cofrestru TAW: {0}
 agentHub.changeClient = Newid cleient
 
 breadcrumb.agentServices = Cyfrif Gwasanaethau Asiant

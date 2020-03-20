@@ -20,7 +20,7 @@ object AgentHubMessages {
 
   val heading = "Your client’s VAT details"
   val title = s"$heading - Your client’s VAT details - GOV.UK"
-  val vatNo: String => String = vrn => s"VAT registration number (VRN): $vrn"
+  val vatNo: String => String = vrn => s"VAT registration number: $vrn"
   val changeClient = "Change client"
   val agentServicesAccount = "Agent Services Account"
   val clientDetails = "Client details"
