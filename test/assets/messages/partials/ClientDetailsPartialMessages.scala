@@ -19,7 +19,7 @@ package assets.messages.partials
 object ClientDetailsPartialMessages {
 
     val heading = "Client details"
-    val paragraphOne = "Change client business, contact and VAT details."
-    val linkText = "View your client’s VAT details"
+    val paragraphOne = "Change your client’s business and contact details or VAT Return dates."
+    val linkText = "View business details"
 
 }
