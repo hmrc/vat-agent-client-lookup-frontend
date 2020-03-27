@@ -20,5 +20,6 @@ case class FeatureSwitchModel(emailVerificationEnabled: Boolean,
                               preferenceJourneyEnabled: Boolean,
                               useLanguageFeatureEnabled: Boolean,
                               useAgentHubPageFeature: Boolean,
-                              useStaticDateFeature: Boolean
+                              useStaticDateFeature: Boolean,
+                              displayCovid: Boolean
                              )

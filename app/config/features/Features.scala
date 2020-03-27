@@ -27,4 +27,5 @@ class Features @Inject()(config: Configuration) {
   val useLanguageSelector = new Feature(ConfigKeys.useLanguageSelectorFeature, config)
   val useAgentHubPageFeature = new Feature(ConfigKeys.useAgentHubPageFeature, config)
   val useStaticDateFeature = new Feature(ConfigKeys.useStaticDateFeature, config)
+  val displayCovidMessage = new Feature(ConfigKeys.displayCovidMessageFeature, config)
 }

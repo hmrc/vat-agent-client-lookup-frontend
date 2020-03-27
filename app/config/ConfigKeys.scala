@@ -62,6 +62,7 @@ object ConfigKeys {
   val useLanguageSelectorFeature: String = "features.useLanguageSelector.enabled"
   val useAgentHubPageFeature: String = "features.useAgentHubPage.enabled"
   val useStaticDateFeature: String = "features.useStaticDate.enabled"
+  val displayCovidMessageFeature: String = "features.displayCovid.enabled"
 
   val staticDateValue: String = "date-service.staticDate.value"
 
