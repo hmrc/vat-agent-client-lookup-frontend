@@ -32,6 +32,8 @@
   </ol>
  </div>
 
+ @if(appConfig.features.displayCovidMessage()){ <div>@covid()</div> }
+
  <header class="page-heading push--top">
   <h1 class="heading-xlarge">@messages("agentHub.heading")</h1>
   <span class="form-hint bottom-margin">@messages("agentHub.vrn", vrn)<br/>
