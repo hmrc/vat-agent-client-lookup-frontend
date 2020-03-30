@@ -35,7 +35,8 @@ class FeatureSwitchController @Inject()(featureSwitchView: FeatureSwitchView, mc
         preferenceJourneyEnabled = appConfig.features.preferenceJourneyEnabled(),
         useLanguageFeatureEnabled = appConfig.features.useLanguageSelector(),
         useAgentHubPageFeature = appConfig.features.useAgentHubPageFeature(),
-        useStaticDateFeature = appConfig.features.useStaticDateFeature()
+        useStaticDateFeature = appConfig.features.useStaticDateFeature(),
+        displayCovid = appConfig.features.displayCovidMessage()
       )
     )))
   }
@@ -53,6 +54,7 @@ class FeatureSwitchController @Inject()(featureSwitchView: FeatureSwitchView, mc
     appConfig.features.useLanguageSelector(model.useLanguageFeatureEnabled)
     appConfig.features.useAgentHubPageFeature(model.useAgentHubPageFeature)
     appConfig.features.useStaticDateFeature(model.useStaticDateFeature)
+    appConfig.features.displayCovidMessage(model.displayCovid)
     Redirect(routes.FeatureSwitchController.featureSwitch())
   }
 }

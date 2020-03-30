@@ -28,7 +28,8 @@ object FeatureSwitchForm {
       ConfigKeys.preferenceJourneyFeature -> boolean,
       ConfigKeys.useLanguageSelectorFeature -> boolean,
       ConfigKeys.useAgentHubPageFeature -> boolean,
-      ConfigKeys.useStaticDateFeature -> boolean
+      ConfigKeys.useStaticDateFeature -> boolean,
+      ConfigKeys.displayCovidMessageFeature -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 }
