@@ -131,3 +131,10 @@ breadcrumb.agentServices = Agent Services Account
 
 signUpPartial.LinkText = Sign up for Making Tax Digital for VAT
 signUpPartial.Body = If your client’s taxable turnover exceeds the VAT threshold, they must sign up to Making Tax Digital for VAT.
+
+covid.title = Coronavirus (COVID 19) VAT deferral
+covid.line1 = If your client has VAT payments that are due between 20 March and 30 June 2020, they can choose to:
+covid.bullet1 = defer them without paying interest or penalties
+covid.bullet2 = pay the VAT due as normal
+covid.line2 = They must continue to submit their returns as normal. If they choose to defer their VAT payment, the VAT due must be paid on or before 31 March 2021. They do not need to tell HMRC that they are deferring VAT payments.
+covid.directDebit = If your client normally pays by Direct Debit, they must contact their bank to cancel it as soon as possible.

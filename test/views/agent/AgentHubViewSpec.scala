@@ -26,6 +26,7 @@ import views.ViewBaseSpec
 import assets.BaseTestConstants.{arn, vrn}
 import assets.CustomerDetailsTestConstants._
 import assets.messages.{AgentHubMessages => Messages}
+import assets.messages.partials.CovidPartialMessages
 import assets.messages.partials.{SignUpPartialMessages, _}
 import models.User
 import play.api.i18n.Lang
@@ -39,10 +40,25 @@ class AgentHubViewSpec extends ViewBaseSpec {
 
     val date: LocalDate = LocalDate.parse("2018-05-01")
 
-    "the user is a valid agent for an opted-in client" should {
+    "the user is a valid agent for an opted-in client with covid feature switch disabled" should {
+      lazy val view = injectedView(customerDetailsFnameOnly, vrn, date)(request,messages,mockConfig,user)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "not display the covid partial" in {
+        mockConfig.features.displayCovidMessage(false)
+        elementExtinct("#covid-partial")
+      }
+    }
+
+    "the user is a valid agent for an opted-in client with covid feature switch enabled" should {
 
       lazy val view = injectedView(customerDetailsFnameOnly, vrn, date)(request,messages,mockConfig,user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "display the covid partial" in {
+        mockConfig.features.displayCovidMessage(true)
+        elementText("#covid-partial > h3") shouldBe CovidPartialMessages.heading
+      }
 
       "have the correct title" in {
         document.title shouldBe Messages.title

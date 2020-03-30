@@ -65,3 +65,13 @@ html[data-useragent*='MSIE 10.0'] .flex-container.tile {
 .bottom-padding {
   padding-bottom: 0.25em;
 }
+
+.warning-banner {
+  border-top: 10px solid #7eff8e;
+  background: #000000 !important;
+}
+
+.nudge {
+  border-left: 0px;
+  color: #ffffff;
+}
