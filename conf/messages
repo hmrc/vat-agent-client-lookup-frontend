@@ -48,8 +48,6 @@ clientsVrn.label = What is your client’s VAT number?
 
 clientVrnForm.error.missing = Enter your client’s VAT number
 clientVrnForm.error.invalid = Enter a VAT number in the correct format
-clientVrnForm.error.tooLong = You have entered too many numbers
-clientVrnForm.error.tooShort = You have not entered enough numbers
 
 confirmEmail.title = Confirm the email address
 confirmEmail.heading = Confirm the email address

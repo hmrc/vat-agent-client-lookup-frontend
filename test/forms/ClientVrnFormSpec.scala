@@ -55,7 +55,7 @@ class ClientVrnFormSpec extends TestUtil {
       }
 
       "have an error with the correct message" in {
-        form.errors.head.message shouldBe "clientVrnForm.error.tooLong"
+        form.errors.head.message shouldBe "clientVrnForm.error.invalid"
       }
     }
 
@@ -73,11 +73,11 @@ class ClientVrnFormSpec extends TestUtil {
       }
 
       "have an error with the correct message" in {
-        form.errors.head.message shouldBe "clientVrnForm.error.tooShort"
+        form.errors.head.message shouldBe "clientVrnForm.error.invalid"
       }
     }
 
-    "the VRN is not valid" should {
+    "the VRN is the correct length but does not validate against the ReferenceChecker library" should {
 
       val invalidVrn = Map("vrn" -> "123456789")
       val form  = ClientVrnForm.form.bind(invalidVrn)

@@ -30,8 +30,6 @@ object ClientVrnForm {
       "vrn" -> text.verifying(
           StopOnFirstFail(
             constraint[String]("clientVrnForm.error.missing", _.length != 0),
-            constraint[String]("clientVrnForm.error.tooLong", _.length <= 9),
-            constraint[String]("clientVrnForm.error.tooShort", _.length >= 9),
             constraint[String]("clientVrnForm.error.invalid", VatReferenceChecker.isValid)
           )
         )
