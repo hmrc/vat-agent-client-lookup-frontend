@@ -157,3 +157,10 @@ breadcrumb.agentServices = Cyfrif Gwasanaethau Asiant
 
 signUpPartial.LinkText = cofrestru ar gyfer Troi Treth yn Ddigidol ar gyfer TAW
 signUpPartial.Body = Os yw trosiant trethadwy eich cleient yn mynd dros £85,000, mae’n rhaid i chi ei gofrestru eto ar gyfer y cynllun Troi Treth yn Ddigidol.
+
+covid.title = Gohirio TAW yn sgil coronafeirws (COVID-19)
+covid.line1 = Os oes gan eich cleient daliadau TAW sydd i’w talu rhwng 20 Mawrth a 30 Mehefin 2020, gall ddewis gwneud un o’r canlynol:
+covid.bullet1 = gohirio’r taliadau heb dalu llog na chosbau
+covid.bullet2 = talu’r TAW sy’n ddyledus, fel arfer
+covid.line2 = Mae’n rhaid i’ch cleient barhau i gyflwyno’i Ffurflenni TAW fel arfer. Os yw’n dewis gohirio’i daliad TAW, mae’n rhaid i’r TAW gael ei thalu ar neu cyn 31 Mawrth 2021. Does dim rhaid iddo roi gwybod i CThEM ei fod yn gohirio taliadau TAW.
+covid.directDebit = Os yw’ch cleient fel arfer yn talu drwy Ddebyd Uniongyrchol, mae’n rhaid iddo gysylltu â’i fanc i’w ganslo cyn gynted â phosibl.
