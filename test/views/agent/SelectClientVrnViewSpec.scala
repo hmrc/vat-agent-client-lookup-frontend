@@ -88,12 +88,12 @@ class SelectClientVrnViewSpec extends ViewBaseSpec {
         }
 
         "has the correct error message" in {
-          elementText("#vrn-error-summary") shouldBe viewMessages.formErrorNotEnoughNumbers
+          elementText("#vrn-error-summary") shouldBe viewMessages.formErrorInvalidVrn
         }
       }
 
       "have the correct error notification text above the input box" in {
-        elementText(".error-message") shouldBe viewMessages.formErrorNotEnoughNumbers
+        elementText(".error-message") shouldBe viewMessages.formErrorInvalidVrn
       }
     }
   }

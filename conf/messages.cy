@@ -74,8 +74,6 @@ clientsVrn.label = Beth yw rhif TAW eich cleient?
 
 clientVrnForm.error.missing = Nodwch rif TAW eich cleient
 clientVrnForm.error.invalid = Nodwch rif TAW yn y fformat cywir
-clientVrnForm.error.tooLong = Rydych wedi nodi gormod o rifau
-clientVrnForm.error.tooShort = Nid ydych wedi nodi digon o rifau
 
 confirmEmail.title = Cadarnhau’r cyfeiriad e-bost
 confirmEmail.heading = Cadarnhau’r cyfeiriad e-bost

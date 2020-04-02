@@ -23,5 +23,5 @@ object ClientVrnPageMessages {
   val hint: String = "For example, 123456789."
   val label: String = "What is your client’s VAT number?"
   val formErrorHeading: String = "There is a problem"
-  val formErrorNotEnoughNumbers: String = "You have not entered enough numbers"
+  val formErrorInvalidVrn: String = "Enter a VAT number in the correct format"
 }
