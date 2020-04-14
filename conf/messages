@@ -55,8 +55,8 @@ confirmEmail.change = Change
 confirmEmail.changeContext = Change your email address
 
 clientDetailsCard.title = Client details
-clientDetailsCard.info = Change client business, contact and VAT details.
-clientDetailsCard.link = View your client’s VAT details
+clientDetailsCard.info = Change your client’s business and contact details or VAT Return dates.
+clientDetailsCard.link = View business details
 
 VatCertificateCard.title = VAT certificate
 VatCertificateCard.info = View and print your client’s VAT certificate.

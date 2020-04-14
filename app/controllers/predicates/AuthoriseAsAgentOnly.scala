@@ -24,7 +24,8 @@ import play.api.Logger
 import play.api.mvc._
 import services.EnrolmentsAuthService
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.retrieve.{Retrievals, ~}
+import uk.gov.hmrc.auth.core.retrieve.~
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import views.html.errors.SessionTimeoutView
 import views.html.errors.agent.UnauthorisedNoEnrolmentView
 

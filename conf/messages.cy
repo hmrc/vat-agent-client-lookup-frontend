@@ -81,8 +81,8 @@ confirmEmail.change = Newid
 confirmEmail.changeContext = Newid eich cyfeiriad e-bost
 
 clientDetailsCard.title = Manylion cleient
-clientDetailsCard.info = Newid manylion busnes, cyswllt a TAW cleient
-clientDetailsCard.link = Bwrw golwg ar fanylion TAW eich cleient
+clientDetailsCard.info = Newid manylion busnes a chyswllt eich cleient neu ddyddiadau Ffurflenni TAW eich cleient.
+clientDetailsCard.link = Bwrw golwg dros y manylion busnes
 
 VatCertificateCard.title = Tystysgrif TAW
 VatCertificateCard.info = Bwrw golwg dros dystysgrif TAW eich cleient a’i hargraffu

@@ -16,17 +16,18 @@
 
 package config
 
+import javax.inject.Inject
 import mocks.MockAppConfig
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.Results.Ok
-import play.api.mvc.{Action, Call}
+import play.api.mvc.{Call, DefaultActionBuilder}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.api.{Application, Configuration}
 
-class WhitelistFilterSpec extends PlaySpec with GuiceOneServerPerSuite {
+class WhitelistFilterSpec @Inject()(action: DefaultActionBuilder) extends PlaySpec with GuiceOneServerPerSuite {
 
   lazy val mockAppConfig = new MockAppConfig(app.configuration)
 
@@ -36,10 +37,13 @@ class WhitelistFilterSpec extends PlaySpec with GuiceOneServerPerSuite {
       "whitelist.enabled" -> true
     ))
     .routes({
-      case ("GET", "/hello-world") => Action(Ok("success"))
-      case _ => Action(Ok("failure"))
-    })
-    .build()
+      case ("GET", "/hello-world") => action {
+        Ok("success")
+      }
+      case _ => action {
+        Ok("failure")
+      }
+    }).build()
 
   "WhitelistFilter" when {
 

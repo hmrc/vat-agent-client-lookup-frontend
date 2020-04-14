@@ -14,13 +14,14 @@
  * limitations under the License.
  *@
 
-@import views.html.templates.errors.errorSummary
 @import views.html.templates.inputs._
 @import models.agent.ClientVrnModel
 @import play.api.data.Form
-@import uk.gov.hmrc.play.views.html.helpers
+@import uk.gov.hmrc.play.views.html.helpers.{ErrorSummary, FormWithCSRF}
 
-@this(mainTemplate: MainTemplate)
+@this(mainTemplate: MainTemplate,
+      formWithCSRF: FormWithCSRF,
+      errorSummary: ErrorSummary)
 
 @(form: Form[ClientVrnModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
@@ -35,9 +36,9 @@
     if(form.errors.nonEmpty) messages("common.error.prefixTitle", messages("clientsVrn.heading")) else messages("clientsVrn.heading")
 ) {
 
-    @errorSummary("common.error.heading", form)
+    @errorSummary(messages("common.error.heading"), form, forceDivToAppear = false)
 
-    @helpers.form(action = controllers.agent.routes.SelectClientVrnController.submit) {
+    @formWithCSRF(action = controllers.agent.routes.SelectClientVrnController.submit) {
 
         <div class="form-group">
             @text(

@@ -14,13 +14,16 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.helpers.{form, errorSummary, input}
+@import uk.gov.hmrc.play.views.html.helpers.{FormWithCSRF, ErrorSummary, Input}
 @import views.html.templates.inputs.optionRevealHelper
 @import config.AppConfig
 @import models.PreferenceModel
 @import forms.PreferenceForm._
 
-@this(mainTemplate: MainTemplate)
+@this(mainTemplate: MainTemplate,
+      formWithCSRF: FormWithCSRF,
+      errorSummary: ErrorSummary,
+      input: Input)
 
 @(preferenceForm: Form[PreferenceModel])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
@@ -30,7 +33,7 @@
 
   @errorSummary(messages("common.error.heading"), preferenceForm, forceDivToAppear = false)
 
-  @form(action = controllers.agent.routes.CapturePreferenceController.submit) {
+  @formWithCSRF(action = controllers.agent.routes.CapturePreferenceController.submit) {
     <div id="@yesNo" class="link-bottom-margin">
       @optionRevealHelper(
         choices = Seq(
