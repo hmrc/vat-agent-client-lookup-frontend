@@ -252,6 +252,23 @@ class RegistrationPartialSpec extends ViewBaseSpec {
           }
         }
       }
+
+      "agent's client has no patyType" should {
+
+        "display an error in the partial" which {
+
+          lazy val view = registrationPartial(clientNoPartyType, toLocalDate("2019-01-01"))(messages, mockConfig, user)
+          lazy implicit val document: Document = Jsoup.parse(view.body)
+
+          s"should have the correct title of ${RegistrationPartialMessages.cancelRegistrationTitle}" in {
+            elementText("h3") shouldBe RegistrationPartialMessages.cancelRegistrationTitle
+          }
+
+          s"have correct content of ${RegistrationPartialMessages.noPartyTypeErrorContent}" in {
+            elementText("p") shouldBe RegistrationPartialMessages.noPartyTypeErrorContent
+          }
+        }
+      }
     }
 
 

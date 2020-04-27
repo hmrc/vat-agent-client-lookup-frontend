@@ -39,4 +39,5 @@ object RegistrationPartialMessages {
   val futureDeregisterContent: String = "Your client’s VAT registration will be cancelled on 1 January 2020."
   val futureDeregLink: String  = "VAT online services for agents (opens in new tab)."
 
+  val noPartyTypeErrorContent: String = "Sorry, there is a problem with the service. Try again later."
 }

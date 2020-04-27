@@ -92,20 +92,33 @@
     </div>
 }
 
+@errorNoPartyType() = {
+    <div class="column-one-third" id="cancel-vat">
+        <h3 class="heading-small">
+            @messages("registrationPartial.cancelRegistration.title")
+        </h3>
+        <p>@messages("registrationPartial.error")</p>
+    </div>
+}
+
 @{
-    if(details.deregistration.isDefined){
-        details.deregistration.flatMap(_.effectDateOfCancellation) match {
-            case Some(date) => date match {
-                case future if future.isAfter(currentDate) => futureDeregistration(future)
-                case historic => historicDeregistration(historic)
-            }
-            case _ =>
-                Logger.warn("[registrationPartial][deregistrationDate] - 'deregistration' contained no 'effectDateOfCancellation'")
-        }
+    if(details.partyType.isEmpty) {
+        errorNoPartyType
     } else {
+        if(details.deregistration.isDefined){
+            details.deregistration.flatMap(_.effectDateOfCancellation) match {
+                case Some(date) => date match {
+                    case future if future.isAfter(currentDate) => futureDeregistration(future)
+                    case historic => historicDeregistration(historic)
+                }
+                case _ =>
+                    Logger.warn("[registrationPartial][deregistrationDate] - 'deregistration' contained no 'effectDateOfCancellation'")
+            }
+        } else {
             details.changeIndicators.map(_.deregister) match {
                 case Some(true) => pendingDeregistration
                 case _ => cancelRegistration
             }
+        }
     }
 }
