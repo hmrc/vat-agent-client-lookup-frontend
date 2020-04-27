@@ -21,15 +21,44 @@
 @import views.html.helpers.displayDate
 @import models.User
 @import helpers.capturePreferenceHelper
+@import common.PartyTypes.VatGroup
 
 @(details: CustomerDetails, currentDate: LocalDate)(implicit messages: Messages, appConfig: AppConfig, user: User[_])
+
+@cancelVatTitleKey = @{
+    details.partyType match {
+        case Some(partyType) if partyType == VatGroup => "registrationPartial.vatGroups.VAT7.title"
+        case _ => "registrationPartial.cancelRegistration.title"
+    }
+}
+
+@cancelVatContentKey = @{
+    details.partyType match {
+        case Some(partyType) if partyType == VatGroup => "registrationPartial.vatGroups.VAT7.content"
+        case _ => "registrationPartial.cancelRegistration.content"
+    }
+}
+
+@cancelVatLinkUrl = @{
+    details.partyType match {
+        case Some(partyType) if partyType == VatGroup => appConfig.vat7FormUrl
+        case _ => appConfig.cancelRegistrationUrl
+    }
+}
+
+@historicAndFutureLinkUrl = @{
+    details.partyType match {
+        case Some(partyType) if partyType == VatGroup => appConfig.vatHowToRegister
+        case _ => appConfig.onlineAgentServicesUrl
+    }
+}
 
 @cancelRegistration = {
     <div id="cancel-vat" class="column-one-third">
         <h3 class="heading-small">
-            @capturePreferenceHelper(messages("registrationPartial.cancelRegistration.title"), appConfig.cancelRegistrationUrl)
+            @capturePreferenceHelper(messages(cancelVatTitleKey), cancelVatLinkUrl)
         </h3>
-        <p>@messages("registrationPartial.cancelRegistration.content")</p>
+        <p>@messages(cancelVatContentKey)</p>
     </div>
 }
 
@@ -39,7 +68,7 @@
             @messages("registrationPartial.historicDeregistration.title")
         </h3>
         <p>@messages("registrationPartial.historicDeregistration.content", displayDate(date))</p>
-        <p><a id="agent-services-link" href="@appConfig.onlineAgentServicesUrl" target="_blank">@messages("registrationPartial.historicDeregistration.link")</a></p>
+        <p><a id="agent-services-link" href="@historicAndFutureLinkUrl" target="_blank">@messages("registrationPartial.historicDeregistration.link")</a></p>
     </div>
 }
 
@@ -49,7 +78,7 @@
           @messages("registrationPartial.futureDeregistration.title")
         </h3>
         <p>@messages("registrationPartial.futureDeregistration.content", displayDate(date))</p>
-        <p><a id="agent-services-link" href="@appConfig.onlineAgentServicesUrl" target="_blank">@messages("registrationPartial.futureDeregistration.link")</a></p>
+        <p><a id="agent-services-link" href="@historicAndFutureLinkUrl" target="_blank">@messages("registrationPartial.futureDeregistration.link")</a></p>
     </div>
 }
 
@@ -70,9 +99,8 @@
                 case future if future.isAfter(currentDate) => futureDeregistration(future)
                 case historic => historicDeregistration(historic)
             }
-            case _ => {
+            case _ =>
                 Logger.warn("[registrationPartial][deregistrationDate] - 'deregistration' contained no 'effectDateOfCancellation'")
-            }
         }
     } else {
             details.changeIndicators.map(_.deregister) match {

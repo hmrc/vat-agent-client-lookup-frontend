@@ -114,6 +114,8 @@ registrationPartial.pendingDeregistration.content = The request to cancel your c
 registrationPartial.futureDeregistration.title = Your client’s VAT registration
 registrationPartial.futureDeregistration.content = Your client’s VAT registration will be cancelled on {0}.
 registrationPartial.futureDeregistration.link = VAT online services for agents (opens in new tab).
+registrationPartial.vatGroups.VAT7.title = Cancel VAT registration (opens in a new window or tab)
+registrationPartial.vatGroups.VAT7.content = To disband VAT group, you need to cancel the registration using the VAT7 form.
 
 vatReturnsPartial.heading = VAT Returns
 vatReturnsPartial.paragraphMandated = View your client’s submitted returns.
