@@ -42,6 +42,7 @@ object CustomerDetailsTestConstants {
     "lastName" -> lastName,
     "organisationName" -> orgName,
     "tradingName" -> tradingName,
+    "partyType" -> "2",
     "mandationStatus" -> mandationStatus,
     "deregistration" -> Json.obj(
       "effectDateOfCancellation" -> "2019-01-01"
@@ -73,7 +74,17 @@ object CustomerDetailsTestConstants {
     None,
     None,
     None,
-    Some(validParty),
+    None,
+    mandationStatus,
+    None
+  )
+
+  val customerDetailsNoInfoWithPartyType = CustomerDetails(
+    None,
+    None,
+    None,
+    None,
+    Some("2"),
     mandationStatus,
     None
   )

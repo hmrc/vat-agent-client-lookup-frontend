@@ -45,7 +45,7 @@ class RegistrationPartialSpec extends ViewBaseSpec {
 
         "agent has not entered their contact preference" should {
 
-          lazy val view = registrationPartial(customerDetailsNoInfo, toLocalDate("2019-01-01"))(messages, mockConfig, user)
+          lazy val view = registrationPartial(customerDetailsNoInfoWithPartyType, toLocalDate("2019-01-01"))(messages, mockConfig, user)
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "display a section for cancelling registration" which {
@@ -78,9 +78,7 @@ class RegistrationPartialSpec extends ViewBaseSpec {
             }
 
             s"link to ${controllers.agent.routes.CapturePreferenceController.show().url}" in {
-              element("h3 > a").attr("href") shouldBe
-                controllers.agent.routes.CapturePreferenceController.show().url +
-                  s"?altRedirectUrl=${urlEncoded(mockConfig.vat7FormUrl)}"
+              element("h3 > a").attr("href") shouldBe mockConfig.vat7FormUrl
             }
 
             s"have correct content of ${RegistrationPartialMessages.cancelRegistrationContentVatGroup}" in {
@@ -94,7 +92,7 @@ class RegistrationPartialSpec extends ViewBaseSpec {
           lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
             .withSession(SessionKeys.verifiedAgentEmail -> "exampleemail@email.com")
           lazy val testUser: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn, active = true)(testGetRequest)
-          lazy val view = registrationPartial(customerDetailsNoInfo, toLocalDate("2019-01-01"))(messages, mockConfig, testUser)
+          lazy val view = registrationPartial(customerDetailsNoInfoWithPartyType, toLocalDate("2019-01-01"))(messages, mockConfig, testUser)
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "display a section for cancelling registration" which {

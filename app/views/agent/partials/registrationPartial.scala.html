@@ -39,10 +39,12 @@
     }
 }
 
-@cancelVatLinkUrl = @{
+@cancelVatLink = @{
+    val title = messages(cancelVatTitleKey)
+
     details.partyType match {
-        case Some(partyType) if partyType == VatGroup => appConfig.vat7FormUrl
-        case _ => appConfig.cancelRegistrationUrl
+        case Some(partyType) if partyType == VatGroup => Html(s"<a href='${appConfig.vat7FormUrl}'>$title</a>")
+        case _ => capturePreferenceHelper(title, appConfig.cancelRegistrationUrl)
     }
 }
 
@@ -56,7 +58,7 @@
 @cancelRegistration = {
     <div id="cancel-vat" class="column-one-third">
         <h3 class="heading-small">
-            @capturePreferenceHelper(messages(cancelVatTitleKey), cancelVatLinkUrl)
+            @cancelVatLink
         </h3>
         <p>@messages(cancelVatContentKey)</p>
     </div>
