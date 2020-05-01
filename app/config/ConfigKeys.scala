@@ -80,7 +80,6 @@ object ConfigKeys {
   val deregisterVatFrontendUrl: String = "deregister-vat-frontend.endpoints.deregister"
 
   val vat7FormUrl: String = "external.vat7Form.url"
-  val vatHowToRegister: String = "external.vatHowToRegister.url"
 
   val agentServicesHost: String = "agent-services.host"
   val agentServicesUrl: String = "agent-services.url"

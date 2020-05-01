@@ -195,8 +195,8 @@ class RegistrationPartialSpec extends ViewBaseSpec {
             elementText("p") shouldBe RegistrationPartialMessages.historicDeregContent
           }
 
-          s"have a link to ${mockConfig.vatHowToRegister}" in {
-            element("p > a").attr("href") shouldBe mockConfig.vatHowToRegister
+          s"have a link to ${mockConfig.onlineAgentServicesUrl}" in {
+            element("p > a").attr("href") shouldBe mockConfig.onlineAgentServicesUrl
           }
         }
       }
@@ -246,12 +246,12 @@ class RegistrationPartialSpec extends ViewBaseSpec {
           }
 
           s"link to ${mockConfig.onlineAgentServicesUrl}" in {
-            element("a").attr("href") shouldBe mockConfig.vatHowToRegister
+            element("a").attr("href") shouldBe mockConfig.onlineAgentServicesUrl
           }
         }
       }
 
-      "agent's client has no patyType" should {
+      "agent's client has no partyType" should {
 
         "display an error in the partial" which {
 

@@ -48,13 +48,6 @@
     }
 }
 
-@historicAndFutureLinkUrl = @{
-    details.partyType match {
-        case Some(partyType) if partyType == VatGroup => appConfig.vatHowToRegister
-        case _ => appConfig.onlineAgentServicesUrl
-    }
-}
-
 @cancelRegistration = {
     <div id="cancel-vat" class="column-one-third">
         <h3 class="heading-small">
@@ -70,7 +63,7 @@
             @messages("registrationPartial.historicDeregistration.title")
         </h3>
         <p>@messages("registrationPartial.historicDeregistration.content", displayDate(date))</p>
-        <p><a id="agent-services-link" href="@historicAndFutureLinkUrl" target="_blank">@messages("registrationPartial.historicDeregistration.link")</a></p>
+        <p><a id="agent-services-link" href="@appConfig.onlineAgentServicesUrl" target="_blank">@messages("registrationPartial.historicDeregistration.link")</a></p>
     </div>
 }
 
@@ -80,7 +73,7 @@
           @messages("registrationPartial.futureDeregistration.title")
         </h3>
         <p>@messages("registrationPartial.futureDeregistration.content", displayDate(date))</p>
-        <p><a id="agent-services-link" href="@historicAndFutureLinkUrl" target="_blank">@messages("registrationPartial.futureDeregistration.link")</a></p>
+        <p><a id="agent-services-link" href="@appConfig.onlineAgentServicesUrl" target="_blank">@messages("registrationPartial.futureDeregistration.link")</a></p>
     </div>
 }
 
