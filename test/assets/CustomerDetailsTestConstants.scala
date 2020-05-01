@@ -30,6 +30,8 @@ object CustomerDetailsTestConstants {
   val mandationStatus = "MTDfB Mandated"
   val nonMTDfB = "Non MTDfB"
   val nonDigital = "Non Digital"
+  val vatGroup = "Z2"
+  val validParty = "2"
 
   val noOptionalInfoJson: JsObject = Json.obj(
     "mandationStatus" -> mandationStatus
@@ -40,6 +42,7 @@ object CustomerDetailsTestConstants {
     "lastName" -> lastName,
     "organisationName" -> orgName,
     "tradingName" -> tradingName,
+    "partyType" -> "2",
     "mandationStatus" -> mandationStatus,
     "deregistration" -> Json.obj(
       "effectDateOfCancellation" -> "2019-01-01"
@@ -51,6 +54,17 @@ object CustomerDetailsTestConstants {
     Some(lastName),
     Some(orgName),
     Some(tradingName),
+    Some(validParty),
+    mandationStatus,
+    Some(Deregistration(Some(LocalDate.parse("2019-01-01"))))
+  )
+
+  val customerDetailsAllInfoVatGroup = CustomerDetails(
+    Some(firstName),
+    Some(lastName),
+    Some(orgName),
+    Some(tradingName),
+    Some(vatGroup),
     mandationStatus,
     Some(Deregistration(Some(LocalDate.parse("2019-01-01"))))
   )
@@ -60,6 +74,27 @@ object CustomerDetailsTestConstants {
     None,
     None,
     None,
+    None,
+    mandationStatus,
+    None
+  )
+
+  val customerDetailsNoInfoWithPartyType = CustomerDetails(
+    None,
+    None,
+    None,
+    None,
+    Some("2"),
+    mandationStatus,
+    None
+  )
+
+  val customerDetailsNoInfoVatGroup = CustomerDetails(
+    None,
+    None,
+    None,
+    None,
+    Some(vatGroup),
     mandationStatus,
     None
   )
@@ -69,6 +104,7 @@ object CustomerDetailsTestConstants {
     None,
     None,
     None,
+    Some(validParty),
     mandationStatus,
     None
   )
@@ -78,6 +114,7 @@ object CustomerDetailsTestConstants {
     Some(lastName),
     None,
     None,
+    Some(validParty),
     mandationStatus,
     None
   )
@@ -87,6 +124,7 @@ object CustomerDetailsTestConstants {
     None,
     Some(orgName),
     None,
+    Some(validParty),
     mandationStatus,
     None
   )
@@ -96,6 +134,7 @@ object CustomerDetailsTestConstants {
     Some(lastName),
     None,
     None,
+    Some(validParty),
     mandationStatus,
     None
   )
@@ -105,6 +144,7 @@ object CustomerDetailsTestConstants {
     None,
     Some(orgName),
     Some(tradingName),
+    Some(validParty),
     mandationStatus,
     None
   )
@@ -114,6 +154,7 @@ object CustomerDetailsTestConstants {
     Some(lastName),
     Some(orgName),
     Some(tradingName),
+    Some(validParty),
     nonDigital,
     None
   )
@@ -123,6 +164,7 @@ object CustomerDetailsTestConstants {
     Some(lastName),
     Some(orgName),
     Some(tradingName),
+    Some(validParty),
     nonMTDfB,
     Some(Deregistration(Some(LocalDate.parse("2019-01-01"))))
   )
@@ -132,6 +174,7 @@ object CustomerDetailsTestConstants {
     None,
     None,
     None,
+    Some(validParty),
     mandationStatus,
     None,
     Some(ChangeIndicators(true))
@@ -142,8 +185,29 @@ object CustomerDetailsTestConstants {
     Some(lastName),
     Some(orgName),
     Some(tradingName),
+    Some(validParty),
     nonMTDfB,
     Some(Deregistration(Some(LocalDate.parse("2020-01-01"))))
+  )
+
+  val customerDetailsFutureDeregisterOptedOutVatGroup = CustomerDetails(
+    Some(firstName),
+    Some(lastName),
+    Some(orgName),
+    Some(tradingName),
+    Some(vatGroup),
+    nonMTDfB,
+    Some(Deregistration(Some(LocalDate.parse("2020-01-01"))))
+  )
+
+  val clientNoPartyType = CustomerDetails(
+    None,
+    None,
+    None,
+    None,
+    None,
+    mandationStatus,
+    None
   )
 
 }

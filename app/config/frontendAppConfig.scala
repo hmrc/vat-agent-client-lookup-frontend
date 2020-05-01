@@ -62,6 +62,7 @@ trait AppConfig {
   val classicServicesSignInUrl: String
   val accessibilityLinkUrl: String
   val cancelRegistrationUrl: String
+  val vat7FormUrl: String
   val optOutMtdVatUrl: String
   val agentServicesHost: String
   val agentServicesUrl: String
@@ -148,6 +149,8 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override val accessibilityLinkUrl: String = sc.getString(ConfigKeys.vatSummaryFrontendHost) + sc.getString(ConfigKeys.vatSummaryAccessibilityUrl)
 
   override val cancelRegistrationUrl: String = sc.getString(ConfigKeys.deregisterVatFrontendHost) + sc.getString(ConfigKeys.deregisterVatFrontendUrl)
+
+  override val vat7FormUrl: String = sc.getString(ConfigKeys.vat7FormUrl)
 
   override val agentServicesHost: String = sc.getString(ConfigKeys.agentServicesHost)
   override val agentServicesUrl: String = agentServicesHost + sc.getString(ConfigKeys.agentServicesUrl)

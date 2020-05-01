@@ -25,6 +25,7 @@ case class CustomerDetails(firstName: Option[String],
                            lastName: Option[String],
                            organisationName: Option[String],
                            tradingName: Option[String],
+                           partyType: Option[String],
                            mandationStatus: String,
                            deregistration: Option[Deregistration],
                            changeIndicators: Option[ChangeIndicators] = None) {
@@ -50,6 +51,7 @@ object CustomerDetails {
   private val lastNamePath = __ \\ "lastName"
   private val organisationNamePath = __ \\ "organisationName"
   private val tradingNamePath = __ \\ "tradingName"
+  private val partyTypePath = __ \ "partyType"
   private val mandationStatusPath = __ \ "mandationStatus"
   private val deregistrationPath = __ \ "deregistration"
   private val changeIndicatorsPath = __ \ "changeIndicators"
@@ -59,6 +61,7 @@ object CustomerDetails {
     lastNamePath.readNullable[String] and
     organisationNamePath.readNullable[String] and
     tradingNamePath.readNullable[String] and
+    partyTypePath.readNullable[String] and
     mandationStatusPath.read[String] and
     deregistrationPath.readNullable[Deregistration] and
       changeIndicatorsPath.readNullable[ChangeIndicators]

@@ -21,15 +21,39 @@
 @import views.html.helpers.displayDate
 @import models.User
 @import helpers.capturePreferenceHelper
+@import common.PartyTypes.VatGroup
 
 @(details: CustomerDetails, currentDate: LocalDate)(implicit messages: Messages, appConfig: AppConfig, user: User[_])
+
+@cancelVatTitleKey = @{
+    details.partyType match {
+        case Some(partyType) if partyType == VatGroup => "registrationPartial.vatGroups.VAT7.title"
+        case _ => "registrationPartial.cancelRegistration.title"
+    }
+}
+
+@cancelVatContentKey = @{
+    details.partyType match {
+        case Some(partyType) if partyType == VatGroup => "registrationPartial.vatGroups.VAT7.content"
+        case _ => "registrationPartial.cancelRegistration.content"
+    }
+}
+
+@cancelVatLink = @{
+    val title = messages(cancelVatTitleKey)
+
+    details.partyType match {
+        case Some(partyType) if partyType == VatGroup => Html(s"<a href='${appConfig.vat7FormUrl}'>$title</a>")
+        case _ => capturePreferenceHelper(title, appConfig.cancelRegistrationUrl)
+    }
+}
 
 @cancelRegistration = {
     <div id="cancel-vat" class="column-one-third">
         <h3 class="heading-small">
-            @capturePreferenceHelper(messages("registrationPartial.cancelRegistration.title"), appConfig.cancelRegistrationUrl)
+            @cancelVatLink
         </h3>
-        <p>@messages("registrationPartial.cancelRegistration.content")</p>
+        <p>@messages(cancelVatContentKey)</p>
     </div>
 }
 
@@ -63,21 +87,33 @@
     </div>
 }
 
+@errorNoPartyType() = {
+    <div class="column-one-third" id="cancel-vat">
+        <h3 class="heading-small">
+            @messages("registrationPartial.cancelRegistration.title")
+        </h3>
+        <p>@messages("registrationPartial.error")</p>
+    </div>
+}
+
 @{
-    if(details.deregistration.isDefined){
-        details.deregistration.flatMap(_.effectDateOfCancellation) match {
-            case Some(date) => date match {
-                case future if future.isAfter(currentDate) => futureDeregistration(future)
-                case historic => historicDeregistration(historic)
-            }
-            case _ => {
-                Logger.warn("[registrationPartial][deregistrationDate] - 'deregistration' contained no 'effectDateOfCancellation'")
-            }
-        }
+    if(details.partyType.isEmpty) {
+        errorNoPartyType
     } else {
+        if(details.deregistration.isDefined){
+            details.deregistration.flatMap(_.effectDateOfCancellation) match {
+                case Some(date) => date match {
+                    case future if future.isAfter(currentDate) => futureDeregistration(future)
+                    case historic => historicDeregistration(historic)
+                }
+                case _ =>
+                    Logger.warn("[registrationPartial][deregistrationDate] - 'deregistration' contained no 'effectDateOfCancellation'")
+            }
+        } else {
             details.changeIndicators.map(_.deregister) match {
                 case Some(true) => pendingDeregistration
                 case _ => cancelRegistration
             }
+        }
     }
 }

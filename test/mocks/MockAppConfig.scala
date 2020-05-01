@@ -82,4 +82,6 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
 
   override val signUpServiceHost: String = ""
   override val signUpServiceUrl: String => String = vatNumber => s"/vat-through-software/sign-up/client/vat-number/$vatNumber"
+
+  override val vat7FormUrl: String = "https://www.gov.uk/government/publications/vat-application-to-cancel-your-vat-registration-vat7"
 }
