@@ -43,7 +43,7 @@
     val title = messages(cancelVatTitleKey)
 
     details.partyType match {
-        case Some(partyType) if partyType == VatGroup => Html(s"<a href='${appConfig.vat7FormUrl}'>$title</a>")
+        case Some(partyType) if partyType == VatGroup => Html(s"<a href='${appConfig.vat7FormUrl}' target='_blank'>$title</a>")
         case _ => capturePreferenceHelper(title, appConfig.cancelRegistrationUrl)
     }
 }
