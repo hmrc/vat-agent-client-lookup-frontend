@@ -33,6 +33,7 @@
    mandationStatus match {
         case MandationStatus.nonMTDfB => signUp
         case MandationStatus.nonDigital => signUp
+        case MandationStatus.MTDfBExempt => signUp
         case _ => {}
    }
 }

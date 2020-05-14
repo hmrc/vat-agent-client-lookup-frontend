@@ -21,6 +21,6 @@ object MandationStatus {
   val manMTDfB = "MTDfB Mandated"
   val volMTDfB = "MTDfB Voluntary"
   val nonMTDfB = "Non MTDfB"
-  val nonDigital= "Non Digital"
-
+  val nonDigital = "Non Digital"
+  val MTDfBExempt = "MTDfB Exempt"
 }

@@ -21,7 +21,7 @@
 
 @(mandationStatus: String)(implicit messages: Messages, appConfig: AppConfig, user: User[_])
 
-@if(!List(MandationStatus.nonMTDfB, MandationStatus.nonDigital).contains(mandationStatus)) {
+@if(!List(MandationStatus.nonMTDfB, MandationStatus.nonDigital, MandationStatus.MTDfBExempt).contains(mandationStatus)) {
 <div id="opt-out" class="column-one-third">
     <h3 class="heading-small">
         @capturePreferenceHelper(messages("optOutCard.heading"), appConfig.optOutMtdVatUrl)
