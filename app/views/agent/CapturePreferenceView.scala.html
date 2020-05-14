@@ -25,7 +25,11 @@
       errorSummary: ErrorSummary,
       input: Input)
 
+
+
 @(preferenceForm: Form[PreferenceModel])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+
+@content = {<p><strong class="bold">@messages("capturePref.confirmationEmailRequest")</strong></p>}
 
   @mainTemplate(if(preferenceForm.errors.nonEmpty) messages("common.error.prefixTitle", messages("capturePref.title")) else messages("capturePref.title")) {
 
@@ -33,30 +37,62 @@
 
   @errorSummary(messages("common.error.heading"), preferenceForm, forceDivToAppear = false)
 
-  @formWithCSRF(action = controllers.agent.routes.CapturePreferenceController.submit) {
-    <div id="@yesNo" class="link-bottom-margin">
-      @optionRevealHelper(
-        choices = Seq(
-          (yes, messages("common.yes")),
-          (no,  messages("common.no"))),
-        hiddenContent = input(preferenceForm(email),
-            '_divClass       -> "form-label",
-            '_labelId        -> "label-email",
-            '_label          -> messages("capturePref.email"),
-            '_labelTextClass -> "form-field",
-            '_inputClass     -> "input--fullwidth",
-            '_maxlength      -> maxLength,
-            '_inputHint      -> messages("capturePref.email.hint")),
-        field          = preferenceForm(yesNo),
-        question       = messages("capturePref.title"),
-        inline         = true,
-        legendAsHeader = false,
-        subtext = Some(messages("capturePref.message"))
-      )
-    </div>
+@if(appConfig.features.disableBulkPaper()) {
 
-    <div class="form-group">
-      <button class="button" type="submit">@messages("common.continue")</button>
-    </div>
-  }
+@formWithCSRF(action = controllers.agent.routes.CapturePreferenceController.submit) {
+<div id="@yesNo" class="link-bottom-margin">
+    @optionRevealHelper(
+    choices = Seq(
+    (yes, messages("common.yes")),
+    (no,  messages("common.no"))),
+    hiddenContent = input(preferenceForm(email),
+    '_divClass       -> "form-label",
+    '_labelId        -> "label-email",
+    '_label          -> messages("capturePref.email"),
+    '_labelTextClass -> "form-field",
+    '_inputClass     -> "input--fullwidth",
+    '_maxlength      -> maxLength,
+    '_inputHint      -> messages("capturePref.email.hintAlternative")),
+    field          = preferenceForm(yesNo),
+    question       = messages("capturePref.confirmationLetterTitle"),
+    inline         = false,
+    legendAsHeader = false,
+    subtext = Some(messages("capturePref.confirmationEmail")),
+    additionalContent = Some(content)
+    )
+</div>
+
+<div class="form-group">
+    <button class="button" type="submit">@messages("common.continue")</button>
+</div>
+}
+} else {
+
+@formWithCSRF(action = controllers.agent.routes.CapturePreferenceController.submit) {
+<div id="@yesNo" class="link-bottom-margin">
+    @optionRevealHelper(
+    choices = Seq(
+    (yes, messages("common.yes")),
+    (no,  messages("common.no"))),
+    hiddenContent = input(preferenceForm(email),
+    '_divClass       -> "form-label",
+    '_labelId        -> "label-email",
+    '_label          -> messages("capturePref.email"),
+    '_labelTextClass -> "form-field",
+    '_inputClass     -> "input--fullwidth",
+    '_maxlength      -> maxLength,
+    '_inputHint      -> messages("capturePref.email.hint")),
+    field          = preferenceForm(yesNo),
+    question       = messages("capturePref.title"),
+    inline         = false,
+    legendAsHeader = false,
+    subtext = Some(messages("capturePref.message"))
+    )
+</div>
+
+<div class="form-group">
+    <button class="button" type="submit">@messages("common.continue")</button>
+</div>
+}
+}
 }

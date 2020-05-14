@@ -85,6 +85,10 @@ capturePref.error.mandatoryRadioOption = Select an option
 capturePref.error.mandatoryEmail = Enter your email address
 capturePref.error.emailLength = Email address must be 132 characters or less
 capturePref.error.invalidEmail = Enter a valid email address
+capturePref.confirmationLetterTitle = We no longer send confirmation letters in the post
+capturePref.confirmationEmail = We now confirm changes by email. We’ll contact your client with an update.
+capturePref.confirmationEmailRequest = Do you want us to send you an email to confirm changes you make?
+capturePref.email.hintAlternative = We will only use it to send you confirmation of changes you make.
 
 accountMigration.heading = You cannot make changes for that client’s business right now
 accountMigration.explanation = This is because the business’s Making Tax Digital account is being set up - this can take up to 72 hours.

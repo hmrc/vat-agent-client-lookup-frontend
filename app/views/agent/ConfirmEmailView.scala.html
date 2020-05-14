@@ -22,7 +22,7 @@
 
 @mainTemplate(title = messages("confirmEmail.title"), bodyClasses = None) {
 
- <a class="link-back" href='@controllers.agent.routes.CapturePreferenceController.show()'>@messages("base.back")</a>
+<a class="link-back" href='@controllers.agent.routes.CapturePreferenceController.show()'>@messages("base.back")</a>
 
  <h1 class="heading-large">@messages("confirmEmail.heading")</h1>
 
@@ -36,4 +36,5 @@
  </p>
 
  <a href='@controllers.agent.routes.ConfirmEmailController.isEmailVerified' role="button" tabindex="0" class="button">@messages("common.confirmAndContinue")</a>
+
 }
