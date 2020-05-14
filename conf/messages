@@ -90,6 +90,7 @@ capturePref.confirmationEmail = We now confirm changes by email. We’ll contact
 capturePref.confirmationEmailRequest = Do you want us to send you an email to confirm changes you make?
 capturePref.email.hintAlternative = We will only use it to send you confirmation of changes you make.
 
+
 accountMigration.heading = You cannot make changes for that client’s business right now
 accountMigration.explanation = This is because the business’s Making Tax Digital account is being set up - this can take up to 72 hours.
 accountMigration.checkBackLater = Check back again later.
