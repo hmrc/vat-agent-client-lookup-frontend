@@ -40,7 +40,6 @@
         @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.useStaticDateFeature), "Use Static Date (2018-05-01)")
         @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.displayCovidMessageFeature), "Display Covid-19 message")
         @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.disableBulkPaper), "Disable Bulk Paper")
-          @if(appConfig.features.disableBulkPaper()) { <p>It works</p>}
       </fieldset>
     </div>
 

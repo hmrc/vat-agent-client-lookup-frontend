@@ -227,7 +227,7 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
 
           "have the correct email hint text" in {
             elementText(Selectors.emailHintText) shouldBe
-              "We will only use it to send you confirmation of changes you make."
+              "We will only use it to send you confirmation of changes you make"
           }
 
           "have the continue button" in {

@@ -31,7 +31,7 @@
 
 @content = {<p><strong class="bold">@messages("capturePref.confirmationEmailRequest")</strong></p>}
 
-@defining(if (appConfig.features.disableBulkPaper()) messages("capturePref.confirmationLetterTitle") else messages("capturePref.title")) { pageTitle  =>
+@defining(if (appConfig.features.disableBulkPaper()) messages("capturePref.noLetterTitle") else messages("capturePref.title")) { pageTitle  =>
 @mainTemplate(if(preferenceForm.errors.nonEmpty) messages("common.error.prefixTitle", pageTitle) else pageTitle) {
 
   <a class="link-back" href='@controllers.agent.routes.AgentHubController.show()'>@messages("base.back")</a>
@@ -55,7 +55,7 @@
     '_maxlength      -> maxLength,
     '_inputHint      -> messages("capturePref.email.hintAlternative")),
     field          = preferenceForm(yesNo),
-    question       = messages("capturePref.confirmationLetterTitle"),
+    question       = messages("capturePref.noLetterTitle"),
     inline         = false,
     legendAsHeader = false,
     subtext = Some(messages("capturePref.confirmationEmail")),
