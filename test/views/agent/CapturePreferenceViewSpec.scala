@@ -168,7 +168,7 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
 
 
           "have the correct document title" in {
-            document.title shouldBe "Would you like to receive email notifications of any changes you make? - Your client’s VAT details - GOV.UK"
+            document.title shouldBe "We no longer send confirmation letters in the post - Your client’s VAT details - GOV.UK"
           }
 
           "have the correct page heading" in {
@@ -272,7 +272,7 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the correct document title" in {
-          document.title shouldBe "Error: Would you like to receive email notifications of any changes you make? - Your client’s VAT details - GOV.UK"
+          document.title shouldBe "Error: We no longer send confirmation letters in the post - Your client’s VAT details - GOV.UK"
         }
 
         "display the error summary" in {
@@ -286,7 +286,7 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the correct document title" in {
-          document.title shouldBe "Error: Would you like to receive email notifications of any changes you make? - Your client’s VAT details - GOV.UK"
+          document.title shouldBe "Error: We no longer send confirmation letters in the post - Your client’s VAT details - GOV.UK"
         }
 
         "display the error summary" in {

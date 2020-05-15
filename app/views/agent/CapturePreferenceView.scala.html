@@ -31,7 +31,8 @@
 
 @content = {<p><strong class="bold">@messages("capturePref.confirmationEmailRequest")</strong></p>}
 
-  @mainTemplate(if(preferenceForm.errors.nonEmpty) messages("common.error.prefixTitle", messages("capturePref.title")) else messages("capturePref.title")) {
+@defining(if (appConfig.features.disableBulkPaper()) messages("capturePref.confirmationLetterTitle") else messages("capturePref.title")) { pageTitle  =>
+@mainTemplate(if(preferenceForm.errors.nonEmpty) messages("common.error.prefixTitle", pageTitle) else pageTitle) {
 
   <a class="link-back" href='@controllers.agent.routes.AgentHubController.show()'>@messages("base.back")</a>
 
@@ -93,6 +94,7 @@
 <div class="form-group">
     <button class="button" type="submit">@messages("common.continue")</button>
 </div>
+}
 }
 }
 }
