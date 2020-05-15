@@ -53,6 +53,10 @@
         <label for="@{elements.field.name}-yes" id="label-@{elements.field.name}-yes">@messages("common.yes")</label>
       </div>
 
+        <div class="form-group panel panel-border-narrow @if(field.value != Some("yes")){js-hidden}" id="hiddenContent">
+        @hiddenContent
+        </div>
+
       <div class="multiple-choice">
         <input type="radio"
                id="@{elements.field.name}-no" name="@elements.field.name" value="no"
@@ -62,7 +66,5 @@
     </div>
   </fieldset>
 
-  <div class="form-group panel panel-border-narrow @if(field.value != Some("yes")){js-hidden}" id="hiddenContent">
-    @hiddenContent
-  </div>
+
 </div>
