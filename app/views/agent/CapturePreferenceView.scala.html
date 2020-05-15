@@ -15,7 +15,7 @@
  *@
 
 @import uk.gov.hmrc.play.views.html.helpers.{FormWithCSRF, ErrorSummary, Input}
-@import views.html.templates.inputs.optionRevealHelper
+@import views.html.templates.inputs.{optionRevealHelper}
 @import config.AppConfig
 @import models.PreferenceModel
 @import forms.PreferenceForm._
@@ -23,7 +23,7 @@
 @this(mainTemplate: MainTemplate,
       formWithCSRF: FormWithCSRF,
       errorSummary: ErrorSummary,
-      input: Input)
+        input: Input)
 
 
 
@@ -59,7 +59,8 @@
     inline         = false,
     legendAsHeader = false,
     subtext = Some(messages("capturePref.confirmationEmail")),
-    additionalContent = Some(content)
+    additionalContent = Some(content),
+    hiddenContentError = preferenceForm(email).hasErrors
     )
 </div>
 

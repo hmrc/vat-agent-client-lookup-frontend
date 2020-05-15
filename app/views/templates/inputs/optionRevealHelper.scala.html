@@ -23,7 +23,8 @@
   hiddenContent: Html,
   legendAsHeader: Boolean = true,
   subtext: Option[String] = None,
-    additionalContent: Option[Html] = None
+    additionalContent: Option[Html] = None,
+    hiddenContentError: Boolean = false
 )(implicit messages: Messages)
 
 @elements = @{ FieldElements(field.id, field, null, Map(), messages) }
@@ -44,7 +45,7 @@
 
     @elements.errors.map { error => <span class="error-message">@messages(error)</span> }
 
-    <div @if(inline){ class="inline form-group"}>
+    <div @if(inline){ class="inline"}>
       <div class="multiple-choice" data-target="hiddenContent">
         <input type="radio" id="@{elements.field.name}-yes"
                name="@elements.field.name" value="yes"
@@ -53,7 +54,7 @@
         <label for="@{elements.field.name}-yes" id="label-@{elements.field.name}-yes">@messages("common.yes")</label>
       </div>
 
-        <div class="form-group panel panel-border-narrow @if(field.value != Some("yes")){js-hidden}" id="hiddenContent">
+        <div class="form-group panel panel-border-narrow @if(field.value != Some("yes")){js-hidden} @if(hiddenContentError){hidden-error-panel}" id="hiddenContent">
         @hiddenContent
         </div>
 
