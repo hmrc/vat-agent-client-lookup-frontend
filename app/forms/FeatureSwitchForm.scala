@@ -29,7 +29,8 @@ object FeatureSwitchForm {
       ConfigKeys.useLanguageSelectorFeature -> boolean,
       ConfigKeys.useAgentHubPageFeature -> boolean,
       ConfigKeys.useStaticDateFeature -> boolean,
-      ConfigKeys.displayCovidMessageFeature -> boolean
+      ConfigKeys.displayCovidMessageFeature -> boolean,
+      ConfigKeys.disableBulkPaper -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 }

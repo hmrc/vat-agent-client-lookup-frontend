@@ -15,7 +15,7 @@
  *@
 
 @import uk.gov.hmrc.play.views.html.helpers.{FormWithCSRF, ErrorSummary, Input}
-@import views.html.templates.inputs.optionRevealHelper
+@import views.html.templates.inputs.{optionRevealHelper}
 @import config.AppConfig
 @import models.PreferenceModel
 @import forms.PreferenceForm._
@@ -23,40 +23,79 @@
 @this(mainTemplate: MainTemplate,
       formWithCSRF: FormWithCSRF,
       errorSummary: ErrorSummary,
-      input: Input)
+        input: Input)
+
+
 
 @(preferenceForm: Form[PreferenceModel])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-  @mainTemplate(if(preferenceForm.errors.nonEmpty) messages("common.error.prefixTitle", messages("capturePref.title")) else messages("capturePref.title")) {
+@content = {<p><strong class="bold">@messages("capturePref.confirmationEmailRequest")</strong></p>}
+
+@defining(if (appConfig.features.disableBulkPaper()) messages("capturePref.noLetterTitle") else messages("capturePref.title")) { pageTitle  =>
+@mainTemplate(if(preferenceForm.errors.nonEmpty) messages("common.error.prefixTitle", pageTitle) else pageTitle) {
 
   <a class="link-back" href='@controllers.agent.routes.AgentHubController.show()'>@messages("base.back")</a>
 
   @errorSummary(messages("common.error.heading"), preferenceForm, forceDivToAppear = false)
 
-  @formWithCSRF(action = controllers.agent.routes.CapturePreferenceController.submit) {
-    <div id="@yesNo" class="link-bottom-margin">
-      @optionRevealHelper(
-        choices = Seq(
-          (yes, messages("common.yes")),
-          (no,  messages("common.no"))),
-        hiddenContent = input(preferenceForm(email),
-            '_divClass       -> "form-label",
-            '_labelId        -> "label-email",
-            '_label          -> messages("capturePref.email"),
-            '_labelTextClass -> "form-field",
-            '_inputClass     -> "input--fullwidth",
-            '_maxlength      -> maxLength,
-            '_inputHint      -> messages("capturePref.email.hint")),
-        field          = preferenceForm(yesNo),
-        question       = messages("capturePref.title"),
-        inline         = true,
-        legendAsHeader = false,
-        subtext = Some(messages("capturePref.message"))
-      )
-    </div>
+@if(appConfig.features.disableBulkPaper()) {
 
-    <div class="form-group">
-      <button class="button" type="submit">@messages("common.continue")</button>
-    </div>
-  }
+@formWithCSRF(action = controllers.agent.routes.CapturePreferenceController.submit) {
+<div id="@yesNo" class="link-bottom-margin">
+    @optionRevealHelper(
+    choices = Seq(
+    (yes, messages("common.yes")),
+    (no,  messages("common.no"))),
+    hiddenContent = input(preferenceForm(email),
+    '_divClass       -> "form-label",
+    '_labelId        -> "label-email",
+    '_label          -> messages("capturePref.email"),
+    '_labelTextClass -> "form-field",
+    '_inputClass     -> "input--fullwidth",
+    '_maxlength      -> maxLength,
+    '_inputHint      -> messages("capturePref.email.hintAlternative")),
+    field          = preferenceForm(yesNo),
+    question       = messages("capturePref.noLetterTitle"),
+    inline         = false,
+    legendAsHeader = false,
+    subtext = Some(messages("capturePref.confirmationEmail")),
+    additionalContent = Some(content),
+    hiddenContentError = preferenceForm(email).hasErrors
+    )
+</div>
+
+<div class="form-group">
+    <button class="button" type="submit">@messages("common.continue")</button>
+</div>
+}
+} else {
+
+@formWithCSRF(action = controllers.agent.routes.CapturePreferenceController.submit) {
+<div id="@yesNo" class="link-bottom-margin">
+    @optionRevealHelper(
+    choices = Seq(
+    (yes, messages("common.yes")),
+    (no,  messages("common.no"))),
+    hiddenContent = input(preferenceForm(email),
+    '_divClass       -> "form-label",
+    '_labelId        -> "label-email",
+    '_label          -> messages("capturePref.email"),
+    '_labelTextClass -> "form-field",
+    '_inputClass     -> "input--fullwidth",
+    '_maxlength      -> maxLength,
+    '_inputHint      -> messages("capturePref.email.hint")),
+    field          = preferenceForm(yesNo),
+    question       = messages("capturePref.title"),
+    inline         = false,
+    legendAsHeader = false,
+    subtext = Some(messages("capturePref.message"))
+    )
+</div>
+
+<div class="form-group">
+    <button class="button" type="submit">@messages("common.continue")</button>
+</div>
+}
+}
+}
 }

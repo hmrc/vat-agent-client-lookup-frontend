@@ -111,6 +111,10 @@ capturePref.error.mandatoryRadioOption = Dewiswch opsiwn
 capturePref.error.mandatoryEmail = Nodwch eich cyfeiriad e-bost
 capturePref.error.emailLength = Mae’n rhaid i’r cyfeiriad e-bost fod yn 132 o gymeriadau neu lai
 capturePref.error.invalidEmail = Nodwch gyfeiriad e-bost dilys
+capturePref.noLetterTitle = Nid ydym mwyach yn anfon llythyrau o gadarnhad drwy’r post.
+capturePref.confirmationEmail = Erbyn hyn rydym yn cadarnhau newidiadau drwy e-bost. Byddwn yn cysylltu â eich cleient gyda diweddariad.
+capturePref.confirmationEmailRequest = A ydych am i ni anfon e-bost atoch i gadarnhau’r newidiadau a wnewch?
+capturePref.email.hintAlternative = Byddwn ond yn defnyddio hwn i anfon cadarnhad atoch o newidiadau a wnewch.
 
 accountMigration.heading = Ni allwch wneud newidiadau ar gyfer busnes y cleient hwnnw ar hyn o bryd
 accountMigration.explanation = Mae hyn oherwydd bod cyfrif Troi Treth yn Ddigidol y busnes wrthi’n cael ei greu – gall hyn gymryd hyd at 72 awr.

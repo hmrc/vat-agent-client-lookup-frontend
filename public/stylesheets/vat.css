@@ -75,3 +75,8 @@ html[data-useragent*='MSIE 10.0'] .flex-container.tile {
   border-left: 0px;
   color: #ffffff;
 }
+
+.hidden-error-panel {
+    border-left: none;
+    padding: 0em;
+}

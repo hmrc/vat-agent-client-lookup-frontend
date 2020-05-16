@@ -21,5 +21,6 @@ case class FeatureSwitchModel(emailVerificationEnabled: Boolean,
                               useLanguageFeatureEnabled: Boolean,
                               useAgentHubPageFeature: Boolean,
                               useStaticDateFeature: Boolean,
-                              displayCovid: Boolean
+                              displayCovid: Boolean,
+                              disableBulkPaper: Boolean
                              )

@@ -86,4 +86,6 @@ object ConfigKeys {
 
   val signUpServiceHost: String = "vat-sign-up-frontend.host"
   val signUpServiceUrl: String = "vat-sign-up-frontend.url"
+
+  val disableBulkPaper: String = "features.disableBulkPaper.enabled"
 }

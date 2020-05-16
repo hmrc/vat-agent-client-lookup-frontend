@@ -34,6 +34,7 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
   override def beforeEach(): Unit = {
     super.beforeEach()
     mockConfig.features.preferenceJourneyEnabled(true)
+    mockConfig.features.disableBulkPaper(true)
   }
 
   val testRedirectUrl: String     = "/manage-vat-account"
@@ -73,7 +74,7 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
           }
 
           "render CapturePreferenceView page" in {
-            messages(Jsoup.parse(bodyOf(result)).select("h1").text()) shouldBe "Would you like to receive email notifications of any changes you make?"
+            messages(Jsoup.parse(bodyOf(result)).select("h1").text()) shouldBe "We no longer send confirmation letters in the post"
           }
 
           "store the new redirectUrl in session" in {

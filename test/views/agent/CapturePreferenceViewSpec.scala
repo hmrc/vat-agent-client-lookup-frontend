@@ -28,6 +28,7 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
   object Selectors {
     val pageHeading         = "#content h1"
     val subtext             = "fieldset > p"
+    val additionalContent   = "fieldset > p:nth-of-type(2)"
     val backLink            = ".link-back"
     val emailQuestionText   = "#hiddenContent > label > span.form-field"
     val emailHintText       = "#hiddenContent > label > span.form-hint"
@@ -42,136 +43,298 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
     val emailFormGroup      = "#hiddenContent"
   }
 
+
   val injectedView: CapturePreferenceView = inject[CapturePreferenceView]
 
   "Rendering the capture preference page" when {
 
-    "the form has no errors" when {
+    "the feature switch disable Bulk Paper is turned on" when {
 
-      "the user has no radio option selected" should {
 
-        lazy val view: Html = injectedView(preferenceForm)(request, messages, mockConfig)
+
+      "the form has no errors" when {
+
+        "the user has no radio option selected" should {
+
+          lazy val view: Html = {
+            mockConfig.features.disableBulkPaper(true)
+            injectedView(preferenceForm)(request, messages, mockConfig)
+          }
+          lazy implicit val document: Document = Jsoup.parse(view.body)
+
+          "have the correct document title" in {
+            document.title shouldBe "We no longer send confirmation letters in the post - Your client’s VAT details - GOV.UK"
+          }
+
+          "have the correct page heading" in {
+            elementText(Selectors.pageHeading) shouldBe
+              "We no longer send confirmation letters in the post"
+          }
+
+          "have a back link" which {
+
+            "has the correct text" in {
+              elementText(Selectors.backLink) shouldBe "Back"
+            }
+
+            "has the correct link location" in {
+              element(Selectors.backLink).attr("href") shouldBe controllers.agent.routes.AgentHubController.show().url
+            }
+          }
+
+          "have the correct subtext" in {
+            elementText(Selectors.subtext) shouldBe
+              "We now confirm changes by email. We’ll contact your client with an update."
+          }
+
+          "have the preference form with the correct form action" in {
+            element(Selectors.form).attr("action") shouldBe "/vat-through-software/representative/email-notification"
+          }
+
+          "have the yes radio option" in {
+            element(Selectors.radioOptionYes).attr("value") shouldBe "yes"
+          }
+
+          "have the no radio option" in {
+            element(Selectors.radioOptionNo).attr("value") shouldBe "no"
+          }
+
+          "have the correct yes radio option label text" in {
+            elementText(Selectors.radioOptionYesLabel) shouldBe "Yes"
+          }
+
+          "have the correct no radio option label text" in {
+            elementText(Selectors.radioOptionNoLabel) shouldBe "No"
+          }
+
+          "have the email form section hidden" in {
+            element(Selectors.emailFormGroup).hasClass("js-hidden") shouldBe true
+          }
+
+          "have the correct email question text" in {
+            elementText(Selectors.emailQuestionText) shouldBe "What is your email address?"
+          }
+
+          "have the correct email hint text" in {
+            elementText(Selectors.emailHintText) shouldBe
+              "We will only use it to send you confirmation of changes you make"
+          }
+
+          "have the continue button" in {
+            elementText(Selectors.continueButton) shouldBe "Continue"
+          }
+        }
+
+        "the user has the 'Yes' radio option selected" should {
+
+          lazy val view: Html = {
+            mockConfig.features.disableBulkPaper(true)
+            injectedView(preferenceForm.bind(Map(yesNo -> "yes")))(request, messages, mockConfig)
+          }
+          lazy implicit val document: Document = Jsoup.parse(view.body)
+
+          "have the 'Yes' radio option checked" in {
+            element(Selectors.radioOptionYes).attr("checked") shouldBe "checked"
+          }
+
+          "have the email form section displayed" in {
+            element(Selectors.emailFormGroup).hasClass("js-hidden") shouldBe false
+          }
+        }
+
+        "the user has the 'No' radio option selected" should {
+
+          lazy val view: Html = {
+            mockConfig.features.disableBulkPaper(true)
+            injectedView(preferenceForm.bind(Map(yesNo -> "no")))(request, messages, mockConfig)
+          }
+          lazy implicit val document: Document = Jsoup.parse(view.body)
+
+          "have the 'No' radio option checked" in {
+            element(Selectors.radioOptionNo).attr("checked") shouldBe "checked"
+          }
+
+          "have the email form section hidden" in {
+            element(Selectors.emailFormGroup).hasClass("js-hidden") shouldBe true
+          }
+        }
+      }
+
+      "the form has an option error" should {
+        lazy val view = {
+          mockConfig.features.disableBulkPaper(true)
+          injectedView(preferenceForm.bind(Map(yesNo -> "")))(request, messages, mockConfig)
+        }
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the correct document title" in {
-          document.title shouldBe "Would you like to receive email notifications of any changes you make? - Your client’s VAT details - GOV.UK"
+          document.title shouldBe "Error: We no longer send confirmation letters in the post - Your client’s VAT details - GOV.UK"
         }
 
-        "have the correct page heading" in {
-          elementText(Selectors.pageHeading) shouldBe
-            "Would you like to receive email notifications of any changes you make?"
-        }
-
-        "have a back link" which {
-
-          "has the correct text" in {
-            elementText(Selectors.backLink) shouldBe "Back"
-          }
-
-          "has the correct link location" in {
-            element(Selectors.backLink).attr("href") shouldBe controllers.agent.routes.AgentHubController.show().url
-          }
-        }
-
-        "have the correct subtext" in {
-          elementText(Selectors.subtext) shouldBe
-            "We will also send a secure message to your client’s business tax account."
-        }
-
-        "have the preference form with the correct form action" in {
-          element(Selectors.form).attr("action") shouldBe "/vat-through-software/representative/email-notification"
-        }
-
-        "have the yes radio option" in {
-          element(Selectors.radioOptionYes).attr("value") shouldBe "yes"
-        }
-
-        "have the no radio option" in {
-          element(Selectors.radioOptionNo).attr("value") shouldBe "no"
-        }
-
-        "have the correct yes radio option label text" in {
-          elementText(Selectors.radioOptionYesLabel) shouldBe "Yes"
-        }
-
-        "have the correct no radio option label text" in {
-          elementText(Selectors.radioOptionNoLabel) shouldBe "No"
-        }
-
-        "have the email form section hidden" in {
-          element(Selectors.emailFormGroup).hasClass("js-hidden") shouldBe true
-        }
-
-        "have the correct email question text" in {
-          elementText(Selectors.emailQuestionText) shouldBe "What is your email address?"
-        }
-
-        "have the correct email hint text" in {
-          elementText(Selectors.emailHintText) shouldBe
-            "We will only use this to send you a confirmation of any changes you make"
-        }
-
-        "have the continue button" in {
-          elementText(Selectors.continueButton) shouldBe "Continue"
+        "display the error summary" in {
+          element(Selectors.errorSummary).text() shouldBe "There is a problem"
         }
       }
 
-      "the user has the 'Yes' radio option selected" should {
-
-        lazy val view: Html =
-          injectedView(preferenceForm.bind(Map(yesNo -> "yes")))(request, messages, mockConfig)
+      "the form has an email error" should {
+        lazy val view = {
+          mockConfig.features.disableBulkPaper(true)
+            injectedView(
+            preferenceForm.bind(Map(yesNo -> yes, email -> "invalid")))(request, messages, mockConfig)
+        }
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
-        "have the 'Yes' radio option checked" in {
-          element(Selectors.radioOptionYes).attr("checked") shouldBe "checked"
+        "have the correct document title" in {
+          document.title shouldBe "Error: We no longer send confirmation letters in the post - Your client’s VAT details - GOV.UK"
         }
 
-        "have the email form section displayed" in {
-          element(Selectors.emailFormGroup).hasClass("js-hidden") shouldBe false
+        "display the error summary" in {
+          element(Selectors.errorSummary).text() shouldBe "There is a problem"
         }
       }
 
-      "the user has the 'No' radio option selected" should {
+    }
 
-        lazy val view: Html =
-          injectedView(preferenceForm.bind(Map(yesNo -> "no")))(request, messages, mockConfig)
+    "the feature switch disable Bulk Paper is turned off" when {
+
+      "the form has no errors" when {
+
+        "the user has no radio option selected" should {
+
+          lazy val view: Html = {
+            mockConfig.features.disableBulkPaper(false)
+            injectedView(preferenceForm)(request, messages, mockConfig)
+          }
+          lazy implicit val document: Document = Jsoup.parse(view.body)
+
+          "have the correct document title" in {
+            document.title shouldBe "Would you like to receive email notifications of any changes you make? - Your client’s VAT details - GOV.UK"
+          }
+
+          "have the correct page heading" in {
+            elementText(Selectors.pageHeading) shouldBe
+              "Would you like to receive email notifications of any changes you make?"
+          }
+
+          "have a back link" which {
+
+            "has the correct text" in {
+              elementText(Selectors.backLink) shouldBe "Back"
+            }
+
+            "has the correct link location" in {
+              element(Selectors.backLink).attr("href") shouldBe controllers.agent.routes.AgentHubController.show().url
+            }
+          }
+
+          "have the correct subtext" in {
+            elementText(Selectors.subtext) shouldBe
+              "We will also send a secure message to your client’s business tax account."
+          }
+
+          "have the preference form with the correct form action" in {
+            element(Selectors.form).attr("action") shouldBe "/vat-through-software/representative/email-notification"
+          }
+
+          "have the yes radio option" in {
+            element(Selectors.radioOptionYes).attr("value") shouldBe "yes"
+          }
+
+          "have the no radio option" in {
+            element(Selectors.radioOptionNo).attr("value") shouldBe "no"
+          }
+
+          "have the correct yes radio option label text" in {
+            elementText(Selectors.radioOptionYesLabel) shouldBe "Yes"
+          }
+
+          "have the correct no radio option label text" in {
+            elementText(Selectors.radioOptionNoLabel) shouldBe "No"
+          }
+
+          "have the email form section hidden" in {
+            element(Selectors.emailFormGroup).hasClass("js-hidden") shouldBe true
+          }
+
+          "have the correct email question text" in {
+            elementText(Selectors.emailQuestionText) shouldBe "What is your email address?"
+          }
+
+          "have the correct email hint text" in {
+            elementText(Selectors.emailHintText) shouldBe
+              "We will only use this to send you a confirmation of any changes you make"
+          }
+
+          "have the continue button" in {
+            elementText(Selectors.continueButton) shouldBe "Continue"
+          }
+        }
+
+        "the user has the 'Yes' radio option selected" should {
+
+          lazy val view: Html = {
+            mockConfig.features.disableBulkPaper(false)
+            injectedView(preferenceForm.bind(Map(yesNo -> "yes")))(request, messages, mockConfig)
+          }
+          lazy implicit val document: Document = Jsoup.parse(view.body)
+
+          "have the 'Yes' radio option checked" in {
+            element(Selectors.radioOptionYes).attr("checked") shouldBe "checked"
+          }
+
+          "have the email form section displayed" in {
+            element(Selectors.emailFormGroup).hasClass("js-hidden") shouldBe false
+          }
+        }
+
+        "the user has the 'No' radio option selected" should {
+
+          lazy val view: Html = {
+            mockConfig.features.disableBulkPaper(false)
+            injectedView(preferenceForm.bind(Map(yesNo -> "no")))(request, messages, mockConfig)
+          }
+          lazy implicit val document: Document = Jsoup.parse(view.body)
+
+          "have the 'No' radio option checked" in {
+            element(Selectors.radioOptionNo).attr("checked") shouldBe "checked"
+          }
+
+          "have the email form section hidden" in {
+            element(Selectors.emailFormGroup).hasClass("js-hidden") shouldBe true
+          }
+        }
+      }
+
+      "the form has an option error" should {
+        lazy val view = {
+          mockConfig.features.disableBulkPaper(false)
+          injectedView(preferenceForm.bind(Map(yesNo -> "")))(request, messages, mockConfig)
+        }
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
-        "have the 'No' radio option checked" in {
-          element(Selectors.radioOptionNo).attr("checked") shouldBe "checked"
+        "have the correct document title" in {
+          document.title shouldBe "Error: Would you like to receive email notifications of any changes you make? - Your client’s VAT details - GOV.UK"
         }
 
-        "have the email form section hidden" in {
-          element(Selectors.emailFormGroup).hasClass("js-hidden") shouldBe true
+        "display the error summary" in {
+          element(Selectors.errorSummary).text() shouldBe "There is a problem"
         }
       }
-    }
 
-    "the form has an option error" should {
-      lazy val view =
-        injectedView(preferenceForm.bind(Map(yesNo -> "")))(request, messages, mockConfig)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
+      "the form has an email error" should {
+        lazy val view = {
+          mockConfig.features.disableBulkPaper(false)
+          injectedView(preferenceForm.bind(Map(yesNo -> yes, email -> "invalid")))(request, messages, mockConfig)
+        }
+        lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "have the correct document title" in {
-        document.title shouldBe "Error: Would you like to receive email notifications of any changes you make? - Your client’s VAT details - GOV.UK"
-      }
+        "have the correct document title" in {
+          document.title shouldBe "Error: Would you like to receive email notifications of any changes you make? - Your client’s VAT details - GOV.UK"
+        }
 
-      "display the error summary" in {
-        element(Selectors.errorSummary).text() shouldBe "There is a problem"
-      }
-    }
-
-    "the form has an email error" should {
-      lazy val view = injectedView(
-        preferenceForm.bind(Map(yesNo -> yes, email -> "invalid")))(request, messages, mockConfig)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
-
-      "have the correct document title" in {
-        document.title shouldBe "Error: Would you like to receive email notifications of any changes you make? - Your client’s VAT details - GOV.UK"
-      }
-
-      "display the error summary" in {
-        element(Selectors.errorSummary).text() shouldBe "There is a problem"
+        "display the error summary" in {
+          element(Selectors.errorSummary).text() shouldBe "There is a problem"
+        }
       }
     }
   }
