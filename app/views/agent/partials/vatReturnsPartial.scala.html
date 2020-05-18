@@ -22,7 +22,7 @@
 <div class="tile tile-no-border">
     <div id="vat-returns" class="tile-body">
         <h2 class="heading-medium push--top">@messages("vatReturnsPartial.heading")</h2>
-        @if(mandationStatus==MandationStatus.nonMTDfB || mandationStatus==MandationStatus.nonDigital){
+        @if(mandationStatus==MandationStatus.nonMTDfB || mandationStatus==MandationStatus.nonDigital || mandationStatus==MandationStatus.MTDfBExempt){
         <p>@messages("vatReturnsPartial.paragraphNonMandated")</p>
         <ul>
             <li class="link-bottom-margin">

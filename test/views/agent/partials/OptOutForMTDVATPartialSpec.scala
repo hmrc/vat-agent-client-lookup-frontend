@@ -86,5 +86,17 @@ class OptOutForMTDVATPartialSpec extends ViewBaseSpec {
 
       }
     }
+
+    "with a mandation status of MTDfB Exempt" should {
+
+      lazy val view = views.html.agent.partials.optOutForMTDVATPartial(MandationStatus.MTDfBExempt)(messages, mockConfig, user)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "not be displayed" in {
+
+        document.select(".card") shouldBe empty
+
+      }
+    }
   }
 }

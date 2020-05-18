@@ -28,6 +28,25 @@ class SignUpPartialSpec extends ViewBaseSpec {
 
   "sign up partial" when {
 
+    "passed a mandation status of 'MTDfB Exempt'" should {
+
+      lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
+      lazy val view = views.html.agent.partials.signUpPartial(MandationStatus.MTDfBExempt,user.vrn)(messages, mockConfig)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "display the correct link text" in {
+        elementText("a") shouldBe Messages.signUpLinkText
+      }
+
+      s"display the correct link of ${mockConfig.signUpServiceUrl(user.vrn)}" in {
+        element("a").attr("href") shouldBe mockConfig.signUpServiceUrl(user.vrn)
+      }
+
+      "display the correct body of text" in {
+        elementText("p") shouldBe Messages.signUpBody
+      }
+    }
+
     "passed a mandation status of 'Non-MTD'" should {
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
