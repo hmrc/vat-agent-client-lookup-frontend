@@ -160,8 +160,8 @@ agentHub.changeClient = Newid cleient
 
 breadcrumb.agentServices = Cyfrif Gwasanaethau Asiant
 
-signUpPartial.LinkText = cofrestru ar gyfer Troi Treth yn Ddigidol ar gyfer TAW
-signUpPartial.Body = Os yw trosiant trethadwy eich cleient yn mynd dros £85,000, mae’n rhaid i chi ei gofrestru eto ar gyfer y cynllun Troi Treth yn Ddigidol.
+signUpPartial.LinkText = Cofrestru ar gyfer Troi Treth yn Ddigidol ar gyfer TAW
+signUpPartial.Body = Mae’n rhaid i’ch cleient gofrestru ar gyfer y Cynllun Troi Treth yn Ddigidol ar gyfer TAW os nad yw wedi’i eithrio rhag TAW, a bod ei drosiant trethadwy dros y trothwy, sef £85,000.
 
 covid.title = Gohirio TAW yn sgil coronafeirws (COVID-19)
 covid.line1 = Os oes gan eich cleient daliadau TAW sydd i’w talu rhwng 20 Mawrth a 30 Mehefin 2020, gall ddewis gwneud un o’r canlynol:
