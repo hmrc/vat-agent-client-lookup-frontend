@@ -20,8 +20,11 @@ import forms.ClientVrnForm
 import play.api.data.{Field, FormError}
 import play.twirl.api.Html
 import views.templates.TemplateBaseSpec
+import views.html.templates.inputs.Text
 
 class TextTemplateSpec extends TemplateBaseSpec {
+
+  val text: Text = injector.instanceOf[Text]
 
   "Rendering the text input" when {
 
@@ -46,7 +49,7 @@ class TextTemplateSpec extends TemplateBaseSpec {
         """.stripMargin
       )
 
-      val markup = views.html.templates.inputs.text(field, labelText)
+      val markup = text(field, labelText)
 
       "generate the correct markup" in {
         formatHtml(markup) shouldBe formatHtml(expectedMarkup)
@@ -71,7 +74,7 @@ class TextTemplateSpec extends TemplateBaseSpec {
         """.stripMargin
       )
 
-      val markup = views.html.templates.inputs.text(field, labelText, Some(additionalContent))
+      val markup = text(field, labelText, Some(additionalContent))
 
       "generate the correct markup" in {
         formatHtml(markup) shouldBe formatHtml(expectedMarkup)
@@ -98,7 +101,7 @@ class TextTemplateSpec extends TemplateBaseSpec {
         """.stripMargin
       )
 
-      val markup = views.html.templates.inputs.text(field, labelText, Some(additionalContent))
+      val markup = text(field, labelText, Some(additionalContent))
 
       "generate the correct markup" in {
         formatHtml(markup) shouldBe formatHtml(expectedMarkup)

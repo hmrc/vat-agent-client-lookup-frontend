@@ -19,11 +19,13 @@ package views.templates.inputs
 import forms.WhatToDoForm
 import play.api.data.{Field, FormError}
 import play.twirl.api.Html
-import views.html.templates.inputs.radioHelper
+import views.html.templates.inputs.RadioHelper
 import views.templates.TemplateBaseSpec
 import assets.messages.WhatToDoMessages._
 
 class RadioHelperSpec extends TemplateBaseSpec {
+
+  val radioHelper: RadioHelper = injector.instanceOf[RadioHelper]
 
   val fieldName = "fieldName"
   val labelText = "labelText"

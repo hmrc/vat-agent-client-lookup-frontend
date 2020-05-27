@@ -14,6 +14,8 @@
  * limitations under the License.
  *@
 
+@this()
+
 @(field: Field, heading: String, additionalContent: Option[Html] = None)(implicit messages: Messages)
 
 <div class="form-field@if(field.hasErrors){--error}">
