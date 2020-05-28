@@ -41,7 +41,7 @@ class TextTemplateSpec extends TemplateBaseSpec {
         s"""
            |
            |<div class="form-field">
-           |  <h1>labelText</h1>
+           |  <span class="form-field">labelText</span>
            |  <label for="$fieldName" class="form-label visuallyhidden">labelText</label>
            |  <input type="text" class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value=""/>
            |</div>
@@ -65,7 +65,7 @@ class TextTemplateSpec extends TemplateBaseSpec {
         s"""
            |
            |<div class="form-field">
-           |  <h1>labelText</h1>
+           |  <span class="form-field">labelText</span>
            |  <p>Content</p>
            |  <label for="$fieldName" class="form-label visuallyhidden">labelText</label>
            |  <input type="text" class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="$value"/>
@@ -74,7 +74,7 @@ class TextTemplateSpec extends TemplateBaseSpec {
         """.stripMargin
       )
 
-      val markup = text(field, labelText, Some(additionalContent))
+      val markup = text(field, labelText, additionalContent = Some(additionalContent))
 
       "generate the correct markup" in {
         formatHtml(markup) shouldBe formatHtml(expectedMarkup)
@@ -89,7 +89,7 @@ class TextTemplateSpec extends TemplateBaseSpec {
         s"""
            |
            |<div class="form-field--error">
-           |  <h1>labelText</h1>
+           |  <span class="form-field">labelText</span>
            |  <p>Content</p>
            |  <label for="$fieldName" class="form-label visuallyhidden">labelText</label>
            |  <span class="error-message" role="tooltip">
@@ -101,7 +101,7 @@ class TextTemplateSpec extends TemplateBaseSpec {
         """.stripMargin
       )
 
-      val markup = text(field, labelText, Some(additionalContent))
+      val markup = text(field, labelText, additionalContent = Some(additionalContent))
 
       "generate the correct markup" in {
         formatHtml(markup) shouldBe formatHtml(expectedMarkup)

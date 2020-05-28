@@ -18,12 +18,12 @@
 @import config.AppConfig
 @import models.PreferenceModel
 @import forms.PreferenceForm._
-@import views.html.templates.inputs.OptionRevealHelper
+@import views.html.templates.inputs.{OptionRevealHelper, Text}
 
 @this(mainTemplate: MainTemplate,
         formWithCSRF: FormWithCSRF,
         errorSummary: ErrorSummary,
-        input: Input,
+        text: Text,
         optionRevealHelper: OptionRevealHelper)
 
 
@@ -47,14 +47,9 @@
     choices = Seq(
     (yes, messages("common.yes")),
     (no,  messages("common.no"))),
-    hiddenContent = input(preferenceForm(email),
-    '_divClass       -> "form-label",
-    '_labelId        -> "label-email",
-    '_label          -> messages("capturePref.email"),
-    '_labelTextClass -> "form-field",
-    '_inputClass     -> "input--fullwidth",
-    '_maxlength      -> maxLength,
-    '_inputHint      -> messages("capturePref.email.hintAlternative")),
+    hiddenContent = text(preferenceForm(email),
+        messages("capturePref.email"),
+        Some(messages("capturePref.email.hintAlternative"))),
     field          = preferenceForm(yesNo),
     question       = messages("capturePref.noLetterTitle"),
     inline         = false,
@@ -77,14 +72,9 @@
     choices = Seq(
     (yes, messages("common.yes")),
     (no,  messages("common.no"))),
-    hiddenContent = input(preferenceForm(email),
-    '_divClass       -> "form-label",
-    '_labelId        -> "label-email",
-    '_label          -> messages("capturePref.email"),
-    '_labelTextClass -> "form-field",
-    '_inputClass     -> "input--fullwidth",
-    '_maxlength      -> maxLength,
-    '_inputHint      -> messages("capturePref.email.hint")),
+    hiddenContent = text(preferenceForm(email),
+        messages("capturePref.email"),
+        Some(messages("capturePref.email.hint"))),
     field          = preferenceForm(yesNo),
     question       = messages("capturePref.title"),
     inline         = false,

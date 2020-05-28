@@ -16,11 +16,14 @@
 
 @this()
 
-@(field: Field, heading: String, additionalContent: Option[Html] = None)(implicit messages: Messages)
+@(field: Field, heading: String, hint: Option[String] = None, additionalContent: Option[Html] = None, largeHeading: Boolean = false)(implicit messages: Messages)
 
 <div class="form-field@if(field.hasErrors){--error}">
 
-  <h1>@heading</h1>
+    @if(largeHeading){<h1>@heading</h1>}
+    @if(!largeHeading){<span class="form-field">@heading</span>}
+
+    @if(!hint.isEmpty){<span class="form-hint">@hint</span>}
 
   @additionalContent.map { content => @content }
 
