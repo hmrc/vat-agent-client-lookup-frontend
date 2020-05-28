@@ -44,9 +44,8 @@
         <div class="form-group">
             @text(
                 form("vrn"),
-                messages("clientsVrn.heading"),
-                additionalContent = Some(additionalContent),
-                largeHeading = true
+                Some(messages("clientsVrn.heading")),
+                Some(additionalContent)
             )
         </div>
 

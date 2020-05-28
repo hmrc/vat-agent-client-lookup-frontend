@@ -41,7 +41,7 @@ class TextTemplateSpec extends TemplateBaseSpec {
         s"""
            |
            |<div class="form-field">
-           |  <span class="form-field">labelText</span>
+           |  <h1>labelText</h1>
            |  <label for="$fieldName" class="form-label visuallyhidden">labelText</label>
            |  <input type="text" class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value=""/>
            |</div>
@@ -49,7 +49,7 @@ class TextTemplateSpec extends TemplateBaseSpec {
         """.stripMargin
       )
 
-      val markup = text(field, labelText)
+      val markup = text(field, Some(labelText))
 
       "generate the correct markup" in {
         formatHtml(markup) shouldBe formatHtml(expectedMarkup)
@@ -65,7 +65,7 @@ class TextTemplateSpec extends TemplateBaseSpec {
         s"""
            |
            |<div class="form-field">
-           |  <span class="form-field">labelText</span>
+           |  <h1>labelText</h1>
            |  <p>Content</p>
            |  <label for="$fieldName" class="form-label visuallyhidden">labelText</label>
            |  <input type="text" class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="$value"/>
@@ -74,7 +74,7 @@ class TextTemplateSpec extends TemplateBaseSpec {
         """.stripMargin
       )
 
-      val markup = text(field, labelText, additionalContent = Some(additionalContent))
+      val markup = text(field, Some(labelText), Some(additionalContent))
 
       "generate the correct markup" in {
         formatHtml(markup) shouldBe formatHtml(expectedMarkup)
@@ -89,7 +89,7 @@ class TextTemplateSpec extends TemplateBaseSpec {
         s"""
            |
            |<div class="form-field--error">
-           |  <span class="form-field">labelText</span>
+           |  <h1>labelText</h1>
            |  <p>Content</p>
            |  <label for="$fieldName" class="form-label visuallyhidden">labelText</label>
            |  <span class="error-message" role="tooltip">
@@ -101,7 +101,7 @@ class TextTemplateSpec extends TemplateBaseSpec {
         """.stripMargin
       )
 
-      val markup = text(field, labelText, additionalContent = Some(additionalContent))
+      val markup = text(field, Some(labelText), Some(additionalContent))
 
       "generate the correct markup" in {
         formatHtml(markup) shouldBe formatHtml(expectedMarkup)

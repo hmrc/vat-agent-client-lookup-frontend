@@ -32,6 +32,16 @@
 
 @content = {<p><strong class="bold">@messages("capturePref.confirmationEmailRequest")</strong></p>}
 
+@additionalContent = {
+    <span class="form-field">@messages("capturePref.email")</span>
+    <span class="form-hint">@messages("capturePref.email.hint")</span>
+}
+
+@additionalContentAlternative = {
+<span class="form-field">@messages("capturePref.email")</span>
+<span class="form-hint">@messages("capturePref.email.hintAlternative")</span>
+}
+
 @defining(if (appConfig.features.disableBulkPaper()) messages("capturePref.noLetterTitle") else messages("capturePref.title")) { pageTitle  =>
 @mainTemplate(if(preferenceForm.errors.nonEmpty) messages("common.error.prefixTitle", pageTitle) else pageTitle) {
 
@@ -48,8 +58,7 @@
     (yes, messages("common.yes")),
     (no,  messages("common.no"))),
     hiddenContent = text(preferenceForm(email),
-        messages("capturePref.email"),
-        Some(messages("capturePref.email.hintAlternative"))),
+        additionalContent = Some(additionalContentAlternative)),
     field          = preferenceForm(yesNo),
     question       = messages("capturePref.noLetterTitle"),
     inline         = false,
@@ -73,8 +82,7 @@
     (yes, messages("common.yes")),
     (no,  messages("common.no"))),
     hiddenContent = text(preferenceForm(email),
-        messages("capturePref.email"),
-        Some(messages("capturePref.email.hint"))),
+        additionalContent = Some(additionalContent)),
     field          = preferenceForm(yesNo),
     question       = messages("capturePref.title"),
     inline         = false,
