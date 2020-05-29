@@ -20,9 +20,12 @@ import java.time.LocalDate
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import views.html.helpers.DisplayDate
 import views.templates.TemplateBaseSpec
 
 class DisplayDateSpec extends TemplateBaseSpec {
+
+  val displayDate: DisplayDate = injector.instanceOf[DisplayDate]
 
   "Calling displayDate" when {
 
@@ -30,7 +33,7 @@ class DisplayDateSpec extends TemplateBaseSpec {
 
     "showYear is true" should {
 
-      lazy val template = views.html.helpers.displayDate(date)
+      lazy val template = displayDate(date)
       lazy val document: Document = Jsoup.parse(template.body)
 
       "render the date with year" in {
@@ -40,7 +43,7 @@ class DisplayDateSpec extends TemplateBaseSpec {
 
     "showYear is true and use short month format is true" should {
 
-      lazy val template = views.html.helpers.displayDate(date, useShortDayFormat = true)
+      lazy val template = displayDate(date, useShortDayFormat = true)
       lazy val document: Document = Jsoup.parse(template.body)
 
       "render the date with year" in {
@@ -50,7 +53,7 @@ class DisplayDateSpec extends TemplateBaseSpec {
 
     "showYear is false" should {
 
-      lazy val template = views.html.helpers.displayDate(date, showYear = false)
+      lazy val template = displayDate(date, showYear = false)
       lazy val document: Document = Jsoup.parse(template.body)
 
       "render the date without year" in {
@@ -60,7 +63,7 @@ class DisplayDateSpec extends TemplateBaseSpec {
 
     "showYear is false and use short month format is true" should {
 
-      lazy val template = views.html.helpers.displayDate(date, showYear = false, useShortDayFormat = true)
+      lazy val template = displayDate(date, showYear = false, useShortDayFormat = true)
       lazy val document: Document = Jsoup.parse(template.body)
 
       "render the date without year" in {

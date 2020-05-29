@@ -18,7 +18,14 @@
 @import views.html.agent.partials._
 @import java.time.LocalDate
 
-@this(mainTemplate: MainTemplate)
+@this(mainTemplate: MainTemplate,
+    clientDetailsPartials: ClientDetailsPartials,
+    covid: Covid,
+    optOutForMTDVATPartial: OptOutForMTDVATPartial,
+    registrationPartial: RegistrationPartial,
+    signUpPartial: SignUpPartial,
+    vatCertificatePartials: VatCertificatePartials,
+    vatReturnsPartial: VatReturnsPartial)
 
 @(details: CustomerDetails, vrn: String, currentDate: LocalDate)(implicit request: Request[_], messages: Messages, appConfig: AppConfig ,user: User[_])
 

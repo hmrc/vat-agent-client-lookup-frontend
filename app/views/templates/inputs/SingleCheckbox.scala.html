@@ -14,16 +14,14 @@
  * limitations under the License.
  *@
 
-@()(implicit messages: Messages)
-<div id="covid-partial" class="panel nudge warning-banner">
-    <h3 class="heading-medium">@messages("covid.title")</h3>
-    <p>@messages("covid.line1")</p>
-    <ul class="list list-bullet">
-        <li>@messages("covid.bullet1")</li>
-        <li>@messages("covid.bullet2")</li>
-    </ul>
-    <p>@messages("covid.line2")</p>
-    <div class="panel panel-border-wide">
-        <p>@messages("covid.directDebit")</p>
-    </div>
+@this()
+
+@(field: Field, label: String)(implicit messages: Messages)
+
+@value = @{ field.value match { case Some(x) => x case None => "false" case x => x }}
+
+<div class="multiple-choice">
+    <input id="@{field.name}" name="@{field.name}" type="checkbox" value="true" @if(value == "true"){ checked }>
+    <label for="@{field.name}">@label</label>
 </div>
+

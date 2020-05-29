@@ -14,11 +14,13 @@
  * limitations under the License.
  *@
 
-@(field: Field, heading: String, additionalContent: Option[Html] = None)(implicit messages: Messages)
+@this()
+
+@(field: Field, heading: Option[String] = None, additionalContent: Option[Html] = None)(implicit messages: Messages)
 
 <div class="form-field@if(field.hasErrors){--error}">
 
-  <h1>@heading</h1>
+    @if(!heading.isEmpty){<h1>@heading</h1>}
 
   @additionalContent.map { content => @content }
 

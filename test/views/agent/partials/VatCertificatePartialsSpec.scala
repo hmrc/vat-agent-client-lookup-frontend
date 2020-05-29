@@ -22,13 +22,16 @@ import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import views.ViewBaseSpec
 import assets.messages.partials.VatCertificatePartialMessages
+import views.html.agent.partials.VatCertificatePartials
 
 class VatCertificatePartialsSpec extends ViewBaseSpec {
+
+  val vatCertificatePartials: VatCertificatePartials = injector.instanceOf[VatCertificatePartials]
 
   "ClientDetailsPartials" should {
 
     lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-    lazy val view = views.html.agent.partials.vatCertificatePartials()(messages,mockConfig)
+    lazy val view = vatCertificatePartials()(messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct card heading as ${VatCertificatePartialMessages.heading}" in {

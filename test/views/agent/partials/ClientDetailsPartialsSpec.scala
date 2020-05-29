@@ -25,14 +25,17 @@ import views.ViewBaseSpec
 import assets.messages.partials.ClientDetailsPartialMessages
 import common.SessionKeys
 import models.User
+import views.html.agent.partials.ClientDetailsPartials
 
 class ClientDetailsPartialsSpec extends ViewBaseSpec {
+
+  val clientDetailsPartials: ClientDetailsPartials = injector.instanceOf[ClientDetailsPartials]
 
   "ClientDetailsPartials" when {
 
     "when the user has no contact preference in session" should {
 
-      lazy val view = views.html.agent.partials.clientDetailsPartials()(messages, mockConfig, user)
+      lazy val view = clientDetailsPartials()(messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct card heading of ${ClientDetailsPartialMessages.heading}" in {
@@ -62,7 +65,7 @@ class ClientDetailsPartialsSpec extends ViewBaseSpec {
 
       lazy val testuser: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn, active = true)(testGetRequest)
 
-      lazy val view = views.html.agent.partials.clientDetailsPartials()(messages, mockConfig, testuser)
+      lazy val view = clientDetailsPartials()(messages, mockConfig, testuser)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct card heading of ${ClientDetailsPartialMessages.heading}" in {
@@ -89,7 +92,7 @@ class ClientDetailsPartialsSpec extends ViewBaseSpec {
 
       lazy val testuser: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn, active = true)(testGetRequest)
 
-      lazy val view = views.html.agent.partials.clientDetailsPartials()(messages, mockConfig, testuser)
+      lazy val view = clientDetailsPartials()(messages, mockConfig, testuser)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct card heading of ${ClientDetailsPartialMessages.heading}" in {

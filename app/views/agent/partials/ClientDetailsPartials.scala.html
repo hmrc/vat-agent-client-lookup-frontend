@@ -14,9 +14,21 @@
  * limitations under the License.
  *@
 
-@(accordionTitleText: String, feature: String, pageName: String, paragraphText: Html)
+@import config.AppConfig
+@import models.User
+@import common.SessionKeys
+@import helpers.CapturePreferenceHelper
 
-<details>
-    <summary><span class="summary">@accordionTitleText</span></summary>
-    <div class="panel panel-border-narrow">@paragraphText</div>
-</details>
+@this(capturePreferenceHelper: CapturePreferenceHelper)
+
+@()(implicit messages: Messages, appConfig: AppConfig ,user: User[_])
+
+<div class="tile tile-no-border">
+    <div id="client-details" class="tile-body">
+        <h2 class="heading-medium push--top">@messages("clientDetailsCard.title")</h2>
+        <p> @messages("clientDetailsCard.info")</p>
+
+        @capturePreferenceHelper(messages("clientDetailsCard.link"), appConfig.manageVatCustomerDetailsUrl)
+
+    </div>
+</div>

@@ -14,14 +14,15 @@
  * limitations under the License.
  *@
 
-@import views.html.templates.inputs._
+@import views.html.templates.inputs.Text
 @import models.agent.ClientVrnModel
 @import play.api.data.Form
 @import uk.gov.hmrc.play.views.html.helpers.{ErrorSummary, FormWithCSRF}
 
 @this(mainTemplate: MainTemplate,
-      formWithCSRF: FormWithCSRF,
-      errorSummary: ErrorSummary)
+        formWithCSRF: FormWithCSRF,
+        errorSummary: ErrorSummary,
+        text: Text)
 
 @(form: Form[ClientVrnModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
@@ -43,7 +44,7 @@
         <div class="form-group">
             @text(
                 form("vrn"),
-                messages("clientsVrn.heading"),
+                Some(messages("clientsVrn.heading")),
                 Some(additionalContent)
             )
         </div>
