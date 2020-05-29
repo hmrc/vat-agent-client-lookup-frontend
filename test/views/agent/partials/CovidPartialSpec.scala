@@ -20,12 +20,15 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
 import assets.messages.partials._
+import views.html.agent.partials.Covid
 
 class CovidPartialSpec extends ViewBaseSpec {
 
+  val covid: Covid = injector.instanceOf[Covid]
+
   "The covid partial" should {
 
-    lazy val view = views.html.agent.partials.covid()(messages)
+    lazy val view = covid()(messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct card heading of ${CovidPartialMessages.heading}" in {

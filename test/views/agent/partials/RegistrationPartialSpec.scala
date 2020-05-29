@@ -25,7 +25,7 @@ import models.User
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
-import views.html.agent.partials.registrationPartial
+import views.html.agent.partials.RegistrationPartial
 import assets.CustomerDetailsTestConstants._
 import common.SessionKeys
 import play.api.i18n.Lang
@@ -34,6 +34,8 @@ import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 
 class RegistrationPartialSpec extends ViewBaseSpec {
+
+  val registrationPartial: RegistrationPartial = injector.instanceOf[RegistrationPartial]
 
   def urlEncoded(url: String): String = URLEncoder.encode(url, StandardCharsets.UTF_8.toString)
 

@@ -15,13 +15,27 @@
  *@
 
 @import config.AppConfig
+@import common.MandationStatus
+@import java.time.LocalDate
 
-@()(implicit messages: Messages, appConfig: AppConfig)
+@this()
 
-<div class="tile tile-no-border">
-    <div id="vat-certificate" class="tile-body">
-        <h2 class="heading-medium push--top">@messages("VatCertificateCard.title")</h2>
-        <p> @messages("VatCertificateCard.info")</p>
-        <p> <a id=card-link href="@{appConfig.vatCertificateUrl}">@messages("VatCertificateCard.link")</a> </p>
-    </div>
+@(mandationStatus: String, vrn: String)(implicit messages: Messages,appConfig: AppConfig)
+
+@signUp = {
+<div id ="sign-up-partial" class="column-one-third">
+    <h3 class="heading-small">
+        <a href="@{appConfig.signUpServiceUrl(vrn)}" >@messages("signUpPartial.LinkText")</a>
+    </h3>
+    <p>@messages("signUpPartial.Body")</p>
 </div>
+}
+
+@{
+   mandationStatus match {
+        case MandationStatus.nonMTDfB => signUp
+        case MandationStatus.nonDigital => signUp
+        case MandationStatus.MTDfBExempt => signUp
+        case _ => {}
+   }
+}

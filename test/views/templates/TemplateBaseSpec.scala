@@ -18,13 +18,10 @@ package views.templates
 
 import org.jsoup.Jsoup
 import org.scalamock.scalatest.MockFactory
-import play.api.inject.Injector
 import play.twirl.api.Html
 import utils.TestUtil
 
 class TemplateBaseSpec extends TestUtil with MockFactory {
-
-  val injector: Injector = app.injector
 
   def formatHtml(body: Html): String = Jsoup.parseBodyFragment(s"\n$body\n").toString.trim
 }

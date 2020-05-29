@@ -18,6 +18,8 @@
 @import java.time.format.{DateTimeFormatter, ResolverStyle}
 @import play.api.i18n.Messages
 
+@this()
+
 @(date: LocalDate, showYear: Boolean = true, useShortDayFormat: Boolean = false)(implicit messages: Messages)
 
 @defining( {

@@ -14,9 +14,18 @@
  * limitations under the License.
  *@
 
-@(accordionTitleText: String, feature: String, pageName: String, paragraphText: Html)
+@this()
 
-<details>
-    <summary><span class="summary">@accordionTitleText</span></summary>
-    <div class="panel panel-border-narrow">@paragraphText</div>
-</details>
+@()(implicit messages: Messages)
+<div id="covid-partial" class="panel nudge warning-banner">
+    <h3 class="heading-medium">@messages("covid.title")</h3>
+    <p>@messages("covid.line1")</p>
+    <ul class="list list-bullet">
+        <li>@messages("covid.bullet1")</li>
+        <li>@messages("covid.bullet2")</li>
+    </ul>
+    <p>@messages("covid.line2")</p>
+    <div class="panel panel-border-wide">
+        <p>@messages("covid.directDebit")</p>
+    </div>
+</div>

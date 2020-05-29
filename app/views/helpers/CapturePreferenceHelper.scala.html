@@ -18,6 +18,8 @@
 @import models.User
 @import common.SessionKeys
 
+@this()
+
 @(heading: String, location: String)(implicit appConfig: AppConfig, user: User[_])
 
 @if(user.session.get(SessionKeys.verifiedAgentEmail).isDefined | user.session.get(SessionKeys.preference).contains("no")) {

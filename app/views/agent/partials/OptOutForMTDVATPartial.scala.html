@@ -16,24 +16,18 @@
 
 @import config.AppConfig
 @import common.MandationStatus
-@import java.time.LocalDate
+@import models.User
+@import helpers.CapturePreferenceHelper
 
-@(mandationStatus: String, vrn: String)(implicit messages: Messages,appConfig: AppConfig)
+@this(capturePreferenceHelper: CapturePreferenceHelper)
 
-@signUp = {
-<div id ="sign-up-partial" class="column-one-third">
+@(mandationStatus: String)(implicit messages: Messages, appConfig: AppConfig, user: User[_])
+
+@if(!List(MandationStatus.nonMTDfB, MandationStatus.nonDigital, MandationStatus.MTDfBExempt).contains(mandationStatus)) {
+<div id="opt-out" class="column-one-third">
     <h3 class="heading-small">
-        <a href="@{appConfig.signUpServiceUrl(vrn)}" >@messages("signUpPartial.LinkText")</a>
+        @capturePreferenceHelper(messages("optOutCard.heading"), appConfig.optOutMtdVatUrl)
     </h3>
-    <p>@messages("signUpPartial.Body")</p>
+    <p>@messages("optOutCard.content")</p>
 </div>
-}
-
-@{
-   mandationStatus match {
-        case MandationStatus.nonMTDfB => signUp
-        case MandationStatus.nonDigital => signUp
-        case MandationStatus.MTDfBExempt => signUp
-        case _ => {}
-   }
 }

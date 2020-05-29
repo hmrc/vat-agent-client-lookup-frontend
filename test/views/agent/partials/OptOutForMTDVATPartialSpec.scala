@@ -25,8 +25,11 @@ import views.ViewBaseSpec
 import assets.messages.partials.OptOutForMTDVATMessages
 import common.{MandationStatus, SessionKeys}
 import models.User
+import views.html.agent.partials.{Covid, OptOutForMTDVATPartial}
 
 class OptOutForMTDVATPartialSpec extends ViewBaseSpec {
+
+  val optOutForMTDVATPartial: OptOutForMTDVATPartial = injector.instanceOf[OptOutForMTDVATPartial]
 
   "OptOutForMTDVATPartial view" when {
 
@@ -35,7 +38,7 @@ class OptOutForMTDVATPartialSpec extends ViewBaseSpec {
       "agent has not entered their contact preference" should {
 
         lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-        lazy val view = views.html.agent.partials.optOutForMTDVATPartial("MTDfB Mandated")(messages, mockConfig, user)
+        lazy val view = optOutForMTDVATPartial("MTDfB Mandated")(messages, mockConfig, user)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         s"have the correct title of ${OptOutForMTDVATMessages.title}" in {
@@ -58,7 +61,7 @@ class OptOutForMTDVATPartialSpec extends ViewBaseSpec {
         lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
           .withSession(SessionKeys.verifiedAgentEmail -> "exampleemail@email.com")
         lazy val testUser: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn, active = true)(testGetRequest)
-        lazy val view = views.html.agent.partials.optOutForMTDVATPartial("MTDfB Mandated")(messages, mockConfig, testUser)
+        lazy val view = optOutForMTDVATPartial("MTDfB Mandated")(messages, mockConfig, testUser)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         s"have the correct title of ${OptOutForMTDVATMessages.title}" in {
@@ -77,7 +80,7 @@ class OptOutForMTDVATPartialSpec extends ViewBaseSpec {
 
     "with a mandation status of nonMTDfB" should {
 
-      lazy val view = views.html.agent.partials.optOutForMTDVATPartial(MandationStatus.nonMTDfB)(messages, mockConfig, user)
+      lazy val view = optOutForMTDVATPartial(MandationStatus.nonMTDfB)(messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not be displayed" in {
@@ -89,7 +92,7 @@ class OptOutForMTDVATPartialSpec extends ViewBaseSpec {
 
     "with a mandation status of MTDfB Exempt" should {
 
-      lazy val view = views.html.agent.partials.optOutForMTDVATPartial(MandationStatus.MTDfBExempt)(messages, mockConfig, user)
+      lazy val view = optOutForMTDVATPartial(MandationStatus.MTDfBExempt)(messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not be displayed" in {

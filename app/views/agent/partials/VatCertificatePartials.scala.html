@@ -15,18 +15,15 @@
  *@
 
 @import config.AppConfig
-@import models.User
-@import common.SessionKeys
-@import helpers.capturePreferenceHelper
 
-@()(implicit messages: Messages, appConfig: AppConfig ,user: User[_])
+@this()
+
+@()(implicit messages: Messages, appConfig: AppConfig)
 
 <div class="tile tile-no-border">
-    <div id="client-details" class="tile-body">
-        <h2 class="heading-medium push--top">@messages("clientDetailsCard.title")</h2>
-        <p> @messages("clientDetailsCard.info")</p>
-
-        @capturePreferenceHelper(messages("clientDetailsCard.link"), appConfig.manageVatCustomerDetailsUrl)
-
+    <div id="vat-certificate" class="tile-body">
+        <h2 class="heading-medium push--top">@messages("VatCertificateCard.title")</h2>
+        <p> @messages("VatCertificateCard.info")</p>
+        <p> <a id=card-link href="@{appConfig.vatCertificateUrl}">@messages("VatCertificateCard.link")</a> </p>
     </div>
 </div>

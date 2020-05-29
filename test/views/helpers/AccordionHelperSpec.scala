@@ -21,17 +21,24 @@ import org.jsoup.nodes.Document
 import org.scalatest.Matchers._
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import org.scalatestplus.play.PlaySpec
+import play.api.inject.Injector
 import play.twirl.api.Html
+import views.html.helpers.AccordionHelper
 
 
 class AccordionHelperSpec extends PlaySpec with GuiceOneServerPerSuite {
+
+  val injector: Injector = app.injector
+
+  val accordionHelper: AccordionHelper = injector.instanceOf[AccordionHelper]
+
 
   val testLabel: String = "test label"
   val testFeature: String = "test-feature"
   val testPageName: String = "test-page-name"
   val testHtml: Html = Html("test html")
 
-  lazy val view: Html = views.html.helpers.accordionHelper(testLabel, testFeature, testPageName, testHtml)
+  lazy val view: Html = accordionHelper(testLabel, testFeature, testPageName, testHtml)
 
   lazy implicit val doc: Document = Jsoup.parse(view.body)
 

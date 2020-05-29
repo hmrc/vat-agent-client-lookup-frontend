@@ -18,10 +18,13 @@
 @import services.DateService
 @import java.time.LocalDate
 @import play.api.Logger
-@import views.html.helpers.displayDate
+@import views.html.helpers.DisplayDate
 @import models.User
-@import helpers.capturePreferenceHelper
+@import helpers.CapturePreferenceHelper
 @import common.PartyTypes.VatGroup
+
+@this(capturePreferenceHelper: CapturePreferenceHelper,
+    displayDate: DisplayDate)
 
 @(details: CustomerDetails, currentDate: LocalDate)(implicit messages: Messages, appConfig: AppConfig, user: User[_])
 

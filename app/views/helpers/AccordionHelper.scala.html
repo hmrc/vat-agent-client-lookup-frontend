@@ -14,18 +14,11 @@
  * limitations under the License.
  *@
 
-@import config.AppConfig
-@import common.MandationStatus
-@import models.User
-@import helpers.capturePreferenceHelper
+@this()
 
-@(mandationStatus: String)(implicit messages: Messages, appConfig: AppConfig, user: User[_])
+@(accordionTitleText: String, feature: String, pageName: String, paragraphText: Html)
 
-@if(!List(MandationStatus.nonMTDfB, MandationStatus.nonDigital, MandationStatus.MTDfBExempt).contains(mandationStatus)) {
-<div id="opt-out" class="column-one-third">
-    <h3 class="heading-small">
-        @capturePreferenceHelper(messages("optOutCard.heading"), appConfig.optOutMtdVatUrl)
-    </h3>
-    <p>@messages("optOutCard.content")</p>
-</div>
-}
+<details>
+    <summary><span class="summary">@accordionTitleText</span></summary>
+    <div class="panel panel-border-narrow">@paragraphText</div>
+</details>
