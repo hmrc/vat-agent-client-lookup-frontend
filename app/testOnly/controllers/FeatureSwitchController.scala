@@ -37,7 +37,8 @@ class FeatureSwitchController @Inject()(featureSwitchView: FeatureSwitchView, mc
         useAgentHubPageFeature = appConfig.features.useAgentHubPageFeature(),
         useStaticDateFeature = appConfig.features.useStaticDateFeature(),
         displayCovid = appConfig.features.displayCovidMessage(),
-        disableBulkPaper = appConfig.features.disableBulkPaper()
+        disableBulkPaper = appConfig.features.disableBulkPaper(),
+        missingTraderAddressIntercept = appConfig.features.missingTraderAddressIntercept()
       )
     )))
   }
@@ -57,6 +58,7 @@ class FeatureSwitchController @Inject()(featureSwitchView: FeatureSwitchView, mc
     appConfig.features.useStaticDateFeature(model.useStaticDateFeature)
     appConfig.features.displayCovidMessage(model.displayCovid)
     appConfig.features.disableBulkPaper(model.disableBulkPaper)
+    appConfig.features.missingTraderAddressIntercept(model.missingTraderAddressIntercept)
     Redirect(routes.FeatureSwitchController.featureSwitch())
   }
 }

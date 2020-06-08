@@ -22,5 +22,5 @@ case class FeatureSwitchModel(emailVerificationEnabled: Boolean,
                               useAgentHubPageFeature: Boolean,
                               useStaticDateFeature: Boolean,
                               displayCovid: Boolean,
-                              disableBulkPaper: Boolean
-                             )
+                              disableBulkPaper: Boolean,
+                              missingTraderAddressIntercept: Boolean)

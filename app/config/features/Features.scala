@@ -29,4 +29,5 @@ class Features @Inject()(config: Configuration) {
   val useStaticDateFeature = new Feature(ConfigKeys.useStaticDateFeature, config)
   val displayCovidMessage = new Feature(ConfigKeys.displayCovidMessageFeature, config)
   val disableBulkPaper = new Feature(ConfigKeys.disableBulkPaper, config)
+  val missingTraderAddressIntercept = new Feature(ConfigKeys.missingTraderFeature, config)
 }
