@@ -32,7 +32,7 @@ object CustomerDetailsTestConstants {
   val nonDigital = "Non Digital"
   val vatGroup = "Z2"
   val validParty = "2"
-  val missingTrader = false
+  val missingTrader = true
 
   val noOptionalInfoJson: JsObject = Json.obj(
     "mandationStatus" -> mandationStatus,
@@ -49,7 +49,7 @@ object CustomerDetailsTestConstants {
     "deregistration" -> Json.obj(
       "effectDateOfCancellation" -> "2019-01-01"
     ),
-    "missingTrader" -> false
+    "missingTrader" -> true
   )
 
   val customerDetailsAllInfo = CustomerDetails(

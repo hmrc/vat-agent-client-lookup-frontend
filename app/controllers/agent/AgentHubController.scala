@@ -41,11 +41,14 @@ class AgentHubController @Inject()(val authenticate: AuthoriseAsAgentWithClient,
     if(appConfig.features.useAgentHubPageFeature()){
       customerDetailsService.getCustomerDetails(user.vrn).map {
         case Right(details) =>
-          if (details.missingTrader) {
+          if (details.missingTrader && appConfig.features.missingTraderAddressIntercept()) {
             Redirect(appConfig.manageVatMissingTraderUrl)
+          } else {
+            if (details.partyType.isEmpty) {
+              Logger.warn("[AgentHubController][show] No party type received from CustomerDetailsService.")
+            }
+            Ok(agentHubView(details, user.vrn, dateService.now()))
           }
-          if(details.partyType.isEmpty) Logger.warn("[AgentHubController][show] No party type received from CustomerDetailsService.")
-          Ok(agentHubView(details, user.vrn, dateService.now()))
         case Left(error) =>
           Logger.warn(s"[AgentHubController][show] - received an error from CustomerDetailsService: $error")
           serviceErrorHandler.showInternalServerError
@@ -54,5 +57,4 @@ class AgentHubController @Inject()(val authenticate: AuthoriseAsAgentWithClient,
       Future.successful(Redirect(routes.WhatToDoController.show()))
     }
   }
-
 }

@@ -20,18 +20,17 @@ import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
 import assets.BaseTestConstants.vrn
+import assets.CustomerDetailsTestConstants._
 import assets.messages.partials.RegistrationPartialMessages
+import common.SessionKeys
 import models.User
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import views.ViewBaseSpec
-import views.html.agent.partials.RegistrationPartial
-import assets.CustomerDetailsTestConstants._
-import common.SessionKeys
-import play.api.i18n.Lang
-import utils.ImplicitDateFormatter._
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
+import utils.ImplicitDateFormatter._
+import views.ViewBaseSpec
+import views.html.agent.partials.RegistrationPartial
 
 class RegistrationPartialSpec extends ViewBaseSpec {
 
