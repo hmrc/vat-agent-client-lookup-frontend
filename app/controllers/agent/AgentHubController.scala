@@ -21,7 +21,6 @@ import controllers.BaseController
 import controllers.predicates.AuthoriseAsAgentWithClient
 import javax.inject.{Inject, Singleton}
 import play.api.Logger
-import play.api.i18n.Lang
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{CustomerDetailsService, DateService}
 import views.html.agent.AgentHubView
@@ -42,6 +41,9 @@ class AgentHubController @Inject()(val authenticate: AuthoriseAsAgentWithClient,
     if(appConfig.features.useAgentHubPageFeature()){
       customerDetailsService.getCustomerDetails(user.vrn).map {
         case Right(details) =>
+          if (details.missingTrader) {
+            Redirect(appConfig.manageVatMissingTraderUrl)
+          }
           if(details.partyType.isEmpty) Logger.warn("[AgentHubController][show] No party type received from CustomerDetailsService.")
           Ok(agentHubView(details, user.vrn, dateService.now()))
         case Left(error) =>

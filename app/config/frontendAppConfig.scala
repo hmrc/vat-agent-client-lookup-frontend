@@ -69,6 +69,7 @@ trait AppConfig {
   val staticDateValue: String
   val signUpServiceHost: String
   val signUpServiceUrl: String => String
+  val manageVatMissingTraderUrl: String
 }
 
 @Singleton
@@ -159,4 +160,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
 
   override lazy val signUpServiceHost: String = sc.getString(Keys.signUpServiceHost)
   override lazy val signUpServiceUrl: String => String = vatNumber =>  signUpServiceHost + sc.getString(Keys.signUpServiceUrl) + s"$vatNumber"
+
+  override val manageVatMissingTraderUrl: String = sc.getString(ConfigKeys.manageVatMissingTraderUrl)
 }

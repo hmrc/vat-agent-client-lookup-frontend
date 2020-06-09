@@ -46,6 +46,7 @@ object ConfigKeys {
 
   val manageVatBase: String = "manage-vat-subscription-frontend.host"
   val manageVatContext: String = "manage-vat-subscription-frontend.endpoints.customer-details"
+  val manageVatMissingTraderUrl: String = "manage-vat-subscription-frontend.endpoints.missing-trader"
 
   val timeoutPeriod: String = "timeout.period"
   val timeoutCountdown: String = "timeout.countdown"

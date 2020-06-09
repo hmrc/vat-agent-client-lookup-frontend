@@ -32,9 +32,11 @@ object CustomerDetailsTestConstants {
   val nonDigital = "Non Digital"
   val vatGroup = "Z2"
   val validParty = "2"
+  val missingTrader = false
 
   val noOptionalInfoJson: JsObject = Json.obj(
-    "mandationStatus" -> mandationStatus
+    "mandationStatus" -> mandationStatus,
+    "missingTrader" -> missingTrader
   )
 
   val allInfoJson: JsObject = Json.obj(
@@ -46,7 +48,8 @@ object CustomerDetailsTestConstants {
     "mandationStatus" -> mandationStatus,
     "deregistration" -> Json.obj(
       "effectDateOfCancellation" -> "2019-01-01"
-    )
+    ),
+    "missingTrader" -> false
   )
 
   val customerDetailsAllInfo = CustomerDetails(
@@ -56,7 +59,9 @@ object CustomerDetailsTestConstants {
     Some(tradingName),
     Some(validParty),
     mandationStatus,
-    Some(Deregistration(Some(LocalDate.parse("2019-01-01"))))
+    Some(Deregistration(Some(LocalDate.parse("2019-01-01")))),
+    None,
+    missingTrader
   )
 
   val customerDetailsAllInfoVatGroup = CustomerDetails(
@@ -66,7 +71,9 @@ object CustomerDetailsTestConstants {
     Some(tradingName),
     Some(vatGroup),
     mandationStatus,
-    Some(Deregistration(Some(LocalDate.parse("2019-01-01"))))
+    Some(Deregistration(Some(LocalDate.parse("2019-01-01")))),
+    None,
+    missingTrader
   )
 
   val customerDetailsNoInfo = CustomerDetails(
@@ -76,7 +83,9 @@ object CustomerDetailsTestConstants {
     None,
     None,
     mandationStatus,
-    None
+    None,
+    None,
+    missingTrader
   )
 
   val customerDetailsNoInfoWithPartyType = CustomerDetails(
