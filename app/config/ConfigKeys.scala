@@ -63,6 +63,8 @@ object ConfigKeys {
   val useAgentHubPageFeature: String = "features.useAgentHubPage.enabled"
   val useStaticDateFeature: String = "features.useStaticDate.enabled"
   val displayCovidMessageFeature: String = "features.displayCovid.enabled"
+  val disableBulkPaper: String = "features.disableBulkPaper.enabled"
+  val missingTraderFeature: String = "features.missingTraderAddressIntercept.enabled"
 
   val staticDateValue: String = "date-service.staticDate.value"
 
@@ -86,6 +88,4 @@ object ConfigKeys {
 
   val signUpServiceHost: String = "vat-sign-up-frontend.host"
   val signUpServiceUrl: String = "vat-sign-up-frontend.url"
-
-  val disableBulkPaper: String = "features.disableBulkPaper.enabled"
 }
