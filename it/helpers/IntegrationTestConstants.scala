@@ -64,13 +64,15 @@ object IntegrationTestConstants {
     "firstName" -> "Pepsi",
     "lastName" -> "Mac",
     "tradingName" -> "PepsiCo",
-    "mandationStatus" -> mandated
+    "mandationStatus" -> mandated,
+    "missingTrader" -> false
   )
 
   val individualNonMTDfBJson: JsObject = Json.obj(
     "firstName" -> "Pepsi",
     "lastName" -> "Mac",
     "tradingName" -> "PepsiCo",
-    "mandationStatus" -> nonMTDfB
+    "mandationStatus" -> nonMTDfB,
+    "missingTrader" -> false
   )
 }

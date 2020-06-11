@@ -16,13 +16,11 @@
 
 package controllers.agent
 
-import java.time.LocalDate
 import java.util.concurrent.TimeUnit
 
 import akka.util.Timeout
 import assets.BaseTestConstants
-import assets.CustomerDetailsTestConstants.{customerDetailsFnameOnly, firstName}
-import assets.messages.WhatToDoMessages.title
+import assets.CustomerDetailsTestConstants.{customerDetailsAllInfo, customerDetailsFnameOnly}
 import controllers.ControllerBaseSpec
 import mocks.services._
 import org.jsoup.Jsoup
@@ -49,58 +47,94 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
   }
 
   "AgentHubController.show()" when {
+
     "the useAgentHub feature switch is enabled" when {
 
-      "the customerDetailsService returns the customer details" should {
+      "the missing trader intercept feature switch is enabled" when {
 
-        "render the AgentHubPage" in new Test {
-          setupMockDateService(LocalDate.parse(mockConfig.staticDateValue))
-          mockAgentAuthorised()
-          mockCustomerDetailsSuccess(customerDetailsFnameOnly)
+        "the customer is a missing trader" should {
 
-          val result: Future[Result] = {
-            mockConfig.features.useAgentHubPageFeature(true)
-            controller.show()(fakeRequestWithVrnAndRedirectUrl)
+          "redirect the customer to manage-vat" in new Test {
+            mockAgentAuthorised()
+            mockCustomerDetailsSuccess(customerDetailsAllInfo)
+
+            val result: Future[Result] = {
+              mockConfig.features.useAgentHubPageFeature(true)
+              controller.show()(fakeRequestWithVrnAndRedirectUrl)
+            }
+
+            status(result) shouldBe SEE_OTHER
           }
+        }
 
-          status(result) shouldBe OK
-          messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client’s VAT details"
+        "the customer isn't a missing trader" should {
+
+          "render the AgentHubPage" in new Test {
+            mockAgentAuthorised()
+            mockCustomerDetailsSuccess(customerDetailsFnameOnly)
+
+            val result: Future[Result] = {
+              mockConfig.features.useAgentHubPageFeature(true)
+              mockConfig.features.missingTraderAddressIntercept(true)
+              controller.show()(fakeRequestWithVrnAndRedirectUrl)
+            }
+
+            status(result) shouldBe OK
+            messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client’s VAT details"
+          }
         }
       }
 
-      "the customerDetails call fails" should {
+      "the missing trader intercept feature switch is disabled" when {
 
-        "return an error" in new Test {
+        "the customerDetailsService returns the customer details" should {
 
-          mockAgentAuthorised()
-          mockCustomerDetailsError(BaseTestConstants.unexpectedError)
+          "render the AgentHubPage" in new Test {
+            mockAgentAuthorised()
+            mockCustomerDetailsSuccess(customerDetailsFnameOnly)
 
-          val result: Future[Result] = {
-            mockConfig.features.useAgentHubPageFeature(true)
-            controller.show()(fakeRequestWithVrnAndRedirectUrl)
+            val result: Future[Result] = {
+              mockConfig.features.useAgentHubPageFeature(true)
+              mockConfig.features.missingTraderAddressIntercept(false)
+              controller.show()(fakeRequestWithVrnAndRedirectUrl)
+            }
+
+            status(result) shouldBe OK
+            messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client’s VAT details"
           }
-
-          status(result) shouldBe INTERNAL_SERVER_ERROR
-          Jsoup.parse(bodyOf(result)).title() shouldBe "There is a problem with the service - Your client’s VAT details - GOV.UK"
         }
       }
     }
 
-    "the useAgentHub feature switch is disabled" should {
 
-      "redirect to the WhatToDo page" in new Test {
-        mockConfig.features.useAgentHubPageFeature(false)
+    "the customerDetails call fails" should {
 
+      "return an error" in new Test {
         mockAgentAuthorised()
-        mockCustomerDetailsSuccess(customerDetailsFnameOnly)
+        mockCustomerDetailsError(BaseTestConstants.unexpectedError)
 
-        val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
+        val result: Future[Result] = {
+          mockConfig.features.useAgentHubPageFeature(true)
+          controller.show()(fakeRequestWithVrnAndRedirectUrl)
+        }
 
-        status(result) shouldBe SEE_OTHER
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+        Jsoup.parse(bodyOf(result)).title() shouldBe "There is a problem with the service - Your client’s VAT details - GOV.UK"
       }
     }
-
-
   }
 
+  "the useAgentHub feature switch is disabled" should {
+
+    "redirect to the WhatToDo page" in new Test {
+      mockConfig.features.useAgentHubPageFeature(false)
+
+      mockAgentAuthorised()
+      mockCustomerDetailsSuccess(customerDetailsFnameOnly)
+
+      val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
+
+      status(result) shouldBe SEE_OTHER
+    }
+  }
 }
