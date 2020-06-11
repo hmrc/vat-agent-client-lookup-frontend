@@ -161,5 +161,5 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override lazy val signUpServiceHost: String = sc.getString(Keys.signUpServiceHost)
   override lazy val signUpServiceUrl: String => String = vatNumber =>  signUpServiceHost + sc.getString(Keys.signUpServiceUrl) + s"$vatNumber"
 
-  override val manageVatMissingTraderUrl: String = sc.getString(ConfigKeys.manageVatMissingTraderUrl)
+  override val manageVatMissingTraderUrl: String = manageVatBase + sc.getString(ConfigKeys.manageVatMissingTraderUrl)
 }
