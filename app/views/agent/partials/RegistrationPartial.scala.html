@@ -100,9 +100,6 @@
 }
 
 @{
-    if(details.partyType.isEmpty) {
-        errorNoPartyType
-    } else {
         if(details.deregistration.isDefined){
             details.deregistration.flatMap(_.effectDateOfCancellation) match {
                 case Some(date) => date match {
@@ -118,5 +115,4 @@
                 case _ => cancelRegistration
             }
         }
-    }
 }

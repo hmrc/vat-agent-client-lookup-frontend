@@ -44,9 +44,6 @@ class AgentHubController @Inject()(val authenticate: AuthoriseAsAgentWithClient,
           if (details.missingTrader && appConfig.features.missingTraderAddressIntercept()) {
             Redirect(appConfig.manageVatMissingTraderUrl)
           } else {
-            if (details.partyType.isEmpty) {
-              Logger.warn("[AgentHubController][show] No party type received from CustomerDetailsService.")
-            }
             Ok(agentHubView(details, user.vrn, dateService.now()))
           }
         case Left(error) =>
