@@ -21,35 +21,40 @@ import org.jsoup.nodes.Document
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import views.ViewBaseSpec
-import views.html.agent.ConfirmEmailView
+import views.html.agent.CheckYourAnswersView
 
-class ConfirmEmailViewSpec extends ViewBaseSpec {
+class CheckYourAnswersViewSpec extends ViewBaseSpec {
 
-  val injectedView: ConfirmEmailView = inject[ConfirmEmailView]
+  val injectedView: CheckYourAnswersView = inject[CheckYourAnswersView]
 
   val testEmail: String = "test@email.com"
 
   object Selectors {
     val heading         = ".heading-large"
-    val heading2        = ".lede"
+    val heading2        = "h2"
     val backLink        = "#content > article > a"
+    val email           = ".cya-answer"
     val continueButton  = ".button"
-    val editLink        = "#content > article > p > a"
-    val editLinkText    = "#content > article > p > a > span:nth-of-type(1)"
-    val editLinkContext = "#content > article > p > a > span:nth-of-type(2)"
+    val editLink        = ".cya-change > a"
+    val editLinkText    = ".cya-change > a > span:nth-of-type(1)"
+    val editLinkContext = ".cya-change > a > span:nth-of-type(2)"
   }
 
-  "The Confirm Email view" should {
+  "The Check Your Answers view" should {
     lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
     lazy val view = injectedView(testEmail)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct title" in {
-      document.title() shouldBe "Confirm the email address - Your client’s VAT details - GOV.UK"
+      document.title() shouldBe "Check your answers - Your client’s VAT details - GOV.UK"
     }
 
     "have the correct heading" in {
-      elementText(Selectors.heading) shouldBe "Confirm the email address"
+      elementText(Selectors.heading) shouldBe "Check your answers"
+    }
+
+    "have the correct subheading" in {
+      elementText(Selectors.heading2) shouldBe "VAT business details"
     }
 
     "have a back link" which {
@@ -64,7 +69,7 @@ class ConfirmEmailViewSpec extends ViewBaseSpec {
     }
 
     "have the email address the user provided" in {
-      elementText(Selectors.heading2) shouldBe testEmail
+      elementText(Selectors.email) shouldBe testEmail
     }
 
     "have a link to edit email address" which {
@@ -78,7 +83,7 @@ class ConfirmEmailViewSpec extends ViewBaseSpec {
       }
 
       "has the correct hidden context text" in {
-        elementText(Selectors.editLinkContext) shouldBe "Change your email address"
+        elementText(Selectors.editLinkContext) shouldBe "Check your answers"
       }
     }
 

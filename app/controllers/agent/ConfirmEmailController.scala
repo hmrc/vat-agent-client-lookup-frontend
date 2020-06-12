@@ -16,19 +16,19 @@
 
 package controllers.agent
 
+import audit.AuditService
+import audit.models.YesPreferenceVerifiedAuditModel
 import common.SessionKeys
 import config.{AppConfig, ErrorHandler}
 import controllers.predicates.{AuthoriseAsAgentOnly, PreferencePredicate}
 import javax.inject.{Inject, Singleton}
-import audit.AuditService
-import audit.models.YesPreferenceVerifiedAuditModel
 import models.Agent
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services.EmailVerificationService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import views.html.agent.ConfirmEmailView
+import views.html.agent.CheckYourAnswersView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -39,7 +39,7 @@ class ConfirmEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
                                        val errorHandler: ErrorHandler,
                                        val auditService: AuditService,
                                        mcc: MessagesControllerComponents,
-                                       confirmEmailView: ConfirmEmailView,
+                                       confirmEmailView: CheckYourAnswersView,
                                        implicit val executionContext: ExecutionContext,
                                        implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
