@@ -67,8 +67,9 @@ html[data-useragent*='MSIE 10.0'] .flex-container.tile {
 }
 
 .warning-banner {
-  border-top: 10px solid #7eff8e;
-  background: #000000;
+  width: 61.666667%;
+  margin-bottom: 2em;
+  margin-top: -1em;
 }
 
 .nudge {

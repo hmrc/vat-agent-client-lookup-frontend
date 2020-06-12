@@ -18,12 +18,10 @@ package assets.messages.partials
 
 object CovidPartialMessages {
 
-  val heading: String = "Coronavirus (COVID 19) VAT deferral"
-  val line1: String = "If your client has VAT payments that are due between 20 March and 30 June 2020, they can choose to:"
-  val bullet1: String = "defer them without paying interest or penalties"
-  val bullet2: String = "pay the VAT due as normal"
-  val line2: String = "They must continue to submit their returns as normal. If they choose to defer their VAT payment, " +
-    "the VAT due must be paid on or before 31 March 2021. They do not need to tell HMRC that they are deferring VAT payments."
-  val directDebit: String = "If your client normally pays by Direct Debit, they must contact their bank to cancel it as soon as possible."
-
+  val heading: String = "You can no longer delay VAT payments because of coronavirus (COVID-19)"
+  val line1: String = "VAT bills that have a payment date on or after 1 July 2020 must be paid on time."
+  val line2link: String = "Contact us as soon as possible if you cannot pay"
+  val line2: String = s"If you cancelled your Direct Debit, set it up again so you don’t miss a payment. $line2link."
+  val line3: String = "You still need to submit VAT Returns, even if your business has temporarily closed."
+  val line4: String = "You have until 31 March 2021 to pay VAT bills that were due between 20 March and 30 June 2020."
 }

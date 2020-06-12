@@ -28,29 +28,38 @@ class CovidPartialSpec extends ViewBaseSpec {
 
   "The covid partial" should {
 
-    lazy val view = covid()(messages)
+    lazy val view = covid()(messages, mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct card heading of ${CovidPartialMessages.heading}" in {
-      elementText(".heading-medium") shouldBe CovidPartialMessages.heading
+    "have the correct card heading" in {
+      elementText("strong") shouldBe CovidPartialMessages.heading
     }
 
-    s"display the correct line 1 of ${CovidPartialMessages.line1}" in {
-      elementText("p:nth-of-type(1)") shouldBe CovidPartialMessages.line1
+    "display the correct line 1" in {
+      elementText("li:nth-of-type(1)") shouldBe CovidPartialMessages.line1
     }
 
-    "display the bullet points" in {
-      elementText("ul > li:nth-of-type(1)") shouldBe CovidPartialMessages.bullet1
-      elementText("ul > li:nth-of-type(2)") shouldBe CovidPartialMessages.bullet2
+    "display the correct line 2" which {
+
+      "has the correct text" in {
+        elementText("li:nth-of-type(2)") shouldBe CovidPartialMessages.line2
+      }
+
+      "has the correct link text" in {
+        elementText("a") shouldBe CovidPartialMessages.line2link
+      }
+
+      "has the correct link location" in {
+        element("a").attr("href") shouldBe mockConfig.difficultiesPayingUrl
+      }
     }
 
-    s"display the correct line 2 of ${CovidPartialMessages.line2}" in {
-      elementText("p:nth-of-type(2)") shouldBe CovidPartialMessages.line2
+    "display the correct line 3" in {
+      elementText("li:nth-of-type(3)") shouldBe CovidPartialMessages.line3
     }
 
-    s"display the correct direct debit information of ${CovidPartialMessages.directDebit}" in {
-      elementText("div > div > p") shouldBe CovidPartialMessages.directDebit
+    "display the correct line 4" in {
+      elementText("li:nth-of-type(4)") shouldBe CovidPartialMessages.line4
     }
   }
-
 }

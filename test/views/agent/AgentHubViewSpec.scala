@@ -57,7 +57,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
 
       "display the covid partial" in {
         mockConfig.features.displayCovidMessage(true)
-        elementText("#covid-partial > h3") shouldBe CovidPartialMessages.heading
+        elementText("#covid-partial strong") shouldBe CovidPartialMessages.heading
       }
 
       "have the correct title" in {
