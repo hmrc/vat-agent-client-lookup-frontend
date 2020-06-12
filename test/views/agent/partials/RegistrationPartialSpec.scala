@@ -263,8 +263,8 @@ class RegistrationPartialSpec extends ViewBaseSpec {
             elementText("h3") shouldBe RegistrationPartialMessages.cancelRegistrationTitle
           }
 
-          s"have correct content of ${RegistrationPartialMessages.noPartyTypeErrorContent}" in {
-            elementText("p") shouldBe RegistrationPartialMessages.noPartyTypeErrorContent
+          s"have correct content of ${RegistrationPartialMessages.cancelRegistrationContent}" in {
+            elementText("p") shouldBe RegistrationPartialMessages.cancelRegistrationContent
           }
         }
       }

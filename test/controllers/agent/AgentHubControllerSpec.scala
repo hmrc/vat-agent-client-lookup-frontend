@@ -59,6 +59,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
             mockCustomerDetailsSuccess(customerDetailsAllInfo)
 
             val result: Future[Result] = {
+              mockConfig.features.missingTraderAddressIntercept(true)
               mockConfig.features.useAgentHubPageFeature(true)
               controller.show()(fakeRequestWithVrnAndRedirectUrl)
             }
