@@ -60,6 +60,7 @@ common.agentService = Manylion TAW eich cleient
 common.errorSummary.heading = Mae gennych un neu fwy o wallau
 common.continue = Yn eich blaen
 common.fullStop = .
+common.warning = Rhybudd
 
 confirmClientVrn.title = Cadarnhau manylion eich cleient
 confirmClientVrn.heading = Cadarnhau manylion eich cleient
@@ -163,9 +164,9 @@ breadcrumb.agentServices = Cyfrif Gwasanaethau Asiant
 signUpPartial.LinkText = Cofrestru ar gyfer Troi Treth yn Ddigidol ar gyfer TAW
 signUpPartial.Body = Mae’n rhaid i’ch cleient gofrestru ar gyfer y Cynllun Troi Treth yn Ddigidol ar gyfer TAW os nad yw wedi’i eithrio rhag TAW, a bod ei drosiant trethadwy dros y trothwy, sef £85,000.
 
-covid.title = Gohirio TAW yn sgil coronafeirws (COVID-19)
-covid.line1 = Os oes gan eich cleient daliadau TAW sydd i’w talu rhwng 20 Mawrth a 30 Mehefin 2020, gall ddewis gwneud un o’r canlynol:
-covid.bullet1 = gohirio’r taliadau heb dalu llog na chosbau
-covid.bullet2 = talu’r TAW sy’n ddyledus, fel arfer
-covid.line2 = Mae’n rhaid i’ch cleient barhau i gyflwyno’i Ffurflenni TAW fel arfer. Os yw’n dewis gohirio’i daliad TAW, mae’n rhaid i’r TAW gael ei thalu ar neu cyn 31 Mawrth 2021. Does dim rhaid iddo roi gwybod i CThEM ei fod yn gohirio taliadau TAW.
-covid.directDebit = Os yw’ch cleient fel arfer yn talu drwy Ddebyd Uniongyrchol, mae’n rhaid iddo gysylltu â’i fanc i’w ganslo cyn gynted â phosibl.
+covid.title = Ni allwch ohirio taliadau TAW mwyach oherwydd coronafeirws (COVID-19)
+covid.line1 = Mae’n rhaid i filiau TAW sydd â dyddiad talu ar neu ar ôl 1 Gorffennaf 2020 gael eu talu ar amser.
+covid.line2-p = Os ydych wedi canslo’ch Debyd Uniongyrchol, dylech ei ailsefydlu er mwyn i chi beidio â methu taliad.
+covid.line2-a = Os na allwch dalu, cysylltwch â ni cyn gynted â phosibl
+covid.line3 = Hyd yn oed os yw eich busnes wedi cau dros dro, mae’n dal yn rhaid i chi gyflwyno Ffurflenni TAW.
+covid.line4 = Mae gennych hyd at 31 Mawrth 2021 i dalu biliau TAW a oedd yn ddyledus rhwng 20 Mawrth a 30 Mehefin 2020.

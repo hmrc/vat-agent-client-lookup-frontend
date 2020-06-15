@@ -86,4 +86,6 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val vat7FormUrl: String = "https://www.gov.uk/government/publications/vat-application-to-cancel-your-vat-registration-vat7"
 
   override val manageVatMissingTraderUrl: String = "/vat-through-software/account/missing-trader"
+
+  override val difficultiesPayingUrl: String = "/difficulties-paying"
 }

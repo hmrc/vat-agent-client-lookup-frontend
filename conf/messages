@@ -34,6 +34,7 @@ common.agentService = Your client’s VAT details
 common.errorSummary.heading = You have one or more errors
 common.continue = Continue
 common.fullStop = .
+common.warning = Warning
 
 confirmClientVrn.title = Confirm your client’s details
 confirmClientVrn.heading = Confirm your client’s details
@@ -138,9 +139,9 @@ breadcrumb.agentServices = Agent Services Account
 signUpPartial.LinkText = Sign up for Making Tax Digital for VAT
 signUpPartial.Body = Your client must sign up to Making Tax Digital for VAT if they are not exempt from VAT, and their taxable turnover exceeds the £85,000 threshold.
 
-covid.title = Coronavirus (COVID 19) VAT deferral
-covid.line1 = If your client has VAT payments that are due between 20 March and 30 June 2020, they can choose to:
-covid.bullet1 = defer them without paying interest or penalties
-covid.bullet2 = pay the VAT due as normal
-covid.line2 = They must continue to submit their returns as normal. If they choose to defer their VAT payment, the VAT due must be paid on or before 31 March 2021. They do not need to tell HMRC that they are deferring VAT payments.
-covid.directDebit = If your client normally pays by Direct Debit, they must contact their bank to cancel it as soon as possible.
+covid.title = You can no longer delay VAT payments because of coronavirus (COVID-19)
+covid.line1 = VAT bills that have a payment date on or after 1 July 2020 must be paid on time.
+covid.line2-p = If you cancelled your Direct Debit, set it up again so you don’t miss a payment.
+covid.line2-a = Contact us as soon as possible if you cannot pay
+covid.line3 = You still need to submit VAT Returns, even if your business has temporarily closed.
+covid.line4 = You have until 31 March 2021 to pay VAT bills that were due between 20 March and 30 June 2020.
