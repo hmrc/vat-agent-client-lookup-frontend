@@ -22,7 +22,7 @@ import play.api.libs.ws.WSResponse
 import play.api.test.Helpers._
 import stubs.EmailVerificationStub
 
-class ConfirmEmailPageSpec extends BasePageISpec {
+class CheckYourAnswersPageSpec extends BasePageISpec {
 
   val path = "/email-confirmation"
   val isEmailVerifiedPath = "/is-email-verified"
@@ -35,13 +35,13 @@ class ConfirmEmailPageSpec extends BasePageISpec {
 
         "there is no notification email in session" should {
 
-          "Render the Confirm Email view" in {
+          "Render the Check Your Answers view" in {
 
             def show(): WSResponse = get(path, formatNotificationsEmail(None) ++ formatReturnUrl)
 
             given.agent.isSignedUpToAgentServices
 
-            When("I call the Confirm email page with no notification email in session")
+            When("I call the Check Your Answers page with no notification email in session")
 
             val res = show()
 
@@ -54,18 +54,18 @@ class ConfirmEmailPageSpec extends BasePageISpec {
 
         "there is a notification email in session" should {
 
-          "Render the Confirm Email view" in {
+          "Render the Check Your Answers view" in {
 
             def show(): WSResponse = get(path, formatNotificationsEmail(Some(notificationsEmail)) ++ formatReturnUrl)
 
             given.agent.isSignedUpToAgentServices
 
-            When("I call the Confirm email page with a notification email in session")
+            When("I call the Check Your Answers page with a notification email in session")
             val res = show()
 
             res should have(
               httpStatus(OK),
-              elementText("h1")("Confirm the email address")
+              elementText("h1")("Check your answers")
             )
           }
         }

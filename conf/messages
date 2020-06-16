@@ -50,10 +50,11 @@ clientsVrn.label = What is your client’s VAT number?
 clientVrnForm.error.missing = Enter your client’s VAT number
 clientVrnForm.error.invalid = Enter a VAT number in the correct format
 
-confirmEmail.title = Confirm the email address
-confirmEmail.heading = Confirm the email address
-confirmEmail.change = Change
-confirmEmail.changeContext = Change your email address
+checkYourAnswers.title = Check your answers
+checkYourAnswers.vatBusinessDetails = VAT business details
+checkYourAnswers.change = Change
+checkYourAnswers.changeContext = Check your answers
+checkYourAnswers.email = Email address
 
 clientDetailsCard.title = Client details
 clientDetailsCard.info = Change your client’s business and contact details or VAT Return dates.

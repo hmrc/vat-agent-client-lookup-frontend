@@ -76,10 +76,11 @@ clientsVrn.label = Beth yw rhif TAW eich cleient?
 clientVrnForm.error.missing = Nodwch rif TAW eich cleient
 clientVrnForm.error.invalid = Nodwch rif TAW yn y fformat cywir
 
-confirmEmail.title = Cadarnhau’r cyfeiriad e-bost
-confirmEmail.heading = Cadarnhau’r cyfeiriad e-bost
-confirmEmail.change = Newid
-confirmEmail.changeContext = Newid eich cyfeiriad e-bost
+checkYourAnswers.title = Gwiriwch eich atebion
+checkYourAnswers.vatBusinessDetails = Manylion busnes TAW
+checkYourAnswers.change = Newid
+checkYourAnswers.changeContext = Gwiriwch eich atebion
+checkYourAnswers.email = Cyfeiriad e-bost
 
 clientDetailsCard.title = Manylion cleient
 clientDetailsCard.info = Newid manylion busnes a chyswllt eich cleient neu ddyddiadau Ffurflenni TAW eich cleient.
