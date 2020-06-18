@@ -33,33 +33,36 @@ class VerifyEmailViewSpec extends ViewBaseSpec {
   "The Verify Email view" should {
 
     s"have the correct document title" in {
-      document.title shouldBe "Verify your email address - Your client’s VAT details - GOV.UK"
+      document.title shouldBe "Confirm your email address - Your client’s VAT details - GOV.UK"
     }
 
     "have the correct heading" in {
-      document.getElementsByClass("heading-large").text() shouldBe "Verify your email address"
+      document.getElementsByClass("heading-large").text() shouldBe "Confirm your email address"
     }
 
     "have the correct text for the first paragraph" in {
-      elementText("#content article p:nth-of-type(1)") shouldBe
-        "We’ve sent an email to test@email.com. Click on the link in the email to verify your email address."
+      elementText("#content article p:nth-of-type(1)") shouldBe "We’ve sent an email to test@email.com"
     }
 
     "have the correct text for the second paragraph" in {
-      elementText("#content article p:nth-of-type(2)") shouldBe "Check your junk folder. If it’s not there we can" +
-        " send it again. If we send it again, any previous link will stop working."
-      }
+      elementText("#content article p:nth-of-type(2)") shouldBe "You need to click the link in our email within 15 minutes. " +
+        "This will confirm your email address."
+    }
+
+    "have the correct text for the third paragraph" in {
+      elementText("#content article p:nth-of-type(3)") shouldBe "Check your junk folder. If it’s not there we can send it again."
+    }
       
-      "have a link" which {
+    "have a link" which {
 
-        "has the correct link text" in {
-          elementText("#content > article > p:nth-of-type(2) > a") shouldBe "send it again"
-        }
+      "has the correct link text" in {
+        elementText("#content > article > p:nth-of-type(3) > a") shouldBe "send it again"
+      }
 
-        "has the correct href" in {
-          element("#content > article > p:nth-of-type(2) > a").attr("href") shouldBe
-            controllers.agent.routes.VerifyEmailController.sendVerification().url
-        }
+      "has the correct href" in {
+        element("#content > article > p:nth-of-type(3) > a").attr("href") shouldBe
+          controllers.agent.routes.VerifyEmailController.sendVerification().url
+      }
     }
   }
 }

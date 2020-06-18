@@ -64,7 +64,7 @@ class VerifyEmailPageSpec extends BasePageISpec {
 
             res should have(
               httpStatus(OK),
-              elementText("h1")("Verify your email address")
+              elementText("h1")("Confirm your email address")
             )
           }
         }
