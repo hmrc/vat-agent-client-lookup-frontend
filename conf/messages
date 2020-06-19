@@ -140,7 +140,7 @@ breadcrumb.agentServices = Agent Services Account
 signUpPartial.LinkText = Sign up for Making Tax Digital for VAT
 signUpPartial.Body = Your client must sign up to Making Tax Digital for VAT if they are not exempt from VAT, and their taxable turnover exceeds the £85,000 threshold.
 
-covid.title = We previously set out that you could delay (defer) paying VAT because of coronavirus (COVID-19). The VAT deferral period ends on 30 June 2020
+covid.title = We previously set out that you could delay (defer) paying VAT because of coronavirus (COVID-19). The VAT deferral period ends on 30 June 2020.
 covid.line1 = VAT bills with a payment date on or after 1 July 2020 must be paid on time and in full.
 covid.line2-p = If you cancelled your Direct Debit, set it up again so you don’t miss a payment.
 covid.line2-a = Contact our
