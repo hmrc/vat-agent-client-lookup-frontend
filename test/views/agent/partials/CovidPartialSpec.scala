@@ -28,7 +28,7 @@ class CovidPartialSpec extends ViewBaseSpec {
 
   "The covid partial pre end of June 2020" should {
 
-    lazy val view = covid(preCovidDeadline = false)(messages, mockConfig)
+    lazy val view = covid(postCovidDeadline = false)(messages, mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct card heading" in {
@@ -65,7 +65,7 @@ class CovidPartialSpec extends ViewBaseSpec {
 
   "The covid partial post end of June 2020" should {
 
-    lazy val view = covid(preCovidDeadline = true)(messages, mockConfig)
+    lazy val view = covid(postCovidDeadline = true)(messages, mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct card heading" in {
