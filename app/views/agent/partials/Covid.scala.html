@@ -18,21 +18,28 @@
 
 @this()
 
-@()(implicit messages: Messages, appConfig: AppConfig)
+@(postCovidDeadline: Boolean)(implicit messages: Messages, appConfig: AppConfig)
 
 <div id="covid-partial" class="warning-banner">
   <div class="notice">
     <i class="icon icon-important">
       <span class="visually-hidden">@messages("common.warning")</span>
     </i>
-    <p><strong class="bold-small">@messages("covid.title")</strong></p>
+      @if(postCovidDeadline) {
+        <p><strong class="bold-small">@messages("covid.title-postEnd")</strong></p>
+      } else {
+      <p><strong class="bold-small">@messages("covid.title-preEnd")</strong></p>
+      }
   </div>
   <ol class="panel panel-border-wide">
-    <li>@messages("covid.line1")</li>
-    <li>@messages("covid.line2-p")
-      <a href="@appConfig.difficultiesPayingUrl">@messages("covid.line2-a")</a>@messages("common.fullStop")
-    </li>
-    <li>@messages("covid.line3")</li>
-    <li>@messages("covid.line4")</li>
+      <li>@messages("covid.line1")</li>
+      <li>@messages("covid.line2-p")
+          @messages("covid.line2-a")
+          <a href="@appConfig.difficultiesPayingUrl">@messages("covid.line2-b-link")</a>
+          @messages("covid.line2-c")
+          @messages("covid.line2-d")
+      </li>
+      <li>@messages("covid.line3")</li>
+      <li>@messages("covid.line4")</li>
   </ol>
 </div>

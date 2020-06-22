@@ -26,13 +26,13 @@ class CovidPartialSpec extends ViewBaseSpec {
 
   val covid: Covid = injector.instanceOf[Covid]
 
-  "The covid partial" should {
+  "The covid partial pre end of June 2020" should {
 
-    lazy val view = covid()(messages, mockConfig)
+    lazy val view = covid(postCovidDeadline = false)(messages, mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct card heading" in {
-      elementText("strong") shouldBe CovidPartialMessages.heading
+      elementText("strong") shouldBe CovidPartialMessages.headingPreEnd
     }
 
     "display the correct line 1" in {
@@ -60,6 +60,16 @@ class CovidPartialSpec extends ViewBaseSpec {
 
     "display the correct line 4" in {
       elementText("li:nth-of-type(4)") shouldBe CovidPartialMessages.line4
+    }
+  }
+
+  "The covid partial post end of June 2020" should {
+
+    lazy val view = covid(postCovidDeadline = true)(messages, mockConfig)
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "have the correct card heading" in {
+      elementText("strong") shouldBe CovidPartialMessages.headingPostEnd
     }
   }
 }

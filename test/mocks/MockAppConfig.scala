@@ -87,5 +87,5 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
 
   override val manageVatMissingTraderUrl: String = "/vat-through-software/account/missing-trader"
 
-  override val difficultiesPayingUrl: String = "/difficulties-paying"
+  override val difficultiesPayingUrl: String = "/difficulties-paying-hmrc"
 }
