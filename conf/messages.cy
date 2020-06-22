@@ -165,7 +165,8 @@ breadcrumb.agentServices = Cyfrif Gwasanaethau Asiant
 signUpPartial.LinkText = Cofrestru ar gyfer Troi Treth yn Ddigidol ar gyfer TAW
 signUpPartial.Body = Mae’n rhaid i’ch cleient gofrestru ar gyfer y Cynllun Troi Treth yn Ddigidol ar gyfer TAW os nad yw wedi’i eithrio rhag TAW, a bod ei drosiant trethadwy dros y trothwy, sef £85,000.
 
-covid.title = Gwnaethom nodi ynghynt y gallech ohirio talu TAW oherwydd coronafeirws (COVID-19). Mae’r cyfnod gohirio TAW yn dod i ben ar 30 Mehefin 2020.
+covid.title-preEnd = Gwnaethom nodi ynghynt y gallech ohirio talu TAW oherwydd coronafeirws (COVID-19). Mae’r cyfnod gohirio TAW yn dod i ben ar 30 Mehefin 2020.
+covid.title-postEnd = Gwnaethom nodi ynghynt y gallech ohirio talu TAW oherwydd coronafeirws (COVID-19). Daeth y cyfnod gohirio TAW i ben ar 30 Mehefin 2020.
 covid.line1 = Mae’n rhaid i filiau TAW sydd â dyddiad talu dyledus ar neu ar ôl 1 Gorffennaf 2020 gael eu talu’n llawn ac mewn pryd.
 covid.line2-p = Os gwnaethoch ganslo’ch Debyd Uniongyrchol, dylech ei ailsefydlu er mwyn i chi beidio â methu taliad.
 covid.line2-a = Cysylltwch â

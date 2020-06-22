@@ -18,14 +18,18 @@
 
 @this()
 
-@()(implicit messages: Messages, appConfig: AppConfig)
+@(preCovidDeadline: Boolean)(implicit messages: Messages, appConfig: AppConfig)
 
 <div id="covid-partial" class="warning-banner">
   <div class="notice">
     <i class="icon icon-important">
       <span class="visually-hidden">@messages("common.warning")</span>
     </i>
-    <p><strong class="bold-small">@messages("covid.title")</strong></p>
+      @if(preCovidDeadline) {
+        <p><strong class="bold-small">@messages("covid.title-postEnd")</strong></p>
+      } else {
+      <p><strong class="bold-small">@messages("covid.title-preEnd")</strong></p>
+      }
   </div>
   <ol class="panel panel-border-wide">
       <li>@messages("covid.line1")</li>

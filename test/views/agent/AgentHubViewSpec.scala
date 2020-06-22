@@ -28,8 +28,6 @@ import assets.CustomerDetailsTestConstants._
 import assets.messages.{AgentHubMessages => Messages}
 import assets.messages.partials.CovidPartialMessages
 import assets.messages.partials.{SignUpPartialMessages, _}
-import models.User
-import play.api.i18n.Lang
 import views.html.agent.AgentHubView
 
 class AgentHubViewSpec extends ViewBaseSpec {
@@ -41,7 +39,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
     val date: LocalDate = LocalDate.parse("2018-05-01")
 
     "the user is a valid agent for an opted-in client with covid feature switch disabled" should {
-      lazy val view = injectedView(customerDetailsFnameOnly, vrn, date)(request,messages,mockConfig,user)
+      lazy val view = injectedView(customerDetailsFnameOnly, vrn, date, preCovidDeadline = true)(request,messages,mockConfig,user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not display the covid partial" in {
@@ -50,14 +48,14 @@ class AgentHubViewSpec extends ViewBaseSpec {
       }
     }
 
-    "the user is a valid agent for an opted-in client with covid feature switch enabled" should {
+    "the user is a valid agent for an opted-in client with covid feature switch enabled pre the end of June 2020" should {
 
-      lazy val view = injectedView(customerDetailsFnameOnly, vrn, date)(request,messages,mockConfig,user)
+      lazy val view = injectedView(customerDetailsFnameOnly, vrn, date, preCovidDeadline = false)(request,messages,mockConfig,user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the covid partial" in {
         mockConfig.features.displayCovidMessage(true)
-        elementText("#covid-partial strong") shouldBe CovidPartialMessages.heading
+        elementText("#covid-partial strong") shouldBe CovidPartialMessages.headingPreEnd
       }
 
       "have the correct title" in {
@@ -108,10 +106,21 @@ class AgentHubViewSpec extends ViewBaseSpec {
       }
     }
 
+    "the user is a valid agent for an opted-in client with covid feature switch enabled post the end of June 2020" should {
+
+      lazy val view = injectedView(customerDetailsFnameOnly, vrn, date, preCovidDeadline = true)(request, messages, mockConfig, user)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "display the covid partial" in {
+        mockConfig.features.displayCovidMessage(true)
+        elementText("#covid-partial strong") shouldBe CovidPartialMessages.headingPostEnd
+      }
+    }
+
     "the user is an agent for an opted out client" should {
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = injectedView(customerDetailsOptedOut, vrn, date)(request,messages,mockConfig,user)
+      lazy val view = injectedView(customerDetailsOptedOut, vrn, date, preCovidDeadline = true)(request,messages,mockConfig,user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not display the opt-out partial" in {
@@ -126,7 +135,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
     "the user is an agent for a 'Non-Digital' client" should {
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = injectedView(customerDetailsNonDigital, vrn, date)(request,messages,mockConfig,user)
+      lazy val view = injectedView(customerDetailsNonDigital, vrn, date, preCovidDeadline = true)(request,messages,mockConfig,user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not display the opt-out partial" in {
@@ -142,7 +151,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
       val otherDate: LocalDate = LocalDate.parse("2020-01-01")
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = injectedView(customerDetailsAllInfo, vrn, otherDate)(request,messages,mockConfig,user)
+      lazy val view = injectedView(customerDetailsAllInfo, vrn, otherDate, preCovidDeadline = true)(request,messages,mockConfig,user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the Cancel VAT registration historic partial" in {
@@ -154,7 +163,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
 
       val date: LocalDate = LocalDate.parse("2010-01-01")
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-      lazy val view = injectedView(customerDetailsAllInfo, vrn, date)(request,messages,mockConfig,user)
+      lazy val view = injectedView(customerDetailsAllInfo, vrn, date, preCovidDeadline = true)(request,messages,mockConfig,user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'cancel vat registration' partial with the correct future of historic date" in {
