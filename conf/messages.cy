@@ -93,12 +93,12 @@ VatCertificateCard.link = Bwrw golwg dros y dystysgrif TAW
 optOutCard.heading = Optio allan o’r cynllun Troi Treth yn Ddigidol ar gyfer TAW
 optOutCard.content = Ni allwch optio allan os yw trosiant trethadwy eich cleient wedi bod dros £85,000 ar unrhyw adeg ers 1 Ebrill 2019.
 
-verifyEmail.title = Dilysu’ch cyfeiriad e-bost
-verifyEmail.heading = Dilysu’ch cyfeiriad e-bost
-verifyEmail.lineOne = Rydym wedi anfon e-bost at {0}. Cliciwch ar y cysylltiad yn yr e-bost i ddilysu’ch cyfeiriad e-bost.
-verifyEmail.lineTwo.1 = Chwiliwch yn eich ffolder sothach. Os nad yw’r e-bost yno, gallwn
-verifyEmail.lineTwo.2 = ei anfon eto
-verifyEmail.lineTwo.3 = Os byddwn yn ei anfon eto, ni fydd unrhyw gysylltiadau blaenorol yn gweithio mwyach.
+verifyEmail.title = Cadarnhau’ch cyfeiriad e-bost
+verifyEmail.heading = Cadarnhau’ch cyfeiriad e-bost
+verifyEmail.lineOne = Rydym wedi anfon e-bost at {0}
+verifyEmail.lineTwo = Mae angen i chi glicio’r cysylltiad yn yr e-bost cyn pen 15 munud. Bydd hyn yn cadarnhau’ch cyfeiriad e-bost.
+verifyEmail.lineThree.1 = Chwiliwch yn eich ffolder sothach. Os nad yw’r e-bost yno, gallwn
+verifyEmail.lineThree.2 = ei anfon eto
 
 sessionTimeout.title = Mae’ch sesiwn wedi’i therfynu
 sessionTimeout.helpOne = I reoli’ch cyfrif TAW, bydd yn rhaid i chi
