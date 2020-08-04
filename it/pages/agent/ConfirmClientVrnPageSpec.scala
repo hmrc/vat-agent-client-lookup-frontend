@@ -25,7 +25,7 @@ import stubs.VatSubscriptionStub
 
 class ConfirmClientVrnPageSpec extends BasePageISpec {
 
-  val path = "/confirm-client-vat-number"
+  val path = "/confirm-client-details"
 
   "Calling the .show action" when {
 

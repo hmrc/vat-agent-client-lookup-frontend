@@ -10,7 +10,7 @@ POST       /client-vat-number                           controllers.agent.Select
 GET        /unauthorised-for-client                     controllers.agent.AgentUnauthorisedForClientController.show(redirectUrl: String ?= "")
 
 GET        /change-client-vat-number                    controllers.agent.ConfirmClientVrnController.changeClient
-GET        /confirm-client-vat-number                   controllers.agent.ConfirmClientVrnController.show
+GET        /confirm-client-details                      controllers.agent.ConfirmClientVrnController.show
 GET        /redirect                                    controllers.agent.ConfirmClientVrnController.redirect
 
 GET        /email-notification                          controllers.agent.CapturePreferenceController.show(altRedirectUrl: String ?= "")
