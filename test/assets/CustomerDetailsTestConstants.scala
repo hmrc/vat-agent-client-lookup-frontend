@@ -178,15 +178,9 @@ object CustomerDetailsTestConstants {
     Some(Deregistration(Some(LocalDate.parse("2019-01-01"))))
   )
 
-  val customerDetailsPendingDeregestrationNoInfo = CustomerDetails(
-    None,
-    None,
-    None,
-    None,
-    Some(validParty),
-    mandationStatus,
-    None,
-    Some(ChangeIndicators(true))
+  val customerDetailsAllPending: CustomerDetails = customerDetailsAllInfo.copy(
+    deregistration = None,
+    changeIndicators = Some(ChangeIndicators(deregister = true, PPOBDetails = true))
   )
 
   val customerDetailsFutureDeregisterOptedOut = CustomerDetails(

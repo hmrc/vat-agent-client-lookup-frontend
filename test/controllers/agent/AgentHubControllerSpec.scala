@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit
 
 import akka.util.Timeout
 import assets.BaseTestConstants
-import assets.CustomerDetailsTestConstants.{customerDetailsAllInfo, customerDetailsFnameOnly}
+import assets.CustomerDetailsTestConstants.{customerDetailsAllInfo, customerDetailsFnameOnly, customerDetailsAllPending}
 import controllers.ControllerBaseSpec
 import mocks.services._
 import org.jsoup.Jsoup
@@ -52,19 +52,39 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
       "the missing trader intercept feature switch is enabled" when {
 
-        "the customer is a missing trader" should {
+        "the customer is a missing trader" when {
 
-          "redirect the customer to manage-vat" in new Test {
-            mockAgentAuthorised()
-            mockCustomerDetailsSuccess(customerDetailsAllInfo)
+          "they do not have a pending PPOB" should {
 
-            val result: Future[Result] = {
-              mockConfig.features.missingTraderAddressIntercept(true)
-              mockConfig.features.useAgentHubPageFeature(true)
-              controller.show()(fakeRequestWithVrnAndRedirectUrl)
+            "redirect the customer to manage-vat" in new Test {
+              mockAgentAuthorised()
+              mockCustomerDetailsSuccess(customerDetailsAllInfo)
+
+              val result: Future[Result] = {
+                mockConfig.features.missingTraderAddressIntercept(true)
+                mockConfig.features.useAgentHubPageFeature(true)
+                controller.show()(fakeRequestWithVrnAndRedirectUrl)
+              }
+
+              status(result) shouldBe SEE_OTHER
             }
+          }
 
-            status(result) shouldBe SEE_OTHER
+          "they have a pending PPOB" should {
+
+            "render the AgentHubPage" in new Test {
+              mockAgentAuthorised()
+              mockCustomerDetailsSuccess(customerDetailsAllPending.copy(missingTrader = true))
+
+              val result: Future[Result] = {
+                mockConfig.features.missingTraderAddressIntercept(true)
+                mockConfig.features.useAgentHubPageFeature(true)
+                controller.show()(fakeRequestWithVrnAndRedirectUrl)
+              }
+
+              status(result) shouldBe OK
+              messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client’s VAT details"
+            }
           }
         }
 
@@ -75,8 +95,8 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
             mockCustomerDetailsSuccess(customerDetailsFnameOnly)
 
             val result: Future[Result] = {
-              mockConfig.features.useAgentHubPageFeature(true)
               mockConfig.features.missingTraderAddressIntercept(true)
+              mockConfig.features.useAgentHubPageFeature(true)
               controller.show()(fakeRequestWithVrnAndRedirectUrl)
             }
 

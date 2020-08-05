@@ -139,12 +139,12 @@ class RegistrationPartialSpec extends ViewBaseSpec {
 
       "client is pending deregistration" should {
 
-        lazy val view = registrationPartial(customerDetailsPendingDeregestrationNoInfo, toLocalDate("2019-01-01"))(messages, mockConfig, user)
+        lazy val view = registrationPartial(customerDetailsAllPending, toLocalDate("2019-01-01"))(messages, mockConfig, user)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "display a section for pending deregistration" which {
 
-          lazy val view = registrationPartial(customerDetailsPendingDeregestrationNoInfo, toLocalDate("2019-01-01"))(messages, mockConfig, user)
+          lazy val view = registrationPartial(customerDetailsAllPending, toLocalDate("2019-01-01"))(messages, mockConfig, user)
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           s"should have the correct title of ${RegistrationPartialMessages.pendingRegistrationTitle}" in {

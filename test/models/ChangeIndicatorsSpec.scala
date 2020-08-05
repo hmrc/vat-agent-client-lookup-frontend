@@ -16,33 +16,38 @@
 
 package models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.play.test.UnitSpec
 
 class ChangeIndicatorsSpec extends UnitSpec {
 
+  val jsonAllTrue: JsObject = Json.obj("deregister" -> true, "PPOBDetails" -> true)
+  val jsonAllFalse: JsObject = Json.obj("deregister" -> false, "PPOBDetails" -> false)
+  val modelAllTrue: ChangeIndicators = ChangeIndicators(deregister = true, PPOBDetails = true)
+  val modelAllFalse: ChangeIndicators = ChangeIndicators(deregister = false, PPOBDetails = false)
+
   "ChangeindicatorsModel" should {
 
     "deserialize from JSON" when {
-      "deregister is true" in {
-        Json.obj("deregister" -> true).as[ChangeIndicators] shouldBe ChangeIndicators(true)
+
+      "all fields are true" in {
+        jsonAllTrue.as[ChangeIndicators] shouldBe modelAllTrue
       }
-      "deregister is false" in {
-        Json.obj("deregister" -> false).as[ChangeIndicators] shouldBe ChangeIndicators(false)
+
+      "all fields are false" in {
+        jsonAllFalse.as[ChangeIndicators] shouldBe modelAllFalse
       }
     }
 
     "serialize to JSON" when {
-      "ChangeIndicator is true" in {
-        Json.toJson(ChangeIndicators(true)) shouldBe Json.obj("deregister" -> true)
+
+      "all fields are true" in {
+        Json.toJson(modelAllTrue) shouldBe jsonAllTrue
       }
 
-      "ChangeIndicator is false" in {
-        Json.toJson(ChangeIndicators(false)) shouldBe Json.obj("deregister" -> false)
+      "all fields are false" in {
+        Json.toJson(modelAllFalse) shouldBe jsonAllFalse
       }
-
     }
-
   }
-
 }

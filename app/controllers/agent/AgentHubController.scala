@@ -41,7 +41,7 @@ class AgentHubController @Inject()(val authenticate: AuthoriseAsAgentWithClient,
     if(appConfig.features.useAgentHubPageFeature()){
       customerDetailsService.getCustomerDetails(user.vrn).map {
         case Right(details) =>
-          if (details.missingTrader && appConfig.features.missingTraderAddressIntercept()) {
+          if (details.missingTrader && appConfig.features.missingTraderAddressIntercept() && !details.hasPendingPPOB) {
             Redirect(appConfig.manageVatMissingTraderUrl)
           } else {
             Ok(agentHubView(details, user.vrn, dateService.now(), dateService.isPostCovidDeadline))

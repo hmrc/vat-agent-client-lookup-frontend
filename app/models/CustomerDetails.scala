@@ -45,6 +45,8 @@ case class CustomerDetails(firstName: Option[String],
       Logger.warn("[CustomerDetails][clientName] - No entity name was returned by the API")
       throw new InternalServerException("No entity name was returned by the API")
   }
+
+  val hasPendingPPOB: Boolean = changeIndicators.fold(false)(_.PPOBDetails)
 }
 
 object CustomerDetails {
