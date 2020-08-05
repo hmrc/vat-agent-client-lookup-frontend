@@ -18,7 +18,7 @@ package models
 
 import play.api.libs.json.{Format, Json}
 
-case class ChangeIndicators(deregister: Boolean)
+case class ChangeIndicators(deregister: Boolean, PPOBDetails: Boolean)
 
 object ChangeIndicators{
   implicit val format: Format[ChangeIndicators] = Json.format[ChangeIndicators]
