@@ -44,7 +44,7 @@ class AgentHubController @Inject()(val authenticate: AuthoriseAsAgentWithClient,
           if (details.missingTrader && appConfig.features.missingTraderAddressIntercept() && !details.hasPendingPPOB) {
             Redirect(appConfig.manageVatMissingTraderUrl)
           } else {
-            Ok(agentHubView(details, user.vrn, dateService.now(), dateService.isPostCovidDeadline))
+            Ok(agentHubView(details, user.vrn, dateService.now()))
           }
         case Left(error) =>
           Logger.warn(s"[AgentHubController][show] - received an error from CustomerDetailsService: $error")

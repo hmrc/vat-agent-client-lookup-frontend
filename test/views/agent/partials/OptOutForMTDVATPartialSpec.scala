@@ -25,7 +25,7 @@ import views.ViewBaseSpec
 import assets.messages.partials.OptOutForMTDVATMessages
 import common.{MandationStatus, SessionKeys}
 import models.User
-import views.html.agent.partials.{Covid, OptOutForMTDVATPartial}
+import views.html.agent.partials.OptOutForMTDVATPartial
 
 class OptOutForMTDVATPartialSpec extends ViewBaseSpec {
 
