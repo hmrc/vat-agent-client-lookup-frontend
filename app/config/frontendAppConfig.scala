@@ -40,10 +40,6 @@ trait AppConfig {
   val signInContinueBaseUrl: String
   def routeToSwitchLanguage: String => Call
   def languageMap: Map[String, Lang]
-  val whitelistEnabled: Boolean
-  val whitelistedIps: Seq[String]
-  val whitelistExcludedPaths: Seq[Call]
-  val shutterPage: String
   val vatSubscriptionUrl: String
   val manageVatCustomerDetailsUrl: String
   val timeoutPeriod: Int
@@ -114,15 +110,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
     "english" -> Lang("en"),
     "cymraeg" -> Lang("cy")
   )
-
-  private def whitelistConfig(key: String): Seq[String] = Some(new String(Base64.getDecoder
-    .decode(sc.getString(key)), "UTF-8"))
-    .map(_.split(",")).getOrElse(Array.empty).toSeq
-
-  override lazy val whitelistEnabled: Boolean = sc.getBoolean(Keys.whitelistEnabled)
-  override lazy val whitelistedIps: Seq[String] = whitelistConfig(Keys.whitelistedIps)
-  override lazy val whitelistExcludedPaths: Seq[Call] = whitelistConfig(Keys.whitelistExcludedPaths).map(path => Call("GET", path))
-  override lazy val shutterPage: String = sc.getString(Keys.whitelistShutterPage)
 
   override lazy val vatSubscriptionUrl: String = sc.baseUrl(Keys.vatSubscription)
 
