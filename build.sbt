@@ -30,7 +30,6 @@ val playPartialsVersion        = "6.11.0-play-26"
 val authClientVersion          = "3.0.0-play-26"
 val playUiVersion              = "8.11.0-play-26"
 val playLanguageVersion        = "4.3.0-play-26"
-val playWhiteListFilterVersion = "3.4.0-play-26"
 val scalaTestPlusVersion       = "3.1.2"
 val hmrcTestVersion            = "3.9.0-play-26"
 val scalatestVersion           = "3.0.6"
@@ -50,7 +49,6 @@ val compile = Seq(
   "uk.gov.hmrc" %% "play-partials" % playPartialsVersion,
   "uk.gov.hmrc" %% "auth-client" % authClientVersion,
   "uk.gov.hmrc" %% "play-language" % playLanguageVersion,
-  "uk.gov.hmrc" %% "play-whitelist-filter" % playWhiteListFilterVersion,
   "uk.gov.hmrc" %% "reference-checker" % referenceCheckerVersion,
   "com.typesafe.play" %% "play-json-joda" % playJodaVersion
 )
