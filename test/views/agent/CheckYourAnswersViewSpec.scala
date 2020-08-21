@@ -57,17 +57,6 @@ class CheckYourAnswersViewSpec extends ViewBaseSpec {
       elementText(Selectors.heading2) shouldBe "VAT business details"
     }
 
-    "have a back link" which {
-
-      "should have the correct text" in {
-        elementText(Selectors.backLink) shouldBe "Back"
-      }
-
-      "should have the correct back link" in {
-        element(Selectors.backLink).attr("href") shouldBe controllers.agent.routes.CapturePreferenceController.show().url
-      }
-    }
-
     "have the email address the user provided" in {
       elementText(Selectors.email) shouldBe testEmail
     }
