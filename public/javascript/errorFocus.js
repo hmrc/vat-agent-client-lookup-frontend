@@ -1,3 +1,6 @@
-$(document).ready(function() {
-    document.getElementById('error-summary-display').focus();
+$(document).ready(function(){
+    var error = document.getElementById('error-summary-display');
+    if(error != null){
+        error.focus();
+    }
 });
