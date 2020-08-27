@@ -20,41 +20,41 @@ import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import uk.gov.hmrc.versioning.SbtGitVersioning
 import uk.gov.hmrc.{SbtArtifactory, SbtAutoBuildPlugin}
 import play.core.PlayVersion
+import play.sbt.routes.RoutesKeys
 import sbt.Tests.{Group, SubProcess}
 
 val appName = "vat-agent-client-lookup-frontend"
 
-val bootstrapPlayVersion       = "1.8.0"
+resolvers += "hmrc-releases-local" at "https://artefacts.tax.service.gov.uk/artifactory/hmrc-releases-local"
+
+val bootstrapPlayVersion       = "2.24.0"
 val govTemplateVersion         = "5.55.0-play-26"
 val playPartialsVersion        = "6.11.0-play-26"
-val authClientVersion          = "3.0.0-play-26"
 val playUiVersion              = "8.11.0-play-26"
 val playLanguageVersion        = "4.3.0-play-26"
 val scalaTestPlusVersion       = "3.1.2"
 val hmrcTestVersion            = "3.9.0-play-26"
-val scalatestVersion           = "3.0.6"
+val scalatestVersion           = "3.0.8"
 val pegdownVersion             = "1.6.0"
-val jsoupVersion               = "1.12.1"
+val jsoupVersion               = "1.13.1"
 val mockitoVersion             = "2.28.2"
 val scalaMockVersion           = "3.6.0"
-val wiremockVersion            = "2.25.1"
-val referenceCheckerVersion    = "2.4.0"
+val wiremockVersion            = "2.26.3"
+val referenceCheckerVersion    = "2.5.0"
 val playJodaVersion            = "2.6.14"
 
 val compile = Seq(
   ws,
-  "uk.gov.hmrc" %% "bootstrap-play-26" % bootstrapPlayVersion,
+  "uk.gov.hmrc" %% "bootstrap-frontend-play-26" % bootstrapPlayVersion,
   "uk.gov.hmrc" %% "govuk-template" % govTemplateVersion,
   "uk.gov.hmrc" %% "play-ui" % playUiVersion,
   "uk.gov.hmrc" %% "play-partials" % playPartialsVersion,
-  "uk.gov.hmrc" %% "auth-client" % authClientVersion,
   "uk.gov.hmrc" %% "play-language" % playLanguageVersion,
   "uk.gov.hmrc" %% "reference-checker" % referenceCheckerVersion,
   "com.typesafe.play" %% "play-json-joda" % playJodaVersion
 )
 
 def test(scope: String = "test,it"): Seq[ModuleID] = Seq(
-  "uk.gov.hmrc" %% "bootstrap-play-26" % bootstrapPlayVersion % scope classifier "tests",
   "uk.gov.hmrc" %% "hmrctest" % hmrcTestVersion % scope,
   "org.scalatest" %% "scalatest" % scalatestVersion % scope,
   "org.scalatestplus.play" %% "scalatestplus-play" % scalaTestPlusVersion % scope,
@@ -66,12 +66,14 @@ def test(scope: String = "test,it"): Seq[ModuleID] = Seq(
   "com.github.tomakehurst" % "wiremock-jre8" % wiremockVersion % scope
 )
 
+RoutesKeys.routesImport := Seq.empty
+
 lazy val coverageSettings: Seq[Setting[_]] = {
   import scoverage.ScoverageKeys
 
   val excludedPackages = Seq(
     "<empty>",
-    "Reverse.*",
+    ".*Reverse.*",
     ".*standardError*.*",
     ".*govuk_wrapper*.*",
     ".*main_template*.*",
@@ -96,16 +98,15 @@ lazy val playSettings : Seq[Setting[_]] = Seq.empty
 
 def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] = tests map {
   test =>
-    Group(
-      test.name,
-      Seq(test),
-      SubProcess(ForkOptions(runJVMOptions = Seq("-Dtest.name=" + test.name, "-Dlogger.resource=logback-test.xml")))
-    )
+    Group(test.name, Seq(test), SubProcess(
+      ForkOptions().withRunJVMOptions(Vector("-Dtest.name=" + test.name, "-Dlogger.resource=logback-test.xml"))
+    ))
 }
 
 
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(Seq(play.sbt.PlayScala,SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory) ++ plugins : _*)
+  .disablePlugins(JUnitXmlReportPlugin)
   .settings(PlayKeys.playDefaultPort := 9149)
   .settings(playSettings : _*)
   .settings(coverageSettings: _*)
@@ -115,7 +116,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     Keys.fork in Test := true,
     javaOptions in Test += "-Dlogger.resource=logback-test.xml",
-    scalaVersion := "2.11.12",
+    scalaVersion := "2.12.12",
     majorVersion := 0,
     libraryDependencies ++= appDependencies,
     retrieveManaged := true,

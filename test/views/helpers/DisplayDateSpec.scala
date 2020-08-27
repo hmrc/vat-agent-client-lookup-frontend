@@ -25,7 +25,7 @@ import views.templates.TemplateBaseSpec
 
 class DisplayDateSpec extends TemplateBaseSpec {
 
-  val displayDate: DisplayDate = injector.instanceOf[DisplayDate]
+  val displayDate: DisplayDate = inject[DisplayDate]
 
   "Calling displayDate" when {
 

@@ -44,7 +44,7 @@ hmrcGovUkTemplate: GovUkTemplate)
   scriptElem: Option[Html] = None,
   showSignOut: Boolean = true,
   feedbackOnSignOut: Boolean = true
-  )(implicit request: Request[_], messages: Messages)
+  )(implicit messages: Messages)
 
 @scriptElement = {
   <script type="text/javascript" src=@routes.Assets.at("javascript/errorFocus.js?2")></script>
@@ -107,8 +107,6 @@ hmrcGovUkTemplate: GovUkTemplate)
 }
 
 @footerTop = {}
-
-@footerLinksContent = {}
 
 @phaseBanner = {
     <div class="beta-banner">

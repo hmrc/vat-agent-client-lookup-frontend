@@ -18,19 +18,16 @@ package views.agent.partials
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.mvc.AnyContentAsEmpty
-import play.api.test.FakeRequest
 import views.ViewBaseSpec
 import assets.messages.partials.VatCertificatePartialMessages
 import views.html.agent.partials.VatCertificatePartials
 
 class VatCertificatePartialsSpec extends ViewBaseSpec {
 
-  val vatCertificatePartials: VatCertificatePartials = injector.instanceOf[VatCertificatePartials]
+  val vatCertificatePartials: VatCertificatePartials = inject[VatCertificatePartials]
 
   "ClientDetailsPartials" should {
 
-    lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
     lazy val view = vatCertificatePartials()(messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 

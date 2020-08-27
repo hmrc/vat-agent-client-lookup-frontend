@@ -24,7 +24,7 @@ import views.html.templates.inputs.Text
 
 class TextTemplateSpec extends TemplateBaseSpec {
 
-  val text: Text = injector.instanceOf[Text]
+  val text: Text = inject[Text]
 
   "Rendering the text input" when {
 

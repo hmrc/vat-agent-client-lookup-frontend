@@ -20,7 +20,7 @@ import config.AppConfig
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.HttpClient
 import connectors.httpParsers.CreateEmailVerificationRequestHttpParser.EmailVerificationRequest
 import connectors.httpParsers.GetEmailVerificationStateHttpParser.EmailVerificationState
 import connectors.httpParsers.ResponseHttpParser.HttpResult

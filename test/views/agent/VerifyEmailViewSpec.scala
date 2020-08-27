@@ -26,7 +26,7 @@ class VerifyEmailViewSpec extends ViewBaseSpec {
 
   val injectedView: VerifyEmailView = inject[VerifyEmailView]
   val testEmail: String = "test@email.com"
-  lazy val view: Html = injectedView(testEmail)(request, messages, mockConfig)
+  lazy val view: Html = injectedView(testEmail)(messages, mockConfig)
 
   lazy implicit val document: Document = Jsoup.parse(view.body)
 

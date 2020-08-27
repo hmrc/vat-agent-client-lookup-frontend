@@ -28,8 +28,7 @@ import scala.concurrent.Future
 class AuthoriseAsAgentOnlySpec extends ControllerBaseSpec {
 
   def target: Action[AnyContent] = {
-    mockAgentOnlyAuthPredicate.async {
-      implicit request => Future.successful(Ok("test"))
+    mockAgentOnlyAuthPredicate.async {Future.successful(Ok("test"))
     }
   }
 

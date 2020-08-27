@@ -18,8 +18,6 @@ package views.agent
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.mvc.AnyContentAsEmpty
-import play.api.test.FakeRequest
 import views.ViewBaseSpec
 import views.html.agent.CheckYourAnswersView
 
@@ -41,7 +39,6 @@ class CheckYourAnswersViewSpec extends ViewBaseSpec {
   }
 
   "The Check Your Answers view" should {
-    lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
     lazy val view = injectedView(testEmail)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 

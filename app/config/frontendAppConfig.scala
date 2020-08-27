@@ -16,15 +16,13 @@
 
 package config
 
-import java.util.Base64
-
 import javax.inject.{Inject, Singleton}
 import config.features.Features
 import config.{ConfigKeys => Keys}
 import play.api.{Configuration, Environment}
 import play.api.i18n.Lang
 import play.api.mvc.Call
-import uk.gov.hmrc.play.binders.ContinueUrl
+import uk.gov.hmrc.play.bootstrap.binders.SafeRedirectUrl
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 trait AppConfig {
@@ -95,7 +93,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override lazy val signInContinueBaseUrl: String = sc.getString(Keys.signInContinueBaseUrl)
   override lazy val signInUrl: String = s"$signInBaseUrl?continue=$signInContinueUrl&origin=$signInOrigin"
   private lazy val signInContinueUrl: String =
-    ContinueUrl(
+    SafeRedirectUrl(
       signInContinueBaseUrl + controllers.agent.routes.SelectClientVrnController.show(manageVatCustomerDetailsUrl).url
     ).encodedUrl
 
@@ -121,7 +119,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override lazy val environmentHost: String = sc.getString(Keys.environmentHost)
 
   override lazy val feedbackUrl: String = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier" +
-    s"&backUrl=${ContinueUrl(selfLookup + controllers.agent.routes.SelectClientVrnController.show().url).encodedUrl}"
+    s"&backUrl=${SafeRedirectUrl(selfLookup + controllers.agent.routes.SelectClientVrnController.show().url).encodedUrl}"
 
   override lazy val agentSignUpUrl: String = sc.getString(Keys.agentSignUpUrl)
   override lazy val submitVatReturnsUrl: String = sc.getString(Keys.submitVatReturnsUrl)

@@ -29,7 +29,7 @@ import views.html.agent.partials.OptOutForMTDVATPartial
 
 class OptOutForMTDVATPartialSpec extends ViewBaseSpec {
 
-  val optOutForMTDVATPartial: OptOutForMTDVATPartial = injector.instanceOf[OptOutForMTDVATPartial]
+  val optOutForMTDVATPartial: OptOutForMTDVATPartial = inject[OptOutForMTDVATPartial]
 
   "OptOutForMTDVATPartial view" when {
 
@@ -37,7 +37,6 @@ class OptOutForMTDVATPartialSpec extends ViewBaseSpec {
 
       "agent has not entered their contact preference" should {
 
-        lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
         lazy val view = optOutForMTDVATPartial("MTDfB Mandated")(messages, mockConfig, user)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 

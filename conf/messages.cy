@@ -148,7 +148,6 @@ registrationPartial.futureDeregistration.content = Bydd cofrestriad TAW eich cle
 registrationPartial.futureDeregistration.link = Gwasanaethau TAW ar-lein ar gyfer asiantau (yn agor ffenestr neu dab newydd)
 registrationPartial.vatGroups.VAT7.title = Canslo cofrestriad TAW (yn agor ffenestr neu dab newydd)
 registrationPartial.vatGroups.VAT7.content = I ddiddymu’r grŵp TAW, mae’n rhaid i chi ganslo’r cofrestriad drwy ddefnyddio ffurflen VAT7.
-registrationPartial.error = Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth. Rhowch gynnig arall arni yn nes ymlaen.
 
 vatReturnsPartial.heading = Ffurflenni TAW
 vatReturnsPartial.paragraphMandated = Bwrw golwg dros Ffurflenni TAW eich cleient a gyflwynwyd.

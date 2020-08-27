@@ -25,12 +25,10 @@ import models.{Agent, User}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{Lang, Messages, MessagesApi, MessagesImpl}
-import play.api.inject.Injector
 import play.api.mvc.{AnyContentAsEmpty, MessagesControllerComponents}
 import play.api.test.{FakeRequest, Injecting}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
-import uk.gov.hmrc.play.bootstrap.tools.Stubs.stubMessagesControllerComponents
 
 import scala.concurrent.ExecutionContext
 
@@ -40,7 +38,7 @@ trait TestUtil extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach
     mockConfig.features.useStaticDateFeature(true)
   }
 
-  lazy val mcc: MessagesControllerComponents = stubMessagesControllerComponents()
+  lazy val mcc: MessagesControllerComponents = inject[MessagesControllerComponents]
   lazy val messagesApi: MessagesApi = inject[MessagesApi]
   implicit lazy val messages: Messages = MessagesImpl(Lang("en-GB"), messagesApi)
 
@@ -68,7 +66,5 @@ trait TestUtil extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach
   lazy val agent: Agent[AnyContentAsEmpty.type] = Agent[AnyContentAsEmpty.type](arn)(fakeRequestWithVrnAndRedirectUrl)
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
   implicit lazy val ec: ExecutionContext = inject[ExecutionContext]
-
-  val injector: Injector = app.injector
 
 }

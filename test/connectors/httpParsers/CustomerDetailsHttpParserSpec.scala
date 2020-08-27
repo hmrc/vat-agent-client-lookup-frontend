@@ -26,7 +26,7 @@ import utils.TestUtil
 
 class CustomerDetailsHttpParserSpec extends TestUtil {
 
-  val successBadJson = Some(Json.obj("firstName" -> 1))
+  val successBadJson = Json.obj("firstName" -> 1)
   val errorModel = UnexpectedError(Status.BAD_REQUEST, "Error Message")
 
   "The CustomerDetailsHttpParser" when {
@@ -34,14 +34,14 @@ class CustomerDetailsHttpParserSpec extends TestUtil {
     "the http response status is OK with valid Json" should {
 
       "return a CustomerDetailsModel" in {
-        read("", "", HttpResponse(Status.OK, Some(allInfoJson))) shouldBe Right(customerDetailsAllInfo)
+        read("", "", HttpResponse(Status.OK, allInfoJson.toString())) shouldBe Right(customerDetailsAllInfo)
       }
     }
 
     "the http response status is OK with invalid Json" should {
 
       "return an UnexpectedError" in {
-        read("", "", HttpResponse(Status.OK, successBadJson)) shouldBe
+        read("", "", HttpResponse(Status.OK, successBadJson.toString())) shouldBe
           Left(UnexpectedError(Status.INTERNAL_SERVER_ERROR, "Invalid Json"))
       }
     }
@@ -49,7 +49,7 @@ class CustomerDetailsHttpParserSpec extends TestUtil {
     "the http response status is PRECONDITION_FAILED" should {
 
       "return an Migration error" in {
-        read("", "", HttpResponse(Status.PRECONDITION_FAILED, None)) shouldBe
+        read("", "", HttpResponse(Status.PRECONDITION_FAILED, "")) shouldBe
           Left(Migration)
       }
     }
@@ -57,7 +57,7 @@ class CustomerDetailsHttpParserSpec extends TestUtil {
     "the http response status is NOT_FOUND" should {
 
       "return an NotSignedUp error" in {
-        read("", "", HttpResponse(Status.NOT_FOUND, None)) shouldBe
+        read("", "", HttpResponse(Status.NOT_FOUND, "")) shouldBe
           Left(NotSignedUp)
       }
     }
@@ -65,7 +65,7 @@ class CustomerDetailsHttpParserSpec extends TestUtil {
     "the http response status is unexpected" should {
 
       "return an UnexpectedError with the status and response body" in {
-        val httpResponse = HttpResponse(Status.BAD_REQUEST, None)
+        val httpResponse = HttpResponse(Status.BAD_REQUEST, "")
         read("", "", httpResponse) shouldBe Left(UnexpectedError(Status.BAD_REQUEST, httpResponse.body))
       }
     }

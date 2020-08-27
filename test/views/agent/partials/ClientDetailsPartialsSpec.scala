@@ -29,7 +29,7 @@ import views.html.agent.partials.ClientDetailsPartials
 
 class ClientDetailsPartialsSpec extends ViewBaseSpec {
 
-  val clientDetailsPartials: ClientDetailsPartials = injector.instanceOf[ClientDetailsPartials]
+  val clientDetailsPartials: ClientDetailsPartials = inject[ClientDetailsPartials]
 
   "ClientDetailsPartials" when {
 

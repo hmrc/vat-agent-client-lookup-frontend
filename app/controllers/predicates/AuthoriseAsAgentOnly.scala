@@ -23,9 +23,9 @@ import models.Agent
 import play.api.Logger
 import play.api.mvc._
 import services.EnrolmentsAuthService
-import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolments, NoActiveSession}
 import uk.gov.hmrc.auth.core.retrieve.~
-import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import views.html.errors.SessionTimeoutView
 import views.html.errors.agent.UnauthorisedNoEnrolmentView
 
@@ -37,17 +37,17 @@ class AuthoriseAsAgentOnly @Inject()(enrolmentsAuthService: EnrolmentsAuthServic
                                      mcc: MessagesControllerComponents,
                                      unauthorisedNoEnrolmentView: UnauthorisedNoEnrolmentView,
                                      sessionTimeoutView: SessionTimeoutView,
-                                     implicit val appConfig: AppConfig,
-                                     override implicit val executionContext: ExecutionContext)
+                                     implicit val appConfig: AppConfig)
   extends AuthBasePredicate(mcc) with ActionBuilder[Agent, AnyContent] with ActionFunction[Request, Agent] {
 
   override val parser: BodyParser[AnyContent] = mcc.parsers.defaultBodyParser
+  override implicit protected val executionContext: ExecutionContext = mcc.executionContext
 
   override def invokeBlock[A](request: Request[A], block: Agent[A] => Future[Result]): Future[Result] = {
 
   implicit val req: Request[A] = request
 
-    enrolmentsAuthService.authorised().retrieve(Retrievals.affinityGroup and Retrievals.allEnrolments) {
+    enrolmentsAuthService.authorised().retrieve(affinityGroup and allEnrolments) {
       case Some(affinityGroup) ~ allEnrolments =>
         (isAgent(affinityGroup), allEnrolments) match {
           case (true, _) =>

@@ -34,7 +34,7 @@ import views.html.agent.partials.RegistrationPartial
 
 class RegistrationPartialSpec extends ViewBaseSpec {
 
-  val registrationPartial: RegistrationPartial = injector.instanceOf[RegistrationPartial]
+  val registrationPartial: RegistrationPartial = inject[RegistrationPartial]
 
   def urlEncoded(url: String): String = URLEncoder.encode(url, StandardCharsets.UTF_8.toString)
 
@@ -138,9 +138,6 @@ class RegistrationPartialSpec extends ViewBaseSpec {
       }
 
       "client is pending deregistration" should {
-
-        lazy val view = registrationPartial(customerDetailsAllPending, toLocalDate("2019-01-01"))(messages, mockConfig, user)
-        lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "display a section for pending deregistration" which {
 

@@ -18,8 +18,6 @@ package views.agent.partials
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.mvc.AnyContentAsEmpty
-import play.api.test.FakeRequest
 import views.ViewBaseSpec
 import assets.messages.partials.{SignUpPartialMessages => Messages}
 import common.MandationStatus
@@ -27,13 +25,12 @@ import views.html.agent.partials.SignUpPartial
 
 class SignUpPartialSpec extends ViewBaseSpec {
 
-  val signUpPartial: SignUpPartial = injector.instanceOf[SignUpPartial]
+  val signUpPartial: SignUpPartial = inject[SignUpPartial]
 
   "sign up partial" when {
 
     "passed a mandation status of 'MTDfB Exempt'" should {
 
-      lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
       lazy val view = signUpPartial(MandationStatus.MTDfBExempt,user.vrn)(messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -52,7 +49,6 @@ class SignUpPartialSpec extends ViewBaseSpec {
 
     "passed a mandation status of 'Non-MTD'" should {
 
-      lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
       lazy val view = signUpPartial(MandationStatus.nonMTDfB,user.vrn)(messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -71,7 +67,6 @@ class SignUpPartialSpec extends ViewBaseSpec {
 
     "passed a mandation status of 'Non Digital'" should {
 
-      lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
       lazy val view = signUpPartial(MandationStatus.nonDigital,user.vrn)(messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -91,7 +86,6 @@ class SignUpPartialSpec extends ViewBaseSpec {
 
     "passed a mandation status of 'MTD Mandated'" should {
 
-      lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
       lazy val view = signUpPartial(MandationStatus.manMTDfB,user.vrn)(messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -106,7 +100,6 @@ class SignUpPartialSpec extends ViewBaseSpec {
 
     "passed a mandation status of 'MTDfB Voluntary'" should {
 
-      lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
       lazy val view = signUpPartial(MandationStatus.volMTDfB,user.vrn)(messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 

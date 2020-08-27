@@ -29,14 +29,12 @@ class ConfirmClientVrnViewSpec extends ViewBaseSpec {
 
   "The Confirm Change Client VRN page" when {
 
-    val exampleRedirectUrl = "/homepage"
-
     "given an individual with no trading name" should {
 
       lazy val view = injectedView(
         BaseTestConstants.vrn,
         CustomerDetailsTestConstants.customerDetailsIndividual
-      )(request, messages, mockConfig)
+      )(messages, mockConfig)
 
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -87,7 +85,7 @@ class ConfirmClientVrnViewSpec extends ViewBaseSpec {
       lazy val view = injectedView(
         BaseTestConstants.vrn,
         CustomerDetailsTestConstants.customerDetailsAllInfo
-      )(request, messages, mockConfig)
+      )(messages, mockConfig)
 
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
