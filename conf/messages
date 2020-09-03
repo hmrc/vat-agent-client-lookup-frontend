@@ -134,6 +134,7 @@ vatReturnsPartial.submitReturnLink = Submit VAT Return
 agentHub.heading = Your client’s VAT details
 agentHub.vrn = VAT registration number: {0}
 agentHub.changeClient = Change client
+agentHub.noDDclient = Agents cannot access a client’s Direct Debit or payment details
 
 breadcrumb.agentServices = Agent Services Account
 

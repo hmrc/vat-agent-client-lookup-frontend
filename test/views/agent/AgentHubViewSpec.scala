@@ -60,6 +60,10 @@ class AgentHubViewSpec extends ViewBaseSpec {
         element(".form-hint > a").attr("href") shouldBe controllers.agent.routes.ConfirmClientVrnController.changeClient().url
       }
 
+       "display the correct warning message" in {
+         elementText("#content > article > header > div > div") shouldBe Messages.noDDclient
+       }
+
       "have a breadcrumb link to agent services" in {
         elementText("#breadcrumb-asa") shouldBe Messages.agentServicesAccount
         element("#breadcrumb-asa").attr("href") shouldBe mockConfig.agentServicesUrl

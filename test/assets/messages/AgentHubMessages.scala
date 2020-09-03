@@ -28,4 +28,5 @@ object AgentHubMessages {
   val vatCertificate = "VAT certificate"
   val optOut = "Opt out of Making Tax Digital for VAT"
   val cancelVat = "Cancel VAT registration"
+  val noDDclient = "Agents cannot access a client’s Direct Debit or payment details"
 }
