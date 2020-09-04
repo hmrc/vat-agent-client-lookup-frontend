@@ -159,6 +159,7 @@ vatReturnsPartial.submitReturnLink = Cyflwyno Ffurflen TAW
 agentHub.heading = Manylion TAW eich cleient
 agentHub.vrn = Rhif cofrestru TAW: {0}
 agentHub.changeClient = Newid cleient
+agentHub.noDDclient = Ni all asiantau gael at fanylion Debyd Uniongyrchol na thaliadau cleient
 
 breadcrumb.agentServices = Cyfrif Gwasanaethau Asiant
 
