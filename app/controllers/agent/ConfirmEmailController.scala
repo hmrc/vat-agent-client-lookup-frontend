@@ -27,7 +27,7 @@ import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services.EmailVerificationService
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.agent.CheckYourAnswersView
 
 import scala.concurrent.{ExecutionContext, Future}

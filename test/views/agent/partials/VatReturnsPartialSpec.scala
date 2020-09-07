@@ -19,20 +19,17 @@ package views.agent.partials
 import assets.messages.partials.{VatReturnsPartialMessages => Messages}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.mvc.AnyContentAsEmpty
-import play.api.test.FakeRequest
 import views.ViewBaseSpec
 import views.html.agent.partials.VatReturnsPartial
 
 class VatReturnsPartialSpec extends ViewBaseSpec {
 
-  val vatReturnsPartial: VatReturnsPartial = injector.instanceOf[VatReturnsPartial]
+  val vatReturnsPartial: VatReturnsPartial = inject[VatReturnsPartial]
 
   "VatReturnsPartial" when {
 
     "passed a mandation status of 'Non MTDfB'" should {
 
-      lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
       lazy val view = vatReturnsPartial("Non MTDfB")(messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -63,7 +60,6 @@ class VatReturnsPartialSpec extends ViewBaseSpec {
 
     "passed a mandation status of 'Non Digital'" should {
 
-      lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
       lazy val view = vatReturnsPartial("Non Digital")(messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -94,7 +90,6 @@ class VatReturnsPartialSpec extends ViewBaseSpec {
 
     "passed a mandation status of 'MTDfB Mandated'" should {
 
-      lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
       lazy val view = vatReturnsPartial("MTDfB Mandated")(messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 

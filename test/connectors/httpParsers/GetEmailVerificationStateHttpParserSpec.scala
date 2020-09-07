@@ -30,7 +30,7 @@ class GetEmailVerificationStateHttpParserSpec extends UnitSpec {
     "the response status is OK" should {
 
       "return an EmailVerified object" in {
-        val httpResponse: HttpResponse = HttpResponse(responseStatus = OK)
+        val httpResponse: HttpResponse = HttpResponse(OK,"")
         read("", "", httpResponse) shouldBe Right(EmailVerified)
       }
     }
@@ -38,7 +38,7 @@ class GetEmailVerificationStateHttpParserSpec extends UnitSpec {
     "the response status is NOT_FOUND" should {
 
       "return an EmailNotVerified object" in {
-        val httpResponse: HttpResponse = HttpResponse(responseStatus = NOT_FOUND)
+        val httpResponse: HttpResponse = HttpResponse(NOT_FOUND,"")
         read("", "", httpResponse) shouldBe Right(EmailNotVerified)
       }
     }
@@ -46,7 +46,7 @@ class GetEmailVerificationStateHttpParserSpec extends UnitSpec {
     "the response returns an unexpected status" should {
 
       "return an error model with the status and response body" in {
-        val httpResponse : HttpResponse = HttpResponse(responseStatus = INTERNAL_SERVER_ERROR)
+        val httpResponse : HttpResponse = HttpResponse(INTERNAL_SERVER_ERROR,"")
         read("", "", httpResponse) shouldBe Left(UnexpectedError(INTERNAL_SERVER_ERROR, httpResponse.body))
       }
     }

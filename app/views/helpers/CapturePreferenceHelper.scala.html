@@ -14,13 +14,12 @@
  * limitations under the License.
  *@
 
-@import config.AppConfig
 @import models.User
 @import common.SessionKeys
 
 @this()
 
-@(heading: String, location: String)(implicit appConfig: AppConfig, user: User[_])
+@(heading: String, location: String)(implicit user: User[_])
 
 @if(user.session.get(SessionKeys.verifiedAgentEmail).isDefined | user.session.get(SessionKeys.preference).contains("no")) {
     <a href="@location">@heading</a>

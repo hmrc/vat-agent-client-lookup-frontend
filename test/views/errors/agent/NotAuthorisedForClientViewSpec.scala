@@ -21,7 +21,6 @@ import org.jsoup.nodes.Document
 import views.ViewBaseSpec
 import assets.messages.BaseMessages
 import assets.messages.{AgentUnauthorisedForClientPageMessages => Messages}
-import assets.BaseTestConstants.vrn
 import views.html.errors.agent.NotAuthorisedForClientView
 
 class NotAuthorisedForClientViewSpec extends ViewBaseSpec {
@@ -39,7 +38,7 @@ class NotAuthorisedForClientViewSpec extends ViewBaseSpec {
       val backLink = ".link-back"
     }
 
-    lazy val view = injectedView()(request, messages, mockConfig)
+    lazy val view = injectedView()(messages, mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {

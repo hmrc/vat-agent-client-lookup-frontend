@@ -29,7 +29,7 @@ import views.html.helpers.CapturePreferenceHelper
 
 class CapturePreferenceHelperSpec extends ViewBaseSpec {
 
-  val capturePreferenceHelper: CapturePreferenceHelper = injector.instanceOf[CapturePreferenceHelper]
+  val capturePreferenceHelper: CapturePreferenceHelper = inject[CapturePreferenceHelper]
 
   "CapturePreferenceHelper" when {
 
@@ -38,7 +38,7 @@ class CapturePreferenceHelperSpec extends ViewBaseSpec {
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
         .withSession(SessionKeys.verifiedAgentEmail -> "exampleemail@email.com")
       lazy val testUser: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn, active = true)(testGetRequest)
-      lazy val view: Html = capturePreferenceHelper("Heading", mockConfig.optOutMtdVatUrl)(mockConfig, testUser)
+      lazy val view: Html = capturePreferenceHelper("Heading", mockConfig.optOutMtdVatUrl)(testUser)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the correct heading" in {
@@ -55,7 +55,7 @@ class CapturePreferenceHelperSpec extends ViewBaseSpec {
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
         .withSession(SessionKeys.preference -> "no")
       lazy val testUser: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn, active = true)(testGetRequest)
-      lazy val view: Html = capturePreferenceHelper("Heading", mockConfig.optOutMtdVatUrl)(mockConfig, testUser)
+      lazy val view: Html = capturePreferenceHelper("Heading", mockConfig.optOutMtdVatUrl)(testUser)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the correct heading" in {
@@ -69,7 +69,7 @@ class CapturePreferenceHelperSpec extends ViewBaseSpec {
 
     "the agent has not entered a contact preference" should {
 
-      lazy val view: Html = capturePreferenceHelper("Heading", mockConfig.optOutMtdVatUrl)(mockConfig, user)
+      lazy val view: Html = capturePreferenceHelper("Heading", mockConfig.optOutMtdVatUrl)(user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the correct heading" in {

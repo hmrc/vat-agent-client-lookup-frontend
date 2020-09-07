@@ -15,7 +15,6 @@
  *@
 
 @import config.AppConfig
-@import services.DateService
 @import java.time.LocalDate
 @import play.api.Logger
 @import views.html.helpers.DisplayDate
@@ -87,15 +86,6 @@
             @messages("registrationPartial.pendingDeregistration.title")
         </h3>
         <p>@messages("registrationPartial.pendingDeregistration.content")</p>
-    </div>
-}
-
-@errorNoPartyType() = {
-    <div class="column-one-third" id="cancel-vat">
-        <h3 class="heading-small">
-            @messages("registrationPartial.cancelRegistration.title")
-        </h3>
-        <p>@messages("registrationPartial.error")</p>
     </div>
 }
 

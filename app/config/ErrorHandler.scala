@@ -20,7 +20,7 @@ import javax.inject.Inject
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Request, Result}
 import play.twirl.api.Html
-import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
+import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
 import play.api.mvc.Results.InternalServerError
 import views.html.errors.StandardErrorView
 

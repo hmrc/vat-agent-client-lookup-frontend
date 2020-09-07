@@ -39,7 +39,6 @@ trait MockAuth extends TestUtil with BeforeAndAfterEach with MockitoSugar {
   override def beforeEach(): Unit = {
     super.beforeEach()
     reset(mockAuthConnector)
-    mockIndividualAuthorised()
     mockConfig.features.useAgentHubPageFeature(false)
   }
 
@@ -74,8 +73,7 @@ trait MockAuth extends TestUtil with BeforeAndAfterEach with MockitoSugar {
       mcc,
       inject[UnauthorisedNoEnrolmentView],
       inject[SessionTimeoutView],
-      mockConfig,
-      ec
+      mockConfig
     )
 
   val mockPreferencePredicate: PreferencePredicate = new PreferencePredicate(
@@ -111,16 +109,6 @@ trait MockAuth extends TestUtil with BeforeAndAfterEach with MockitoSugar {
         Enrolments(Set(Enrolment("OTHER_ENROLMENT",
           Seq(EnrolmentIdentifier("", "")),
           "Activated"
-        )))
-      )
-    ))
-
-  def mockIndividualWithoutEnrolment(): OngoingStubbing[Future[~[Option[AffinityGroup], Enrolments]]] =
-    setupAuthResponse(Future.successful(
-      new ~(Some(AffinityGroup.Individual),
-        Enrolments(Set(Enrolment("OTHER_ENROLMENT",
-          Seq(EnrolmentIdentifier("", "")),
-          ""
         )))
       )
     ))

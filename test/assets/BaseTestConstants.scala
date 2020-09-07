@@ -16,10 +16,8 @@
 
 package assets
 
-import common.EnrolmentKeys
 import models.errors.UnexpectedError
 import play.api.http.Status
-import uk.gov.hmrc.auth.core.Enrolment
 
 object BaseTestConstants {
 
@@ -27,7 +25,6 @@ object BaseTestConstants {
   val arn = "ABCD12345678901"
   val vrn: String = "999999999"
   val email = "test@test.com"
-  val testMtdVatEnrolment: Enrolment = Enrolment(EnrolmentKeys.vatEnrolmentId).withIdentifier(EnrolmentKeys.vatIdentifierId, vrn)
   val formBundle = "XA1234567"
 
 }

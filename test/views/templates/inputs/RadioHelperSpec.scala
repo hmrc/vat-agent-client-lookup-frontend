@@ -25,7 +25,7 @@ import assets.messages.WhatToDoMessages._
 
 class RadioHelperSpec extends TemplateBaseSpec {
 
-  val radioHelper: RadioHelper = injector.instanceOf[RadioHelper]
+  val radioHelper: RadioHelper = inject[RadioHelper]
 
   val fieldName = "fieldName"
   val labelText = "labelText"
