@@ -18,11 +18,9 @@ package helpers
 
 import java.net.URLEncoder
 
+import play.api.http.SecretConfiguration
 import play.api.libs.crypto.DefaultCookieSigner
 import uk.gov.hmrc.crypto.{CompositeSymmetricCrypto, PlainText}
-import uk.gov.hmrc.http.SessionKeys
-import IntegrationTestConstants._
-import play.api.http.SecretConfiguration
 
 object SessionCookieBaker {
   private val cookieKey = "gvBoGdgzqG1AarzF1LY0zQ=="
@@ -43,21 +41,7 @@ object SessionCookieBaker {
     s"""mdtp="$encrypted"; Path=/; HTTPOnly"; Path=/; HTTPOnly"""
   }
 
-  private def cookieData(additionalData: Map[String, String], timeStampRollback: Long): Map[String, String] = {
-
-    val timeStamp = new java.util.Date().getTime
-    val rollbackTimestamp = (timeStamp - timeStampRollback).toString
-
-    Map(
-      SessionKeys.sessionId -> sessionId,
-      SessionKeys.userId -> userId,
-      SessionKeys.authToken -> "token",
-      SessionKeys.lastRequestTimestamp -> rollbackTimestamp,
-      SessionKeys.authToken -> "auth"
-    ) ++ additionalData
-  }
-
-  def bakeSessionCookie(additionalData: Map[String, String] = Map(), timeStampRollback: Long = 0): String = {
-    cookieValue(cookieData(additionalData, timeStampRollback))
+  def bakeSessionCookie(additionalData: Map[String, String] = Map()): String = {
+    cookieValue(additionalData)
   }
 }
