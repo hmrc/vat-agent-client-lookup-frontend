@@ -14,57 +14,49 @@
  * limitations under the License.
  *@
 
-@import config.AppConfig
-@import templates.inputs.RadioHelper
-@import models.agent.WhatToDoModel
-@import forms.WhatToDoForm._
-@import uk.gov.hmrc.play.views.html.helpers.{ErrorSummary, FormWithCSRF}
-
 @import common.MandationStatus
+@import config.AppConfig
+@import forms.WhatToDoForm._
+@import models.agent.WhatToDoModel
+@import templates.inputs.RadioHelper
+@import uk.gov.hmrc.play.views.html.helpers.FormWithCSRF
+@import views.html.templates.errors.ErrorSummary
 
-@this(mainTemplate: MainTemplate,
-        errorSummary: ErrorSummary,
-        formWithCSRF: FormWithCSRF,
-        radioHelper: RadioHelper)
+@this(mainTemplate: MainTemplate, errorSummary: ErrorSummary, formWithCSRF: FormWithCSRF, radioHelper: RadioHelper)
 
 @(form: Form[WhatToDoModel], name: String, mandationStatus: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @validChoices = @{
     Seq(
-        if(mandationStatus == MandationStatus.nonMTDfB) Some((submitReturn, Messages("whatToDo.submitReturn"))) else None
+        if(mandationStatus == MandationStatus.nonMTDfB) Some((submitReturn, messages("whatToDo.submitReturn"))) else None
     ).flatten ++
             Seq(
-                (viewReturn, Messages("whatToDo.viewReturns")),
-                (changeDetails, Messages("whatToDo.changeDetails")),
-                (viewCertificate, Messages("whatToDo.viewCertificate"))
+                (viewReturn, messages("whatToDo.viewReturns")),
+                (changeDetails, messages("whatToDo.changeDetails")),
+                (viewCertificate, messages("whatToDo.viewCertificate"))
             )
 }
 
 @mainTemplate(
     if(form.errors.nonEmpty) messages("common.error.prefixTitle", messages("whatToDo.heading", name)) else messages("whatToDo.heading", name),
-    bodyClasses = None
 ) {
 
-    @formWithCSRF(action = controllers.agent.routes.WhatToDoController.submit) {
+  @errorSummary(messages("common.error.heading"), form)
 
-        <div class="form-group" id="option">
+  @formWithCSRF(action = controllers.agent.routes.WhatToDoController.submit) {
 
-            @if(form.errors.nonEmpty) {
-                @errorSummary(messages("common.error.heading"), form)
-            }
+    <div class="form-group" id="option">
+        @radioHelper(
+            field = form("option"),
+            choices = validChoices,
+            question = messages("whatToDo.heading", name)
+        )
+    </div>
 
-            @radioHelper(
-                field = form("option"),
-                choices = validChoices,
-                question = Messages("whatToDo.heading", name)
-            )
-        </div>
-
-        <button class="button"
-            type ="submit"
-            id="continue">
-            @messages("common.continue")
-        </button>
-    }
-
+    <button class="button"
+        type ="submit"
+        id="continue">
+        @messages("common.continue")
+    </button>
+  }
 }

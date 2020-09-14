@@ -20,14 +20,14 @@
 
 <div class="form-field@if(field.hasErrors){--error}">
 
-    @if(!heading.isEmpty){<h1>@heading</h1>}
+  @if(!heading.isEmpty){<h1>@heading</h1>}
 
   @additionalContent.map { content => @content }
 
   <label for="@field.id" class="form-label visuallyhidden">@heading</label>
 
   @field.errors.headOption.map { error =>
-    <span class="error-message" role="tooltip">
+    <span class="error-message">
       @messages(error.message, error.args: _*)
     </span>
   }

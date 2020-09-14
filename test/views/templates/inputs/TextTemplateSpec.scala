@@ -92,7 +92,7 @@ class TextTemplateSpec extends TemplateBaseSpec {
            |  <h1>labelText</h1>
            |  <p>Content</p>
            |  <label for="$fieldName" class="form-label visuallyhidden">labelText</label>
-           |  <span class="error-message" role="tooltip">
+           |  <span class="error-message">
            |    $errorMessage
            |  </span>
            |  <input type="text" class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value=""/>
