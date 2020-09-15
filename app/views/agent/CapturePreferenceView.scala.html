@@ -33,12 +33,12 @@
 
 @additionalContent = {
   <span class="form-field">@messages("capturePref.email")</span>
-  <span class="form-hint">@messages("capturePref.email.hint")</span>
+  <span id="form-hint" class="form-hint">@messages("capturePref.email.hint")</span>
 }
 
 @additionalContentAlternative = {
   <span class="form-field">@messages("capturePref.email")</span>
-  <span class="form-hint">@messages("capturePref.email.hintAlternative")</span>
+  <span id="form-hint" class="form-hint">@messages("capturePref.email.hintAlternative")</span>
 }
 
 @defining(if (appConfig.features.disableBulkPaper()) messages("capturePref.noLetterTitle") else messages("capturePref.title")) { pageTitle  =>
@@ -52,8 +52,7 @@
     @if(appConfig.features.disableBulkPaper()) {
 
       @formWithCSRF(action = controllers.agent.routes.CapturePreferenceController.submit) {
-        <div id="@yesNo" class="link-bottom-margin">
-          @optionRevealHelper(
+        @optionRevealHelper(
           choices = Seq(
             (yes, messages("common.yes")),
             (no,  messages("common.no"))
@@ -67,8 +66,7 @@
           subtext = Some(messages("capturePref.confirmationEmail")),
           additionalContent = Some(content),
           hiddenContentError = preferenceForm(email).hasErrors
-          )
-        </div>
+        )
 
         <div class="form-group">
           <button class="button" type="submit">@messages("common.continue")</button>
@@ -77,8 +75,7 @@
     } else {
 
       @formWithCSRF(action = controllers.agent.routes.CapturePreferenceController.submit) {
-        <div id="@yesNo" class="link-bottom-margin">
-          @optionRevealHelper(
+        @optionRevealHelper(
           choices = Seq(
             (yes, messages("common.yes")),
             (no,  messages("common.no"))
@@ -90,8 +87,7 @@
           inline         = false,
           legendAsHeader = false,
           subtext = Some(messages("capturePref.message"))
-          )
-        </div>
+        )
 
         <div class="form-group">
           <button class="button" type="submit">@messages("common.continue")</button>

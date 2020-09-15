@@ -38,7 +38,7 @@
 }
 
 @mainTemplate(
-    if(form.errors.nonEmpty) messages("common.error.prefixTitle", messages("whatToDo.heading", name)) else messages("whatToDo.heading", name),
+    if(form.errors.nonEmpty) messages("common.error.prefixTitle", messages("whatToDo.heading", name)) else messages("whatToDo.heading", name)
 ) {
 
   @errorSummary(messages("common.error.heading"), form)

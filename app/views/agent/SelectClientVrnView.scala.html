@@ -25,28 +25,26 @@
 @(form: Form[ClientVrnModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @additionalContent = {
-    <span id="vrn-hint" class="form-hint">
-        @messages("clientsVrn.p1")
-        @messages("clientsVrn.example")
-    </span>
+  <span id="form-hint" class="form-hint">
+    @messages("clientsVrn.p1")
+    @messages("clientsVrn.example")
+  </span>
 }
 
 @mainTemplate(
     if(form.errors.nonEmpty) messages("common.error.prefixTitle", messages("clientsVrn.heading")) else messages("clientsVrn.heading")
 ) {
 
-    @errorSummary(messages("common.error.heading"), form)
+  @errorSummary(messages("common.error.heading"), form)
 
-    @formWithCSRF(action = controllers.agent.routes.SelectClientVrnController.submit) {
+  @formWithCSRF(action = controllers.agent.routes.SelectClientVrnController.submit) {
 
-        <div class="form-group">
-            @text(
-                form("vrn"),
-                Some(messages("clientsVrn.heading")),
-                Some(additionalContent)
-            )
-        </div>
+    @text(
+      form("vrn"),
+      Some(messages("clientsVrn.heading")),
+      Some(additionalContent)
+    )
 
-        <button class="button" type="submit">@messages("common.continue")</button>
-    }
+    <button class="button" type="submit">@messages("common.continue")</button>
+  }
 }

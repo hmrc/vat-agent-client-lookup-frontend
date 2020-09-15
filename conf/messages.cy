@@ -4,6 +4,7 @@ base.pageTitle = {0} - {1} - GOV.UK
 
 common.yes = Iawn
 common.no = Na
+common.error = Gwall:
 common.error.heading = Mae problem wedi codi
 common.error.prefixTitle = Gwall: {0}
 common.differentClient = Gwneud newidiadau ar gyfer cleient gwahanol
