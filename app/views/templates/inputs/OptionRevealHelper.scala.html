@@ -14,6 +14,7 @@
  * limitations under the License.
  *@
 
+@import forms.PreferenceForm.yesNo
 @import views.html.helper._
 
 @this()
@@ -25,49 +26,58 @@
   hiddenContent: Html,
   legendAsHeader: Boolean = true,
   subtext: Option[String] = None,
-    additionalContent: Option[Html] = None,
-    hiddenContentError: Boolean = false
+  additionalContent: Option[Html] = None,
+  hiddenContentError: Boolean = false
 )(implicit messages: Messages)
 
 @elements = @{ FieldElements(field.id, field, null, Map(), messages) }
 
-<div @if(elements.hasErrors){ class="form-field--error"}>
-  <fieldset>
-    <legend>
-      <h1>@question</h1>
-    </legend>
+<div id="@yesNo" class="form-group">
 
-    @subtext.map { text =>
-      <p>@text</p>
-    }
+  <fieldset aria-describedby="form-hint@if(field.hasErrors){ form-error}">
 
-    @additionalContent.map { content =>
-      @content
-     }
+    <div class="form-field@if(elements.hasErrors){--error panel-border-narrow}">
+      <legend>
+        <h1>@question</h1>
+      </legend>
 
-    @elements.errors.map { error => <span class="error-message">@messages(error)</span> }
+      @subtext.map { text =>
+        <p>@text</p>
+      }
 
-    <div @if(inline){ class="inline"}>
-      <div class="multiple-choice" data-target="hiddenContent">
-        <input type="radio" id="@{elements.field.name}-yes"
-               name="@elements.field.name" value="yes"
-               @field.value.filter( _ == "yes").map{_ => checked="checked"}/>
+      @additionalContent.map { content =>
+        @content
+      }
 
-        <label for="@{elements.field.name}-yes" id="label-@{elements.field.name}-yes">@messages("common.yes")</label>
-      </div>
+      @elements.errors.map { error =>
+        <span id="form-error" class="error-message">
+          <span class="visuallyhidden">@messages("common.error")</span>
+          @messages(error)
+        </span>
+      }
 
-        <div class="form-group panel panel-border-narrow @if(field.value != Some("yes")){js-hidden} @if(hiddenContentError){hidden-error-panel}" id="hiddenContent">
-        @hiddenContent
+      <div @if(inline){ class="inline"}>
+        <div class="multiple-choice" data-target="hiddenContent">
+          <input type="radio" id="@{elements.field.name}-yes"
+                 name="@elements.field.name" value="yes"
+                 @field.value.filter( _ == "yes").map{_ => checked="checked"}/>
+
+          <label for="@{elements.field.name}-yes" id="label-@{elements.field.name}-yes">@messages("common.yes")</label>
         </div>
 
-      <div class="multiple-choice">
-        <input type="radio"
-               id="@{elements.field.name}-no" name="@elements.field.name" value="no"
-               @field.value.filter( _ == "no").map{_ => checked="checked"}/>
-        <label for="@{elements.field.name}-no" id="label-@{elements.field.name}-no">@messages("common.no")</label>
+          <div class="form-group panel panel-border-narrow @if(!field.value.contains("yes")){js-hidden} @if(hiddenContentError){hidden-error-panel}" id="hiddenContent">
+            @hiddenContent
+          </div>
+
+        <div class="multiple-choice">
+          <input type="radio"
+                 id="@{elements.field.name}-no"
+                 name="@elements.field.name"
+                 value="no"
+                 @field.value.filter( _ == "no").map{_ => checked="checked"}/>
+          <label for="@{elements.field.name}-no" id="label-@{elements.field.name}-no">@messages("common.no")</label>
+        </div>
       </div>
     </div>
   </fieldset>
-
-
 </div>

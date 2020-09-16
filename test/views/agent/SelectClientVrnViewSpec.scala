@@ -93,7 +93,7 @@ class SelectClientVrnViewSpec extends ViewBaseSpec {
       }
 
       "have the correct error notification text above the input box" in {
-        elementText(".error-message") shouldBe viewMessages.formErrorInvalidVrn
+        elementText(".error-message") shouldBe s"Error: ${viewMessages.formErrorInvalidVrn}"
       }
     }
   }

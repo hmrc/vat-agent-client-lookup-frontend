@@ -39,13 +39,14 @@ class TextTemplateSpec extends TemplateBaseSpec {
 
       val expectedMarkup = Html(
         s"""
-           |
-           |<div class="form-field">
-           |  <h1>labelText</h1>
-           |  <label for="$fieldName" class="form-label visuallyhidden">labelText</label>
-           |  <input type="text" class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value=""/>
+           |<div class="form-group">
+           |  <fieldset aria-describedby="form-hint">
+           |    <div class="form-field">
+           |      <h1 id="page-heading"><label for=$fieldName class="heading-large">labelText</label></h1>
+           |      <input type="text" class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value=""/>
+           |    </div>
+           |  </fieldset>
            |</div>
-           |
         """.stripMargin
       )
 
@@ -63,14 +64,15 @@ class TextTemplateSpec extends TemplateBaseSpec {
 
       val expectedMarkup = Html(
         s"""
-           |
-           |<div class="form-field">
-           |  <h1>labelText</h1>
-           |  <p>Content</p>
-           |  <label for="$fieldName" class="form-label visuallyhidden">labelText</label>
-           |  <input type="text" class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="$value"/>
+           |<div class="form-group">
+           |  <fieldset aria-describedby="form-hint">
+           |    <div class="form-field">
+           |      <h1 id="page-heading"><label for=$fieldName class="heading-large">labelText</label></h1>
+           |      <p>Content</p>
+           |      <input type="text" class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="$value"/>
+           |    </div>
+           |  </fieldset>
            |</div>
-           |
         """.stripMargin
       )
 
@@ -87,17 +89,19 @@ class TextTemplateSpec extends TemplateBaseSpec {
 
       val expectedMarkup = Html(
         s"""
-           |
-           |<div class="form-field--error">
-           |  <h1>labelText</h1>
-           |  <p>Content</p>
-           |  <label for="$fieldName" class="form-label visuallyhidden">labelText</label>
-           |  <span class="error-message" role="tooltip">
-           |    $errorMessage
-           |  </span>
-           |  <input type="text" class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value=""/>
+           |<div class="form-group">
+           |  <fieldset aria-describedby="form-hint form-error">
+           |    <div class="form-field--error panel-border-narrow">
+           |      <h1 id="page-heading"><label for=$fieldName class="heading-large">labelText</label></h1>
+           |      <p>Content</p>
+           |      <span id="form-error" class="error-message">
+           |        <span class="visuallyhidden">Error:</span>
+           |        $errorMessage
+           |      </span>
+           |      <input type="text" class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value=""/>
+           |    </div>
+           |  </fieldset>
            |</div>
-           |
         """.stripMargin
       )
 

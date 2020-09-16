@@ -18,23 +18,30 @@
 
 @(field: Field, heading: Option[String] = None, additionalContent: Option[Html] = None)(implicit messages: Messages)
 
-<div class="form-field@if(field.hasErrors){--error}">
+<div class="form-group">
 
-    @if(!heading.isEmpty){<h1>@heading</h1>}
+  <fieldset aria-describedby="form-hint@if(field.hasErrors){ form-error}">
 
-  @additionalContent.map { content => @content }
+    <div class="form-field@if(field.hasErrors){--error panel-border-narrow}">
 
-  <label for="@field.id" class="form-label visuallyhidden">@heading</label>
+      @heading.map { title =>
+        <h1 id="page-heading"><label for="@field.id" class="heading-large">@messages(title)</label></h1>
+      }
 
-  @field.errors.headOption.map { error =>
-    <span class="error-message" role="tooltip">
-      @messages(error.message, error.args: _*)
-    </span>
-  }
+      @additionalContent.map { content => @content }
 
-  <input type="text"
-         class="form-control input--no-spinner"
-         name="@field.name"
-         id="@field.name"
-         value="@field.value.getOrElse("")"/>
+      @field.errors.headOption.map { error =>
+        <span id="form-error" class="error-message">
+          <span class="visuallyhidden">@messages("common.error")</span>
+          @messages(error.message, error.args: _*)
+        </span>
+      }
+
+      <input type="text"
+             class="form-control input--no-spinner"
+             name="@field.name"
+             id="@field.name"
+             value="@field.value.getOrElse("")"/>
+    </div>
+  </fieldset>
 </div>

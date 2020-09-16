@@ -176,7 +176,7 @@ class SelectClientVrnPageSpec extends BasePageISpec {
 
               //Error against Input Label
               isElementVisible(".form-field--error .error-message")(isVisible = true),
-              elementText(".form-field--error .error-message")("Enter a VAT number in the correct format")
+              elementText(".form-field--error .error-message")("Error: Enter a VAT number in the correct format")
             )
           }
         }

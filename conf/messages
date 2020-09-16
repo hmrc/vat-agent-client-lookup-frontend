@@ -4,6 +4,7 @@ base.pageTitle = {0} - {1} - GOV.UK
 
 common.yes = Yes
 common.no = No
+common.error = Error:
 common.error.heading = There is a problem
 common.error.prefixTitle = Error: {0}
 common.differentClient = Make changes for a different client

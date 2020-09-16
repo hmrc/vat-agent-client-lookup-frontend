@@ -27,11 +27,11 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
 
   object Selectors {
     val pageHeading         = "#content h1"
-    val subtext             = "fieldset > p"
-    val additionalContent   = "fieldset > p:nth-of-type(2)"
+    val subtext             = ".form-field > p:nth-child(2)"
+    val inlineQuestion      = ".bold"
     val backLink            = ".link-back"
-    val emailQuestionText   = "#hiddenContent > div > span.form-field"
-    val emailHintText       = "#hiddenContent > div > span.form-hint"
+    val emailQuestionText   = "span.form-field"
+    val emailHintText       = "span.form-hint"
     val form                = "form"
     val emailField          = "#email"
     val continueButton      = "button"
@@ -43,14 +43,11 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
     val emailFormGroup      = "#hiddenContent"
   }
 
-
   val injectedView: CapturePreferenceView = inject[CapturePreferenceView]
 
   "Rendering the capture preference page" when {
 
     "the feature switch disable Bulk Paper is turned on" when {
-
-
 
       "the form has no errors" when {
 
@@ -85,6 +82,10 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
           "have the correct subtext" in {
             elementText(Selectors.subtext) shouldBe
               "We now confirm changes by email. We’ll contact your client with an update."
+          }
+
+          "have the correct inline question" in {
+            elementText(Selectors.inlineQuestion) shouldBe "Do you want us to send you an email to confirm changes you make?"
           }
 
           "have the preference form with the correct form action" in {
