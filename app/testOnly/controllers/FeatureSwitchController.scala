@@ -37,7 +37,8 @@ class FeatureSwitchController @Inject()(featureSwitchView: FeatureSwitchView, mc
         useAgentHubPageFeature = appConfig.features.useAgentHubPageFeature(),
         useStaticDateFeature = appConfig.features.useStaticDateFeature(),
         disableBulkPaper = appConfig.features.disableBulkPaper(),
-        missingTraderAddressIntercept = appConfig.features.missingTraderAddressIntercept()
+        missingTraderAddressIntercept = appConfig.features.missingTraderAddressIntercept(),
+        emailPinVerificationEnabled = appConfig.features.emailPinVerificationEnabled()
       )
     )))
   }
@@ -57,6 +58,7 @@ class FeatureSwitchController @Inject()(featureSwitchView: FeatureSwitchView, mc
     appConfig.features.useStaticDateFeature(model.useStaticDateFeature)
     appConfig.features.disableBulkPaper(model.disableBulkPaper)
     appConfig.features.missingTraderAddressIntercept(model.missingTraderAddressIntercept)
+    appConfig.features.emailPinVerificationEnabled(model.emailPinVerificationEnabled)
     Redirect(routes.FeatureSwitchController.featureSwitch())
   }
 }

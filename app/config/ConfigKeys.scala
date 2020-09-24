@@ -61,6 +61,7 @@ object ConfigKeys {
   val useStaticDateFeature: String = "features.useStaticDate.enabled"
   val disableBulkPaper: String = "features.disableBulkPaper.enabled"
   val missingTraderFeature: String = "features.missingTraderAddressIntercept.enabled"
+  val emailPinVerificationFeature: String = "features.useEmailPinVerification.enabled"
 
   val staticDateValue: String = "date-service.staticDate.value"
 

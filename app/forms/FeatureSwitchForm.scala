@@ -30,7 +30,8 @@ object FeatureSwitchForm {
       ConfigKeys.useAgentHubPageFeature -> boolean,
       ConfigKeys.useStaticDateFeature -> boolean,
       ConfigKeys.disableBulkPaper -> boolean,
-      ConfigKeys.missingTraderFeature -> boolean
+      ConfigKeys.missingTraderFeature -> boolean,
+      ConfigKeys.emailPinVerificationFeature -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 }
