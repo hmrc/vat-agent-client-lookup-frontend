@@ -140,3 +140,6 @@ breadcrumb.agentServices = Agent Services Account
 
 signUpPartial.LinkText = Sign up for Making Tax Digital for VAT
 signUpPartial.Body = Your client must sign up to Making Tax Digital for VAT if they are not exempt from VAT, and their taxable turnover exceeds the £85,000 threshold.
+
+passcode.error.empty = Enter the confirmation code
+passcode.error.invalid = Enter the 6 character confirmation code
