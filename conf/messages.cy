@@ -165,3 +165,6 @@ breadcrumb.agentServices = Cyfrif Gwasanaethau Asiant
 
 signUpPartial.LinkText = Cofrestru ar gyfer Troi Treth yn Ddigidol ar gyfer TAW
 signUpPartial.Body = Mae’n rhaid i’ch cleient gofrestru ar gyfer y Cynllun Troi Treth yn Ddigidol ar gyfer TAW os nad yw wedi’i eithrio rhag TAW, a bod ei drosiant trethadwy dros y trothwy, sef £85,000.
+
+passcode.error.empty = Nodwch y cod cadarnhau
+passcode.error.invalid = Nodwch y cod cadarnhau sy’n 6 chymeriad
