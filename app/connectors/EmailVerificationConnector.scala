@@ -23,6 +23,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpClient
 import connectors.httpParsers.CreateEmailVerificationRequestHttpParser.EmailVerificationRequest
 import connectors.httpParsers.GetEmailVerificationStateHttpParser.EmailVerificationState
+import connectors.httpParsers.RequestPasscodeHttpParser.EmailVerificationPasscodeRequest
 import connectors.httpParsers.ResponseHttpParser.HttpResult
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -55,4 +56,20 @@ class EmailVerificationConnector @Inject()(http: HttpClient,
 
     http.POST[JsObject, HttpResult[EmailVerificationRequest]](createEmailVerificationRequestUrl, jsonBody)
   }
+
+
+
+  private val emailPinVerificationUrl: String = s"${appConfig.emailVerificationBaseUrl}/email-verification/request-passcode"
+
+  def requestEmailPasscode(emailAddress: String)
+                          (implicit hc: HeaderCarrier): Future[HttpResult[EmailVerificationPasscodeRequest]] = {
+    val jsonBody =
+      Json.obj(
+        "email" -> emailAddress,
+        "serviceName" -> "HMRC VAT"
+      )
+
+    http.POST[JsObject, HttpResult[EmailVerificationPasscodeRequest]](emailPinVerificationUrl, jsonBody)
+  }
+
 }

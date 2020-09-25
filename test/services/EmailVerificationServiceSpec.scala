@@ -18,6 +18,7 @@ package services
 
 import connectors.httpParsers.CreateEmailVerificationRequestHttpParser.{EmailAlreadyVerified, EmailVerificationRequestSent}
 import connectors.httpParsers.GetEmailVerificationStateHttpParser.{EmailNotVerified, EmailVerified}
+import connectors.httpParsers.RequestPasscodeHttpParser.{EmailIsAlreadyVerified, EmailVerificationPasscodeRequestSent}
 import mocks.connectors.MockEmailVerificationConnector
 import models.errors.UnexpectedError
 import org.mockito.Mockito.{never, verify}
@@ -158,6 +159,68 @@ class EmailVerificationServiceSpec extends TestUtil with MockEmailVerificationCo
     "not call the email verification connector" in {
       res
       verify(mockEmailVerificationConnector, never()).getEmailVerificationState(testEmail)
+    }
+  }
+
+  "Creating an email verification passcode request" when {
+
+    "the emailPinVerificationEnabled feature switch is on" when {
+
+      "the email verification passcode request is sent successfully" should {
+
+        "return Some(true)" in {
+
+          mockRequestEmailPasscode(Future.successful(Right(EmailVerificationPasscodeRequestSent)))
+          val res: Option[Boolean] = {
+            mockConfig.features.emailPinVerificationEnabled(true)
+            await(TestStoreEmailService.createEmailPasscodeRequest(testEmail))
+          }
+          res shouldBe Some(true)
+        }
+      }
+
+      "the email address has already been verified" should {
+
+        "return Some(false)" in {
+
+          mockRequestEmailPasscode(Future.successful(Right(EmailIsAlreadyVerified)))
+          val res: Option[Boolean] = {
+            mockConfig.features.emailPinVerificationEnabled(true)
+            await(TestStoreEmailService.createEmailPasscodeRequest(testEmail))
+          }
+          res shouldBe Some(false)
+        }
+      }
+
+      "the email verification passcode request fails" should {
+
+        "return None" in {
+
+          mockRequestEmailPasscode(Future.successful(Left(UnexpectedError(BAD_REQUEST, ""))))
+          val res: Option[Boolean] = {
+            mockConfig.features.emailPinVerificationEnabled(true)
+            await(TestStoreEmailService.createEmailPasscodeRequest(testEmail))
+          }
+          res shouldBe None
+        }
+      }
+    }
+
+    "the email verification feature switch is off" should {
+
+      def res: Option[Boolean] = {
+        mockConfig.features.emailPinVerificationEnabled(false)
+        await(TestStoreEmailService.createEmailPasscodeRequest(testEmail))
+      }
+
+      "return Some(false)" in {
+        res shouldBe Some(false)
+      }
+
+      "not call the email verification connector" in {
+        res
+        verify(mockEmailVerificationConnector, never()).requestEmailPasscode(testEmail)
+      }
     }
   }
 }
