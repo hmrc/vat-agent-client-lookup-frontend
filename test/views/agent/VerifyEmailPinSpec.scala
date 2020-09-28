@@ -31,7 +31,7 @@ val testForm: Form[String] = Form("passcode" -> nonEmptyText) //TODO - replace w
 
 "The VerifyEmailPiView page" should {
 
-  lazy val view: Html = injectedView(testEmail, testForm, emailPreferenceJourney = false)(user, messages, mockConfig)
+  lazy val view: Html = injectedView(testEmail, testForm)(user, messages, mockConfig)
   lazy implicit val document: Document = Jsoup.parse(view.body)
 
   "have the correct document title" in {
@@ -54,9 +54,8 @@ val testForm: Form[String] = Form("passcode" -> nonEmptyText) //TODO - replace w
 }
 
   "have the correct first paragraph" in {
-  elementText("#content article p:nth-of-type(1)") shouldBe s"We have sent a code to: $testEmail"
+  elementText("#content article p:nth-of-type(1)") shouldBe "We have sent a code to: $testEmail"
 }
-
   "have the correct panel paragraph" in {
   elementText("p.panel") shouldBe "Open a new tab or window if you need to access your emails online."
 }
@@ -114,7 +113,7 @@ val testForm: Form[String] = Form("passcode" -> nonEmptyText) //TODO - replace w
   "The VerifyEmailPinView when there are errors in the form" should {
 
   val errorForm = testForm.withError(FormError("passcode", "Test error")) //TODO - replace with real form
-  lazy val view: Html = injectedView(testEmail, errorForm, emailPreferenceJourney = true)(user, messages, mockConfig)
+  lazy val view: Html = injectedView(testEmail, errorForm)(user, messages, mockConfig)
   lazy implicit val document: Document = Jsoup.parse(view.body)
 
   "have the correct document title" in {

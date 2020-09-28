@@ -33,7 +33,8 @@ text: Text)
 
 @startJourneyUrl = @{controllers.agent.routes.CapturePreferenceController.show().url}
 
-@resendVerificationUrl = @{"#" //TODO - new controller action}
+@resendVerificationUrl = @{"#" //TODO - new controller action
+}
 
 @mainTemplate(
     title = if(pinviewForm.hasErrors) messages("common.error.prefixTitle", messages("pinView.title")) else messages("pinView.title")
@@ -57,7 +58,7 @@ text: Text)
     @form(action = Call("GET", "/test")) { <!-- TODO - new controller action -->
         @text(
             field = pinviewForm("passcode"),
-            pageTitle = None,
+            heading = None,
             additionalContent = Some(additionalContent)
         )
     }
@@ -66,10 +67,10 @@ text: Text)
         <summary><span class="summary">@messages("pinView.notReceive")</span></summary>
         <div class="panel panel-border-narrow">
             <p>@messages("pinView.subjectLine")</p>
-            <p>@messages("pinView.information.1")
-                <a href=@resendVerificationUrl>@messages("pinView.information.2")</a>
-                @messages("pinView.information.3")
-                <a href=@startJourneyUrl>@messages("pinView.information.4")</a>@messages("common.fullstop")
+            <p>@messages("pinView.information1")
+                <a href=@resendVerificationUrl>@messages("pinView.information2")</a>
+                @messages("pinView.information3")
+                <a href=@startJourneyUrl>@messages("pinView.information4")</a>@messages("common.fullStop")
             </p>
         </div>
     </details>
