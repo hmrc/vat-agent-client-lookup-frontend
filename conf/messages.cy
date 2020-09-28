@@ -119,6 +119,18 @@ capturePref.confirmationEmail = Erbyn hyn rydym yn cadarnhau newidiadau drwy e-b
 capturePref.confirmationEmailRequest = A ydych am i ni anfon e-bost atoch i gadarnhau’r newidiadau a wnewch?
 capturePref.email.hintAlternative = Byddwn ond yn defnyddio hwn i anfon cadarnhad atoch o newidiadau a wnewch.
 
+pinView.title = Nodwch y cod i gadarnhau eich cyfeiriad e-bost
+pinView.notification = Rydym wedi anfon cod i:
+pinView.newTab = Agorwch dab neu ffenestr newydd os oes angen i chi gael mynediad at eich e-byst ar-lein.
+pinView.code = Cod cadarnhau
+pinView.formHint = Er enghraifft, DZKBFC
+pinView.notReceive = Nid wyf wedi cael yr e-bost
+pinView.subjectLine = Gall yr e-bost gymryd ychydig o funudau i gyrraedd. Llinell pwnc yr e-bost yw: ‘Cadarnhau’ch cyfeiriad e-bost - cyfrif TAW’ / ‘Confirm your email address - VAT account’.
+pinView.information1 = Gwiriwch eich ffolder sbam neu sothach. Os nad yw’r e-bost wedi cyrraedd o hyd, gallwch
+pinView.information2 = ofyn am god newydd
+pinView.information3 = neu
+pinView.information4 = roi cyfeiriad e-bost arall
+
 accountMigration.heading = Ni allwch wneud newidiadau ar gyfer busnes y cleient hwnnw ar hyn o bryd
 accountMigration.explanation = Mae hyn oherwydd bod cyfrif Troi Treth yn Ddigidol y busnes wrthi’n cael ei greu – gall hyn gymryd hyd at 72 awr.
 accountMigration.checkBackLater = Dewch yn ôl yn nes ymlaen.
