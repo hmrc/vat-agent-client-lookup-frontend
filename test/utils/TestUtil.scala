@@ -48,7 +48,6 @@ trait TestUtil extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach
   lazy val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
   lazy val language: Lang = mockConfig.languageMap("english")
 
-  val testEmail = "test@email.co.uk"
 
   lazy val fakeRequestWithVrnAndRedirectUrl: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest().withSession(

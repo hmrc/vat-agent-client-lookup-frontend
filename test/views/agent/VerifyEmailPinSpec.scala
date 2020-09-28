@@ -28,6 +28,7 @@ class VerifyEmailPinSpec extends ViewBaseSpec {
 
 val injectedView: VerifyEmailPinView = inject[VerifyEmailPinView]
 val testForm: Form[String] = Form("passcode" -> nonEmptyText) //TODO - replace with real form
+val testEmail: String = "test@email.com"
 
 "The VerifyEmailPiView page" should {
 
@@ -35,7 +36,7 @@ val testForm: Form[String] = Form("passcode" -> nonEmptyText) //TODO - replace w
   lazy implicit val document: Document = Jsoup.parse(view.body)
 
   "have the correct document title" in {
-  document.title shouldBe "Enter code to confirm your email address - Business tax account - GOV.UK"
+  document.title shouldBe "Enter code to confirm your email address - Your client’s VAT details - GOV.UK"
 }
 
   "have the correct heading" in {
@@ -54,7 +55,7 @@ val testForm: Form[String] = Form("passcode" -> nonEmptyText) //TODO - replace w
 }
 
   "have the correct first paragraph" in {
-  elementText("#content article p:nth-of-type(1)") shouldBe "We have sent a code to: $testEmail"
+  elementText("#content article p:nth-of-type(1)") shouldBe s"We have sent a code to: $testEmail"
 }
   "have the correct panel paragraph" in {
   elementText("p.panel") shouldBe "Open a new tab or window if you need to access your emails online."
@@ -74,7 +75,7 @@ val testForm: Form[String] = Form("passcode" -> nonEmptyText) //TODO - replace w
 
   "have the correct first paragraph inside of the progressive disclosure" in {
   elementText("details div p:nth-child(1)") shouldBe
-  "This email might take a few minutes to arrive. Its subject line is: ‘Confirm your email address - VAT account'."
+  "The email may take a few minutes to arrive. Its subject line is: ‘Confirm your email address - VAT account’."
 }
 
   "have the correct second paragraph inside of the progressive disclosure" in {
@@ -117,7 +118,7 @@ val testForm: Form[String] = Form("passcode" -> nonEmptyText) //TODO - replace w
   lazy implicit val document: Document = Jsoup.parse(view.body)
 
   "have the correct document title" in {
-  document.title shouldBe "Error: Enter code to confirm your email address - Business tax account - GOV.UK"
+  document.title shouldBe "Error: Enter code to confirm your email address - Your client’s VAT details - GOV.UK"
 }
 
   "have an error summary" which {
