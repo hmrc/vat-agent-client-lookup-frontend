@@ -20,6 +20,7 @@ import config.AppConfig
 import connectors.EmailVerificationConnector
 import connectors.httpParsers.CreateEmailVerificationRequestHttpParser.{EmailAlreadyVerified, EmailVerificationRequestSent}
 import connectors.httpParsers.GetEmailVerificationStateHttpParser.{EmailNotVerified, EmailVerified}
+import connectors.httpParsers.RequestPasscodeHttpParser.{EmailVerificationPasscodeRequestSent, EmailIsAlreadyVerified}
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.{ExecutionContext, Future}
@@ -55,6 +56,18 @@ class EmailVerificationService @Inject()(emailVerificationConnector: EmailVerifi
           Some(false)
         case _ =>
           None
+      }
+    } else {
+      Future.successful(Some(false))
+    }
+
+  def createEmailPasscodeRequest(email: String)(implicit hc: HeaderCarrier): Future[Option[Boolean]] =
+
+    if(appConfig.features.emailPinVerificationEnabled()) {
+      emailVerificationConnector.requestEmailPasscode(email) map {
+        case Right(EmailVerificationPasscodeRequestSent) => Some(true)
+        case Right(EmailIsAlreadyVerified) => Some(false)
+        case _ => None
       }
     } else {
       Future.successful(Some(false))
