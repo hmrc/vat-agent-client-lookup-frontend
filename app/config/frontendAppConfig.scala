@@ -65,6 +65,7 @@ trait AppConfig {
   val signUpServiceUrl: String => String
   val manageVatMissingTraderUrl: String
   val difficultiesPayingUrl: String
+  val trackingConsentUrl: String
 }
 
 @Singleton
@@ -150,4 +151,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override val manageVatMissingTraderUrl: String = manageVatBase + sc.getString(ConfigKeys.manageVatMissingTraderUrl)
 
   override val difficultiesPayingUrl: String = sc.getString(Keys.difficultiesPayingUrl)
+
+  val trackingConsentUrl: String = sc.getString(Keys.trackingConsentUrl)
 }
