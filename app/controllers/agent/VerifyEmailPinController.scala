@@ -19,27 +19,30 @@ package controllers.agent
 import common.SessionKeys
 import config.{AppConfig, ErrorHandler}
 import controllers.predicates.{AuthoriseAsAgentOnly, PreferencePredicate}
+import forms.PasscodeForm
 import javax.inject.{Inject, Singleton}
+import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.EmailVerificationService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import views.html.agent.VerifyEmailPinView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class VerifyEmailPinController @Inject()(val authenticate: AuthoriseAsAgentOnly,
                                          val preferenceCheck: PreferencePredicate,
-//                                         val emailPinVerificationService: EmailPinVerificationService, //TODO - uncomment when ready
                                          val errorHandler: ErrorHandler,
                                          mcc: MessagesControllerComponents,
-//                                         verifyEmailPinView: VerifyEmailPinView, //TODO - uncomment when ready
+                                         verifyEmailPinView: VerifyEmailPinView,
                                          implicit val executionContext: ExecutionContext,
                                          implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   def show: Action[AnyContent] = (authenticate andThen preferenceCheck) { implicit agent =>
     if(appConfig.features.emailPinVerificationEnabled()){
       agent.session.get(SessionKeys.notificationsEmail) match {
-        case Some(email) => Ok("") //TODO - insert new view
+        case Some(email) => Ok(verifyEmailPinView(email, PasscodeForm.form))
         case _ => Redirect(routes.CapturePreferenceController.show())
       }
     } else {
@@ -51,7 +54,18 @@ class VerifyEmailPinController @Inject()(val authenticate: AuthoriseAsAgentOnly,
   def submit: Action[AnyContent] = (authenticate andThen preferenceCheck).async { implicit agent =>
     if(appConfig.features.emailPinVerificationEnabled()){
       agent.session.get(SessionKeys.notificationsEmail) match {
-        case Some(email) => Future.successful(Ok("")) //TODO - deal with form and emailPinVerificationService
+        case Some(email) =>
+          PasscodeForm.form.bindFromRequest().fold(
+            error => {
+              Logger.debug(s"[VerifyEmailPinController][submit] Error submitting form: $error")
+              Future.successful(BadRequest(verifyEmailPinView(email, error)))
+            },
+            agentEmail => {
+              val redirectUrl = agent.session.get(SessionKeys.redirectUrl).getOrElse(appConfig.manageVatCustomerDetailsUrl)
+              // TODO - send user's entered passcode to verification service and handle response
+              Future.successful(Redirect(redirectUrl).addingToSession(SessionKeys.verifiedAgentEmail -> email))
+            }
+          )
 
         case _ => Future.successful(Redirect(routes.CapturePreferenceController.show()))
       }
