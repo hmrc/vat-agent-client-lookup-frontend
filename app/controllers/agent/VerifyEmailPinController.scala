@@ -24,7 +24,6 @@ import javax.inject.{Inject, Singleton}
 import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.EmailVerificationService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.agent.VerifyEmailPinView
 
@@ -66,13 +65,11 @@ class VerifyEmailPinController @Inject()(val authenticate: AuthoriseAsAgentOnly,
               Future.successful(Redirect(routes.AgentHubController.show()).addingToSession(SessionKeys.verifiedAgentEmail -> email))
             }
           )
-
         case _ => Future.successful(Redirect(routes.CapturePreferenceController.show()))
       }
     } else {
       Future.successful(NotFound(errorHandler.notFoundTemplate(agent)))
     }
-
   }
 
 }
