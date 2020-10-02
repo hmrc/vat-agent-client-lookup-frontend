@@ -60,10 +60,10 @@ class VerifyEmailPinController @Inject()(val authenticate: AuthoriseAsAgentOnly,
               Logger.debug(s"[VerifyEmailPinController][submit] Error submitting form: $error")
               Future.successful(BadRequest(verifyEmailPinView(email, error)))
             },
-            agentEmail => {
-              val redirectUrl = agent.session.get(SessionKeys.redirectUrl).getOrElse(appConfig.manageVatCustomerDetailsUrl)
+            passcode => {
               // TODO - send user's entered passcode to verification service and handle response
-              Future.successful(Redirect(redirectUrl).addingToSession(SessionKeys.verifiedAgentEmail -> email))
+              Logger.debug(s"[VerifyEmailPinController][submit] Successfully submitted form")
+              Future.successful(Redirect(routes.AgentHubController.show()).addingToSession(SessionKeys.verifiedAgentEmail -> email))
             }
           )
 

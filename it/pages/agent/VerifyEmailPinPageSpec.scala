@@ -69,8 +69,7 @@ class VerifyEmailPinPageSpec extends BasePageISpec {
   "Calling the .submit action" when {
 
     def submit(passcode: String): WSResponse = post(
-      path, formatNotificationsEmail(Some(notificationsEmail)) ++ formatReturnUrl
-    )(toFormData(PasscodeForm.form, passcode))
+      path, formatNotificationsEmail(Some(notificationsEmail)))(toFormData(PasscodeForm.form, passcode))
 
     "there is a verified notification email in session" when {
 
@@ -84,7 +83,7 @@ class VerifyEmailPinPageSpec extends BasePageISpec {
 
           res should have(
             httpStatus(SEE_OTHER),
-            redirectURI("/homepage")
+            redirectURI("/vat-through-software/representative/client-vat-account")
           )
         }
       }

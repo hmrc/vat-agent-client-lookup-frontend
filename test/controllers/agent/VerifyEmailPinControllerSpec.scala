@@ -137,7 +137,7 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfte
             }
 
             status(result) shouldBe SEE_OTHER
-            redirectLocation(result) shouldBe Some("/customer-details")
+            redirectLocation(result) shouldBe Some("/vat-through-software/representative/client-vat-account")
           }
         }
 

@@ -23,7 +23,7 @@ import play.twirl.api.Html
 import views.html.agent.VerifyEmailPinView
 import views.ViewBaseSpec
 
-class VerifyEmailPinSpec extends ViewBaseSpec {
+class VerifyEmailPinViewSpec extends ViewBaseSpec {
 
   val injectedView: VerifyEmailPinView = inject[VerifyEmailPinView]
   val testEmail: String = "test@email.com"
