@@ -38,6 +38,7 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
   }
 
   val testRedirectUrl: String     = "/manage-vat-account"
+  val defaultRedirectUrl: String  = "/vat-through-software/representative/client-vat-account"
   val testValidEmail: String      = "test@example.com"
   val testInvalidEmail: String    = "invalidEmail"
   val testYesPreference: String   = "yes"
@@ -115,7 +116,7 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
           }
 
           s"redirect to ${controllers.agent.routes.SelectClientVrnController.show().url}" in {
-            redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show().url)
+            redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show(defaultRedirectUrl).url)
           }
         }
       }

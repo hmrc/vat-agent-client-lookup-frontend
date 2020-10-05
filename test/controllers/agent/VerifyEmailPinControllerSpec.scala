@@ -24,10 +24,9 @@ import play.api.http.Status
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import views.html.agent.VerifyEmailPinView
 
-class VerifyEmailPinControllerSpec extends ControllerBaseSpec
-//  with MockEmailPinVerificationService
-  with BeforeAndAfterAll {
+class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfterAll {
 
   override def beforeAll(): Unit = {
     mockConfig.features.preferenceJourneyEnabled(true)
@@ -36,10 +35,9 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec
   object TestVerifyEmailPinController extends VerifyEmailPinController(
     mockAgentOnlyAuthPredicate,
     mockPreferencePredicate,
-//    mockEmailPinVerificationService,
     mockErrorHandler,
     mcc,
-//    inject[VerifyEmailPinView],
+    inject[VerifyEmailPinView],
     ec,
     mockConfig
   )
@@ -66,6 +64,8 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec
           }
 
           status(result) shouldBe Status.OK
+          contentType(result) shouldBe Some("text/html")
+          charset(result) shouldBe Some("utf-8")
         }
       }
 
@@ -120,19 +120,43 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec
 
     "the emailPinVerification feature switch is enabled" when {
 
-      "there is an email in session" should {
+      "there is an email in session" when {
 
-        "return an OK response" in {
+        "there are no errors in the form" should {
 
-          mockAgentAuthorised()
+          "redirect the user to manage vat customer details" in {
 
-          val request = testPostRequest.withSession(SessionKeys.notificationsEmail -> testEmail)
-          val result = {
-            mockConfig.features.emailPinVerificationEnabled(true)
-            TestVerifyEmailPinController.submit(request)
+            mockAgentAuthorised()
+
+            val request = testPostRequest
+              .withFormUrlEncodedBody(("passcode", "123456"))
+              .withSession(SessionKeys.notificationsEmail -> testEmail)
+            val result = {
+              mockConfig.features.emailPinVerificationEnabled(true)
+              TestVerifyEmailPinController.submit(request)
+            }
+
+            status(result) shouldBe SEE_OTHER
+            redirectLocation(result) shouldBe Some("/vat-through-software/representative/client-vat-account")
           }
+        }
 
-          status(result) shouldBe OK
+        "there are errors in the form" should {
+
+          "return a bad request" in {
+
+            mockAgentAuthorised()
+
+            val request = testPostRequest
+              .withFormUrlEncodedBody(("passcode", "badthings"))
+              .withSession(SessionKeys.notificationsEmail -> testEmail)
+            val result = {
+              mockConfig.features.emailPinVerificationEnabled(true)
+              TestVerifyEmailPinController.submit(request)
+            }
+
+            status(result) shouldBe BAD_REQUEST
+          }
         }
       }
 

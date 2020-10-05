@@ -42,7 +42,7 @@ class CapturePreferenceController @Inject()(val authenticate: AuthoriseAsAgentOn
     val preference = user.session.get(SessionKeys.preference)
     val notificationEmail = user.session.get(SessionKeys.notificationsEmail)
     val clientVrn = user.session.get(SessionKeys.clientVRN)
-    val redirectUrl = if(altRedirectUrl.nonEmpty) altRedirectUrl else user.session.get(SessionKeys.redirectUrl).getOrElse("")
+    val redirectUrl = if(altRedirectUrl.nonEmpty) altRedirectUrl else user.session.get(SessionKeys.redirectUrl).getOrElse(routes.AgentHubController.show().url)
     if (clientVrn.isEmpty) {
       Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectUrl))
     } else {

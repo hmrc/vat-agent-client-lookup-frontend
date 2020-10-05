@@ -55,29 +55,30 @@ text: Text)
 
     <p class="panel panel-border-wide">@messages("pinView.newTab")</p>
 
-    @form(action = Call("GET", "/test")) { <!-- TODO - new controller action -->
+    @form(action = controllers.agent.routes.VerifyEmailPinController.submit) {
         @text(
             field = pinviewForm("passcode"),
             heading = None,
             additionalContent = Some(additionalContent)
         )
-    }
 
-    <details class="controlpanel">
-        <summary><span class="summary">@messages("pinView.notReceive")</span></summary>
-        <div class="panel panel-border-narrow">
-            <p>@messages("pinView.subjectLine")</p>
-            <p>@messages("pinView.information1")
-                <a href=@resendVerificationUrl>@messages("pinView.information2")</a>
-                @messages("pinView.information3")
-                <a href=@startJourneyUrl>@messages("pinView.information4")</a>@messages("common.fullStop")
-            </p>
+
+        <details class="controlpanel">
+            <summary><span class="summary">@messages("pinView.notReceive")</span></summary>
+            <div class="panel panel-border-narrow">
+                <p>@messages("pinView.subjectLine")</p>
+                <p>@messages("pinView.information1")
+                    <a href=@resendVerificationUrl>@messages("pinView.information2")</a>
+                    @messages("pinView.information3")
+                    <a href=@startJourneyUrl>@messages("pinView.information4")</a>@messages("common.fullStop")
+                </p>
+            </div>
+        </details>
+
+
+        <div class="form-group">
+            <button class="button" type="submit">@messages("common.continue")</button>
         </div>
-    </details>
-
-
-<div class="form-group">
-    <button class="button" type="submit">@messages("common.continue")</button>
-</div>
+    }
 }
 
