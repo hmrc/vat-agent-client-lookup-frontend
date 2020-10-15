@@ -105,6 +105,12 @@ pinView.information2 = request a new code
 pinView.information3 = or
 pinView.information4 = provide another email address
 
+tooManyAttempts.title = You need to start again
+tooManyAttempts.heading = You need to start again
+tooManyAttempts.lineOne = This is because you have entered the wrong code too many times.
+tooManyAttempts.lineTwo.1 = Return to your client’s VAT account
+tooManyAttempts.lineTwo.2 = to start the process again.
+
 accountMigration.heading = You cannot make changes for that client’s business right now
 accountMigration.explanation = This is because the business’s Making Tax Digital account is being set up - this can take up to 72 hours.
 accountMigration.checkBackLater = Check back again later.

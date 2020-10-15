@@ -131,6 +131,12 @@ pinView.information2 = ofyn am god newydd
 pinView.information3 = neu
 pinView.information4 = roi cyfeiriad e-bost arall
 
+tooManyAttempts.title = You need to start again
+tooManyAttempts.heading = You need to start again
+tooManyAttempts.lineOne = This is because you have entered the wrong code too many times.
+tooManyAttempts.lineTwo.1 = Return to your client’s VAT account
+tooManyAttempts.lineTwo.2 = to start the process again.
+
 accountMigration.heading = Ni allwch wneud newidiadau ar gyfer busnes y cleient hwnnw ar hyn o bryd
 accountMigration.explanation = Mae hyn oherwydd bod cyfrif Troi Treth yn Ddigidol y busnes wrthi’n cael ei greu – gall hyn gymryd hyd at 72 awr.
 accountMigration.checkBackLater = Dewch yn ôl yn nes ymlaen.
