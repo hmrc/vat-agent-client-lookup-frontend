@@ -18,19 +18,22 @@ package controllers.agent
 
 import common.SessionKeys
 import config.{AppConfig, ErrorHandler}
+import connectors.httpParsers.VerifyPasscodeHttpParser.{AlreadyVerified, SuccessfullyVerified, TooManyAttempts}
 import controllers.predicates.{AuthoriseAsAgentOnly, PreferencePredicate}
 import forms.PasscodeForm
 import javax.inject.{Inject, Singleton}
 import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.EmailVerificationService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.agent.VerifyEmailPinView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class VerifyEmailPinController @Inject()(val authenticate: AuthoriseAsAgentOnly,
+class VerifyEmailPinController @Inject()(emailVerificationService: EmailVerificationService,
+                                         authenticate: AuthoriseAsAgentOnly,
                                          val preferenceCheck: PreferencePredicate,
                                          val errorHandler: ErrorHandler,
                                          mcc: MessagesControllerComponents,
@@ -60,9 +63,14 @@ class VerifyEmailPinController @Inject()(val authenticate: AuthoriseAsAgentOnly,
               Future.successful(BadRequest(verifyEmailPinView(email, error)))
             },
             passcode => {
-              // TODO - send user's entered passcode to verification service and handle response
-              Logger.debug(s"[VerifyEmailPinController][submit] Successfully submitted form")
-              Future.successful(Redirect(routes.AgentHubController.show()).addingToSession(SessionKeys.verifiedAgentEmail -> email))
+              emailVerificationService.verifyPasscode(email, passcode).map{
+                case Right(SuccessfullyVerified) | Right(AlreadyVerified) =>
+                  Redirect(agent.session.get(SessionKeys.redirectUrl).getOrElse(appConfig.manageVatCustomerDetailsUrl))
+                    .addingToSession(SessionKeys.verifiedAgentEmail -> email)
+                // TODO - Find out what to do in successful case
+                case Right(TooManyAttempts) => Ok("Success")
+                case _ => errorHandler.showInternalServerError
+              }
             }
           )
         case _ => Future.successful(Redirect(routes.CapturePreferenceController.show()))

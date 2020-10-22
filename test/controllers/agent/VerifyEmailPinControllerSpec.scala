@@ -17,7 +17,10 @@
 package controllers.agent
 
 import common.SessionKeys
+import connectors.httpParsers.VerifyPasscodeHttpParser.{AlreadyVerified, SuccessfullyVerified, TooManyAttempts}
 import controllers.ControllerBaseSpec
+import mocks.services.MockEmailVerificationService
+import models.errors.UnexpectedError
 import org.jsoup.Jsoup
 import org.scalatest.BeforeAndAfterAll
 import play.api.http.Status
@@ -26,13 +29,14 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.agent.VerifyEmailPinView
 
-class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfterAll {
+class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfterAll with MockEmailVerificationService {
 
   override def beforeAll(): Unit = {
     mockConfig.features.preferenceJourneyEnabled(true)
   }
 
   object TestVerifyEmailPinController extends VerifyEmailPinController(
+    mockEmailVerificationService,
     mockAgentOnlyAuthPredicate,
     mockPreferencePredicate,
     mockErrorHandler,
@@ -122,22 +126,82 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfte
 
       "there is an email in session" when {
 
-        "there are no errors in the form" should {
+        "there are no errors in the form" when {
 
-          "redirect the user to manage vat customer details" in {
+          "the email verification service returns SuccessfullyVerified" should {
 
-            mockAgentAuthorised()
+            "redirect the user to manage vat customer details" in {
 
-            val request = testPostRequest
-              .withFormUrlEncodedBody(("passcode", "123456"))
-              .withSession(SessionKeys.notificationsEmail -> testEmail)
-            val result = {
-              mockConfig.features.emailPinVerificationEnabled(true)
-              TestVerifyEmailPinController.submit(request)
+              mockAgentAuthorised()
+
+              val request = testPostRequest
+                .withFormUrlEncodedBody(("passcode", "123456"))
+                .withSession(SessionKeys.notificationsEmail -> testEmail)
+              val result = {
+                mockVerifyPasscodeRequest(Right(SuccessfullyVerified))
+                mockConfig.features.emailPinVerificationEnabled(true)
+                TestVerifyEmailPinController.submit(request)
+              }
+
+              status(result) shouldBe SEE_OTHER
+              redirectLocation(result) shouldBe Some("/customer-details")
             }
 
-            status(result) shouldBe SEE_OTHER
-            redirectLocation(result) shouldBe Some("/vat-through-software/representative/client-vat-account")
+          }
+
+          "the email verification service returns AlreadyVerified" should {
+
+            "redirect the user to manage vat customer details" in {
+
+              mockAgentAuthorised()
+
+              val request = testPostRequest
+                .withFormUrlEncodedBody(("passcode", "123456"))
+                .withSession(SessionKeys.notificationsEmail -> testEmail)
+              val result = {
+                mockVerifyPasscodeRequest(Right(AlreadyVerified))
+                mockConfig.features.emailPinVerificationEnabled(true)
+                TestVerifyEmailPinController.submit(request)
+              }
+
+              status(result) shouldBe SEE_OTHER
+              redirectLocation(result) shouldBe Some("/customer-details")
+            }
+          }
+
+          "the email verification service returns too many attempts" should {
+
+            "return 200" in {
+
+              mockAgentAuthorised()
+
+              val request = testPostRequest
+                .withFormUrlEncodedBody(("passcode", "123456"))
+                .withSession(SessionKeys.notificationsEmail -> testEmail)
+              lazy val result = {
+                mockVerifyPasscodeRequest(Right(TooManyAttempts))
+                mockConfig.features.emailPinVerificationEnabled(true)
+                TestVerifyEmailPinController.submit(request)
+              }
+
+              status(result) shouldBe OK
+            }
+          }
+
+          "the email verification service returns an unexpected error" should {
+
+            "return 500" in {
+              val request = testPostRequest
+                .withFormUrlEncodedBody(("passcode", "123456"))
+                .withSession(SessionKeys.notificationsEmail -> testEmail)
+              lazy val result = {
+                mockVerifyPasscodeRequest(Left(UnexpectedError(Status.INTERNAL_SERVER_ERROR, "Err0r")))
+                mockConfig.features.emailPinVerificationEnabled(true)
+                TestVerifyEmailPinController.submit(request)
+              }
+              mockAgentAuthorised()
+              status(result) shouldBe INTERNAL_SERVER_ERROR
+            }
           }
         }
 

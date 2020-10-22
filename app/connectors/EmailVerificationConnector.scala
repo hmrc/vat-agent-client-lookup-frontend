@@ -25,6 +25,7 @@ import connectors.httpParsers.CreateEmailVerificationRequestHttpParser.EmailVeri
 import connectors.httpParsers.GetEmailVerificationStateHttpParser.EmailVerificationState
 import connectors.httpParsers.RequestPasscodeHttpParser.EmailVerificationPasscodeRequest
 import connectors.httpParsers.ResponseHttpParser.HttpResult
+import connectors.httpParsers.VerifyPasscodeHttpParser.VerifyPasscodeRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -59,17 +60,31 @@ class EmailVerificationConnector @Inject()(http: HttpClient,
 
 
 
-  private val emailPinVerificationUrl: String = s"${appConfig.emailVerificationBaseUrl}/email-verification/request-passcode"
+  private val requestPasscodeUrl: String = s"${appConfig.emailVerificationBaseUrl}/email-verification/request-passcode"
 
-  def requestEmailPasscode(emailAddress: String)
+  def requestEmailPasscode(emailAddress: String, lang: String)
                           (implicit hc: HeaderCarrier): Future[HttpResult[EmailVerificationPasscodeRequest]] = {
     val jsonBody =
       Json.obj(
         "email" -> emailAddress,
-        "serviceName" -> "HMRC VAT"
+        "serviceName" -> "HMRC VAT",
+        "lang" -> lang
       )
 
-    http.POST[JsObject, HttpResult[EmailVerificationPasscodeRequest]](emailPinVerificationUrl, jsonBody)
+    http.POST[JsObject, HttpResult[EmailVerificationPasscodeRequest]](requestPasscodeUrl, jsonBody)
+  }
+
+  private val verifyPasscodeUrl: String = s"${appConfig.emailVerificationBaseUrl}/email-verification/verify-passcode"
+
+  def verifyPasscode(emailAddress: String, passcode: String)
+                    (implicit hc: HeaderCarrier): Future[HttpResult[VerifyPasscodeRequest]] = {
+    val jsonBody = Json.obj(
+      "email" -> emailAddress,
+      "passcode" -> passcode
+    )
+
+
+    http.POST[JsObject, HttpResult[VerifyPasscodeRequest]](verifyPasscodeUrl, jsonBody)
   }
 
 }
