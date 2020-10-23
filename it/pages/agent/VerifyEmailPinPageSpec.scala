@@ -20,7 +20,8 @@ import forms.PasscodeForm
 import helpers.IntegrationTestConstants.notificationsEmail
 import pages.BasePageISpec
 import play.api.libs.ws.WSResponse
-import play.api.test.Helpers.{OK, SEE_OTHER, BAD_REQUEST}
+import play.api.test.Helpers.{BAD_REQUEST, OK, SEE_OTHER}
+import stubs.EmailVerificationStub
 
 class VerifyEmailPinPageSpec extends BasePageISpec {
 
@@ -69,7 +70,7 @@ class VerifyEmailPinPageSpec extends BasePageISpec {
   "Calling the .submit action" when {
 
     def submit(passcode: String): WSResponse = post(
-      path, formatNotificationsEmail(Some(notificationsEmail)))(toFormData(PasscodeForm.form, passcode))
+      path, formatNotificationsEmail(Some(notificationsEmail)) ++ formatReturnUrl)(toFormData(PasscodeForm.form, passcode))
 
     "there is a verified notification email in session" when {
 
@@ -77,13 +78,14 @@ class VerifyEmailPinPageSpec extends BasePageISpec {
 
         "redirect to manage customer details" in {
           given.agent.isSignedUpToAgentServices
+          EmailVerificationStub.stubVerifyPasscodeCreated
 
           When("I submit the Email verification passcode page with the correct passcode")
           val res = submit("123456")
 
           res should have(
             httpStatus(SEE_OTHER),
-            redirectURI("/vat-through-software/representative/client-vat-account")
+            redirectURI("/homepage")
           )
         }
       }

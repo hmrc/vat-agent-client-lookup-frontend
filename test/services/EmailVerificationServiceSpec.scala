@@ -173,7 +173,7 @@ class EmailVerificationServiceSpec extends TestUtil with MockEmailVerificationCo
           mockRequestEmailPasscode(Future.successful(Right(EmailVerificationPasscodeRequestSent)))
           val res: Option[Boolean] = {
             mockConfig.features.emailPinVerificationEnabled(true)
-            await(TestStoreEmailService.createEmailPasscodeRequest(testEmail))
+            await(TestStoreEmailService.createEmailPasscodeRequest(testEmail, "en"))
           }
           res shouldBe Some(true)
         }
@@ -186,7 +186,7 @@ class EmailVerificationServiceSpec extends TestUtil with MockEmailVerificationCo
           mockRequestEmailPasscode(Future.successful(Right(EmailIsAlreadyVerified)))
           val res: Option[Boolean] = {
             mockConfig.features.emailPinVerificationEnabled(true)
-            await(TestStoreEmailService.createEmailPasscodeRequest(testEmail))
+            await(TestStoreEmailService.createEmailPasscodeRequest(testEmail, "en"))
           }
           res shouldBe Some(false)
         }
@@ -199,7 +199,7 @@ class EmailVerificationServiceSpec extends TestUtil with MockEmailVerificationCo
           mockRequestEmailPasscode(Future.successful(Left(UnexpectedError(BAD_REQUEST, ""))))
           val res: Option[Boolean] = {
             mockConfig.features.emailPinVerificationEnabled(true)
-            await(TestStoreEmailService.createEmailPasscodeRequest(testEmail))
+            await(TestStoreEmailService.createEmailPasscodeRequest(testEmail, "en"))
           }
           res shouldBe None
         }
@@ -210,7 +210,7 @@ class EmailVerificationServiceSpec extends TestUtil with MockEmailVerificationCo
 
       def res: Option[Boolean] = {
         mockConfig.features.emailPinVerificationEnabled(false)
-        await(TestStoreEmailService.createEmailPasscodeRequest(testEmail))
+        await(TestStoreEmailService.createEmailPasscodeRequest(testEmail, "en"))
       }
 
       "return Some(false)" in {
@@ -219,7 +219,7 @@ class EmailVerificationServiceSpec extends TestUtil with MockEmailVerificationCo
 
       "not call the email verification connector" in {
         res
-        verify(mockEmailVerificationConnector, never()).requestEmailPasscode(testEmail)
+        verify(mockEmailVerificationConnector, never()).requestEmailPasscode(testEmail, "en")
       }
     }
   }
