@@ -28,6 +28,7 @@ import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.agent.VerifyEmailPinView
+import views.html.errors.agent.IncorrectPasscodeView
 
 class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfterAll with MockEmailVerificationService {
 
@@ -42,6 +43,7 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfte
     mockErrorHandler,
     mcc,
     inject[VerifyEmailPinView],
+    inject[IncorrectPasscodeView],
     ec,
     mockConfig
   )
@@ -171,7 +173,7 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfte
 
           "the email verification service returns too many attempts" should {
 
-            "return 200" in {
+            "return 400" in {
 
               mockAgentAuthorised()
 
@@ -184,7 +186,7 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfte
                 TestVerifyEmailPinController.submit(request)
               }
 
-              status(result) shouldBe OK
+              status(result) shouldBe BAD_REQUEST
             }
           }
 

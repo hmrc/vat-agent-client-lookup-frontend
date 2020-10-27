@@ -28,6 +28,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.EmailVerificationService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.agent.VerifyEmailPinView
+import views.html.errors.agent.IncorrectPasscodeView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -38,6 +39,7 @@ class VerifyEmailPinController @Inject()(emailVerificationService: EmailVerifica
                                          val errorHandler: ErrorHandler,
                                          mcc: MessagesControllerComponents,
                                          verifyEmailPinView: VerifyEmailPinView,
+                                         incorrectPasscodeView: IncorrectPasscodeView,
                                          implicit val executionContext: ExecutionContext,
                                          implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
@@ -67,8 +69,7 @@ class VerifyEmailPinController @Inject()(emailVerificationService: EmailVerifica
                 case Right(SuccessfullyVerified) | Right(AlreadyVerified) =>
                   Redirect(agent.session.get(SessionKeys.redirectUrl).getOrElse(appConfig.manageVatCustomerDetailsUrl))
                     .addingToSession(SessionKeys.verifiedAgentEmail -> email)
-                // TODO - Find out what to do in successful case
-                case Right(TooManyAttempts) => Ok("Success")
+                case Right(TooManyAttempts) => BadRequest(incorrectPasscodeView())
                 case _ => errorHandler.showInternalServerError
               }
             }
