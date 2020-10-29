@@ -90,6 +90,23 @@ class VerifyEmailPinPageSpec extends BasePageISpec {
         }
       }
 
+      "too many incorrect passcodes are submitted" should {
+
+        "show the passcode error view" in {
+          given.agent.isSignedUpToAgentServices
+          EmailVerificationStub.stubPasscodeAttemptsExceeded
+
+          When("I submit the passcode form with an incorrect passcode several times")
+
+          val res = submit("444444")
+
+          res should have(
+            httpStatus(BAD_REQUEST),
+            elementText(".heading-large")("You need to start again")
+          )
+        }
+      }
+
       "an incorrect passcode is submitted" should {
 
         "redirect to manage customer details" in {

@@ -72,6 +72,9 @@ object EmailVerificationStub extends WireMockMethods {
   def stubVerifyPasscodeNotFound: StubMapping = when(method = POST, uri = emailVerificationVerifyPasscodeUri)
     .thenReturn(status = NOT_FOUND, body = verifyPasscodeNotFoundJson)
 
+  def stubPasscodeAttemptsExceeded: StubMapping = when(method = POST, uri = emailVerificationVerifyPasscodeUri)
+    .thenReturn(status = FORBIDDEN, body = tooManyAttempts)
+
   def stubVerifyPasscodeUnexpected: StubMapping = when(method = POST, uri = emailVerificationVerifyPasscodeUri)
     .thenReturn(status = INTERNAL_SERVER_ERROR, body = internalServerErrorJson)
 
@@ -95,6 +98,13 @@ object EmailVerificationStub extends WireMockMethods {
     """{
       |  "code": "PASSCODE_NOT_FOUND",
       |  "message": "Passcode not found"
+      |}""".stripMargin
+  )
+
+  val tooManyAttempts: JsValue = Json.parse(
+    """{
+      |  "code": "MAX_PASSCODE_ATTEMPTS_EXCEEDED",
+      |  "message": "Max attempts per session exceeded"
       |}""".stripMargin
   )
 }
