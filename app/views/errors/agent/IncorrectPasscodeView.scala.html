@@ -18,13 +18,13 @@
 
 @this(mainTemplate: MainTemplate)
 
-@()(implicit messages: Messages, appConfig: AppConfig)
+@(errorMessage: String)(implicit messages: Messages, appConfig: AppConfig)
 
 @mainTemplate(title = messages("incorrectPasscode.title")) {
 
     <h1 class="heading-large">@messages("incorrectPasscode.heading")</h1>
 
-    <p>@messages("incorrectPasscode.lineOne")</p>
+    <p>@messages(errorMessage)</p>
 
     <p>
       <a href="@controllers.agent.routes.AgentHubController.show()">@messages("incorrectPasscode.lineTwo.1")</a>

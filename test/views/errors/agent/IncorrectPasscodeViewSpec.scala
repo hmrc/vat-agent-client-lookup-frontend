@@ -25,7 +25,7 @@ import views.html.errors.agent.IncorrectPasscodeView
 class IncorrectPasscodeViewSpec extends ViewBaseSpec {
 
   val injectedView: IncorrectPasscodeView = inject[IncorrectPasscodeView]
-  lazy val view: Html = injectedView()(messages, mockConfig)
+  lazy val view: Html = injectedView("incorrectPasscode.tooManyAttempts")(messages, mockConfig)
 
   lazy implicit val document: Document = Jsoup.parse(view.body)
 
