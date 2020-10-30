@@ -18,7 +18,7 @@ package controllers.agent
 
 import common.SessionKeys
 import config.{AppConfig, ErrorHandler}
-import connectors.httpParsers.VerifyPasscodeHttpParser.{AlreadyVerified, SuccessfullyVerified, TooManyAttempts}
+import connectors.httpParsers.VerifyPasscodeHttpParser._
 import controllers.predicates.{AuthoriseAsAgentOnly, PreferencePredicate}
 import forms.PasscodeForm
 import javax.inject.{Inject, Singleton}
@@ -69,7 +69,8 @@ class VerifyEmailPinController @Inject()(emailVerificationService: EmailVerifica
                 case Right(SuccessfullyVerified) | Right(AlreadyVerified) =>
                   Redirect(agent.session.get(SessionKeys.redirectUrl).getOrElse(appConfig.manageVatCustomerDetailsUrl))
                     .addingToSession(SessionKeys.verifiedAgentEmail -> email)
-                case Right(TooManyAttempts) => BadRequest(incorrectPasscodeView())
+                case Right(TooManyAttempts) => BadRequest(incorrectPasscodeView("incorrectPasscode.tooManyAttempts"))
+                case Right(PasscodeNotFound) => BadRequest(incorrectPasscodeView("incorrectPasscode.expired"))
                 case _ => errorHandler.showInternalServerError
               }
             }

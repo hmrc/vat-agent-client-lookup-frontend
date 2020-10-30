@@ -17,7 +17,7 @@
 package controllers.agent
 
 import common.SessionKeys
-import connectors.httpParsers.VerifyPasscodeHttpParser.{AlreadyVerified, SuccessfullyVerified, TooManyAttempts}
+import connectors.httpParsers.VerifyPasscodeHttpParser.{AlreadyVerified, PasscodeNotFound, SuccessfullyVerified, TooManyAttempts}
 import controllers.ControllerBaseSpec
 import mocks.services.MockEmailVerificationService
 import models.errors.UnexpectedError
@@ -187,6 +187,25 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfte
               }
 
               status(result) shouldBe BAD_REQUEST
+            }
+          }
+
+          "the email verification service returns PasscodeNotFound" should {
+
+            "return 400" in {
+
+              mockAgentAuthorised()
+
+              val request = testPostRequest
+                .withFormUrlEncodedBody(("passcode", "123456"))
+                .withSession(SessionKeys.notificationsEmail -> testEmail)
+              lazy val result = {
+                mockVerifyPasscodeRequest(Right(PasscodeNotFound))
+                mockConfig.features.emailPinVerificationEnabled(true)
+                TestVerifyEmailPinController.submit(request)
+              }
+
+              status(result) shouldBe Status.BAD_REQUEST
             }
           }
 

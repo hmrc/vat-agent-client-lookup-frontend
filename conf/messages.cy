@@ -133,7 +133,8 @@ pinView.information4 = roi cyfeiriad e-bost arall
 
 incorrectPasscode.title = You need to start again
 incorrectPasscode.heading = You need to start again
-incorrectPasscode.lineOne = This is because you have entered the wrong code too many times.
+incorrectPasscode.tooManyAttempts = This is because you have entered the wrong code too many times.
+incorrectPasscode.expired = The code we sent you has expired.
 incorrectPasscode.lineTwo.1 = Return to your client’s VAT account
 incorrectPasscode.lineTwo.2 = to start the process again.
 
