@@ -71,6 +71,11 @@ class VerifyEmailPinController @Inject()(emailVerificationService: EmailVerifica
                     .addingToSession(SessionKeys.verifiedAgentEmail -> email)
                 case Right(TooManyAttempts) => BadRequest(incorrectPasscodeView("incorrectPasscode.tooManyAttempts"))
                 case Right(PasscodeNotFound) => BadRequest(incorrectPasscodeView("incorrectPasscode.expired"))
+                case Right(IncorrectPasscode) =>
+                  BadRequest(verifyEmailPinView(
+                    email,
+                    PasscodeForm.form.withError("passcode", "passcode.error.invalid")
+                  ))
                 case _ => errorHandler.showInternalServerError
               }
             }
