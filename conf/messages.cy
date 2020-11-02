@@ -131,12 +131,12 @@ pinView.information2 = ofyn am god newydd
 pinView.information3 = neu
 pinView.information4 = roi cyfeiriad e-bost arall
 
-incorrectPasscode.title = You need to start again
-incorrectPasscode.heading = You need to start again
-incorrectPasscode.tooManyAttempts = This is because you have entered the wrong code too many times.
-incorrectPasscode.expired = The code we sent you has expired.
-incorrectPasscode.lineTwo.1 = Return to your client’s VAT account
-incorrectPasscode.lineTwo.2 = to start the process again.
+incorrectPasscode.title = Mae’n rhaid i chi ddechrau eto
+incorrectPasscode.heading = Mae’n rhaid i chi ddechrau eto
+incorrectPasscode.tooManyAttempts = Y rheswm am hyn yw eich bod wedi nodi’r cod anghywir gormod o weithiau.
+incorrectPasscode.expired = Mae’r cod a anfonom atoch wedi dod i ben.
+incorrectPasscode.lineTwo.1 = Ewch yn ôl i gyfrif TAW eich cleient
+incorrectPasscode.lineTwo.2 = er mwyn dechrau’r broses eto.
 
 accountMigration.heading = Ni allwch wneud newidiadau ar gyfer busnes y cleient hwnnw ar hyn o bryd
 accountMigration.explanation = Mae hyn oherwydd bod cyfrif Troi Treth yn Ddigidol y busnes wrthi’n cael ei greu – gall hyn gymryd hyd at 72 awr.
