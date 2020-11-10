@@ -31,7 +31,7 @@ class GovUkWrapperSpec extends ViewBaseSpec {
 
     "the user is an agent" should {
 
-      lazy val view = injectedView(mockConfig,"Test")(messages)
+      lazy val view = injectedView(mockConfig,"Test")(request, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not be shown a logo" in {

@@ -44,7 +44,7 @@ hmrcGovUkTemplate: GovUkTemplate)
   scriptElem: Option[Html] = None,
   showSignOut: Boolean = true,
   feedbackOnSignOut: Boolean = true
-  )(implicit messages: Messages)
+  )(implicit request: Request[_], messages: Messages)
 
 @scriptElement = {
   <script type="text/javascript" src=@routes.Assets.at("javascript/errorFocus.js?2")></script>
@@ -108,11 +108,6 @@ hmrcGovUkTemplate: GovUkTemplate)
 }
 
 @footerTop = {}
-@footerLinksContent= {
- @footerLinks(
-    accessibilityFooterUrl = Some(appConfig.accessibilityLinkUrl)
- )
-}
 
 @phaseBanner = {
     <div class="beta-banner">
@@ -163,4 +158,4 @@ hmrcGovUkTemplate: GovUkTemplate)
 messages("base.pageTitle", title, messages("common.agentService"))
 }
 
-@hmrcGovUkTemplate(Some(pageTitle), bodyClasses)(headContent, bodyEnd, insideHeader, afterHeader, footerTop, Some(footerLinksContent), nav = true)(content)
+@hmrcGovUkTemplate(Some(pageTitle), bodyClasses)(headContent, bodyEnd, insideHeader, afterHeader, footerTop, Some(footerLinks(accessibilityFooterUrl = Some(appConfig.accessibilityLinkUrl))), nav = true)(content)
