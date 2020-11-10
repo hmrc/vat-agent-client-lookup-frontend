@@ -84,5 +84,5 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
 
   override val difficultiesPayingUrl: String = "/difficulties-paying-hmrc"
 
-  override val trackingConsentUrl: String ="/tracking"
+  override val gtmContainer: String = "x"
 }

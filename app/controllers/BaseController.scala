@@ -21,7 +21,7 @@ import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl._
-import uk.gov.hmrc.play.bootstrap.binders.{AbsoluteWithHostnameFromWhitelist, OnlyRelative, RedirectUrl}
+import uk.gov.hmrc.play.bootstrap.binders.{AbsoluteWithHostnameFromAllowlist, OnlyRelative, RedirectUrl}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 abstract class BaseController(val mcc: MessagesControllerComponents) extends FrontendController(mcc) with I18nSupport {
@@ -30,7 +30,7 @@ abstract class BaseController(val mcc: MessagesControllerComponents) extends Fro
 
     try {
       if (url.nonEmpty) {
-        RedirectUrl(url).getEither(OnlyRelative | AbsoluteWithHostnameFromWhitelist(appConfig.environmentHost)) match {
+        RedirectUrl(url).getEither(OnlyRelative | AbsoluteWithHostnameFromAllowlist(appConfig.environmentHost)) match {
           case Right(value) =>
             Some(value.toString())
           case Left(_) =>
