@@ -27,7 +27,7 @@ class NotSignedUpViewSpec extends ViewBaseSpec {
 
   "Rendering the Not Signed Up error page" should {
 
-    lazy val view = injectedView()(messages, mockConfig)
+    lazy val view = injectedView()(request, messages, mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct title" in {

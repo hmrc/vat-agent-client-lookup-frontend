@@ -32,7 +32,7 @@ class SessionTimeoutViewSpec extends ViewBaseSpec {
       val instructions = "#content article p"
     }
 
-    lazy val view = injectedView()(messages, mockConfig)
+    lazy val view = injectedView()(request, messages, mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {

@@ -39,7 +39,7 @@ class CheckYourAnswersViewSpec extends ViewBaseSpec {
   }
 
   "The Check Your Answers view" should {
-    lazy val view = injectedView(testEmail)
+    lazy val view = injectedView(testEmail)(request, messages, mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct title" in {

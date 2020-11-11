@@ -16,7 +16,7 @@
 
  @this(govukWrapper: GovukWrapper)
 
-@(appConfig: config.AppConfig, pageTitle: String, heading: String, message: String)(implicit messages: Messages)
+@(appConfig: config.AppConfig, pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages)
 
 @contentHeader = {
   <h1>@messages(heading)</h1>

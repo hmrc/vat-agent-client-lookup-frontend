@@ -18,7 +18,7 @@ import sbt._
 import uk.gov.hmrc.DefaultBuildSettings._
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import uk.gov.hmrc.versioning.SbtGitVersioning
-import uk.gov.hmrc.{SbtArtifactory, SbtAutoBuildPlugin}
+import uk.gov.hmrc.SbtAutoBuildPlugin
 import play.core.PlayVersion
 import play.sbt.routes.RoutesKeys
 import sbt.Tests.{Group, SubProcess}
@@ -27,10 +27,10 @@ val appName = "vat-agent-client-lookup-frontend"
 
 resolvers += "hmrc-releases-local" at "https://artefacts.tax.service.gov.uk/artifactory/hmrc-releases-local"
 
-val bootstrapPlayVersion       = "2.24.0"
-val govTemplateVersion         = "5.56.0-play-26"
-val playPartialsVersion        = "6.11.0-play-26"
-val playUiVersion              = "8.11.0-play-26"
+val bootstrapPlayVersion       = "3.0.0"
+val govTemplateVersion         = "5.58.0-play-26"
+val playPartialsVersion        = "7.0.0-play-26"
+val playUiVersion              = "8.14.0-play-26"
 val playLanguageVersion        = "4.4.0-play-26"
 val scalaTestPlusVersion       = "3.1.3"
 val hmrcTestVersion            = "3.9.0-play-26"
@@ -105,7 +105,7 @@ def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] = tests map {
 
 
 lazy val microservice = Project(appName, file("."))
-  .enablePlugins(Seq(play.sbt.PlayScala,SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory) ++ plugins : _*)
+  .enablePlugins(Seq(play.sbt.PlayScala,SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins : _*)
   .disablePlugins(JUnitXmlReportPlugin)
   .settings(PlayKeys.playDefaultPort := 9149)
   .settings(playSettings : _*)

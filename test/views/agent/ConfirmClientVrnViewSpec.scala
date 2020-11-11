@@ -34,7 +34,7 @@ class ConfirmClientVrnViewSpec extends ViewBaseSpec {
       lazy val view = injectedView(
         BaseTestConstants.vrn,
         CustomerDetailsTestConstants.customerDetailsIndividual
-      )(messages, mockConfig)
+      )(request, messages, mockConfig)
 
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -85,7 +85,7 @@ class ConfirmClientVrnViewSpec extends ViewBaseSpec {
       lazy val view = injectedView(
         BaseTestConstants.vrn,
         CustomerDetailsTestConstants.customerDetailsAllInfo
-      )(messages, mockConfig)
+      )(request, messages, mockConfig)
 
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
