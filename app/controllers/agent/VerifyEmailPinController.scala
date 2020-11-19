@@ -65,7 +65,7 @@ class VerifyEmailPinController @Inject()(emailVerificationService: EmailVerifica
             case Some(true) => Redirect(routes.VerifyEmailPinController.show())
             case Some(false) =>
               Logger.debug(
-                "[VerifyEmailController][sendVerification] - " +
+                "[VerifyEmailPinController][requestPasscode] - " +
                   "Unable to send email verification request. Service responded with 'already verified'"
               )
               Redirect(agent.session.get(SessionKeys.redirectUrl).getOrElse(appConfig.manageVatCustomerDetailsUrl))
