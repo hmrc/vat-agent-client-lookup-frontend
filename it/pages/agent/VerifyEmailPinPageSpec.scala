@@ -20,14 +20,14 @@ import forms.PasscodeForm
 import helpers.IntegrationTestConstants.notificationsEmail
 import pages.BasePageISpec
 import play.api.libs.ws.WSResponse
-import play.api.test.Helpers.{BAD_REQUEST, OK, SEE_OTHER, INTERNAL_SERVER_ERROR}
+import play.api.test.Helpers.{BAD_REQUEST, OK, SEE_OTHER}
 import stubs.EmailVerificationStub
 
 class VerifyEmailPinPageSpec extends BasePageISpec {
 
-  "Calling the .show action" when {
+  val path = "/email-enter-code"
 
-    val path = "/email-enter-code"
+  "Calling the .show action" when {
 
     "there is no notification email in session" should {
 
@@ -68,8 +68,6 @@ class VerifyEmailPinPageSpec extends BasePageISpec {
   }
 
   "Calling the .submit action" when {
-
-    val path = "/email-enter-code"
 
     def submit(passcode: String): WSResponse = post(
       path, formatNotificationsEmail(Some(notificationsEmail)) ++ formatReturnUrl)(toFormData(PasscodeForm.form, passcode))
@@ -165,73 +163,6 @@ class VerifyEmailPinPageSpec extends BasePageISpec {
             elementText(".form-field--error .error-message")("Error: Enter the 6 character confirmation code")
           )
         }
-      }
-    }
-  }
-
-  "Calling the requestPasscode method" when {
-
-    val path = "/send-passcode"
-
-    "there is no notification email in session" should {
-
-      def requestPasscode(): WSResponse = get(path, formatNotificationsEmail(None))
-
-      "Render the Capture Preference view" in {
-
-        given.agent.isSignedUpToAgentServices
-
-        When("I request a new passcode with no notification email in session")
-
-        val res = requestPasscode()
-
-        res should have(
-          httpStatus(SEE_OTHER),
-          redirectURI(controllers.agent.routes.CapturePreferenceController.show().url)
-        )
-      }
-    }
-
-    "there is a notification email in session" when {
-
-      def requestPasscode(): WSResponse = get(path, formatNotificationsEmail(Some(notificationsEmail)))
-
-      "createEmailPasscodeRequest returns 'true'" in {
-        given.agent.isSignedUpToAgentServices
-        EmailVerificationStub.stubPasscodeVerificationRequestSent
-
-        When("I request a new passcode and the email is not already verified")
-        val res = requestPasscode()
-
-        res should have(
-          httpStatus(SEE_OTHER),
-          redirectURI("/vat-through-software/representative/email-enter-code")
-        )
-      }
-
-      "createEmailPasscodeRequest returns 'false'" in {
-        given.agent.isSignedUpToAgentServices
-        EmailVerificationStub.stubPasscodeEmailAlreadyVerified
-
-        When("I request a new passcode and the email is already verified")
-        val res = requestPasscode()
-
-        res should have(
-          httpStatus(SEE_OTHER),
-          redirectURI(mockAppConfig.manageVatCustomerDetailsUrl)
-        )
-      }
-
-      "createEmailPasscodeRequest returns an error" in {
-        given.agent.isSignedUpToAgentServices
-        EmailVerificationStub.stubPasscodeRequestError
-
-        When("I request a new passcode and the email service returns an error")
-        val res = requestPasscode()
-
-        res should have(
-          httpStatus(INTERNAL_SERVER_ERROR)
-        )
       }
     }
   }

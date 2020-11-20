@@ -168,44 +168,21 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerifi
       }
     }
 
-    "there is a non-verified email in session" when {
-
-      "the useEmailPinVerification feature switch is enabled" should {
-        lazy val testRequest = request.withSession(SessionKeys.notificationsEmail -> testEmail)
-        lazy val result = {
-          mockConfig.features.emailPinVerificationEnabled(true)
-          mockGetEmailVerificationState(testEmail)(Future(Some(false)))
-          TestConfirmEmailController.isEmailVerified()(testRequest)
-        }
-
-        "return 303" in {
-          mockAgentAuthorised()
-          status(result) shouldBe Status.SEE_OTHER
-        }
-
-        "redirect the user to the send email verification page" in {
-          redirectLocation(result) shouldBe Some("/vat-through-software/representative/send-passcode")
-        }
+    "there is a non-verified email in session" should {
+      lazy val testRequest = request.withSession(SessionKeys.notificationsEmail -> testEmail)
+      lazy val result = {
+        mockGetEmailVerificationState(testEmail)(Future(Some(false)))
+        TestConfirmEmailController.isEmailVerified()(testRequest)
       }
 
-      "the useEmailPinVerification feature switch is disabled" should {
-        lazy val testRequest = request.withSession(SessionKeys.notificationsEmail -> testEmail)
-        lazy val result = {
-          mockConfig.features.emailPinVerificationEnabled(false)
-          mockGetEmailVerificationState(testEmail)(Future(Some(false)))
-          TestConfirmEmailController.isEmailVerified()(testRequest)
-        }
-
-        "return 303" in {
-          mockAgentAuthorised()
-          status(result) shouldBe Status.SEE_OTHER
-        }
-
-        "redirect the user to the send email verification page" in {
-          redirectLocation(result) shouldBe Some("/vat-through-software/representative/send-verification-request")
-        }
+      "return 303" in {
+        mockAgentAuthorised()
+        status(result) shouldBe Status.SEE_OTHER
       }
 
+      "redirect the user to the send email verification page" in {
+        redirectLocation(result) shouldBe Some("/vat-through-software/representative/send-verification-request")
+      }
     }
 
     "there isn't an email in session" should {
