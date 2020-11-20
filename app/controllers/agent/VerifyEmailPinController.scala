@@ -52,31 +52,7 @@ class VerifyEmailPinController @Inject()(emailVerificationService: EmailVerifica
     } else {
       NotFound(errorHandler.notFoundTemplate(agent))
     }
-  }
 
-  def requestPasscode: Action[AnyContent] = (authenticate andThen preferenceCheck).async { implicit agent =>
-    if(appConfig.features.emailPinVerificationEnabled()){
-
-      val langCookieValue = agent.cookies.get("PLAY_LANG").map(_.value).getOrElse("en")
-
-      agent.session.get(SessionKeys.notificationsEmail) match {
-        case Some(email) =>
-          emailVerificationService.createEmailPasscodeRequest(email, langCookieValue) map {
-            case Some(true) => Redirect(routes.VerifyEmailPinController.show())
-            case Some(false) =>
-              Logger.debug(
-                "[VerifyEmailPinController][requestPasscode] - " +
-                  "Unable to send email verification request. Service responded with 'already verified'"
-              )
-              Redirect(agent.session.get(SessionKeys.redirectUrl).getOrElse(appConfig.manageVatCustomerDetailsUrl))
-                .addingToSession(SessionKeys.verifiedAgentEmail -> email)
-            case _ =>  errorHandler.showInternalServerError
-          }
-        case _ => Future.successful(Redirect(routes.CapturePreferenceController.show()))
-      }
-    } else {
-      Future.successful(NotFound(errorHandler.notFoundTemplate(agent)))
-    }
   }
 
   def submit: Action[AnyContent] = (authenticate andThen preferenceCheck).async { implicit agent =>
