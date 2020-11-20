@@ -48,6 +48,11 @@ trait MockEmailVerificationService extends MockitoSugar with BeforeAndAfterEach 
       ArgumentMatchers.any()
     )(ArgumentMatchers.any[HeaderCarrier])) thenReturn Future.successful(response)
 
+  def mockCreatePasscodeRequest(response: Option[Boolean]): Unit =
+    when(mockEmailVerificationService.createEmailPasscodeRequest(
+      ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any[HeaderCarrier])
+    ) thenReturn Future.successful(response)
+
   def mockVerifyPasscodeRequest(response: HttpResult[VerifyPasscodeRequest]): Unit =
     when(mockEmailVerificationService
       .verifyPasscode(ArgumentMatchers.any(), ArgumentMatchers.any())(ArgumentMatchers.any[HeaderCarrier])) thenReturn Future.successful(response)

@@ -52,6 +52,7 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfte
 
   lazy val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/email-enter-code")
   lazy val testPostRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("POST", "/email-enter-code")
+  lazy val testPasscodeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/send-passcode")
 
   "Calling the show action in VerifyEmailPinController" when {
 
@@ -312,4 +313,102 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfte
     }
 
   }
+
+  "Calling the requestPasscode action in VerifyEmailPinController" when {
+
+    "the emailPinVerification feature switch is enabled" when {
+
+      "there is an email in session" when {
+
+        "the EmailPasscodeRequest returns 'true'" should {
+
+          "redirect the user to manage vat customer details" in {
+
+            mockAgentAuthorised()
+
+            val request = testPasscodeRequest
+              .withSession(SessionKeys.notificationsEmail -> testEmail)
+            val result = {
+              mockCreatePasscodeRequest(Some(true))
+              mockConfig.features.emailPinVerificationEnabled(true)
+              TestVerifyEmailPinController.requestPasscode(request)
+            }
+
+            status(result) shouldBe SEE_OTHER
+            redirectLocation(result) shouldBe Some("/vat-through-software/representative/email-enter-code")
+          }
+        }
+
+        "the EmailPasscodeRequest returns 'false'" should {
+
+          "redirect the user to manage vat customer details" in {
+
+            mockAgentAuthorised()
+
+            val request = testPasscodeRequest
+              .withSession(SessionKeys.notificationsEmail -> testEmail)
+            val result = {
+              mockCreatePasscodeRequest(Some(false))
+              mockConfig.features.emailPinVerificationEnabled(true)
+              TestVerifyEmailPinController.requestPasscode(request)
+            }
+
+            status(result) shouldBe SEE_OTHER
+            redirectLocation(result) shouldBe Some("/customer-details")
+          }
+        }
+
+        "the EmailPasscodeRequest returns an error" should {
+
+          "redirect the user to manage vat customer details" in {
+
+            mockAgentAuthorised()
+
+            val request = testPasscodeRequest
+              .withSession(SessionKeys.notificationsEmail -> testEmail)
+            val result = {
+              mockCreatePasscodeRequest(None)
+              mockConfig.features.emailPinVerificationEnabled(true)
+              TestVerifyEmailPinController.requestPasscode(request)
+            }
+
+            status(result) shouldBe INTERNAL_SERVER_ERROR
+          }
+        }
+      }
+
+      "there is no email in session" should {
+
+        "redirect to the capture email page" in {
+
+          mockAgentAuthorised()
+
+          val result = {
+            mockConfig.features.emailPinVerificationEnabled(true)
+            TestVerifyEmailPinController.requestPasscode(request)
+          }
+
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(routes.CapturePreferenceController.show().url)
+        }
+      }
+    }
+
+    "the emailPinVerification feature switch is disabled" should {
+
+      "return a NOT FOUND error" in {
+
+        mockAgentAuthorised()
+
+        val request = testPasscodeRequest
+        val result = {
+          mockConfig.features.emailPinVerificationEnabled(false)
+          TestVerifyEmailPinController.requestPasscode(request)
+        }
+
+        status(result) shouldBe Status.NOT_FOUND
+      }
+    }
+  }
+
 }
