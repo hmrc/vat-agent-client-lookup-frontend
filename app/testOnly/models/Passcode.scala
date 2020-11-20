@@ -16,10 +16,10 @@
 
 package testOnly.models
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{JsPath, Reads}
 
 case class Passcode(passcode: String)
 
 object Passcode {
-  implicit val format: OFormat[Passcode] = Json.format[Passcode]
+  implicit val reads: Reads[Passcode] = (JsPath \\ "passcode").read[String].map(Passcode(_))
 }
