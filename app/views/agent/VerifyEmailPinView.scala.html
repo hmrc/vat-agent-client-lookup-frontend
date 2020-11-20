@@ -33,8 +33,7 @@ text: Text)
 
 @startJourneyUrl = @{controllers.agent.routes.CapturePreferenceController.show().url}
 
-@resendVerificationUrl = @{"#" //TODO - new controller action
-}
+@resendVerificationUrl = @{controllers.agent.routes.VerifyEmailPinController.requestPasscode().url}
 
 @mainTemplate(
     title = if(pinviewForm.hasErrors) messages("common.error.prefixTitle", messages("pinView.title")) else messages("pinView.title")
