@@ -104,26 +104,58 @@ class CheckYourAnswersPageSpec extends BasePageISpec {
           }
         }
 
-        "there is a non-verified notification email in session" should {
+        "there is a non-verified notification email in session" when {
 
-          "Render the Verify Email view" in {
+          "the emailPinVerification feature switch is enabled" should {
 
-            def isEmailVerified: WSResponse = get(isEmailVerifiedPath, formatNotificationsEmail(Some(notificationsEmail)) ++
-              formatReturnUrl)
+            "Render the Verify Email Enter Passcode view" in {
 
-            given.agent.isSignedUpToAgentServices
+              def isEmailVerified: WSResponse = get(isEmailVerifiedPath, formatNotificationsEmail(Some(notificationsEmail)) ++
+                formatReturnUrl)
 
-            And("I stub an email not verified response from EmailVerificationService")
-            EmailVerificationStub.stubEmailNotVerified
+              given.agent.isSignedUpToAgentServices
 
-            When("I call the isEmailVerified controller action with a non-verified notification email in session")
+              And("I stub an email not verified response from EmailVerificationService")
+              EmailVerificationStub.stubEmailNotVerified
 
-            val res = isEmailVerified
+              When("I call the isEmailVerified controller action with a non-verified notification email in session")
 
-            res should have(
-              httpStatus(SEE_OTHER),
-              redirectURI(controllers.agent.routes.VerifyEmailController.sendVerification().url)
-            )
+              val res = {
+                mockAppConfig.features.emailPinVerificationEnabled(true)
+                isEmailVerified
+              }
+
+              res should have(
+                httpStatus(SEE_OTHER),
+                redirectURI(controllers.agent.routes.VerifyEmailPinController.requestPasscode().url)
+              )
+            }
+          }
+
+          "the emailPinVerification feature switch is disabled" should {
+
+            "Render the Verify Email view" in {
+
+              def isEmailVerified: WSResponse = get(isEmailVerifiedPath, formatNotificationsEmail(Some(notificationsEmail)) ++
+                formatReturnUrl)
+
+              given.agent.isSignedUpToAgentServices
+
+              And("I stub an email not verified response from EmailVerificationService")
+              EmailVerificationStub.stubEmailNotVerified
+
+              When("I call the isEmailVerified controller action with a non-verified notification email in session")
+
+              val res = {
+                mockAppConfig.features.emailPinVerificationEnabled(false)
+                isEmailVerified
+              }
+
+              res should have(
+                httpStatus(SEE_OTHER),
+                redirectURI(controllers.agent.routes.VerifyEmailController.sendVerification().url)
+              )
+            }
           }
         }
 

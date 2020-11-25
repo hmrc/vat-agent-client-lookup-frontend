@@ -25,6 +25,8 @@ GET        /send-verification-request                   controllers.agent.Verify
 GET        /email-enter-code                            controllers.agent.VerifyEmailPinController.show
 POST       /email-enter-code                            controllers.agent.VerifyEmailPinController.submit
 
+GET        /send-passcode                               controllers.agent.VerifyEmailPinController.requestPasscode
+
 GET        /agent-action                                controllers.agent.WhatToDoController.show
 POST       /agent-action                                controllers.agent.WhatToDoController.submit
 
