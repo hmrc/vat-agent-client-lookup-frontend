@@ -98,10 +98,10 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
       signInContinueBaseUrl + controllers.agent.routes.SelectClientVrnController.show(manageVatCustomerDetailsUrl).url
     ).encodedUrl
 
-  override lazy val feedbackSignOutUrl: String = s"$governmentGatewayHost/gg/sign-out?continue=$feedbackSurveyUrl"
-  override lazy val unauthorisedSignOutUrl: String = s"$governmentGatewayHost/gg/sign-out?continue=$signInContinueUrl"
+  override lazy val feedbackSignOutUrl: String = s"$governmentGatewayHost/bas-gateway/sign-out-without-state?continue=$feedbackSurveyUrl"
+  override lazy val unauthorisedSignOutUrl: String = s"$governmentGatewayHost/bas-gateway/sign-out-without-state?continue=$signInContinueUrl"
 
-  override lazy val classicServicesSignInUrl: String = s"$governmentGatewayHost/gg/sign-out?continue=${sc.getString(Keys.classicServicesSignIn)}"
+  override lazy val classicServicesSignInUrl: String = s"$governmentGatewayHost/bas-gateway/sign-out-without-state?continue=${sc.getString(Keys.classicServicesSignIn)}"
 
   override def routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchToLanguage(lang)
 
