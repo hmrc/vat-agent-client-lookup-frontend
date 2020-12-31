@@ -33,7 +33,6 @@ class FeatureSwitchController @Inject()(featureSwitchView: FeatureSwitchView, mc
       FeatureSwitchModel(
         emailVerificationEnabled = appConfig.features.emailVerificationEnabled(),
         useStaticDateFeature = appConfig.features.useStaticDateFeature(),
-        missingTraderAddressIntercept = appConfig.features.missingTraderAddressIntercept(),
         emailPinVerificationEnabled = appConfig.features.emailPinVerificationEnabled()
       )
     )))
@@ -49,7 +48,6 @@ class FeatureSwitchController @Inject()(featureSwitchView: FeatureSwitchView, mc
   def handleSuccess(model: FeatureSwitchModel): Result = {
     appConfig.features.emailVerificationEnabled(model.emailVerificationEnabled)
     appConfig.features.useStaticDateFeature(model.useStaticDateFeature)
-    appConfig.features.missingTraderAddressIntercept(model.missingTraderAddressIntercept)
     appConfig.features.emailPinVerificationEnabled(model.emailPinVerificationEnabled)
     Redirect(routes.FeatureSwitchController.featureSwitch())
   }

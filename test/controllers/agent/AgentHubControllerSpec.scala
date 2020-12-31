@@ -48,8 +48,6 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
   "AgentHubController.show()" when {
 
-      "the missing trader intercept feature switch is enabled" when {
-
         "the customer is a missing trader" when {
 
           "they do not have a pending PPOB" should {
@@ -59,7 +57,6 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
               mockCustomerDetailsSuccess(customerDetailsAllInfo)
 
               val result: Future[Result] = {
-                mockConfig.features.missingTraderAddressIntercept(true)
                 controller.show()(fakeRequestWithVrnAndRedirectUrl)
               }
 
@@ -74,7 +71,6 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
               mockCustomerDetailsSuccess(customerDetailsAllPending.copy(missingTrader = true))
 
               val result: Future[Result] = {
-                mockConfig.features.missingTraderAddressIntercept(true)
                 controller.show()(fakeRequestWithVrnAndRedirectUrl)
               }
 
@@ -91,7 +87,6 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
             mockCustomerDetailsSuccess(customerDetailsFnameOnly)
 
             val result: Future[Result] = {
-              mockConfig.features.missingTraderAddressIntercept(true)
               controller.show()(fakeRequestWithVrnAndRedirectUrl)
             }
 
@@ -99,28 +94,6 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
             messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client’s VAT details"
           }
         }
-      }
-
-      "the missing trader intercept feature switch is disabled" when {
-
-        "the customerDetailsService returns the customer details" should {
-
-          "render the AgentHubPage" in new Test {
-            mockAgentAuthorised()
-            mockCustomerDetailsSuccess(customerDetailsFnameOnly)
-
-            val result: Future[Result] = {
-              mockConfig.features.missingTraderAddressIntercept(false)
-              controller.show()(fakeRequestWithVrnAndRedirectUrl)
-            }
-
-            status(result) shouldBe OK
-            messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client’s VAT details"
-          }
-        }
-      }
-
-
 
     "the customerDetails call fails" should {
 
