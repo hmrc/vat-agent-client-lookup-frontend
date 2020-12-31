@@ -80,10 +80,8 @@ sessionTimeout.helpOne = To manage your VAT account, you’ll have to
 sessionTimeout.helpTwo = sign in
 sessionTimeout.helpThree = using your Government Gateway ID.
 
-capturePref.title = Would you like to receive email notifications of any changes you make?
 capturePref.message = We will also send a secure message to your client’s business tax account.
 capturePref.email = What is your email address?
-capturePref.email.hint = We will only use this to send you a confirmation of any changes you make
 capturePref.error.mandatoryRadioOption = Select yes if you want us to send you emails about changes
 capturePref.error.mandatoryEmail = Enter your email address
 capturePref.error.emailLength = Email address must be 132 characters or less

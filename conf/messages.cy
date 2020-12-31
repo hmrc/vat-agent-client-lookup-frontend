@@ -106,10 +106,8 @@ sessionTimeout.helpOne = I reoli’ch cyfrif TAW, bydd yn rhaid i chi
 sessionTimeout.helpTwo = fewngofnodi
 sessionTimeout.helpThree = gan ddefnyddio’ch Dynodydd Defnyddiwr (ID) ar gyfer Porth y Llywodraeth.
 
-capturePref.title = A hoffech gael hysbysiadau e-bost ar gyfer unrhyw newidiadau a wnewch?
 capturePref.message = Byddwn hefyd yn anfon neges ddiogel i Gyfrif Treth Busnes eich cleient.
 capturePref.email = Beth yw’ch cyfeiriad e-bost?
-capturePref.email.hint = Byddwn ond yn defnyddio hwn i anfon cadarnhad atoch o unrhyw newidiadau a wnewch
 capturePref.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os ydych am i ni anfon e-byst ynghylch newidiadau atoch
 capturePref.error.mandatoryEmail = Nodwch eich cyfeiriad e-bost
 capturePref.error.emailLength = Mae’n rhaid i’r cyfeiriad e-bost fod yn 132 o gymeriadau neu lai

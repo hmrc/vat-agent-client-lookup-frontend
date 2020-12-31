@@ -31,11 +31,6 @@ import views.html.agent.CapturePreferenceView
 
 class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditingService with BeforeAndAfterAll {
 
-  override def beforeEach(): Unit = {
-    super.beforeEach()
-    mockConfig.features.disableBulkPaper(true)
-  }
-
   val testRedirectUrl: String     = "/manage-vat-account"
   val defaultRedirectUrl: String  = "/vat-through-software/representative/client-vat-account"
   val testValidEmail: String      = "test@example.com"

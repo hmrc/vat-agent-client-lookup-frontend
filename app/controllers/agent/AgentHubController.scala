@@ -25,7 +25,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{CustomerDetailsService, DateService}
 import views.html.agent.AgentHubView
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext}
 
 @Singleton
 class AgentHubController @Inject()(val authenticate: AuthoriseAsAgentWithClient,

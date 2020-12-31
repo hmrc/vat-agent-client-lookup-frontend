@@ -26,7 +26,6 @@ object FeatureSwitchForm {
     mapping(
       ConfigKeys.emailVerificationFeature -> boolean,
       ConfigKeys.useStaticDateFeature -> boolean,
-      ConfigKeys.disableBulkPaper -> boolean,
       ConfigKeys.missingTraderFeature -> boolean,
       ConfigKeys.emailPinVerificationFeature -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)

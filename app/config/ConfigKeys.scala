@@ -56,7 +56,6 @@ object ConfigKeys {
 
   val emailVerificationFeature: String = "features.emailVerification.enabled"
   val useStaticDateFeature: String = "features.useStaticDate.enabled"
-  val disableBulkPaper: String = "features.disableBulkPaper.enabled"
   val missingTraderFeature: String = "features.missingTraderAddressIntercept.enabled"
   val emailPinVerificationFeature: String = "features.useEmailPinVerification.enabled"
 

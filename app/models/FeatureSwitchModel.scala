@@ -18,6 +18,5 @@ package models
 
 case class FeatureSwitchModel(emailVerificationEnabled: Boolean,
                               useStaticDateFeature: Boolean,
-                              disableBulkPaper: Boolean,
                               missingTraderAddressIntercept: Boolean,
                               emailPinVerificationEnabled: Boolean)

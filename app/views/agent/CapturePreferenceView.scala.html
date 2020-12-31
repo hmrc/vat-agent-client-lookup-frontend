@@ -31,25 +31,18 @@
 
 @content = {<p><strong class="bold">@messages("capturePref.confirmationEmailRequest")</strong></p>}
 
-@additionalContent = {
-  <span class="form-field">@messages("capturePref.email")</span>
-  <span id="form-hint" class="form-hint">@messages("capturePref.email.hint")</span>
-}
-
 @additionalContentAlternative = {
   <span class="form-field">@messages("capturePref.email")</span>
   <span id="form-hint" class="form-hint">@messages("capturePref.email.hintAlternative")</span>
 }
 
-@defining(if (appConfig.features.disableBulkPaper()) messages("capturePref.noLetterTitle") else messages("capturePref.title")) { pageTitle  =>
+@defining(messages("capturePref.noLetterTitle")) { pageTitle  =>
 
   @mainTemplate(if(preferenceForm.errors.nonEmpty) messages("common.error.prefixTitle", pageTitle) else pageTitle) {
 
     <a class="link-back" href='@controllers.agent.routes.AgentHubController.show()'>@messages("base.back")</a>
 
     @errorSummary(messages("common.error.heading"), preferenceForm)
-
-    @if(appConfig.features.disableBulkPaper()) {
 
       @formWithCSRF(action = controllers.agent.routes.CapturePreferenceController.submit) {
         @optionRevealHelper(
@@ -72,27 +65,6 @@
           <button class="button" type="submit">@messages("common.continue")</button>
         </div>
       }
-    } else {
 
-      @formWithCSRF(action = controllers.agent.routes.CapturePreferenceController.submit) {
-        @optionRevealHelper(
-          choices = Seq(
-            (yes, messages("common.yes")),
-            (no,  messages("common.no"))
-          ),
-          hiddenContent = text(preferenceForm(email),
-          additionalContent = Some(additionalContent)),
-          field          = preferenceForm(yesNo),
-          question       = messages("capturePref.title"),
-          inline         = false,
-          legendAsHeader = false,
-          subtext = Some(messages("capturePref.message"))
-        )
-
-        <div class="form-group">
-          <button class="button" type="submit">@messages("common.continue")</button>
-        </div>
-      }
-    }
   }
 }
