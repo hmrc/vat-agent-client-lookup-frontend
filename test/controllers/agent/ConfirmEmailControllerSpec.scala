@@ -35,8 +35,6 @@ import scala.concurrent.Future
 class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerificationService
   with MockAuditingService with BeforeAndAfterAll {
 
-  override def beforeAll(): Unit = mockConfig.features.preferenceJourneyEnabled(true)
-
   object TestConfirmEmailController extends ConfirmEmailController(
     mockAgentOnlyAuthPredicate,
     mockPreferencePredicate,

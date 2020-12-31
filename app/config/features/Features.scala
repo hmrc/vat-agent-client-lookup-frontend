@@ -23,7 +23,6 @@ import play.api.Configuration
 class Features @Inject()(config: Configuration) {
 
   val emailVerificationEnabled = new Feature(ConfigKeys.emailVerificationFeature, config)
-  val preferenceJourneyEnabled = new Feature(ConfigKeys.preferenceJourneyFeature, config)
   val useLanguageSelector = new Feature(ConfigKeys.useLanguageSelectorFeature, config)
   val useAgentHubPageFeature = new Feature(ConfigKeys.useAgentHubPageFeature, config)
   val useStaticDateFeature = new Feature(ConfigKeys.useStaticDateFeature, config)

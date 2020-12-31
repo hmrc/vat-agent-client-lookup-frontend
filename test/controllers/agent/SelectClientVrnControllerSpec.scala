@@ -36,10 +36,6 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wit
     mockConfig
   )
 
-  override def beforeEach(): Unit = {
-    mockConfig.features.preferenceJourneyEnabled(true)
-  }
-
   "Calling the .show() action" when {
 
     val testRedirectUrl = "/manage-vat-account"

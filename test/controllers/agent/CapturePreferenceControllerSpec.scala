@@ -33,7 +33,6 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    mockConfig.features.preferenceJourneyEnabled(true)
     mockConfig.features.disableBulkPaper(true)
   }
 

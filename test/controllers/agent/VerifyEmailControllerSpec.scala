@@ -28,10 +28,6 @@ import views.html.agent.VerifyEmailView
 
 class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerificationService with BeforeAndAfterAll {
 
-  override def beforeAll(): Unit = {
-    mockConfig.features.preferenceJourneyEnabled(true)
-  }
-
   object TestVerifyEmailController extends VerifyEmailController(
     mockAgentOnlyAuthPredicate,
     mockPreferencePredicate,

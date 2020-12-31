@@ -38,15 +38,10 @@ class PreferencePredicate @Inject()(mcc: MessagesControllerComponents,
     val preference = agent.session.get(SessionKeys.preference)
     val hasVerifiedEmail = agent.session.get(SessionKeys.verifiedAgentEmail).isDefined
 
-    if(appConfig.features.preferenceJourneyEnabled()) {
       preference match {
         case Some("no") => Future.successful(Left(Redirect(redirectUrl)))
         case _ if hasVerifiedEmail => Future.successful(Left(Redirect(redirectUrl)))
         case _ => Future.successful(Right(agent))
       }
-    } else {
-      Future.successful(Left(Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectUrl).url)
-        .addingToSession(SessionKeys.preference -> "no")))
-    }
   }
 }

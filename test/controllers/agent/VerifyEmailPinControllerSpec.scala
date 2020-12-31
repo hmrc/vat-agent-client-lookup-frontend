@@ -32,10 +32,6 @@ import views.html.errors.agent.IncorrectPasscodeView
 
 class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfterAll with MockEmailVerificationService {
 
-  override def beforeAll(): Unit = {
-    mockConfig.features.preferenceJourneyEnabled(true)
-  }
-
   object TestVerifyEmailPinController extends VerifyEmailPinController(
     mockEmailVerificationService,
     mockAgentOnlyAuthPredicate,
