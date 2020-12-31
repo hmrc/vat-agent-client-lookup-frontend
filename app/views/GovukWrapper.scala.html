@@ -129,13 +129,12 @@ hmrcGovUkTemplate: GovUkTemplate)
 }
 
 @mainContentHeaderContent = {
-    @if(appConfig.features.useLanguageSelector()){
     <div class="text--right">@views.html.language_selection(
         appConfig.languageMap,
         appConfig.routeToSwitchLanguage,
         customClass = None
     )</div>
-    }
+
     @if(contentHeader.isDefined) {
         @mainContentHeader(contentHeader = contentHeader.get)
     }

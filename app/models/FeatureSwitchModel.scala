@@ -17,7 +17,6 @@
 package models
 
 case class FeatureSwitchModel(emailVerificationEnabled: Boolean,
-                              useLanguageFeatureEnabled: Boolean,
                               useAgentHubPageFeature: Boolean,
                               useStaticDateFeature: Boolean,
                               disableBulkPaper: Boolean,
