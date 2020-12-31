@@ -38,7 +38,7 @@ class AgentHubController @Inject()(val authenticate: AuthoriseAsAgentWithClient,
                                    implicit val executionContext: ExecutionContext) extends BaseController(mcc) {
 
   def show: Action[AnyContent] = authenticate.async { implicit user =>
-    if(appConfig.features.useAgentHubPageFeature()){
+
       customerDetailsService.getCustomerDetails(user.vrn).map {
         case Right(details) =>
           if (details.missingTrader && appConfig.features.missingTraderAddressIntercept() && !details.hasPendingPPOB) {
@@ -50,8 +50,5 @@ class AgentHubController @Inject()(val authenticate: AuthoriseAsAgentWithClient,
           Logger.warn(s"[AgentHubController][show] - received an error from CustomerDetailsService: $error")
           serviceErrorHandler.showInternalServerError
       }
-    } else {
-      Future.successful(Redirect(routes.WhatToDoController.show()))
-    }
   }
 }

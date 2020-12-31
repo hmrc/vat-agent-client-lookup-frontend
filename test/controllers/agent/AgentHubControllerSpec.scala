@@ -48,8 +48,6 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
   "AgentHubController.show()" when {
 
-    "the useAgentHub feature switch is enabled" when {
-
       "the missing trader intercept feature switch is enabled" when {
 
         "the customer is a missing trader" when {
@@ -62,7 +60,6 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
               val result: Future[Result] = {
                 mockConfig.features.missingTraderAddressIntercept(true)
-                mockConfig.features.useAgentHubPageFeature(true)
                 controller.show()(fakeRequestWithVrnAndRedirectUrl)
               }
 
@@ -78,7 +75,6 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
               val result: Future[Result] = {
                 mockConfig.features.missingTraderAddressIntercept(true)
-                mockConfig.features.useAgentHubPageFeature(true)
                 controller.show()(fakeRequestWithVrnAndRedirectUrl)
               }
 
@@ -96,7 +92,6 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
             val result: Future[Result] = {
               mockConfig.features.missingTraderAddressIntercept(true)
-              mockConfig.features.useAgentHubPageFeature(true)
               controller.show()(fakeRequestWithVrnAndRedirectUrl)
             }
 
@@ -115,7 +110,6 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
             mockCustomerDetailsSuccess(customerDetailsFnameOnly)
 
             val result: Future[Result] = {
-              mockConfig.features.useAgentHubPageFeature(true)
               mockConfig.features.missingTraderAddressIntercept(false)
               controller.show()(fakeRequestWithVrnAndRedirectUrl)
             }
@@ -125,7 +119,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
           }
         }
       }
-    }
+
 
 
     "the customerDetails call fails" should {
@@ -135,7 +129,6 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
         mockCustomerDetailsError(BaseTestConstants.unexpectedError)
 
         val result: Future[Result] = {
-          mockConfig.features.useAgentHubPageFeature(true)
           controller.show()(fakeRequestWithVrnAndRedirectUrl)
         }
 
@@ -145,17 +138,4 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
     }
   }
 
-  "the useAgentHub feature switch is disabled" should {
-
-    "redirect to the WhatToDo page" in new Test {
-      mockConfig.features.useAgentHubPageFeature(false)
-
-      mockAgentAuthorised()
-      mockCustomerDetailsSuccess(customerDetailsFnameOnly)
-
-      val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
-
-      status(result) shouldBe SEE_OTHER
-    }
-  }
 }

@@ -123,13 +123,6 @@ notSignedUp.paragraph2Text1 = You can
 notSignedUp.paragraph2Text2 = to submit VAT Returns and manage your client’s business details.
 notSignedUp.paragraph2Link = sign out and use your existing HMRC online services account
 
-whatToDo.heading = What would you like to do for {0}?
-whatToDo.submitReturn = Submit VAT return
-whatToDo.viewReturns = View submitted returns
-whatToDo.changeDetails = Change VAT details
-whatToDo.viewCertificate = View VAT certificate
-whatToDo.error.mandatoryRadioOption = Select what you would like to do for this client
-
 registrationPartial.cancelRegistration.title = Cancel VAT registration
 registrationPartial.cancelRegistration.content = Cancel your client’s VAT registration if you’re closing the business, transferring ownership or do not need to be VAT registered.
 registrationPartial.historicDeregistration.title = Your client’s VAT registration

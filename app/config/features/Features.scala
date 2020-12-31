@@ -23,7 +23,6 @@ import play.api.Configuration
 class Features @Inject()(config: Configuration) {
 
   val emailVerificationEnabled = new Feature(ConfigKeys.emailVerificationFeature, config)
-  val useAgentHubPageFeature = new Feature(ConfigKeys.useAgentHubPageFeature, config)
   val useStaticDateFeature = new Feature(ConfigKeys.useStaticDateFeature, config)
   val disableBulkPaper = new Feature(ConfigKeys.disableBulkPaper, config)
   val missingTraderAddressIntercept = new Feature(ConfigKeys.missingTraderFeature, config)

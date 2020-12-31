@@ -27,9 +27,6 @@ POST       /email-enter-code                            controllers.agent.Verify
 
 GET        /send-passcode                               controllers.agent.VerifyEmailPinController.requestPasscode
 
-GET        /agent-action                                controllers.agent.WhatToDoController.show
-POST       /agent-action                                controllers.agent.WhatToDoController.submit
-
 GET        /client-vat-account                          controllers.agent.AgentHubController.show
 
 # Map static resources from the /public folder to the /assets URL path

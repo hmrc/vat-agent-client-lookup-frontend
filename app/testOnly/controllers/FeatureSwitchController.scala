@@ -32,7 +32,6 @@ class FeatureSwitchController @Inject()(featureSwitchView: FeatureSwitchView, mc
     Ok(featureSwitchView(FeatureSwitchForm.form.fill(
       FeatureSwitchModel(
         emailVerificationEnabled = appConfig.features.emailVerificationEnabled(),
-        useAgentHubPageFeature = appConfig.features.useAgentHubPageFeature(),
         useStaticDateFeature = appConfig.features.useStaticDateFeature(),
         disableBulkPaper = appConfig.features.disableBulkPaper(),
         missingTraderAddressIntercept = appConfig.features.missingTraderAddressIntercept(),
@@ -50,7 +49,6 @@ class FeatureSwitchController @Inject()(featureSwitchView: FeatureSwitchView, mc
 
   def handleSuccess(model: FeatureSwitchModel): Result = {
     appConfig.features.emailVerificationEnabled(model.emailVerificationEnabled)
-    appConfig.features.useAgentHubPageFeature(model.useAgentHubPageFeature)
     appConfig.features.useStaticDateFeature(model.useStaticDateFeature)
     appConfig.features.disableBulkPaper(model.disableBulkPaper)
     appConfig.features.missingTraderAddressIntercept(model.missingTraderAddressIntercept)

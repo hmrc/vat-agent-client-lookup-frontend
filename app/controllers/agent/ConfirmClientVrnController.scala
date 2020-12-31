@@ -94,16 +94,9 @@ class ConfirmClientVrnController @Inject()(val authenticate: AuthoriseAsAgentWit
           }
 
         case Some("") | None =>
-          if(appConfig.features.useAgentHubPageFeature()){
             Logger.debug("[ConfirmClientVrnController][redirect] Redirect url not provided. " +
               "Redirecting to 'Agent Hub' page.")
             Redirect(controllers.agent.routes.AgentHubController.show())
-          } else {
-            Logger.debug("[ConfirmClientVrnController][redirect] Redirect url not provided. " +
-              "Redirecting to 'What To Do' page.")
-            Redirect(controllers.agent.routes.WhatToDoController.show())
-          }
-
 
         case Some(nonChangeUrl) =>
           Redirect(nonChangeUrl).removingFromSession(SessionKeys.redirectUrl)
