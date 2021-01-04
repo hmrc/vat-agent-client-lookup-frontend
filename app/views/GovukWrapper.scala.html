@@ -1,5 +1,5 @@
 @*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -129,13 +129,12 @@ hmrcGovUkTemplate: GovUkTemplate)
 }
 
 @mainContentHeaderContent = {
-    @if(appConfig.features.useLanguageSelector()){
     <div class="text--right">@views.html.language_selection(
         appConfig.languageMap,
         appConfig.routeToSwitchLanguage,
         customClass = None
     )</div>
-    }
+
     @if(contentHeader.isDefined) {
         @mainContentHeader(contentHeader = contentHeader.get)
     }

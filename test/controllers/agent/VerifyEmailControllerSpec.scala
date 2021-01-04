@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,10 +27,6 @@ import play.api.test.Helpers._
 import views.html.agent.VerifyEmailView
 
 class VerifyEmailControllerSpec extends ControllerBaseSpec with MockEmailVerificationService with BeforeAndAfterAll {
-
-  override def beforeAll(): Unit = {
-    mockConfig.features.preferenceJourneyEnabled(true)
-  }
 
   object TestVerifyEmailController extends VerifyEmailController(
     mockAgentOnlyAuthPredicate,

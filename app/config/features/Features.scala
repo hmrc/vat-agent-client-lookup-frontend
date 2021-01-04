@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,11 +23,6 @@ import play.api.Configuration
 class Features @Inject()(config: Configuration) {
 
   val emailVerificationEnabled = new Feature(ConfigKeys.emailVerificationFeature, config)
-  val preferenceJourneyEnabled = new Feature(ConfigKeys.preferenceJourneyFeature, config)
-  val useLanguageSelector = new Feature(ConfigKeys.useLanguageSelectorFeature, config)
-  val useAgentHubPageFeature = new Feature(ConfigKeys.useAgentHubPageFeature, config)
   val useStaticDateFeature = new Feature(ConfigKeys.useStaticDateFeature, config)
-  val disableBulkPaper = new Feature(ConfigKeys.disableBulkPaper, config)
-  val missingTraderAddressIntercept = new Feature(ConfigKeys.missingTraderFeature, config)
   val emailPinVerificationEnabled = new Feature(ConfigKeys.emailPinVerificationFeature, config)
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,12 +55,7 @@ object ConfigKeys {
   val optOutMtdVatUrl: String = "vat-opt-out-frontend.url"
 
   val emailVerificationFeature: String = "features.emailVerification.enabled"
-  val preferenceJourneyFeature: String = "features.preferenceJourney.enabled"
-  val useLanguageSelectorFeature: String = "features.useLanguageSelector.enabled"
-  val useAgentHubPageFeature: String = "features.useAgentHubPage.enabled"
   val useStaticDateFeature: String = "features.useStaticDate.enabled"
-  val disableBulkPaper: String = "features.disableBulkPaper.enabled"
-  val missingTraderFeature: String = "features.missingTraderAddressIntercept.enabled"
   val emailPinVerificationFeature: String = "features.useEmailPinVerification.enabled"
 
   val staticDateValue: String = "date-service.staticDate.value"

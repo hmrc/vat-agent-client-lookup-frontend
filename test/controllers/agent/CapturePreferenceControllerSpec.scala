@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,12 +30,6 @@ import play.api.test.Helpers._
 import views.html.agent.CapturePreferenceView
 
 class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditingService with BeforeAndAfterAll {
-
-  override def beforeEach(): Unit = {
-    super.beforeEach()
-    mockConfig.features.preferenceJourneyEnabled(true)
-    mockConfig.features.disableBulkPaper(true)
-  }
 
   val testRedirectUrl: String     = "/manage-vat-account"
   val defaultRedirectUrl: String  = "/vat-through-software/representative/client-vat-account"

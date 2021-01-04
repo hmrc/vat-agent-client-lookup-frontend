@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,12 +32,7 @@ class FeatureSwitchController @Inject()(featureSwitchView: FeatureSwitchView, mc
     Ok(featureSwitchView(FeatureSwitchForm.form.fill(
       FeatureSwitchModel(
         emailVerificationEnabled = appConfig.features.emailVerificationEnabled(),
-        preferenceJourneyEnabled = appConfig.features.preferenceJourneyEnabled(),
-        useLanguageFeatureEnabled = appConfig.features.useLanguageSelector(),
-        useAgentHubPageFeature = appConfig.features.useAgentHubPageFeature(),
         useStaticDateFeature = appConfig.features.useStaticDateFeature(),
-        disableBulkPaper = appConfig.features.disableBulkPaper(),
-        missingTraderAddressIntercept = appConfig.features.missingTraderAddressIntercept(),
         emailPinVerificationEnabled = appConfig.features.emailPinVerificationEnabled()
       )
     )))
@@ -52,12 +47,7 @@ class FeatureSwitchController @Inject()(featureSwitchView: FeatureSwitchView, mc
 
   def handleSuccess(model: FeatureSwitchModel): Result = {
     appConfig.features.emailVerificationEnabled(model.emailVerificationEnabled)
-    appConfig.features.preferenceJourneyEnabled(model.preferenceJourneyEnabled)
-    appConfig.features.useLanguageSelector(model.useLanguageFeatureEnabled)
-    appConfig.features.useAgentHubPageFeature(model.useAgentHubPageFeature)
     appConfig.features.useStaticDateFeature(model.useStaticDateFeature)
-    appConfig.features.disableBulkPaper(model.disableBulkPaper)
-    appConfig.features.missingTraderAddressIntercept(model.missingTraderAddressIntercept)
     appConfig.features.emailPinVerificationEnabled(model.emailPinVerificationEnabled)
     Redirect(routes.FeatureSwitchController.featureSwitch())
   }

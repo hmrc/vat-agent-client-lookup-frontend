@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,5 @@
 package models
 
 case class FeatureSwitchModel(emailVerificationEnabled: Boolean,
-                              preferenceJourneyEnabled: Boolean,
-                              useLanguageFeatureEnabled: Boolean,
-                              useAgentHubPageFeature: Boolean,
                               useStaticDateFeature: Boolean,
-                              disableBulkPaper: Boolean,
-                              missingTraderAddressIntercept: Boolean,
                               emailPinVerificationEnabled: Boolean)

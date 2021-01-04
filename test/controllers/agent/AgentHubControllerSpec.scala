@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,10 +48,6 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
 
   "AgentHubController.show()" when {
 
-    "the useAgentHub feature switch is enabled" when {
-
-      "the missing trader intercept feature switch is enabled" when {
-
         "the customer is a missing trader" when {
 
           "they do not have a pending PPOB" should {
@@ -61,8 +57,6 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
               mockCustomerDetailsSuccess(customerDetailsAllInfo)
 
               val result: Future[Result] = {
-                mockConfig.features.missingTraderAddressIntercept(true)
-                mockConfig.features.useAgentHubPageFeature(true)
                 controller.show()(fakeRequestWithVrnAndRedirectUrl)
               }
 
@@ -77,8 +71,6 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
               mockCustomerDetailsSuccess(customerDetailsAllPending.copy(missingTrader = true))
 
               val result: Future[Result] = {
-                mockConfig.features.missingTraderAddressIntercept(true)
-                mockConfig.features.useAgentHubPageFeature(true)
                 controller.show()(fakeRequestWithVrnAndRedirectUrl)
               }
 
@@ -95,8 +87,6 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
             mockCustomerDetailsSuccess(customerDetailsFnameOnly)
 
             val result: Future[Result] = {
-              mockConfig.features.missingTraderAddressIntercept(true)
-              mockConfig.features.useAgentHubPageFeature(true)
               controller.show()(fakeRequestWithVrnAndRedirectUrl)
             }
 
@@ -104,29 +94,6 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
             messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client’s VAT details"
           }
         }
-      }
-
-      "the missing trader intercept feature switch is disabled" when {
-
-        "the customerDetailsService returns the customer details" should {
-
-          "render the AgentHubPage" in new Test {
-            mockAgentAuthorised()
-            mockCustomerDetailsSuccess(customerDetailsFnameOnly)
-
-            val result: Future[Result] = {
-              mockConfig.features.useAgentHubPageFeature(true)
-              mockConfig.features.missingTraderAddressIntercept(false)
-              controller.show()(fakeRequestWithVrnAndRedirectUrl)
-            }
-
-            status(result) shouldBe OK
-            messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client’s VAT details"
-          }
-        }
-      }
-    }
-
 
     "the customerDetails call fails" should {
 
@@ -135,7 +102,6 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
         mockCustomerDetailsError(BaseTestConstants.unexpectedError)
 
         val result: Future[Result] = {
-          mockConfig.features.useAgentHubPageFeature(true)
           controller.show()(fakeRequestWithVrnAndRedirectUrl)
         }
 
@@ -145,17 +111,4 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
     }
   }
 
-  "the useAgentHub feature switch is disabled" should {
-
-    "redirect to the WhatToDo page" in new Test {
-      mockConfig.features.useAgentHubPageFeature(false)
-
-      mockAgentAuthorised()
-      mockCustomerDetailsSuccess(customerDetailsFnameOnly)
-
-      val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
-
-      status(result) shouldBe SEE_OTHER
-    }
-  }
 }

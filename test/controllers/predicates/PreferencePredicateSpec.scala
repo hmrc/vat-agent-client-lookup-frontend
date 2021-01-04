@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,6 @@ import org.scalatest.BeforeAndAfterAll
 import play.api.mvc.Results.Redirect
 
 class PreferencePredicateSpec extends ControllerBaseSpec with BeforeAndAfterAll {
-
-  override def beforeAll(): Unit = mockConfig.features.preferenceJourneyEnabled(true)
 
   "The preference predicate" when {
 
@@ -107,21 +105,5 @@ class PreferencePredicateSpec extends ControllerBaseSpec with BeforeAndAfterAll 
       }
     }
 
-    "the preference journey feature switch is off" should {
-
-      lazy val result = {
-        mockConfig.features.preferenceJourneyEnabled(false)
-        await(mockPreferencePredicate.refine(agent))
-      }
-
-      "redirect the request to the SelectClientVrn controller" in {
-        result shouldBe Left(Redirect(controllers.agent.routes.SelectClientVrnController.show("/homepage"))
-          .addingToSession(SessionKeys.preference -> "no")(agent))
-      }
-
-      "add the 'no' preference to session to deny further attempts to bypass the predicate" in {
-        result.left.get.session(agent).get(SessionKeys.preference) shouldBe Some("no")
-      }
-    }
   }
 }

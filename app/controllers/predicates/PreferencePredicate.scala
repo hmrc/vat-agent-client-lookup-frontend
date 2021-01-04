@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,15 +38,10 @@ class PreferencePredicate @Inject()(mcc: MessagesControllerComponents,
     val preference = agent.session.get(SessionKeys.preference)
     val hasVerifiedEmail = agent.session.get(SessionKeys.verifiedAgentEmail).isDefined
 
-    if(appConfig.features.preferenceJourneyEnabled()) {
       preference match {
         case Some("no") => Future.successful(Left(Redirect(redirectUrl)))
         case _ if hasVerifiedEmail => Future.successful(Left(Redirect(redirectUrl)))
         case _ => Future.successful(Right(agent))
       }
-    } else {
-      Future.successful(Left(Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectUrl).url)
-        .addingToSession(SessionKeys.preference -> "no")))
-    }
   }
 }

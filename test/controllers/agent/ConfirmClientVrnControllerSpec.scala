@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -403,15 +403,13 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           }
 
           "redirect to the the what to do page" in {
-            redirectLocation(result) shouldBe Some(controllers.agent.routes.WhatToDoController.show().url)
+            redirectLocation(result) shouldBe Some(controllers.agent.routes.AgentHubController.show().url)
           }
         }
       }
     }
 
-    "redirect URL is not in session" when {
-
-      "useAgentHub feature is enabled" should {
+    "redirect URL is not in session" should {
 
         lazy val result = {
           TestConfirmClientVrnController.redirect(FakeRequest().withSession(
@@ -421,7 +419,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
         }
 
         "return status SEE_OTHER (303)" in {
-          mockConfig.features.useAgentHubPageFeature(true)
           mockAgentAuthorised()
           mockCustomerDetailsSuccess(customerDetailsOrganisation)
           status(result) shouldBe Status.SEE_OTHER
@@ -430,28 +427,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
         "redirect to WhatToDo controller" in {
           redirectLocation(result) shouldBe Some(controllers.agent.routes.AgentHubController.show().url)
         }
-      }
 
-      "useAgentHub feature is disabled" should {
-        
-        lazy val result = {
-          TestConfirmClientVrnController.redirect(FakeRequest().withSession(
-            SessionKeys.clientVRN -> vrn,
-            SessionKeys.notificationsEmail -> "an.email@host.com"
-          ))
-        }
-
-        "return status SEE_OTHER (303)" in {
-          mockConfig.features.useAgentHubPageFeature(false)
-          mockAgentAuthorised()
-          mockCustomerDetailsSuccess(customerDetailsOrganisation)
-          status(result) shouldBe Status.SEE_OTHER
-        }
-
-        "redirect to WhatToDo controller" in {
-          redirectLocation(result) shouldBe Some(controllers.agent.routes.WhatToDoController.show().url)
-        }
-      }
     }
   }
 }

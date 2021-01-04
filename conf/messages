@@ -80,10 +80,8 @@ sessionTimeout.helpOne = To manage your VAT account, you’ll have to
 sessionTimeout.helpTwo = sign in
 sessionTimeout.helpThree = using your Government Gateway ID.
 
-capturePref.title = Would you like to receive email notifications of any changes you make?
 capturePref.message = We will also send a secure message to your client’s business tax account.
 capturePref.email = What is your email address?
-capturePref.email.hint = We will only use this to send you a confirmation of any changes you make
 capturePref.error.mandatoryRadioOption = Select yes if you want us to send you emails about changes
 capturePref.error.mandatoryEmail = Enter your email address
 capturePref.error.emailLength = Email address must be 132 characters or less
@@ -122,13 +120,6 @@ notSignedUp.paragraph1Link = sign them up to Making Tax Digital for VAT (opens i
 notSignedUp.paragraph2Text1 = You can
 notSignedUp.paragraph2Text2 = to submit VAT Returns and manage your client’s business details.
 notSignedUp.paragraph2Link = sign out and use your existing HMRC online services account
-
-whatToDo.heading = What would you like to do for {0}?
-whatToDo.submitReturn = Submit VAT return
-whatToDo.viewReturns = View submitted returns
-whatToDo.changeDetails = Change VAT details
-whatToDo.viewCertificate = View VAT certificate
-whatToDo.error.mandatoryRadioOption = Select what you would like to do for this client
 
 registrationPartial.cancelRegistration.title = Cancel VAT registration
 registrationPartial.cancelRegistration.content = Cancel your client’s VAT registration if you’re closing the business, transferring ownership or do not need to be VAT registered.

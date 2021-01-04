@@ -106,10 +106,8 @@ sessionTimeout.helpOne = I reoli’ch cyfrif TAW, bydd yn rhaid i chi
 sessionTimeout.helpTwo = fewngofnodi
 sessionTimeout.helpThree = gan ddefnyddio’ch Dynodydd Defnyddiwr (ID) ar gyfer Porth y Llywodraeth.
 
-capturePref.title = A hoffech gael hysbysiadau e-bost ar gyfer unrhyw newidiadau a wnewch?
 capturePref.message = Byddwn hefyd yn anfon neges ddiogel i Gyfrif Treth Busnes eich cleient.
 capturePref.email = Beth yw’ch cyfeiriad e-bost?
-capturePref.email.hint = Byddwn ond yn defnyddio hwn i anfon cadarnhad atoch o unrhyw newidiadau a wnewch
 capturePref.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os ydych am i ni anfon e-byst ynghylch newidiadau atoch
 capturePref.error.mandatoryEmail = Nodwch eich cyfeiriad e-bost
 capturePref.error.emailLength = Mae’n rhaid i’r cyfeiriad e-bost fod yn 132 o gymeriadau neu lai
@@ -148,13 +146,6 @@ notSignedUp.paragraph1Link = ei gofrestru ar gyfer Troi Treth yn Ddigidol ar gyf
 notSignedUp.paragraph2Text1 = Gallwch
 notSignedUp.paragraph2Text2 = gyflwyno Ffurflenni TAW a rheoli manylion busnes eich cleient.
 notSignedUp.paragraph2Link = allgofnodi a defnyddio’ch cyfrif Gwasanaethau Ar-lein CThEM presennol
-
-whatToDo.heading = Beth ydych am ei wneud ar gyfer {0}?
-whatToDo.submitReturn = Cyflwyno Ffurflen TAW
-whatToDo.viewReturns = Bwrw golwg dros y Ffurflenni TAW a gyflwynwyd
-whatToDo.changeDetails = Newid manylion TAW
-whatToDo.viewCertificate = Bwrw golwg dros y dystysgrif TAW
-whatToDo.error.mandatoryRadioOption = Dewiswch beth ydych am ei wneud ar gyfer y cleient hwn
 
 registrationPartial.cancelRegistration.title = Canslo cofrestriad TAW
 registrationPartial.cancelRegistration.content = Canslo cofrestriad TAW eich cleient os ydych yn cau’r busnes, yn trosglwyddo perchnogaeth neu os nad oes angen i’r cleient fod wedi cofrestru ar gyfer TAW.

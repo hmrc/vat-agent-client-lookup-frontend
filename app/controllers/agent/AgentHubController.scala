@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{CustomerDetailsService, DateService}
 import views.html.agent.AgentHubView
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext}
 
 @Singleton
 class AgentHubController @Inject()(val authenticate: AuthoriseAsAgentWithClient,
@@ -38,10 +38,10 @@ class AgentHubController @Inject()(val authenticate: AuthoriseAsAgentWithClient,
                                    implicit val executionContext: ExecutionContext) extends BaseController(mcc) {
 
   def show: Action[AnyContent] = authenticate.async { implicit user =>
-    if(appConfig.features.useAgentHubPageFeature()){
+
       customerDetailsService.getCustomerDetails(user.vrn).map {
         case Right(details) =>
-          if (details.missingTrader && appConfig.features.missingTraderAddressIntercept() && !details.hasPendingPPOB) {
+          if (details.missingTrader && !details.hasPendingPPOB) {
             Redirect(appConfig.manageVatMissingTraderUrl)
           } else {
             Ok(agentHubView(details, user.vrn, dateService.now()))
@@ -50,8 +50,5 @@ class AgentHubController @Inject()(val authenticate: AuthoriseAsAgentWithClient,
           Logger.warn(s"[AgentHubController][show] - received an error from CustomerDetailsService: $error")
           serviceErrorHandler.showInternalServerError
       }
-    } else {
-      Future.successful(Redirect(routes.WhatToDoController.show()))
-    }
   }
 }
