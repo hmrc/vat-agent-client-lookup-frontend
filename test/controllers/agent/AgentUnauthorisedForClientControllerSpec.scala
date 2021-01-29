@@ -29,6 +29,7 @@ import play.api.http.Status
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 import assets.BaseTestConstants._
+import common.SessionKeys
 import views.html.errors.agent.NotAuthorisedForClientView
 
 import scala.concurrent.ExecutionContext
@@ -75,6 +76,10 @@ class AgentUnauthorisedForClientControllerSpec extends ControllerBaseSpec with M
 
       "render the Unauthorised for client Vrn Page" in {
         messages(document.select("h1").text) shouldBe Messages.title
+      }
+
+      "remove the client vrn from session" in {
+        result.session(request).get(SessionKeys.clientVRN) shouldBe None
       }
     }
 

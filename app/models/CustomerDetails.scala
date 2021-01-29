@@ -28,6 +28,8 @@ case class CustomerDetails(firstName: Option[String],
                            partyType: Option[String],
                            mandationStatus: String,
                            deregistration: Option[Deregistration],
+                           isInsolvent: Boolean,
+                           continueToTrade: Option[Boolean],
                            changeIndicators: Option[ChangeIndicators] = None,
                            missingTrader: Boolean = false
                           ) {
@@ -47,6 +49,11 @@ case class CustomerDetails(firstName: Option[String],
   }
 
   val hasPendingPPOB: Boolean = changeIndicators.fold(false)(_.PPOBDetails)
+
+  val isInsolventWithoutAccess: Boolean = continueToTrade match {
+    case Some(false) => isInsolvent
+    case _ => false
+  }
 }
 
 object CustomerDetails {
@@ -58,6 +65,8 @@ object CustomerDetails {
   private val partyTypePath = __ \ "partyType"
   private val mandationStatusPath = __ \ "mandationStatus"
   private val deregistrationPath = __ \ "deregistration"
+  private val isInsolventPath = __ \\ "isInsolvent"
+  private val continueToTradePath = __ \\ "continueToTrade"
   private val changeIndicatorsPath = __ \ "changeIndicators"
   private val missingTraderPath = __ \ "missingTrader"
 
@@ -69,6 +78,8 @@ object CustomerDetails {
     partyTypePath.readNullable[String] and
     mandationStatusPath.read[String] and
     deregistrationPath.readNullable[Deregistration] and
+    isInsolventPath.read[Boolean] and
+    continueToTradePath.readNullable[Boolean] and
     changeIndicatorsPath.readNullable[ChangeIndicators] and
     missingTraderPath.read[Boolean]
     ) (CustomerDetails.apply _)
