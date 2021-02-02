@@ -36,6 +36,7 @@ object CustomerDetailsTestConstants {
 
   val noOptionalInfoJson: JsObject = Json.obj(
     "mandationStatus" -> mandationStatus,
+    "isInsolvent" -> false,
     "missingTrader" -> missingTrader
   )
 
@@ -46,6 +47,8 @@ object CustomerDetailsTestConstants {
     "tradingName" -> tradingName,
     "partyType" -> "2",
     "mandationStatus" -> mandationStatus,
+    "isInsolvent" -> false,
+    "continueToTrade" -> true,
     "deregistration" -> Json.obj(
       "effectDateOfCancellation" -> "2019-01-01"
     ),
@@ -60,8 +63,10 @@ object CustomerDetailsTestConstants {
     Some(validParty),
     mandationStatus,
     Some(Deregistration(Some(LocalDate.parse("2019-01-01")))),
+    isInsolvent = false,
+    Some(true),
     None,
-    missingTrader
+    missingTrader = missingTrader
   )
 
   val customerDetailsAllInfoVatGroup = CustomerDetails(
@@ -72,6 +77,8 @@ object CustomerDetailsTestConstants {
     Some(vatGroup),
     mandationStatus,
     Some(Deregistration(Some(LocalDate.parse("2019-01-01")))),
+    isInsolvent = false,
+    None,
     None,
     missingTrader
   )
@@ -84,6 +91,8 @@ object CustomerDetailsTestConstants {
     None,
     mandationStatus,
     None,
+    isInsolvent = false,
+    None,
     None,
     missingTrader
   )
@@ -95,6 +104,8 @@ object CustomerDetailsTestConstants {
     None,
     Some("2"),
     mandationStatus,
+    None,
+    isInsolvent = false,
     None
   )
 
@@ -105,6 +116,8 @@ object CustomerDetailsTestConstants {
     None,
     Some(vatGroup),
     mandationStatus,
+    None,
+    isInsolvent = false,
     None
   )
 
@@ -115,6 +128,8 @@ object CustomerDetailsTestConstants {
     None,
     Some(validParty),
     mandationStatus,
+    None,
+    isInsolvent = false,
     None
   )
 
@@ -125,6 +140,8 @@ object CustomerDetailsTestConstants {
     None,
     Some(validParty),
     mandationStatus,
+    None,
+    isInsolvent = false,
     None
   )
 
@@ -135,6 +152,8 @@ object CustomerDetailsTestConstants {
     None,
     Some(validParty),
     mandationStatus,
+    None,
+    isInsolvent = false,
     None
   )
 
@@ -145,6 +164,8 @@ object CustomerDetailsTestConstants {
     None,
     Some(validParty),
     mandationStatus,
+    None,
+    isInsolvent = false,
     None
   )
 
@@ -155,6 +176,8 @@ object CustomerDetailsTestConstants {
     Some(tradingName),
     Some(validParty),
     mandationStatus,
+    None,
+    isInsolvent = false,
     None
   )
 
@@ -165,6 +188,8 @@ object CustomerDetailsTestConstants {
     Some(tradingName),
     Some(validParty),
     nonDigital,
+    None,
+    isInsolvent = false,
     None
   )
 
@@ -175,7 +200,9 @@ object CustomerDetailsTestConstants {
     Some(tradingName),
     Some(validParty),
     nonMTDfB,
-    Some(Deregistration(Some(LocalDate.parse("2019-01-01"))))
+    Some(Deregistration(Some(LocalDate.parse("2019-01-01")))),
+    isInsolvent = false,
+    None
   )
 
   val customerDetailsAllPending: CustomerDetails = customerDetailsAllInfo.copy(
@@ -190,7 +217,9 @@ object CustomerDetailsTestConstants {
     Some(tradingName),
     Some(validParty),
     nonMTDfB,
-    Some(Deregistration(Some(LocalDate.parse("2020-01-01"))))
+    Some(Deregistration(Some(LocalDate.parse("2020-01-01")))),
+    isInsolvent = false,
+    None
   )
 
   val customerDetailsFutureDeregisterOptedOutVatGroup = CustomerDetails(
@@ -200,7 +229,9 @@ object CustomerDetailsTestConstants {
     Some(tradingName),
     Some(vatGroup),
     nonMTDfB,
-    Some(Deregistration(Some(LocalDate.parse("2020-01-01"))))
+    Some(Deregistration(Some(LocalDate.parse("2020-01-01")))),
+    isInsolvent = false,
+    None
   )
 
   val clientNoPartyType = CustomerDetails(
@@ -210,7 +241,11 @@ object CustomerDetailsTestConstants {
     None,
     None,
     mandationStatus,
+    None,
+    isInsolvent = false,
     None
   )
+
+  val customerDetailsInsolvent: CustomerDetails = customerDetailsAllInfo.copy(isInsolvent = true, continueToTrade = Some(false))
 
 }

@@ -45,7 +45,7 @@ class AgentUnauthorisedForClientController @Inject()(val authenticate: Authorise
             AuthenticateAgentAuditModel(agent.arn, vrn, isAuthorisedForClient = false),
             Some(controllers.agent.routes.ConfirmClientVrnController.show().url)
           )
-          Ok(notAuthorisedForClientView())
+          Ok(notAuthorisedForClientView()).removingFromSession(SessionKeys.clientVRN)
 
         case _ =>
           val redirectLink = extractRedirectUrl(redirectUrl).getOrElse("")

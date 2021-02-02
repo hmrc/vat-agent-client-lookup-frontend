@@ -47,7 +47,9 @@ object IntegrationTestConstants {
     organisationName = Some("Vatmobile Taxi LTD"),
     mandationStatus = nonMTDfB,
     deregistration = None,
-    partyType = Some("2")
+    partyType = Some("2"),
+    isInsolvent = false,
+    continueToTrade = Some(true)
   )
 
   val individual = CustomerDetails(
@@ -57,7 +59,9 @@ object IntegrationTestConstants {
     organisationName = None,
     mandationStatus = nonMTDfB,
     deregistration = None,
-    partyType = Some("2")
+    partyType = Some("2"),
+    isInsolvent = false,
+    continueToTrade = Some(true)
   )
 
   val individualMandatedJson: JsObject = Json.obj(
@@ -65,7 +69,8 @@ object IntegrationTestConstants {
     "lastName" -> "Mac",
     "tradingName" -> "PepsiCo",
     "mandationStatus" -> mandated,
-    "missingTrader" -> false
+    "missingTrader" -> false,
+    "isInsolvent" -> false
   )
 
   val individualNonMTDfBJson: JsObject = Json.obj(

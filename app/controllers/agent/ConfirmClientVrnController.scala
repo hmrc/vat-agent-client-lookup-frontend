@@ -22,6 +22,7 @@ import common.SessionKeys
 import config.{AppConfig, ErrorHandler}
 import controllers.predicates.AuthoriseAsAgentWithClient
 import javax.inject.{Inject, Singleton}
+import models.User
 import models.errors._
 import play.api.Logger
 import play.api.i18n.I18nSupport
@@ -31,7 +32,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.agent.ConfirmClientVrnView
 import views.html.errors.{AccountMigrationView, NotSignedUpView}
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ConfirmClientVrnController @Inject()(val authenticate: AuthoriseAsAgentWithClient,
@@ -48,6 +49,9 @@ class ConfirmClientVrnController @Inject()(val authenticate: AuthoriseAsAgentWit
   def show: Action[AnyContent] = authenticate.async {
     implicit user =>
       customerDetailsService.getCustomerDetails(user.vrn) map {
+        case Right(customerDetails) if customerDetails.isInsolventWithoutAccess =>
+          Logger.debug("[ConfirmClientVrnController][show] - Client is insolventWithoutAccess, rendering UnauthorisedForClient page")
+          Redirect(controllers.agent.routes.AgentUnauthorisedForClientController.show())
         case Right(customerDetails) =>
           auditService.extendedAudit(
             AuthenticateAgentAuditModel(user.arn.get, user.vrn, isAuthorisedForClient = true),
@@ -83,7 +87,7 @@ class ConfirmClientVrnController @Inject()(val authenticate: AuthoriseAsAgentWit
       val hasVerifiedAgentEmail: Boolean = user.session.get(SessionKeys.verifiedAgentEmail).isDefined
       val manageVatUrl = appConfig.manageVatCustomerDetailsUrl
 
-       redirectUrl match {
+      redirectUrl match {
 
         case Some(changeUrl) if changeUrl.contains("/vat-through-software/account")  =>
           user.session.get(SessionKeys.preference) match {
@@ -94,9 +98,9 @@ class ConfirmClientVrnController @Inject()(val authenticate: AuthoriseAsAgentWit
           }
 
         case Some("") | None =>
-            Logger.debug("[ConfirmClientVrnController][redirect] Redirect url not provided. " +
-              "Redirecting to 'Agent Hub' page.")
-            Redirect(controllers.agent.routes.AgentHubController.show())
+          Logger.debug("[ConfirmClientVrnController][redirect] Redirect url not provided. " +
+            "Redirecting to 'Agent Hub' page.")
+          Redirect(controllers.agent.routes.AgentHubController.show())
 
         case Some(nonChangeUrl) =>
           Redirect(nonChangeUrl).removingFromSession(SessionKeys.redirectUrl)

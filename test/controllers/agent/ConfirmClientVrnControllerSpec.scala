@@ -61,42 +61,62 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
 
         "a Client's VRN is held in Session" when {
 
-          "details are successfully retrieved" should {
+          "details are successfully retrieved" when {
 
-            lazy val result = TestConfirmClientVrnController.show(fakeRequestWithVrnAndRedirectUrl)
-            lazy val document = Jsoup.parse(bodyOf(result))
+            "the agent cannot act on behalf of the client due to insolvency" should {
 
-            "return 200" in {
-              mockAgentAuthorised()
-              mockCustomerDetailsSuccess(customerDetailsOrganisation)
-              status(result) shouldBe Status.OK
+              lazy val result = {
+                mockAgentAuthorised()
+                mockCustomerDetailsSuccess(customerDetailsInsolvent)
+                TestConfirmClientVrnController.show(fakeRequestWithVrnAndRedirectUrl)
+              }
 
-              verify(mockAuditingService)
-                .extendedAudit(
-                  ArgumentMatchers.eq(AuthenticateAgentAuditModel(arn, vrn, isAuthorisedForClient = true)),
-                  ArgumentMatchers.eq[Option[String]](Some(controllers.agent.routes.ConfirmClientVrnController.show().url))
-                )(
-                  ArgumentMatchers.any[HeaderCarrier],
-                  ArgumentMatchers.any[ExecutionContext]
-                )
+              "return status SEE_OTHER (303)" in {
+                status(result) shouldBe Status.SEE_OTHER
+              }
 
-              verify(mockAuditingService)
-                .extendedAudit(
-                  ArgumentMatchers.eq(GetClientBusinessNameAuditModel(arn, vrn, customerDetailsOrganisation.clientName)),
-                  ArgumentMatchers.eq[Option[String]](Some(controllers.agent.routes.ConfirmClientVrnController.show().url))
-                )(
-                  ArgumentMatchers.any[HeaderCarrier],
-                  ArgumentMatchers.any[ExecutionContext]
-                )
+              "redirect to the agentUnauthorisedForClient page" in {
+                redirectLocation(result) shouldBe Some(controllers.agent.routes.AgentUnauthorisedForClientController.show().url)
+              }
             }
 
-            "return HTML" in {
-              contentType(result) shouldBe Some("text/html")
-              charset(result) shouldBe Some("utf-8")
-            }
+            "the agent is permitted through the insolvency check" should {
 
-            "render the Confirm Client Vrn Page" in {
-              messages(document.select("h1").text) shouldBe Messages.heading
+              lazy val result = TestConfirmClientVrnController.show(fakeRequestWithVrnAndRedirectUrl)
+              lazy val document = Jsoup.parse(bodyOf(result))
+
+              "return 200" in {
+                mockAgentAuthorised()
+                mockCustomerDetailsSuccess(customerDetailsOrganisation)
+                status(result) shouldBe Status.OK
+
+                verify(mockAuditingService)
+                  .extendedAudit(
+                    ArgumentMatchers.eq(AuthenticateAgentAuditModel(arn, vrn, isAuthorisedForClient = true)),
+                    ArgumentMatchers.eq[Option[String]](Some(controllers.agent.routes.ConfirmClientVrnController.show().url))
+                  )(
+                    ArgumentMatchers.any[HeaderCarrier],
+                    ArgumentMatchers.any[ExecutionContext]
+                  )
+
+                verify(mockAuditingService)
+                  .extendedAudit(
+                    ArgumentMatchers.eq(GetClientBusinessNameAuditModel(arn, vrn, customerDetailsOrganisation.clientName)),
+                    ArgumentMatchers.eq[Option[String]](Some(controllers.agent.routes.ConfirmClientVrnController.show().url))
+                  )(
+                    ArgumentMatchers.any[HeaderCarrier],
+                    ArgumentMatchers.any[ExecutionContext]
+                  )
+              }
+
+              "return HTML" in {
+                contentType(result) shouldBe Some("text/html")
+                charset(result) shouldBe Some("utf-8")
+              }
+
+              "render the Confirm Client Vrn Page" in {
+                messages(document.select("h1").text) shouldBe Messages.heading
+              }
             }
           }
 
@@ -261,7 +281,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
 
   "Calling the .redirect action" when {
 
-    "the user is an Agent" when {
+    "the agent is permitted through the insolvency check" when {
 
       "redirect URL to a change service (contains /vat-through-software/account) is in session" when {
 
