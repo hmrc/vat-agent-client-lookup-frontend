@@ -48,14 +48,13 @@ object CustomerDetailsTestConstants {
     "partyType" -> "2",
     "mandationStatus" -> mandationStatus,
     "isInsolvent" -> false,
-    "continueToTrade" -> true,
     "deregistration" -> Json.obj(
       "effectDateOfCancellation" -> "2019-01-01"
     ),
     "missingTrader" -> true
   )
 
-  val customerDetailsAllInfo = CustomerDetails(
+  val customerDetailsAllInfo: CustomerDetails = CustomerDetails(
     Some(firstName),
     Some(lastName),
     Some(orgName),
@@ -64,12 +63,11 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     Some(Deregistration(Some(LocalDate.parse("2019-01-01")))),
     isInsolvent = false,
-    Some(true),
     None,
     missingTrader = missingTrader
   )
 
-  val customerDetailsAllInfoVatGroup = CustomerDetails(
+  val customerDetailsAllInfoVatGroup: CustomerDetails = CustomerDetails(
     Some(firstName),
     Some(lastName),
     Some(orgName),
@@ -79,11 +77,10 @@ object CustomerDetailsTestConstants {
     Some(Deregistration(Some(LocalDate.parse("2019-01-01")))),
     isInsolvent = false,
     None,
-    None,
     missingTrader
   )
 
-  val customerDetailsNoInfo = CustomerDetails(
+  val customerDetailsNoInfo: CustomerDetails = CustomerDetails(
     None,
     None,
     None,
@@ -93,11 +90,10 @@ object CustomerDetailsTestConstants {
     None,
     isInsolvent = false,
     None,
-    None,
     missingTrader
   )
 
-  val customerDetailsNoInfoWithPartyType = CustomerDetails(
+  val customerDetailsNoInfoWithPartyType: CustomerDetails = CustomerDetails(
     None,
     None,
     None,
@@ -105,11 +101,10 @@ object CustomerDetailsTestConstants {
     Some("2"),
     mandationStatus,
     None,
-    isInsolvent = false,
-    None
+    isInsolvent = false
   )
 
-  val customerDetailsNoInfoVatGroup = CustomerDetails(
+  val customerDetailsNoInfoVatGroup: CustomerDetails = CustomerDetails(
     None,
     None,
     None,
@@ -117,11 +112,10 @@ object CustomerDetailsTestConstants {
     Some(vatGroup),
     mandationStatus,
     None,
-    isInsolvent = false,
-    None
+    isInsolvent = false
   )
 
-  val customerDetailsFnameOnly = CustomerDetails(
+  val customerDetailsFnameOnly: CustomerDetails = CustomerDetails(
     Some(firstName),
     None,
     None,
@@ -129,11 +123,10 @@ object CustomerDetailsTestConstants {
     Some(validParty),
     mandationStatus,
     None,
-    isInsolvent = false,
-    None
+    isInsolvent = false
   )
 
-  val customerDetailsLnameOnly = CustomerDetails(
+  val customerDetailsLnameOnly: CustomerDetails = CustomerDetails(
     None,
     Some(lastName),
     None,
@@ -141,11 +134,10 @@ object CustomerDetailsTestConstants {
     Some(validParty),
     mandationStatus,
     None,
-    isInsolvent = false,
-    None
+    isInsolvent = false
   )
 
-  val customerDetailsNoTradingName = CustomerDetails(
+  val customerDetailsNoTradingName: CustomerDetails = CustomerDetails(
     None,
     None,
     Some(orgName),
@@ -153,11 +145,10 @@ object CustomerDetailsTestConstants {
     Some(validParty),
     mandationStatus,
     None,
-    isInsolvent = false,
-    None
+    isInsolvent = false
   )
 
-  val customerDetailsIndividual = CustomerDetails(
+  val customerDetailsIndividual: CustomerDetails = CustomerDetails(
     Some(firstName),
     Some(lastName),
     None,
@@ -165,11 +156,10 @@ object CustomerDetailsTestConstants {
     Some(validParty),
     mandationStatus,
     None,
-    isInsolvent = false,
-    None
+    isInsolvent = false
   )
 
-  val customerDetailsOrganisation = CustomerDetails(
+  val customerDetailsOrganisation: CustomerDetails = CustomerDetails(
     None,
     None,
     Some(orgName),
@@ -177,11 +167,10 @@ object CustomerDetailsTestConstants {
     Some(validParty),
     mandationStatus,
     None,
-    isInsolvent = false,
-    None
+    isInsolvent = false
   )
 
-  val customerDetailsNonDigital = CustomerDetails(
+  val customerDetailsNonDigital: CustomerDetails = CustomerDetails(
     Some(firstName),
     Some(lastName),
     Some(orgName),
@@ -189,11 +178,10 @@ object CustomerDetailsTestConstants {
     Some(validParty),
     nonDigital,
     None,
-    isInsolvent = false,
-    None
+    isInsolvent = false
   )
 
-  val customerDetailsOptedOut = CustomerDetails(
+  val customerDetailsOptedOut: CustomerDetails = CustomerDetails(
     Some(firstName),
     Some(lastName),
     Some(orgName),
@@ -201,8 +189,7 @@ object CustomerDetailsTestConstants {
     Some(validParty),
     nonMTDfB,
     Some(Deregistration(Some(LocalDate.parse("2019-01-01")))),
-    isInsolvent = false,
-    None
+    isInsolvent = false
   )
 
   val customerDetailsAllPending: CustomerDetails = customerDetailsAllInfo.copy(
@@ -210,7 +197,7 @@ object CustomerDetailsTestConstants {
     changeIndicators = Some(ChangeIndicators(deregister = true, PPOBDetails = true))
   )
 
-  val customerDetailsFutureDeregisterOptedOut = CustomerDetails(
+  val customerDetailsFutureDeregisterOptedOut: CustomerDetails = CustomerDetails(
     Some(firstName),
     Some(lastName),
     Some(orgName),
@@ -218,11 +205,10 @@ object CustomerDetailsTestConstants {
     Some(validParty),
     nonMTDfB,
     Some(Deregistration(Some(LocalDate.parse("2020-01-01")))),
-    isInsolvent = false,
-    None
+    isInsolvent = false
   )
 
-  val customerDetailsFutureDeregisterOptedOutVatGroup = CustomerDetails(
+  val customerDetailsFutureDeregisterOptedOutVatGroup: CustomerDetails = CustomerDetails(
     Some(firstName),
     Some(lastName),
     Some(orgName),
@@ -230,11 +216,10 @@ object CustomerDetailsTestConstants {
     Some(vatGroup),
     nonMTDfB,
     Some(Deregistration(Some(LocalDate.parse("2020-01-01")))),
-    isInsolvent = false,
-    None
+    isInsolvent = false
   )
 
-  val clientNoPartyType = CustomerDetails(
+  val clientNoPartyType: CustomerDetails = CustomerDetails(
     None,
     None,
     None,
@@ -242,10 +227,8 @@ object CustomerDetailsTestConstants {
     None,
     mandationStatus,
     None,
-    isInsolvent = false,
-    None
+    isInsolvent = false
   )
 
-  val customerDetailsInsolvent: CustomerDetails = customerDetailsAllInfo.copy(isInsolvent = true, continueToTrade = Some(false))
-
+  val customerDetailsInsolvent: CustomerDetails = customerDetailsAllInfo.copy(isInsolvent = true)
 }

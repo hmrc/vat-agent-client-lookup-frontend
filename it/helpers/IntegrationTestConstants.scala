@@ -40,7 +40,7 @@ object IntegrationTestConstants {
   val email = "test@test.com"
   val emailVerified = true
 
-  val organisation = CustomerDetails(
+  val organisation: CustomerDetails = CustomerDetails(
     firstName = None,
     lastName = None,
     tradingName = Some("Vatmobile Taxi"),
@@ -48,11 +48,10 @@ object IntegrationTestConstants {
     mandationStatus = nonMTDfB,
     deregistration = None,
     partyType = Some("2"),
-    isInsolvent = false,
-    continueToTrade = Some(true)
+    isInsolvent = false
   )
 
-  val individual = CustomerDetails(
+  val individual: CustomerDetails = CustomerDetails(
     firstName = Some("Pepsi"),
     lastName = Some("Mac"),
     tradingName = Some("PepsiCo"),
@@ -60,8 +59,7 @@ object IntegrationTestConstants {
     mandationStatus = nonMTDfB,
     deregistration = None,
     partyType = Some("2"),
-    isInsolvent = false,
-    continueToTrade = Some(true)
+    isInsolvent = false
   )
 
   val individualMandatedJson: JsObject = Json.obj(
