@@ -22,7 +22,6 @@ import common.SessionKeys
 import config.{AppConfig, ErrorHandler}
 import controllers.predicates.AuthoriseAsAgentWithClient
 import javax.inject.{Inject, Singleton}
-import models.User
 import models.errors._
 import play.api.Logger
 import play.api.i18n.I18nSupport
@@ -32,7 +31,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.agent.ConfirmClientVrnView
 import views.html.errors.{AccountMigrationView, NotSignedUpView}
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class ConfirmClientVrnController @Inject()(val authenticate: AuthoriseAsAgentWithClient,
@@ -49,8 +48,8 @@ class ConfirmClientVrnController @Inject()(val authenticate: AuthoriseAsAgentWit
   def show: Action[AnyContent] = authenticate.async {
     implicit user =>
       customerDetailsService.getCustomerDetails(user.vrn) map {
-        case Right(customerDetails) if customerDetails.isInsolventWithoutAccess =>
-          Logger.debug("[ConfirmClientVrnController][show] - Client is insolventWithoutAccess, rendering UnauthorisedForClient page")
+        case Right(customerDetails) if customerDetails.isInsolvent =>
+          Logger.debug("[ConfirmClientVrnController][show] - Client is insolvent, rendering UnauthorisedForClient page")
           Redirect(controllers.agent.routes.AgentUnauthorisedForClientController.show())
         case Right(customerDetails) =>
           auditService.extendedAudit(
