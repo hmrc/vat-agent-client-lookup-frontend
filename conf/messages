@@ -68,13 +68,6 @@ VatCertificateCard.link = View VAT certificate
 optOutCard.heading = Opt out of Making Tax Digital for VAT
 optOutCard.content = You cannot opt out if your client’s taxable turnover has been above £85,000 since 1 April 2019.
 
-verifyEmail.title = Confirm your email address
-verifyEmail.heading = Confirm your email address
-verifyEmail.lineOne = We’ve sent an email to {0}
-verifyEmail.lineTwo = You need to click the link in our email within 15 minutes. This will confirm your email address.
-verifyEmail.lineThree.1 = Check your junk folder. If it’s not there we can
-verifyEmail.lineThree.2 = send it again
-
 sessionTimeout.title = Your session has timed out
 sessionTimeout.helpOne = To manage your VAT account, you’ll have to
 sessionTimeout.helpTwo = sign in

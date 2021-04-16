@@ -121,39 +121,12 @@ class CheckYourAnswersPageSpec extends BasePageISpec {
               When("I call the isEmailVerified controller action with a non-verified notification email in session")
 
               val res = {
-                mockAppConfig.features.emailPinVerificationEnabled(true)
                 isEmailVerified
               }
 
               res should have(
                 httpStatus(SEE_OTHER),
                 redirectURI(controllers.agent.routes.VerifyEmailPinController.requestPasscode().url)
-              )
-            }
-          }
-
-          "the emailPinVerification feature switch is disabled" should {
-
-            "Render the Verify Email view" in {
-
-              def isEmailVerified: WSResponse = get(isEmailVerifiedPath, formatNotificationsEmail(Some(notificationsEmail)) ++
-                formatReturnUrl)
-
-              given.agent.isSignedUpToAgentServices
-
-              And("I stub an email not verified response from EmailVerificationService")
-              EmailVerificationStub.stubEmailNotVerified
-
-              When("I call the isEmailVerified controller action with a non-verified notification email in session")
-
-              val res = {
-                mockAppConfig.features.emailPinVerificationEnabled(false)
-                isEmailVerified
-              }
-
-              res should have(
-                httpStatus(SEE_OTHER),
-                redirectURI(controllers.agent.routes.VerifyEmailController.sendVerification().url)
               )
             }
           }

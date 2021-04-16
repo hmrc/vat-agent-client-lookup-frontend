@@ -56,7 +56,6 @@ object ConfigKeys {
 
   val emailVerificationFeature: String = "features.emailVerification.enabled"
   val useStaticDateFeature: String = "features.useStaticDate.enabled"
-  val emailPinVerificationFeature: String = "features.useEmailPinVerification.enabled"
 
   val staticDateValue: String = "date-service.staticDate.value"
 
