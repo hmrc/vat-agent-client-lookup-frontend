@@ -58,11 +58,8 @@ class ConfirmEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
         emailVerificationService.isEmailVerified(email) map {
           case Some(true) =>
             handleRedirect(agent, email)
-          case Some(false) =>
-            if(appConfig.features.emailPinVerificationEnabled()){
+          case Some(false) => {
               Redirect(routes.VerifyEmailPinController.requestPasscode())
-            } else {
-              Redirect(routes.VerifyEmailController.sendVerification())
             }
 
           case _ =>

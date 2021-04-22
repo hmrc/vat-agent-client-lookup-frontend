@@ -62,7 +62,6 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfte
 
           val request = testGetRequest.withSession(SessionKeys.notificationsEmail -> testEmail)
           val result = {
-            mockConfig.features.emailPinVerificationEnabled(true)
             TestVerifyEmailPinController.show(request)
           }
 
@@ -79,29 +78,12 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfte
           mockAgentAuthorised()
 
           val result = {
-            mockConfig.features.emailPinVerificationEnabled(true)
             TestVerifyEmailPinController.show(request)
           }
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(routes.CapturePreferenceController.show().url)
         }
-      }
-    }
-
-    "the emailPinVerification feature switch is disabled" should {
-
-      "return a NOT FOUND error" in {
-
-        mockAgentAuthorised()
-
-        val request = testGetRequest
-        val result = {
-          mockConfig.features.emailPinVerificationEnabled(false)
-          TestVerifyEmailPinController.show(request)
-        }
-
-        status(result) shouldBe Status.NOT_FOUND
       }
     }
 
@@ -138,7 +120,6 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfte
                 .withSession(SessionKeys.notificationsEmail -> testEmail)
               val result = {
                 mockVerifyPasscodeRequest(Right(SuccessfullyVerified))
-                mockConfig.features.emailPinVerificationEnabled(true)
                 TestVerifyEmailPinController.submit(request)
               }
 
@@ -159,7 +140,6 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfte
                 .withSession(SessionKeys.notificationsEmail -> testEmail)
               val result = {
                 mockVerifyPasscodeRequest(Right(AlreadyVerified))
-                mockConfig.features.emailPinVerificationEnabled(true)
                 TestVerifyEmailPinController.submit(request)
               }
 
@@ -179,7 +159,6 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfte
                 .withSession(SessionKeys.notificationsEmail -> testEmail)
               lazy val result = {
                 mockVerifyPasscodeRequest(Right(TooManyAttempts))
-                mockConfig.features.emailPinVerificationEnabled(true)
                 TestVerifyEmailPinController.submit(request)
               }
 
@@ -198,7 +177,6 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfte
                 .withSession(SessionKeys.notificationsEmail -> testEmail)
               lazy val result = {
                 mockVerifyPasscodeRequest(Right(PasscodeNotFound))
-                mockConfig.features.emailPinVerificationEnabled(true)
                 TestVerifyEmailPinController.submit(request)
               }
 
@@ -217,7 +195,6 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfte
                 .withSession(SessionKeys.notificationsEmail -> testEmail)
               lazy val result = {
                 mockVerifyPasscodeRequest(Right(IncorrectPasscode))
-                mockConfig.features.emailPinVerificationEnabled(true)
                 TestVerifyEmailPinController.submit(request)
               }
 
@@ -233,7 +210,6 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfte
                 .withSession(SessionKeys.notificationsEmail -> testEmail)
               lazy val result = {
                 mockVerifyPasscodeRequest(Left(UnexpectedError(Status.INTERNAL_SERVER_ERROR, "Err0r")))
-                mockConfig.features.emailPinVerificationEnabled(true)
                 TestVerifyEmailPinController.submit(request)
               }
               mockAgentAuthorised()
@@ -252,7 +228,6 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfte
               .withFormUrlEncodedBody(("passcode", "badthings"))
               .withSession(SessionKeys.notificationsEmail -> testEmail)
             val result = {
-              mockConfig.features.emailPinVerificationEnabled(true)
               TestVerifyEmailPinController.submit(request)
             }
 
@@ -268,29 +243,12 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfte
           mockAgentAuthorised()
 
           val result = {
-            mockConfig.features.emailPinVerificationEnabled(true)
             TestVerifyEmailPinController.submit(request)
           }
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(routes.CapturePreferenceController.show().url)
         }
-      }
-    }
-
-    "the emailPinVerification feature switch is disabled" should {
-
-      "return a NOT FOUND error" in {
-
-        mockAgentAuthorised()
-
-        val request = testPostRequest
-        val result = {
-          mockConfig.features.emailPinVerificationEnabled(false)
-          TestVerifyEmailPinController.submit(request)
-        }
-
-        status(result) shouldBe Status.NOT_FOUND
       }
     }
 
@@ -326,7 +284,6 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfte
               .withSession(SessionKeys.notificationsEmail -> testEmail)
             val result = {
               mockCreatePasscodeRequest(Some(true))
-              mockConfig.features.emailPinVerificationEnabled(true)
               TestVerifyEmailPinController.requestPasscode(request)
             }
 
@@ -345,7 +302,6 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfte
               .withSession(SessionKeys.notificationsEmail -> testEmail)
             val result = {
               mockCreatePasscodeRequest(Some(false))
-              mockConfig.features.emailPinVerificationEnabled(true)
               TestVerifyEmailPinController.requestPasscode(request)
             }
 
@@ -364,7 +320,6 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfte
               .withSession(SessionKeys.notificationsEmail -> testEmail)
             val result = {
               mockCreatePasscodeRequest(None)
-              mockConfig.features.emailPinVerificationEnabled(true)
               TestVerifyEmailPinController.requestPasscode(request)
             }
 
@@ -380,29 +335,12 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfte
           mockAgentAuthorised()
 
           val result = {
-            mockConfig.features.emailPinVerificationEnabled(true)
             TestVerifyEmailPinController.requestPasscode(request)
           }
 
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(routes.CapturePreferenceController.show().url)
         }
-      }
-    }
-
-    "the emailPinVerification feature switch is disabled" should {
-
-      "return a NOT FOUND error" in {
-
-        mockAgentAuthorised()
-
-        val request = testPasscodeRequest
-        val result = {
-          mockConfig.features.emailPinVerificationEnabled(false)
-          TestVerifyEmailPinController.requestPasscode(request)
-        }
-
-        status(result) shouldBe Status.NOT_FOUND
       }
     }
   }
