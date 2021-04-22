@@ -166,9 +166,8 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerifi
       }
     }
 
-    "there is a non-verified email in session" when {
+    "there is a non-verified email in session" should {
 
-      "the useEmailPinVerification feature switch is enabled" should {
         lazy val testRequest = request.withSession(SessionKeys.notificationsEmail -> testEmail)
         lazy val result = {
           mockGetEmailVerificationState(testEmail)(Future(Some(false)))
@@ -184,7 +183,6 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerifi
           redirectLocation(result) shouldBe Some("/vat-through-software/representative/send-passcode")
         }
       }
-    }
 
     "there isn't an email in session" should {
       lazy val result = {
