@@ -145,3 +145,6 @@ signUpPartial.Body = Your client must sign up to Making Tax Digital for VAT if t
 
 passcode.error.empty = Enter the confirmation code
 passcode.error.invalid = Enter the 6 character confirmation code
+
+DirectDebitInterrupt.title = Placeholder for Direct Debit interrupt page
+DirectDebitInterrupt.heading = Placeholder for Direct Debit interrupt page
