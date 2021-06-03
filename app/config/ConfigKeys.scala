@@ -56,6 +56,7 @@ object ConfigKeys {
 
   val emailVerificationFeature: String = "features.emailVerification.enabled"
   val useStaticDateFeature: String = "features.useStaticDate.enabled"
+  val directDebitInterruptFeature: String = "features.directDebitInterrupt.enabled"
 
   val staticDateValue: String = "date-service.staticDate.value"
 
