@@ -109,6 +109,8 @@ trait IntegrationBaseSpec extends TestSuite with CustomMatchers
     "microservice.services.auth.port" -> mockPort,
     "microservice.services.email-verification.host" -> mockHost,
     "microservice.services.email-verification.port" -> mockPort,
+    "microservice.services.financial-transactions.host" -> mockHost,
+    "microservice.services.financial-transactions.port" -> mockPort,
     "microservice.services.manage-vat-subscription-frontend.host" -> mockHost,
     "microservice.services.manage-vat-subscription-frontend.port" -> mockPort,
     "microservice.services.manage-vat-subscription-frontend.endpoints.customer-details" -> "/customer-details?isAgent=true",

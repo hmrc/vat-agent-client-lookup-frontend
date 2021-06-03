@@ -81,4 +81,6 @@ object ConfigKeys {
   val signUpServiceUrl: String = "vat-sign-up-frontend.url"
 
   val gtmContainer: String = "tracking-consent-frontend.gtm.container"
+
+  val financialTransactions: String = "financial-transactions"
 }
