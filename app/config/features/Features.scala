@@ -24,4 +24,5 @@ class Features @Inject()(config: Configuration) {
 
   val emailVerificationEnabled = new Feature(ConfigKeys.emailVerificationFeature, config)
   val useStaticDateFeature = new Feature(ConfigKeys.useStaticDateFeature, config)
+  val directDebitInterruptFeature = new Feature(ConfigKeys.directDebitInterruptFeature, config)
 }
