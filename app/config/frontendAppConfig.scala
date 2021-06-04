@@ -66,6 +66,7 @@ trait AppConfig {
   val manageVatMissingTraderUrl: String
   val difficultiesPayingUrl: String
   val gtmContainer: String
+  val financialTransactionsBaseUrl: String
 }
 
 @Singleton
@@ -153,4 +154,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override val difficultiesPayingUrl: String = sc.getString(Keys.difficultiesPayingUrl)
 
   override val gtmContainer: String = sc.getString(Keys.gtmContainer)
+
+  override val financialTransactionsBaseUrl: String = sc.baseUrl(Keys.financialTransactions)
 }

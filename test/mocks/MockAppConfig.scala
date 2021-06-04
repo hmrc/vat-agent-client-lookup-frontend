@@ -85,4 +85,5 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val difficultiesPayingUrl: String = "/difficulties-paying-hmrc"
 
   override val gtmContainer: String = "x"
+  override val financialTransactionsBaseUrl: String = "http://myHost:9999"
 }
