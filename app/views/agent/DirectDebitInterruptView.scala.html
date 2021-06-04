@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,15 +12,18 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package config.filters
+@this(mainTemplate: MainTemplate)
 
-import javax.inject.Inject
-import play.api.http.{DefaultHttpFilters,EnabledFilters}
-import play.filters.csrf.CSRFFilter
+@(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-class ServiceFilters @Inject()(defaultFilters: EnabledFilters, excludingCSRFFilter: ExcludingCSRFFilter)
-  extends DefaultHttpFilters({
-    defaultFilters.filters.filterNot(f => f.isInstanceOf[CSRFFilter]) :+ excludingCSRFFilter
-  }:_*)
+@mainTemplate(
+    title = messages("DirectDebitInterrupt.title"),
+    bodyClasses = None) {
+
+    <h1 class="heading-large">
+        @messages("DirectDebitInterrupt.heading")
+    </h1>
+
+}

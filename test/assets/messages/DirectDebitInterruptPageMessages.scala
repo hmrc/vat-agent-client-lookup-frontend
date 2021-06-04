@@ -14,13 +14,9 @@
  * limitations under the License.
  */
 
-package config.filters
+package assets.messages
 
-import javax.inject.Inject
-import play.api.http.{DefaultHttpFilters,EnabledFilters}
-import play.filters.csrf.CSRFFilter
-
-class ServiceFilters @Inject()(defaultFilters: EnabledFilters, excludingCSRFFilter: ExcludingCSRFFilter)
-  extends DefaultHttpFilters({
-    defaultFilters.filters.filterNot(f => f.isInstanceOf[CSRFFilter]) :+ excludingCSRFFilter
-  }:_*)
+object DirectDebitInterruptPageMessages {
+  val title: String = "Placeholder for Direct Debit interrupt page"
+  val heading: String = "Placeholder for Direct Debit interrupt page"
+}
