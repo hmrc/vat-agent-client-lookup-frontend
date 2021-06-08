@@ -146,5 +146,11 @@ signUpPartial.Body = Your client must sign up to Making Tax Digital for VAT if t
 passcode.error.empty = Enter the confirmation code
 passcode.error.invalid = Enter the 6 character confirmation code
 
-DirectDebitInterrupt.title = Placeholder for Direct Debit interrupt page
-DirectDebitInterrupt.heading = Placeholder for Direct Debit interrupt page
+directDebitInterrupt.title = Your client needs to set up a new Direct Debit
+directDebitInterrupt.clientMigrated = Your client has been migrated to HMRC’s new online system and their Direct Debit has now been cancelled.
+directDebitInterrupt.toSetUp = To set up a new Direct Debit,
+directDebitInterrupt.yourClient = your client
+directDebitInterrupt.needToLogIn = will need to log in to or create an online Business Tax Account. Once your client logs in to their Business Tax Account, instructions will guide them through setting up a new Direct Debit for their VAT Bill.
+directDebitInterrupt.iWillInform = I will inform my client about this change
+directDebitInterrupt.continue = Continue to your client’s VAT account
+directDebitInterrupt.formError = Select the checkbox to confirm you will inform your client about this change

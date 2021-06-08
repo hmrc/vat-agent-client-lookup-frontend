@@ -36,6 +36,7 @@ trait TestUtil extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach
 
   override def beforeEach(): Unit = {
     mockConfig.features.useStaticDateFeature(true)
+    mockConfig.features.directDebitInterruptFeature(true)
   }
 
   lazy val mcc: MessagesControllerComponents = inject[MessagesControllerComponents]

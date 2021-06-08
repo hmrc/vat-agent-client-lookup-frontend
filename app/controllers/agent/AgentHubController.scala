@@ -21,6 +21,8 @@ import config.{AppConfig, ErrorHandler}
 import connectors.httpParsers.ResponseHttpParser.HttpResult
 import controllers.BaseController
 import controllers.predicates.AuthoriseAsAgentWithClient
+import forms.DDInterruptForm
+
 import javax.inject.{Inject, Singleton}
 import models.DirectDebit
 import models.errors.DirectDebitError
@@ -61,8 +63,7 @@ class AgentHubController @Inject()(val authenticate: AuthoriseAsAgentWithClient,
       customerInfo match {
         case Right(details) =>
           (details.missingTrader, details.hasPendingPPOB, ddInterrupt(ddResult)) match {
-            case (_, _, true) if hasNotViewedDDInterrupt => Ok(ddInterruptView())
-              .addingToSession(viewedDDInterrupt -> "true")
+            case (_, _, true) if hasNotViewedDDInterrupt => Ok(ddInterruptView(DDInterruptForm.form))
             case (true, false, _) => Redirect(appConfig.manageVatMissingTraderUrl)
             case _ => Ok(agentHubView(details, user.vrn, dateService.now()))
           }

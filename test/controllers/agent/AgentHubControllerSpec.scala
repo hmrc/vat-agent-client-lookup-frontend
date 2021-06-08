@@ -135,7 +135,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
       }
 
       "render the DD interrupt page" in {
-        messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Placeholder for Direct Debit interrupt page"
+        messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client needs to set up a new Direct Debit"
       }
 
     }
