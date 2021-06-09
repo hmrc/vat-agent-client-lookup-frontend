@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package common
+package assets
 
-object SessionKeys {
+import connectors.httpParsers.ResponseHttpParser.HttpResult
+import models.DirectDebit
 
-  val clientVRN: String = "CLIENT_VRN"
-  val clientMandationStatus: String = "mtdVatMandationStatus"
-  val redirectUrl: String = "vatAgentLookupRedirectUrl"
-  val preference: String = "vatAgentLookupEmailPreference"
-  val notificationsEmail: String = "vatAgentLookupNotificationsPreferenceEmail"
-  val verifiedAgentEmail: String = "verifiedAgentEmail"
-  val mtdVatAgentClientName: String = "mtdVatAgentClientName"
-  val mtdVatAgentMandationStatus: String = "mtdVatAgentMandationStatus"
-  val viewedDDInterrupt: String = "vatViewChangeHasViewedDDInterrupt"
+object DirectDebitConstants {
+
+  val ddNoMandateFound: HttpResult[DirectDebit] = Right(DirectDebit(
+    directDebitMandateFound = false
+  ))
+
+  val ddMandateFound: HttpResult[DirectDebit] = Right(DirectDebit(
+    directDebitMandateFound = true
+  ))
+
+  val ddFailureResponse = Left(models.errors.UnexpectedError(500, "problems"))
 }

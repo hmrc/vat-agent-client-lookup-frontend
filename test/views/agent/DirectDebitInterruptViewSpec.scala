@@ -28,7 +28,7 @@ class DirectDebitInterruptViewSpec extends ViewBaseSpec {
 
   "The DD interrupt screen for users" should {
 
-    lazy val view = injectedView(request, messages, mockConfig)
+    lazy val view = injectedView()(request, messages, mockConfig)
 
     lazy implicit val document: Document = Jsoup.parse(view.body)
 

@@ -16,39 +16,68 @@
 
 package controllers.agent
 
+import common.SessionKeys.viewedDDInterrupt
 import config.{AppConfig, ErrorHandler}
+import connectors.httpParsers.ResponseHttpParser.HttpResult
 import controllers.BaseController
 import controllers.predicates.AuthoriseAsAgentWithClient
 import javax.inject.{Inject, Singleton}
+import models.DirectDebit
+import models.errors.DirectDebitError
 import play.api.Logger
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.{CustomerDetailsService, DateService}
-import views.html.agent.AgentHubView
+import services.{CustomerDetailsService, DateService, DirectDebitService}
+import views.html.agent.{AgentHubView, DirectDebitInterruptView}
 
-import scala.concurrent.{ExecutionContext}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AgentHubController @Inject()(val authenticate: AuthoriseAsAgentWithClient,
                                    val serviceErrorHandler: ErrorHandler,
                                    val customerDetailsService: CustomerDetailsService,
                                    val dateService: DateService,
+                                   val directDebitService: DirectDebitService,
                                    mcc: MessagesControllerComponents,
                                    agentHubView: AgentHubView,
+                                   ddInterruptView: DirectDebitInterruptView,
                                    implicit val appConfig: AppConfig,
-                                   implicit val executionContext: ExecutionContext) extends BaseController(mcc) {
+                                   implicit val executionContext: ExecutionContext
+                                  ) extends BaseController(mcc) {
 
   def show: Action[AnyContent] = authenticate.async { implicit user =>
 
-      customerDetailsService.getCustomerDetails(user.vrn).map {
+    for {
+      customerInfo <- customerDetailsService.getCustomerDetails(user.vrn)
+      ddResult <-
+        if(appConfig.features.directDebitInterruptFeature() && user.session.get(viewedDDInterrupt).isEmpty) {
+          directDebitService.getDirectDebit(user.vrn)
+        } else {
+          Future.successful(Left(DirectDebitError))
+        }
+    } yield {
+
+      val hasNotViewedDDInterrupt = user.session.get(viewedDDInterrupt).isEmpty
+
+      customerInfo match {
         case Right(details) =>
-          if (details.missingTrader && !details.hasPendingPPOB) {
-            Redirect(appConfig.manageVatMissingTraderUrl)
-          } else {
-            Ok(agentHubView(details, user.vrn, dateService.now()))
+          (details.missingTrader, details.hasPendingPPOB, ddInterrupt(ddResult)) match {
+            case (_, _, true) if hasNotViewedDDInterrupt => Ok(ddInterruptView())
+              .addingToSession(viewedDDInterrupt -> "true")
+            case (true, false, _) => Redirect(appConfig.manageVatMissingTraderUrl)
+            case _ => Ok(agentHubView(details, user.vrn, dateService.now()))
           }
         case Left(error) =>
           Logger.warn(s"[AgentHubController][show] - received an error from CustomerDetailsService: $error")
           serviceErrorHandler.showInternalServerError
       }
+    }
+  }
+
+  private[controllers] def ddInterrupt(directDebitInfo: HttpResult[DirectDebit]): Boolean = {
+
+    val ddStatus: Option[Boolean] = directDebitInfo.fold(_ => None, dd => Some(dd.directDebitMandateFound))
+
+    ddStatus.contains(false)
+
   }
 }
