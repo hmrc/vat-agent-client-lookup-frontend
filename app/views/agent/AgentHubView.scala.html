@@ -19,55 +19,52 @@
 @import java.time.LocalDate
 
 @this(mainTemplate: MainTemplate,
-    clientDetailsPartials: ClientDetailsPartials,
-    optOutForMTDVATPartial: OptOutForMTDVATPartial,
-    registrationPartial: RegistrationPartial,
-    signUpPartial: SignUpPartial,
-    vatCertificatePartials: VatCertificatePartials,
-    vatReturnsPartial: VatReturnsPartial)
+      clientDetailsPartials: ClientDetailsPartials,
+      optOutForMTDVATPartial: OptOutForMTDVATPartial,
+      registrationPartial: RegistrationPartial,
+      signUpPartial: SignUpPartial,
+      vatCertificatePartials: VatCertificatePartials,
+      vatReturnsPartial: VatReturnsPartial)
 
-@(details: CustomerDetails, vrn: String, currentDate: LocalDate)(implicit messages: Messages, appConfig: AppConfig ,user: User[_])
+@(details: CustomerDetails, vrn: String, currentDate: LocalDate)(implicit messages: Messages,
+                                                                          appConfig: AppConfig,
+                                                                          user: User[_])
 
 @mainTemplate(title = messages("agentHub.heading"), bodyClasses = None, mainClass = Some("full-width")) {
 
- <div id="breadcrumb" class="breadcrumbs soft--top">
-  <ol class="push--top">
-   <li><a id="breadcrumb-asa"
-   href="@{appConfig.agentServicesUrl}">@messages("breadcrumb.agentServices")</a></li>
-   <li aria-current="page" id="clients-vat-account">@messages("agentHub.heading")</li>
-  </ol>
- </div>
-
- <header class="page-heading push--top">
-  <h1 class="heading-xlarge">@messages("agentHub.heading")</h1>
-  <span class="form-hint bottom-margin">@messages("agentHub.vrn", vrn)<br/>
-   @details.clientName<br/>
-   <a href="@controllers.agent.routes.ConfirmClientVrnController.changeClient()">
-   @messages("agentHub.changeClient")
-   </a>
-  </span>
-
-  <div class="warning-banner">
-   <div class="panel panel-border-wide">
-    @messages("agentHub.noDDclient")
-   </div>
+  <div id="breadcrumb" class="breadcrumbs soft--top">
+    <ol class="push--top">
+      <li>
+        <a id="breadcrumb-asa"
+           href="@{appConfig.agentServicesUrl}">@messages("breadcrumb.agentServices")</a>
+      </li>
+      <li aria-current="page" id="clients-vat-account">
+        @messages("agentHub.heading")
+      </li>
+    </ol>
   </div>
-
- </header>
-
- <div class="flex-container grid-row">
-  @clientDetailsPartials()
-
-  @vatReturnsPartial(details.mandationStatus)
-
-  @vatCertificatePartials()
- </div>
-
- <div class="grid-row">
-  @signUpPartial(details.mandationStatus,vrn)
-
-  @optOutForMTDVATPartial(details.mandationStatus)
-
-  @registrationPartial(details, currentDate)
- </div>
+  <header class="page-heading push--top">
+    <h1 class="heading-xlarge">@messages("agentHub.heading")</h1>
+    <span class="form-hint bottom-margin">@messages("agentHub.vrn", vrn)<br/>
+      @details.clientName<br/>
+      <a href="@controllers.agent.routes.ConfirmClientVrnController.changeClient()">
+        @messages("agentHub.changeClient")
+      </a>
+    </span>
+    <div class="warning-banner">
+      <div class="panel panel-border-wide">
+        @messages("agentHub.noDDclient")
+      </div>
+    </div>
+  </header>
+  <div class="flex-container grid-row">
+    @clientDetailsPartials()
+    @vatReturnsPartial(details.mandationStatus)
+    @vatCertificatePartials()
+  </div>
+  <div class="grid-row">
+    @signUpPartial(details.mandationStatus,vrn)
+    @optOutForMTDVATPartial(details.mandationStatus)
+    @registrationPartial(details, currentDate)
+  </div>
 }

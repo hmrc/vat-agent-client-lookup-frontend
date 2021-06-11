@@ -16,77 +16,65 @@
 
 package controllers.agent
 
-import java.util.concurrent.TimeUnit
-
-import akka.util.Timeout
 import assets.BaseTestConstants
-import assets.CustomerDetailsTestConstants.{customerDetailsAllInfo, customerDetailsFnameOnly, customerDetailsAllPending}
+import assets.CustomerDetailsTestConstants._
+import assets.DirectDebitConstants.{ddFailureResponse, ddMandateFound, ddNoMandateFound}
+import common.SessionKeys.viewedDDInterrupt
 import controllers.ControllerBaseSpec
 import mocks.services._
 import org.jsoup.Jsoup
 import play.api.mvc.Result
 import play.mvc.Http.Status._
-import views.html.agent.AgentHubView
+import views.html.agent.{AgentHubView, DirectDebitInterruptView}
 
 import scala.concurrent.Future
 
-class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetailsService with MockDateService {
+class AgentHubControllerSpec extends ControllerBaseSpec
+                              with MockCustomerDetailsService
+                              with MockDateService
+                              with MockDirectDebitService {
 
-  trait Test {
-    lazy val controller = new AgentHubController(
-      mockAuthAsAgentWithClient,
-      mockErrorHandler,
-      mockCustomerDetailsService,
-      mockDateService,
-      mcc,
-      inject[AgentHubView],
-      mockConfig,
-      ec
-    )
-    implicit val timeout: Timeout = Timeout.apply(60, TimeUnit.SECONDS)
-  }
+  lazy val controller = new AgentHubController(
+    mockAuthAsAgentWithClient,
+    mockErrorHandler,
+    mockCustomerDetailsService,
+    mockDateService,
+    mockDirectDebitService,
+    mcc,
+    inject[AgentHubView],
+    inject[DirectDebitInterruptView],
+    mockConfig,
+    ec
+  )
 
   "AgentHubController.show()" when {
 
-        "the customer is a missing trader" when {
+    "the DD interrupt feature switch is off" when {
 
-          "they do not have a pending PPOB" should {
+      "the customer is a missing trader" when {
 
-            "redirect the customer to manage-vat" in new Test {
-              mockAgentAuthorised()
-              mockCustomerDetailsSuccess(customerDetailsAllInfo)
+        "they do not have a pending PPOB" should {
 
-              val result: Future[Result] = {
-                controller.show()(fakeRequestWithVrnAndRedirectUrl)
-              }
-
-              status(result) shouldBe SEE_OTHER
+          "redirect the customer to manage-vat" in {
+            mockAgentAuthorised()
+            mockCustomerDetailsSuccess(customerDetailsAllInfo)
+            val result: Future[Result] = {
+              mockConfig.features.directDebitInterruptFeature(false)
+              controller.show()(fakeRequestWithVrnAndRedirectUrl)
             }
-          }
 
-          "they have a pending PPOB" should {
-
-            "render the AgentHubPage" in new Test {
-              mockAgentAuthorised()
-              mockCustomerDetailsSuccess(customerDetailsAllPending.copy(missingTrader = true))
-
-              val result: Future[Result] = {
-                controller.show()(fakeRequestWithVrnAndRedirectUrl)
-              }
-
-              status(result) shouldBe OK
-              messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client’s VAT details"
-            }
+            status(result) shouldBe SEE_OTHER
           }
         }
 
-        "the customer isn't a missing trader" should {
+        "they have a pending PPOB" should {
 
-          "render the AgentHubPage" in new Test {
+          "render the AgentHubPage" in {
             mockAgentAuthorised()
-            mockCustomerDetailsSuccess(customerDetailsFnameOnly)
+            mockCustomerDetailsSuccess(customerDetailsAllPending.copy(missingTrader = true))
 
             val result: Future[Result] = {
+              mockConfig.features.directDebitInterruptFeature(false)
               controller.show()(fakeRequestWithVrnAndRedirectUrl)
             }
 
@@ -94,14 +82,33 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
             messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client’s VAT details"
           }
         }
+      }
+
+      "the customer isn't a missing trader" should {
+
+        "render the AgentHubPage" in {
+          mockAgentAuthorised()
+          mockCustomerDetailsSuccess(customerDetailsFnameOnly)
+
+          val result: Future[Result] = {
+            mockConfig.features.directDebitInterruptFeature(false)
+            controller.show()(fakeRequestWithVrnAndRedirectUrl)
+          }
+
+          status(result) shouldBe OK
+          messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client’s VAT details"
+        }
+      }
+    }
 
     "the customerDetails call fails" should {
 
-      "return an error" in new Test {
+      "return an error" in {
         mockAgentAuthorised()
         mockCustomerDetailsError(BaseTestConstants.unexpectedError)
 
         val result: Future[Result] = {
+          mockConfig.features.directDebitInterruptFeature(false)
           controller.show()(fakeRequestWithVrnAndRedirectUrl)
         }
 
@@ -111,4 +118,83 @@ class AgentHubControllerSpec extends ControllerBaseSpec with MockCustomerDetails
     }
   }
 
+  "the DD interrupt feature is on" when {
+
+    "the direct debit service returns false" should {
+
+      lazy val result: Future[Result] = {
+        mockConfig.features.directDebitInterruptFeature(true)
+        mockAgentAuthorised()
+        mockCustomerDetailsSuccess(customerDetailsIndividual)
+        mockDirectDebitResponse(ddNoMandateFound)
+        controller.show()(fakeRequestWithVrnAndRedirectUrl)
+      }
+
+      "return 200" in {
+        status(result) shouldBe OK
+      }
+
+      "render the DD interrupt page" in {
+        messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Placeholder for Direct Debit interrupt page"
+      }
+
+    }
+
+    "the direct debit service returns true" should {
+
+      lazy val result: Future[Result] = {
+        mockConfig.features.directDebitInterruptFeature(true)
+        mockAgentAuthorised()
+        mockCustomerDetailsSuccess(customerDetailsIndividual)
+        mockDirectDebitResponse(ddMandateFound)
+        controller.show()(fakeRequestWithVrnAndRedirectUrl)
+      }
+
+      "return 200" in {
+        status(result) shouldBe OK
+      }
+
+      "render the agent hub page" in {
+        messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client’s VAT details"
+      }
+    }
+
+    "the customer has already viewed the DD interrupt page" should {
+
+      lazy val result: Future[Result] = {
+        mockConfig.features.directDebitInterruptFeature(true)
+        mockAgentAuthorised()
+        mockCustomerDetailsSuccess(customerDetailsIndividual)
+        controller.show()(fakeRequestWithVrnAndRedirectUrl.withSession(viewedDDInterrupt -> "true"))
+      }
+
+      "return 200" in {
+        status(result) shouldBe OK
+      }
+
+      "render the agent hub page" in {
+         messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client’s VAT details"
+      }
+
+    }
+
+    "the DD service returns an error" should {
+
+      lazy val result: Future[Result] = {
+        mockConfig.features.directDebitInterruptFeature(true)
+        mockAgentAuthorised()
+        mockCustomerDetailsSuccess(customerDetailsIndividual)
+        mockDirectDebitResponse(ddFailureResponse)
+        controller.show()(fakeRequestWithVrnAndRedirectUrl)
+      }
+
+      "return 200" in {
+        status(result) shouldBe OK
+      }
+
+      "render the agent hub page" in {
+        messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client’s VAT details"
+      }
+    }
+  }
 }
