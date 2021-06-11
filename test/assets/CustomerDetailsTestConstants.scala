@@ -60,6 +60,27 @@ object CustomerDetailsTestConstants {
     "missingTrader" -> true
   )
 
+  val pendingInfoJson: JsObject = Json.obj(
+    "customerDetails" -> Json.obj(
+      "firstName" -> firstName,
+      "lastName" -> lastName,
+      "organisationName" -> orgName,
+      "tradingName" -> tradingName,
+      "isInsolvent" -> false,
+      "customerMigratedToETMPDate" -> "2018-03-03"
+    ),
+    "partyType" -> "2",
+    "mandationStatus" -> mandationStatus,
+    "deregistration" -> Json.obj(
+      "effectDateOfCancellation" -> "2019-01-01"
+    ),
+    "missingTrader" -> true,
+    "pendingChanges" -> Json.obj(
+      "organisationName" -> s"New $orgName",
+      "tradingName" -> s"New $tradingName"
+    )
+  )
+
   val customerDetailsAllInfo: CustomerDetails = CustomerDetails(
     Some(firstName),
     Some(lastName),

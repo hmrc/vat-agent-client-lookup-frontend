@@ -52,14 +52,14 @@ case class CustomerDetails(firstName: Option[String],
 
 object CustomerDetails {
 
-  private val firstNamePath = __ \\ "firstName"
-  private val lastNamePath = __ \\ "lastName"
-  private val organisationNamePath = __ \\ "organisationName"
-  private val tradingNamePath = __ \\ "tradingName"
+  private val firstNamePath = __ \ "customerDetails" \ "firstName"
+  private val lastNamePath = __ \ "customerDetails" \ "lastName"
+  private val organisationNamePath = __ \ "customerDetails" \ "organisationName"
+  private val tradingNamePath = __ \ "customerDetails" \ "tradingName"
   private val partyTypePath = __ \ "partyType"
   private val mandationStatusPath = __ \ "mandationStatus"
   private val deregistrationPath = __ \ "deregistration"
-  private val isInsolventPath = __ \\ "isInsolvent"
+  private val isInsolventPath = __ \ "customerDetails" \ "isInsolvent"
   private val changeIndicatorsPath = __ \ "changeIndicators"
   private val missingTraderPath = __ \ "missingTrader"
   private val migratedToETMPDatePath = __ \ "customerDetails" \ "customerMigratedToETMPDate"
