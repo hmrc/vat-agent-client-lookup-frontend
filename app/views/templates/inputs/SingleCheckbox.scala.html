@@ -16,12 +16,22 @@
 
 @this()
 
-@(field: Field, label: String)()
+@(field: Field, label: String)(implicit messages: Messages)
 
 @value = @{ field.value match { case Some(x) => x case None => "false" case x => x }}
 
-<div class="multiple-choice">
-    <input id="@{field.name}" name="@{field.name}" type="checkbox" value="true" @if(value == "true"){ checked }>
-    <label for="@{field.name}">@label</label>
-</div>
+<fieldset @if(field.hasErrors){aria-describedby="form-error"}>
 
+  <div class="form-field@if(field.hasErrors){--error panel-border-narrow}">
+    @field.errors.map { error =>
+      <span id="form-error" class="error-message">
+        <span class="visuallyhidden">@messages("common.error")</span>
+        @messages(error.message)
+      </span>
+    }
+    <div class="multiple-choice">
+     <input id="@{field.name}" name="@{field.name}" type="checkbox" value="true" @if(value == "true"){ checked }>
+      <label for="@{field.name}">@label</label>
+    </div>
+  </div>
+</fieldset>

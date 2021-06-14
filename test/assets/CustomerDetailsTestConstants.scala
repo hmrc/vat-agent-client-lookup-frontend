@@ -33,21 +33,27 @@ object CustomerDetailsTestConstants {
   val vatGroup = "Z2"
   val validParty = "2"
   val missingTrader = true
+  val migratedToETMPDate = "2018-03-03"
 
   val noOptionalInfoJson: JsObject = Json.obj(
+    "customerDetails" -> Json.obj(
+      "isInsolvent" -> false
+    ),
     "mandationStatus" -> mandationStatus,
-    "isInsolvent" -> false,
     "missingTrader" -> missingTrader
   )
 
   val allInfoJson: JsObject = Json.obj(
-    "firstName" -> firstName,
-    "lastName" -> lastName,
-    "organisationName" -> orgName,
-    "tradingName" -> tradingName,
+    "customerDetails" -> Json.obj(
+      "firstName" -> firstName,
+      "lastName" -> lastName,
+      "organisationName" -> orgName,
+      "tradingName" -> tradingName,
+      "isInsolvent" -> false,
+      "customerMigratedToETMPDate" -> "2018-03-03"
+    ),
     "partyType" -> "2",
     "mandationStatus" -> mandationStatus,
-    "isInsolvent" -> false,
     "deregistration" -> Json.obj(
       "effectDateOfCancellation" -> "2019-01-01"
     ),
@@ -63,6 +69,7 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     Some(Deregistration(Some(LocalDate.parse("2019-01-01")))),
     isInsolvent = false,
+    Some(migratedToETMPDate),
     None,
     missingTrader = missingTrader
   )
@@ -76,6 +83,7 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     Some(Deregistration(Some(LocalDate.parse("2019-01-01")))),
     isInsolvent = false,
+    Some(migratedToETMPDate),
     None,
     missingTrader
   )
@@ -90,6 +98,7 @@ object CustomerDetailsTestConstants {
     None,
     isInsolvent = false,
     None,
+    None,
     missingTrader
   )
 
@@ -101,7 +110,8 @@ object CustomerDetailsTestConstants {
     Some("2"),
     mandationStatus,
     None,
-    isInsolvent = false
+    isInsolvent = false,
+    None
   )
 
   val customerDetailsNoInfoVatGroup: CustomerDetails = CustomerDetails(
@@ -112,7 +122,8 @@ object CustomerDetailsTestConstants {
     Some(vatGroup),
     mandationStatus,
     None,
-    isInsolvent = false
+    isInsolvent = false,
+    None
   )
 
   val customerDetailsFnameOnly: CustomerDetails = CustomerDetails(
@@ -123,7 +134,8 @@ object CustomerDetailsTestConstants {
     Some(validParty),
     mandationStatus,
     None,
-    isInsolvent = false
+    isInsolvent = false,
+    None
   )
 
   val customerDetailsLnameOnly: CustomerDetails = CustomerDetails(
@@ -134,7 +146,8 @@ object CustomerDetailsTestConstants {
     Some(validParty),
     mandationStatus,
     None,
-    isInsolvent = false
+    isInsolvent = false,
+    None
   )
 
   val customerDetailsNoTradingName: CustomerDetails = CustomerDetails(
@@ -145,7 +158,8 @@ object CustomerDetailsTestConstants {
     Some(validParty),
     mandationStatus,
     None,
-    isInsolvent = false
+    isInsolvent = false,
+    None
   )
 
   val customerDetailsIndividual: CustomerDetails = CustomerDetails(
@@ -156,7 +170,8 @@ object CustomerDetailsTestConstants {
     Some(validParty),
     mandationStatus,
     None,
-    isInsolvent = false
+    isInsolvent = false,
+    Some(migratedToETMPDate)
   )
 
   val customerDetailsOrganisation: CustomerDetails = CustomerDetails(
@@ -167,7 +182,8 @@ object CustomerDetailsTestConstants {
     Some(validParty),
     mandationStatus,
     None,
-    isInsolvent = false
+    isInsolvent = false,
+    Some(migratedToETMPDate)
   )
 
   val customerDetailsNonDigital: CustomerDetails = CustomerDetails(
@@ -178,7 +194,8 @@ object CustomerDetailsTestConstants {
     Some(validParty),
     nonDigital,
     None,
-    isInsolvent = false
+    isInsolvent = false,
+    Some(migratedToETMPDate)
   )
 
   val customerDetailsOptedOut: CustomerDetails = CustomerDetails(
@@ -189,7 +206,8 @@ object CustomerDetailsTestConstants {
     Some(validParty),
     nonMTDfB,
     Some(Deregistration(Some(LocalDate.parse("2019-01-01")))),
-    isInsolvent = false
+    isInsolvent = false,
+    Some(migratedToETMPDate)
   )
 
   val customerDetailsAllPending: CustomerDetails = customerDetailsAllInfo.copy(
@@ -205,7 +223,8 @@ object CustomerDetailsTestConstants {
     Some(validParty),
     nonMTDfB,
     Some(Deregistration(Some(LocalDate.parse("2020-01-01")))),
-    isInsolvent = false
+    isInsolvent = false,
+    Some(migratedToETMPDate)
   )
 
   val customerDetailsFutureDeregisterOptedOutVatGroup: CustomerDetails = CustomerDetails(
@@ -216,7 +235,8 @@ object CustomerDetailsTestConstants {
     Some(vatGroup),
     nonMTDfB,
     Some(Deregistration(Some(LocalDate.parse("2020-01-01")))),
-    isInsolvent = false
+    isInsolvent = false,
+    Some(migratedToETMPDate)
   )
 
   val clientNoPartyType: CustomerDetails = CustomerDetails(
@@ -227,7 +247,8 @@ object CustomerDetailsTestConstants {
     None,
     mandationStatus,
     None,
-    isInsolvent = false
+    isInsolvent = false,
+    None
   )
 
   val customerDetailsInsolvent: CustomerDetails = customerDetailsAllInfo.copy(isInsolvent = true)

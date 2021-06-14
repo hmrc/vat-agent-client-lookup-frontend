@@ -14,16 +14,35 @@
  * limitations under the License.
  *@
 
-@this(mainTemplate: MainTemplate)
+@import views.html.templates.errors.ErrorSummary
+@import views.html.templates.inputs.SingleCheckbox
+@import uk.gov.hmrc.play.views.html.helpers.FormWithCSRF
 
-@()(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+@this(mainTemplate: MainTemplate, singleCheckbox: SingleCheckbox, formWithCSRF: FormWithCSRF, errorSummary: ErrorSummary)
 
-@mainTemplate(
-    title = messages("DirectDebitInterrupt.title"),
-    bodyClasses = None) {
+@(form: Form[Boolean])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-    <h1 class="heading-large">
-        @messages("DirectDebitInterrupt.heading")
-    </h1>
+@mainTemplate(title = if(form.hasErrors) messages("common.error.prefixTitle", messages("directDebitInterrupt.title"))
+                      else messages("directDebitInterrupt.title")) {
 
+  @errorSummary(messages("common.error.heading"), form)
+
+  <h1 class="heading-large">
+    @messages("directDebitInterrupt.title")
+  </h1>
+
+  <p>@messages("directDebitInterrupt.clientMigrated")</p>
+  <p>
+    @messages("directDebitInterrupt.toSetUp")
+    <strong class="bold">@messages("directDebitInterrupt.yourClient")</strong>
+    @messages("directDebitInterrupt.needToLogIn")
+  </p>
+
+  @formWithCSRF(action = controllers.agent.routes.DDInterruptController.submit) {
+    <div class="form-group">
+      @singleCheckbox(form("checkbox"), messages("directDebitInterrupt.iWillInform"))
+    </div>
+
+    <button class="button" type="submit">@messages("directDebitInterrupt.continue")</button>
+  }
 }
