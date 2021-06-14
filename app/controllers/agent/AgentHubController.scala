@@ -24,13 +24,14 @@ import controllers.predicates.AuthoriseAsAgentWithClient
 import forms.DDInterruptForm
 
 import javax.inject.{Inject, Singleton}
-import models.DirectDebit
+import models.{CustomerDetails, DirectDebit}
 import models.errors.DirectDebitError
 import play.api.Logger
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{CustomerDetailsService, DateService, DirectDebitService}
 import views.html.agent.{AgentHubView, DirectDebitInterruptView}
 
+import java.time.LocalDate
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -46,19 +47,21 @@ class AgentHubController @Inject()(val authenticate: AuthoriseAsAgentWithClient,
                                    implicit val executionContext: ExecutionContext
                                   ) extends BaseController(mcc) {
 
+  // scalastyle:off cyclomatic.complexity
   def show: Action[AnyContent] = authenticate.async { implicit user =>
+
+    val hasNotViewedDDInterrupt = user.session.get(viewedDDInterrupt).isEmpty
 
     for {
       customerInfo <- customerDetailsService.getCustomerDetails(user.vrn)
+      migratedToETMPWithin4M = migratedWithin4M(customerInfo)
       ddResult <-
-        if(appConfig.features.directDebitInterruptFeature() && user.session.get(viewedDDInterrupt).isEmpty) {
+        if(appConfig.features.directDebitInterruptFeature() && hasNotViewedDDInterrupt && migratedToETMPWithin4M) {
           directDebitService.getDirectDebit(user.vrn)
         } else {
           Future.successful(Left(DirectDebitError))
         }
     } yield {
-
-      val hasNotViewedDDInterrupt = user.session.get(viewedDDInterrupt).isEmpty
 
       customerInfo match {
         case Right(details) =>
@@ -73,6 +76,7 @@ class AgentHubController @Inject()(val authenticate: AuthoriseAsAgentWithClient,
       }
     }
   }
+  // scalastyle:on cyclomatic.complexity
 
   private[controllers] def ddInterrupt(directDebitInfo: HttpResult[DirectDebit]): Boolean = {
 
@@ -80,5 +84,18 @@ class AgentHubController @Inject()(val authenticate: AuthoriseAsAgentWithClient,
 
     ddStatus.contains(false)
 
+  }
+
+  private[controllers] def migratedWithin4M(customerInfo: HttpResult[CustomerDetails]): Boolean = {
+    val monthLimit: Int = 4
+    lazy val cutOffDate: LocalDate = dateService.now().minusMonths(monthLimit)
+
+    customerInfo match {
+      case Right(details) => details.customerMigratedToETMPDate.map(LocalDate.parse) match {
+        case Some(date) => date.isAfter(cutOffDate)
+        case None => false
+      }
+      case Left(_) => false
+    }
   }
 }
