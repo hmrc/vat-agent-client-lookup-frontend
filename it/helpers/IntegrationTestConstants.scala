@@ -73,7 +73,7 @@ object IntegrationTestConstants {
       "customerMigratedToETMPDate" -> "2018-03-03"
     ),
     "mandationStatus" -> mandated,
-    "missingTrader" -> false,
+    "missingTrader" -> false
   )
 
   val individualNonMTDfBJson: JsObject = Json.obj(

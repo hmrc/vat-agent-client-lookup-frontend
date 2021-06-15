@@ -94,6 +94,10 @@ class CustomerDetailsSpec extends UnitSpec {
       "no optional fields are returned" in {
         noOptionalInfoJson.as[CustomerDetails] shouldBe customerDetailsNoInfo
       }
+
+      "there are pending fields" in {
+        pendingInfoJson.as[CustomerDetails] shouldBe customerDetailsAllInfo
+      }
     }
   }
 }
