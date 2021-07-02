@@ -59,7 +59,7 @@ class DirectDebitInterruptViewSpec extends ViewBaseSpec {
       }
 
       "have the correct form action" in {
-        element("form").attr("action") shouldBe controllers.agent.routes.DDInterruptController.submit.url
+        element("form").attr("action") shouldBe controllers.agent.routes.DDInterruptController.submit().url
       }
 
       "have a button" which {

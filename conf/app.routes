@@ -26,6 +26,7 @@ GET        /send-passcode                               controllers.agent.Verify
 
 GET        /client-vat-account                          controllers.agent.AgentHubController.show
 
+GET        /direct-debit-interrupt                      controllers.agent.DDInterruptController.show
 POST       /direct-debit-interrupt                      controllers.agent.DDInterruptController.submit
 
 # Map static resources from the /public folder to the /assets URL path

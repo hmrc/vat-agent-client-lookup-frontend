@@ -42,6 +42,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
 
   object TestConfirmClientVrnController extends ConfirmClientVrnController(
     mockAuthAsAgentWithClient,
+    mockDDPredicate,
     mockCustomerDetailsService,
     serviceErrorHandler,
     mockAuditingService,
@@ -290,6 +291,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           lazy val result = {
             TestConfirmClientVrnController.redirect(FakeRequest().withSession(
               SessionKeys.clientVRN -> vrn,
+              SessionKeys.viewedDDInterrupt -> "true",
               SessionKeys.redirectUrl -> "/vat-through-software/account/change-something-about-vat",
               SessionKeys.preference -> "no",
               SessionKeys.notificationsEmail -> "an.email@host.com"
@@ -320,6 +322,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           lazy val result = {
             TestConfirmClientVrnController.redirect(FakeRequest().withSession(
               SessionKeys.preference -> "yes",
+              SessionKeys.viewedDDInterrupt -> "true",
               SessionKeys.clientVRN -> vrn,
               SessionKeys.redirectUrl -> "/vat-through-software/account/change-something-about-vat",
               SessionKeys.verifiedAgentEmail -> "an.email@host.com"
@@ -351,6 +354,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
             TestConfirmClientVrnController.redirect(FakeRequest().withSession(
               SessionKeys.preference -> "yes",
               SessionKeys.clientVRN -> vrn,
+              SessionKeys.viewedDDInterrupt -> "true",
               SessionKeys.redirectUrl -> "/vat-through-software/account/change-something-about-vat"
             ))
           }
@@ -372,6 +376,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           lazy val result = {
             TestConfirmClientVrnController.redirect(FakeRequest().withSession(
               SessionKeys.clientVRN -> vrn,
+              SessionKeys.viewedDDInterrupt -> "true",
               SessionKeys.redirectUrl -> "/vat-through-software/account/change-something-about-vat"
             ))
           }
@@ -392,6 +397,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           lazy val result = {
             TestConfirmClientVrnController.redirect(FakeRequest().withSession(
               SessionKeys.clientVRN -> vrn,
+              SessionKeys.viewedDDInterrupt -> "true",
               SessionKeys.redirectUrl -> "/random-place"
             ))
           }
@@ -412,6 +418,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           lazy val result = {
             TestConfirmClientVrnController.redirect(FakeRequest().withSession(
               SessionKeys.clientVRN -> vrn,
+              SessionKeys.viewedDDInterrupt -> "true",
               SessionKeys.redirectUrl -> ""
             ))
           }
@@ -431,23 +438,43 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
 
     "redirect URL is not in session" should {
 
-        lazy val result = {
-          TestConfirmClientVrnController.redirect(FakeRequest().withSession(
-            SessionKeys.clientVRN -> vrn,
-            SessionKeys.notificationsEmail -> "an.email@host.com"
-          ))
-        }
+      lazy val result = {
+        TestConfirmClientVrnController.redirect(FakeRequest().withSession(
+          SessionKeys.clientVRN -> vrn,
+          SessionKeys.viewedDDInterrupt -> "true",
+          SessionKeys.notificationsEmail -> "an.email@host.com"
+        ))
+      }
 
-        "return status SEE_OTHER (303)" in {
-          mockAgentAuthorised()
-          mockCustomerDetailsSuccess(customerDetailsOrganisation)
-          status(result) shouldBe Status.SEE_OTHER
-        }
+      "return status SEE_OTHER (303)" in {
+        mockAgentAuthorised()
+        mockCustomerDetailsSuccess(customerDetailsOrganisation)
+        status(result) shouldBe Status.SEE_OTHER
+      }
 
-        "redirect to WhatToDo controller" in {
-          redirectLocation(result) shouldBe Some(controllers.agent.routes.AgentHubController.show().url)
-        }
+      "redirect to WhatToDo controller" in {
+        redirectLocation(result) shouldBe Some(controllers.agent.routes.AgentHubController.show().url)
+      }
+    }
 
+    "the DD interrupt value is not in session" should {
+
+      lazy val result = {
+        TestConfirmClientVrnController.redirect(FakeRequest().withSession(
+          SessionKeys.clientVRN -> vrn,
+          SessionKeys.notificationsEmail -> "an.email@host.com"
+        ))
+      }
+
+      "return status SEE_OTHER (303)" in {
+        mockAgentAuthorised()
+        mockCustomerDetailsSuccess(customerDetailsOrganisation)
+        status(result) shouldBe Status.SEE_OTHER
+      }
+
+      "redirect to the DD interrupt controller" in {
+        redirectLocation(result) shouldBe Some(controllers.agent.routes.DDInterruptController.show().url)
+      }
     }
   }
 }
