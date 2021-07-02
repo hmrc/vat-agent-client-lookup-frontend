@@ -65,6 +65,8 @@ trait MockAuth extends TestUtil with BeforeAndAfterEach with MockitoSugar {
       ec
     )
 
+  val mockDDPredicate: DDInterruptPredicate = new DDInterruptPredicate(ec)
+
   val mockAgentOnlyAuthPredicate: AuthoriseAsAgentOnly =
     new AuthoriseAsAgentOnly(
       mockEnrolmentsAuthService,
@@ -75,11 +77,7 @@ trait MockAuth extends TestUtil with BeforeAndAfterEach with MockitoSugar {
       mockConfig
     )
 
-  val mockPreferencePredicate: PreferencePredicate = new PreferencePredicate(
-    mcc,
-    mockConfig,
-    ec
-  )
+  val mockPreferencePredicate: PreferencePredicate = new PreferencePredicate
 
   def mockIndividualAuthorised(): OngoingStubbing[Future[~[Option[AffinityGroup], Enrolments]]] =
     setupAuthResponse(Future.successful(

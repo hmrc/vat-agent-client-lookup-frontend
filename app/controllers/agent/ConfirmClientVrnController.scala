@@ -20,7 +20,8 @@ import audit.AuditService
 import audit.models.{AuthenticateAgentAuditModel, GetClientBusinessNameAuditModel}
 import common.SessionKeys
 import config.{AppConfig, ErrorHandler}
-import controllers.predicates.AuthoriseAsAgentWithClient
+import controllers.predicates.{AuthoriseAsAgentWithClient, DDInterruptPredicate}
+
 import javax.inject.{Inject, Singleton}
 import models.errors._
 import play.api.Logger
@@ -34,10 +35,11 @@ import views.html.errors.{AccountMigrationView, NotSignedUpView}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class ConfirmClientVrnController @Inject()(val authenticate: AuthoriseAsAgentWithClient,
-                                           val customerDetailsService: CustomerDetailsService,
-                                           val errorHandler: ErrorHandler,
-                                           val auditService: AuditService,
+class ConfirmClientVrnController @Inject()(authenticate: AuthoriseAsAgentWithClient,
+                                           ddInterrupt: DDInterruptPredicate,
+                                           customerDetailsService: CustomerDetailsService,
+                                           errorHandler: ErrorHandler,
+                                           auditService: AuditService,
                                            mcc: MessagesControllerComponents,
                                            confirmClientVrnView: ConfirmClientVrnView,
                                            accountMigrationView: AccountMigrationView,
@@ -76,9 +78,10 @@ class ConfirmClientVrnController @Inject()(val authenticate: AuthoriseAsAgentWit
 
       Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectUrl))
         .removingFromSession(SessionKeys.clientVRN)
+        .removingFromSession(SessionKeys.viewedDDInterrupt)
   }
 
-  def redirect: Action[AnyContent] = authenticate {
+  def redirect: Action[AnyContent] = (authenticate andThen ddInterrupt) {
 
     implicit user =>
 

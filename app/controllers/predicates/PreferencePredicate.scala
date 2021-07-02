@@ -20,15 +20,14 @@ import javax.inject.{Inject, Singleton}
 import common.SessionKeys
 import config.AppConfig
 import models.Agent
-import play.api.mvc.{ActionRefiner, MessagesControllerComponents, Result}
+import play.api.mvc.{ActionRefiner, Result}
 import play.api.mvc.Results.Redirect
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class PreferencePredicate @Inject()(mcc: MessagesControllerComponents,
-                                    implicit val appConfig: AppConfig,
-                                    implicit val executionContext: ExecutionContext) extends ActionRefiner[Agent, Agent] {
+class PreferencePredicate @Inject()(implicit val appConfig: AppConfig,
+                                    override val executionContext: ExecutionContext) extends ActionRefiner[Agent, Agent] {
 
   override def refine[A](request: Agent[A]): Future[Either[Result, Agent[A]]] = {
 

@@ -38,7 +38,7 @@
     @messages("directDebitInterrupt.needToLogIn")
   </p>
 
-  @formWithCSRF(action = controllers.agent.routes.DDInterruptController.submit) {
+  @formWithCSRF(action = controllers.agent.routes.DDInterruptController.submit()) {
     <div class="form-group">
       @singleCheckbox(form("checkbox"), messages("directDebitInterrupt.iWillInform"))
     </div>

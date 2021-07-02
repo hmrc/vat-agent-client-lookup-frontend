@@ -16,19 +16,139 @@
 
 package controllers.agent
 
+import assets.BaseTestConstants
+import assets.CustomerDetailsTestConstants._
+import assets.DirectDebitConstants._
 import common.SessionKeys
 import controllers.ControllerBaseSpec
+import mocks.services.{MockCustomerDetailsService, MockDateService, MockDirectDebitService}
 import play.api.http.Status
-import play.api.mvc.AnyContentAsEmpty
+import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.agent.DirectDebitInterruptView
 
-class DDInterruptControllerSpec extends ControllerBaseSpec {
+import java.time.LocalDate
+import scala.concurrent.Future
 
-  val controller = new DDInterruptController(mcc, mockAuthAsAgentWithClient, inject[DirectDebitInterruptView])
+class DDInterruptControllerSpec extends ControllerBaseSpec with MockDateService with
+  MockCustomerDetailsService with MockDirectDebitService {
+
+  lazy val controller = new DDInterruptController(
+    mcc,
+    mockAuthAsAgentWithClient,
+    inject[DirectDebitInterruptView],
+    mockDateService,
+    mockCustomerDetailsService,
+    mockDirectDebitService,
+  )
   lazy val ddSessionRequest: FakeRequest[AnyContentAsEmpty.type] =
     fakeRequestWithMtdVatAgentData.withSession(SessionKeys.viewedDDInterrupt -> "true")
+
+  val staticDate: LocalDate = LocalDate.parse("2018-05-01")
+
+  def redirectAssertions(result: Future[Result]): Unit = {
+    "return 303" in {
+      status(result) shouldBe Status.SEE_OTHER
+    }
+
+    "redirect to the ConfirmClientVrnController" in {
+      redirectLocation(result) shouldBe Some(controllers.agent.routes.ConfirmClientVrnController.redirect().url)
+    }
+
+    "add the DD session key to the session" in {
+      session(result).get(SessionKeys.viewedDDInterrupt) shouldBe Some("true")
+    }
+  }
+
+  "The .show action" when {
+
+    "the DD feature switch is on" when {
+
+      "the client was migrated within 4 months" when {
+
+        "the client does not have a direct debit mandate" should {
+
+          lazy val result = {
+            mockAgentAuthorised()
+            mockCustomerDetailsSuccess(customerDetailsIndividual)
+            setupMockDateService(staticDate)
+            mockDirectDebitResponse(ddNoMandateFound)
+            controller.show(fakeRequestWithVrnAndRedirectUrl)
+          }
+
+          "return 200" in {
+            status(result) shouldBe Status.OK
+          }
+        }
+
+        "the client has a direct debit mandate" should {
+          lazy val result = {
+            mockAgentAuthorised()
+            mockCustomerDetailsSuccess(customerDetailsIndividual)
+            setupMockDateService(staticDate)
+            mockDirectDebitResponse(ddMandateFound)
+            controller.show(fakeRequestWithVrnAndRedirectUrl)
+          }
+          redirectAssertions(result)
+        }
+
+        "the DD call fails" should {
+          lazy val result = {
+            mockAgentAuthorised()
+            mockCustomerDetailsSuccess(customerDetailsIndividual)
+            setupMockDateService(staticDate)
+            mockDirectDebitResponse(ddFailureResponse)
+            controller.show(fakeRequestWithVrnAndRedirectUrl)
+          }
+          redirectAssertions(result)
+        }
+      }
+
+      "the client was migrated over 4 months ago" should {
+        lazy val result = {
+          mockAgentAuthorised()
+          mockCustomerDetailsSuccess(customerDetailsIndividual.copy(customerMigratedToETMPDate = Some("2017-01-01")))
+          setupMockDateService(staticDate)
+          controller.show(fakeRequestWithVrnAndRedirectUrl)
+        }
+        redirectAssertions(result)
+      }
+
+      "the customer info call fails" should {
+        lazy val result = {
+          mockAgentAuthorised()
+          mockCustomerDetailsError(BaseTestConstants.unexpectedError)
+          controller.show(fakeRequestWithVrnAndRedirectUrl)
+        }
+        redirectAssertions(result)
+      }
+    }
+
+    "the DD feature switch is off" should {
+      lazy val result = {
+        mockAgentAuthorised()
+        mockConfig.features.directDebitInterruptFeature(false)
+        controller.show(fakeRequestWithVrnAndRedirectUrl)
+      }
+      redirectAssertions(result)
+    }
+
+    "the user is unauthorised" should {
+      lazy val result = {
+        mockUnauthorised()
+        controller.show(FakeRequest())
+      }
+
+      "return 303" in {
+        status(result) shouldBe Status.SEE_OTHER
+      }
+
+      "redirect to the Select Client VRN controller (no client VRN in session)" in {
+        redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show().url)
+      }
+    }
+  }
 
   "The .submit action" when {
 
@@ -144,6 +264,34 @@ class DDInterruptControllerSpec extends ControllerBaseSpec {
 
       "redirect to the Select Client VRN controller (no client VRN in session)" in {
         redirectLocation(result) shouldBe Some(controllers.agent.routes.SelectClientVrnController.show().url)
+      }
+    }
+  }
+
+  "The .migratedWithin4M function" when {
+
+    "the migration date is more recent than 4 months" should {
+
+      "return true" in {
+        setupMockDateService(staticDate)
+        controller.migratedWithin4M(customerDetailsIndividual) shouldBe true
+      }
+    }
+
+    "the migration date is further back than 4 months" should {
+
+      "return false" in {
+        setupMockDateService(staticDate)
+        controller.migratedWithin4M(
+          customerDetailsIndividual.copy(customerMigratedToETMPDate = Some("2017-01-01"))
+        ) shouldBe false
+      }
+    }
+
+    "there is no migration date provided" should {
+
+      "return false" in {
+        controller.migratedWithin4M(customerDetailsNoInfo) shouldBe false
       }
     }
   }

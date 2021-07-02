@@ -18,32 +18,27 @@ package controllers.agent
 
 import assets.BaseTestConstants
 import assets.CustomerDetailsTestConstants._
-import assets.DirectDebitConstants.{ddFailureResponse, ddMandateFound, ddNoMandateFound}
-import common.SessionKeys.viewedDDInterrupt
 import controllers.ControllerBaseSpec
 import mocks.services._
 import org.jsoup.Jsoup
 import play.api.mvc.Result
 import play.mvc.Http.Status._
-import views.html.agent.{AgentHubView, DirectDebitInterruptView}
+import views.html.agent.AgentHubView
 
 import java.time.LocalDate
 import scala.concurrent.Future
 
 class AgentHubControllerSpec extends ControllerBaseSpec
                               with MockCustomerDetailsService
-                              with MockDateService
-                              with MockDirectDebitService {
+                              with MockDateService {
 
   lazy val controller = new AgentHubController(
     mockAuthAsAgentWithClient,
     mockErrorHandler,
     mockCustomerDetailsService,
     mockDateService,
-    mockDirectDebitService,
     mcc,
     inject[AgentHubView],
-    inject[DirectDebitInterruptView],
     mockConfig,
     ec
   )
@@ -52,213 +47,61 @@ class AgentHubControllerSpec extends ControllerBaseSpec
 
   "AgentHubController.show()" when {
 
-    "the DD interrupt feature switch is off" when {
+    "the customer is a missing trader" when {
 
-      "the customer is a missing trader" when {
+      "they do not have a pending PPOB" should {
 
-        "they do not have a pending PPOB" should {
+        "redirect the customer to manage-vat" in {
+          mockAgentAuthorised()
+          mockCustomerDetailsSuccess(customerDetailsAllInfo)
+          setupMockDateService(staticDate)
 
-          "redirect the customer to manage-vat" in {
-            mockAgentAuthorised()
-            mockCustomerDetailsSuccess(customerDetailsAllInfo)
-            setupMockDateService(staticDate)
+          val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
-            val result: Future[Result] = {
-              mockConfig.features.directDebitInterruptFeature(false)
-              controller.show()(fakeRequestWithVrnAndRedirectUrl)
-            }
-
-            status(result) shouldBe SEE_OTHER
-          }
-        }
-
-        "they have a pending PPOB" should {
-
-          "render the AgentHubPage" in {
-            mockAgentAuthorised()
-            mockCustomerDetailsSuccess(customerDetailsAllPending.copy(missingTrader = true))
-            setupMockDateService(staticDate)
-
-            val result: Future[Result] = {
-              mockConfig.features.directDebitInterruptFeature(false)
-              controller.show()(fakeRequestWithVrnAndRedirectUrl)
-            }
-
-            status(result) shouldBe OK
-            messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client’s VAT details"
-          }
+          status(result) shouldBe SEE_OTHER
         }
       }
 
-      "the customer isn't a missing trader" should {
+      "they have a pending PPOB" should {
 
         "render the AgentHubPage" in {
           mockAgentAuthorised()
-          mockCustomerDetailsSuccess(customerDetailsFnameOnly)
+          mockCustomerDetailsSuccess(customerDetailsAllPending.copy(missingTrader = true))
           setupMockDateService(staticDate)
 
-          val result: Future[Result] = {
-            mockConfig.features.directDebitInterruptFeature(false)
-            controller.show()(fakeRequestWithVrnAndRedirectUrl)
-          }
+          val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
           status(result) shouldBe OK
           messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client’s VAT details"
-        }
-      }
-
-      "the customerDetails call fails" should {
-
-        "return an error" in {
-          mockAgentAuthorised()
-          mockCustomerDetailsError(BaseTestConstants.unexpectedError)
-          setupMockDateService(staticDate)
-
-          val result: Future[Result] = {
-            mockConfig.features.directDebitInterruptFeature(false)
-            controller.show()(fakeRequestWithVrnAndRedirectUrl)
-          }
-
-          status(result) shouldBe INTERNAL_SERVER_ERROR
-          Jsoup.parse(bodyOf(result)).title() shouldBe "There is a problem with the service - Your client’s VAT details - GOV.UK"
         }
       }
     }
 
-    "the DD interrupt feature is on" when {
+    "the customer isn't a missing trader" should {
 
-      "the direct debit service returns false" should {
-
-        lazy val result: Future[Result] = {
-          mockConfig.features.directDebitInterruptFeature(true)
-          mockAgentAuthorised()
-          mockCustomerDetailsSuccess(customerDetailsIndividual)
-          setupMockDateService(staticDate)
-          mockDirectDebitResponse(ddNoMandateFound)
-          controller.show()(fakeRequestWithVrnAndRedirectUrl)
-        }
-
-        "return 200" in {
-          status(result) shouldBe OK
-        }
-
-        "render the DD interrupt page" in {
-          messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client needs to set up a new Direct Debit"
-        }
-
-      }
-
-      "the direct debit service returns true" should {
-
-        lazy val result: Future[Result] = {
-          mockConfig.features.directDebitInterruptFeature(true)
-          mockAgentAuthorised()
-          mockCustomerDetailsSuccess(customerDetailsIndividual)
-          setupMockDateService(staticDate)
-          mockDirectDebitResponse(ddMandateFound)
-          controller.show()(fakeRequestWithVrnAndRedirectUrl)
-        }
-
-        "return 200" in {
-          status(result) shouldBe OK
-        }
-
-        "render the agent hub page" in {
-          messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client’s VAT details"
-        }
-      }
-
-      "the customer has already viewed the DD interrupt page" should {
-
-        lazy val result: Future[Result] = {
-          mockConfig.features.directDebitInterruptFeature(true)
-          mockAgentAuthorised()
-          mockCustomerDetailsSuccess(customerDetailsIndividual)
-          setupMockDateService(staticDate)
-          controller.show()(fakeRequestWithVrnAndRedirectUrl.withSession(viewedDDInterrupt -> "true"))
-        }
-
-        "return 200" in {
-          status(result) shouldBe OK
-        }
-
-        "render the agent hub page" in {
-          messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client’s VAT details"
-        }
-      }
-
-      "the customer has a migration date older than 4 months" should {
-
-        lazy val result: Future[Result] = {
-          mockConfig.features.directDebitInterruptFeature(true)
-          mockAgentAuthorised()
-          mockCustomerDetailsSuccess(customerDetailsIndividual.copy(customerMigratedToETMPDate = Some("2017-01-01")))
-          setupMockDateService(staticDate)
-          controller.show()(fakeRequestWithVrnAndRedirectUrl)
-        }
-
-        "return 200" in {
-          status(result) shouldBe OK
-        }
-
-        "render the agent hub page" in {
-          messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client’s VAT details"
-        }
-      }
-
-      "the DD service returns an error" should {
-
-        lazy val result: Future[Result] = {
-          mockConfig.features.directDebitInterruptFeature(true)
-          mockAgentAuthorised()
-          mockCustomerDetailsSuccess(customerDetailsIndividual)
-          setupMockDateService(staticDate)
-          mockDirectDebitResponse(ddFailureResponse)
-          controller.show()(fakeRequestWithVrnAndRedirectUrl)
-        }
-
-        "return 200" in {
-          status(result) shouldBe OK
-        }
-
-        "render the agent hub page" in {
-          messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client’s VAT details"
-        }
-      }
-    }
-  }
-
-  "The .migratedWithin4M function" when {
-
-    "the migration date is more recent than 4 months" should {
-
-      "return true" in {
+      "render the AgentHubPage" in {
+        mockAgentAuthorised()
+        mockCustomerDetailsSuccess(customerDetailsFnameOnly)
         setupMockDateService(staticDate)
-        controller.migratedWithin4M(Right(customerDetailsIndividual)) shouldBe true
+
+        val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
+
+        status(result) shouldBe OK
+        messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client’s VAT details"
       }
     }
 
-    "the migration date is further back than 4 months" should {
+    "the customerDetails call fails" should {
 
-      "return false" in {
+      "return an error" in {
+        mockAgentAuthorised()
+        mockCustomerDetailsError(BaseTestConstants.unexpectedError)
         setupMockDateService(staticDate)
-        controller.migratedWithin4M(
-          Right(customerDetailsIndividual.copy(customerMigratedToETMPDate = Some("2017-01-01")))
-        ) shouldBe false
-      }
-    }
 
-    "there is no migration date provided" should {
+        val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
-      "return false" in {
-        controller.migratedWithin4M(Right(customerDetailsNoInfo)) shouldBe false
-      }
-    }
-
-    "there is no customer info provided" should {
-
-      "return false" in {
-        controller.migratedWithin4M(Left(BaseTestConstants.unexpectedError)) shouldBe false
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+        Jsoup.parse(bodyOf(result)).title() shouldBe "There is a problem with the service - Your client’s VAT details - GOV.UK"
       }
     }
   }

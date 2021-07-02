@@ -21,18 +21,45 @@ import config.AppConfig
 import controllers.BaseController
 import controllers.predicates.AuthoriseAsAgentWithClient
 import forms.DDInterruptForm
+import models.CustomerDetails
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.{CustomerDetailsService, DateService, DirectDebitService}
 import views.html.agent.DirectDebitInterruptView
 
+import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class DDInterruptController @Inject()(mcc: MessagesControllerComponents,
                                       authenticate: AuthoriseAsAgentWithClient,
-                                      ddInterruptView: DirectDebitInterruptView)
-                                     (implicit val appConfig: AppConfig) extends BaseController(mcc) {
+                                      ddInterruptView: DirectDebitInterruptView,
+                                      dateService: DateService,
+                                      customerDetailsService: CustomerDetailsService,
+                                      directDebitService: DirectDebitService)
+                                     (implicit val appConfig: AppConfig,
+                                      ec: ExecutionContext) extends BaseController(mcc) {
 
-  val submit: Action[AnyContent] = authenticate { implicit agent =>
+  def show: Action[AnyContent] = authenticate.async { implicit agent =>
+    if(appConfig.features.directDebitInterruptFeature()) {
+      customerDetailsService.getCustomerDetails(agent.vrn).flatMap {
+        case Right(details) if migratedWithin4M(details) =>
+          directDebitService.getDirectDebit(agent.vrn).map {
+            case Right(directDebit) if !directDebit.directDebitMandateFound =>
+              Ok(ddInterruptView(DDInterruptForm.form))
+            case _ => Redirect(routes.ConfirmClientVrnController.redirect().url)
+                        .addingToSession(SessionKeys.viewedDDInterrupt -> "true")
+          }
+        case _ => Future.successful(Redirect(routes.ConfirmClientVrnController.redirect().url)
+                    .addingToSession(SessionKeys.viewedDDInterrupt -> "true"))
+      }
+    } else {
+      Future.successful(Redirect(routes.ConfirmClientVrnController.redirect().url)
+        .addingToSession(SessionKeys.viewedDDInterrupt -> "true"))
+    }
+  }
+
+  def submit: Action[AnyContent] = authenticate { implicit agent =>
     (appConfig.features.directDebitInterruptFeature(), agent.session.get(SessionKeys.viewedDDInterrupt).isDefined) match {
       case (true, true) | (false, _) =>
         Redirect(controllers.agent.routes.AgentHubController.show())
@@ -42,6 +69,16 @@ class DDInterruptController @Inject()(mcc: MessagesControllerComponents,
           _ => Redirect(controllers.agent.routes.AgentHubController.show())
                 .addingToSession(SessionKeys.viewedDDInterrupt -> "true")
         )
+    }
+  }
+
+  private[controllers] def migratedWithin4M(customerInfo: CustomerDetails): Boolean = {
+    val monthLimit: Int = 4
+    lazy val cutOffDate: LocalDate = dateService.now().minusMonths(monthLimit)
+
+    customerInfo.customerMigratedToETMPDate.map(LocalDate.parse) match {
+      case Some(date) => date.isAfter(cutOffDate)
+      case None => false
     }
   }
 }

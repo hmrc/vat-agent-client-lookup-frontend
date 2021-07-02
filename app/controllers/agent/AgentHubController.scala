@@ -16,86 +16,38 @@
 
 package controllers.agent
 
-import common.SessionKeys.viewedDDInterrupt
 import config.{AppConfig, ErrorHandler}
-import connectors.httpParsers.ResponseHttpParser.HttpResult
 import controllers.BaseController
 import controllers.predicates.AuthoriseAsAgentWithClient
-import forms.DDInterruptForm
-
 import javax.inject.{Inject, Singleton}
-import models.{CustomerDetails, DirectDebit}
-import models.errors.DirectDebitError
 import play.api.Logger
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.{CustomerDetailsService, DateService, DirectDebitService}
-import views.html.agent.{AgentHubView, DirectDebitInterruptView}
-
-import java.time.LocalDate
-import scala.concurrent.{ExecutionContext, Future}
+import services.{CustomerDetailsService, DateService}
+import views.html.agent.AgentHubView
+import scala.concurrent.ExecutionContext
 
 @Singleton
-class AgentHubController @Inject()(val authenticate: AuthoriseAsAgentWithClient,
-                                   val serviceErrorHandler: ErrorHandler,
-                                   val customerDetailsService: CustomerDetailsService,
-                                   val dateService: DateService,
-                                   val directDebitService: DirectDebitService,
+class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
+                                   serviceErrorHandler: ErrorHandler,
+                                   customerDetailsService: CustomerDetailsService,
+                                   dateService: DateService,
                                    mcc: MessagesControllerComponents,
                                    agentHubView: AgentHubView,
-                                   ddInterruptView: DirectDebitInterruptView,
                                    implicit val appConfig: AppConfig,
-                                   implicit val executionContext: ExecutionContext
-                                  ) extends BaseController(mcc) {
+                                   implicit val executionContext: ExecutionContext) extends BaseController(mcc) {
 
-  // scalastyle:off cyclomatic.complexity
   def show: Action[AnyContent] = authenticate.async { implicit user =>
 
-    val hasNotViewedDDInterrupt = user.session.get(viewedDDInterrupt).isEmpty
-
-    for {
-      customerInfo <- customerDetailsService.getCustomerDetails(user.vrn)
-      migratedToETMPWithin4M = migratedWithin4M(customerInfo)
-      ddResult <-
-        if(appConfig.features.directDebitInterruptFeature() && hasNotViewedDDInterrupt && migratedToETMPWithin4M) {
-          directDebitService.getDirectDebit(user.vrn)
+    customerDetailsService.getCustomerDetails(user.vrn).map {
+      case Right(details) =>
+        if (details.missingTrader && !details.hasPendingPPOB) {
+          Redirect(appConfig.manageVatMissingTraderUrl)
         } else {
-          Future.successful(Left(DirectDebitError))
+          Ok(agentHubView(details, user.vrn, dateService.now()))
         }
-    } yield {
-
-      customerInfo match {
-        case Right(details) =>
-          (details.missingTrader, details.hasPendingPPOB, ddInterrupt(ddResult)) match {
-            case (_, _, true) if hasNotViewedDDInterrupt => Ok(ddInterruptView(DDInterruptForm.form))
-            case (true, false, _) => Redirect(appConfig.manageVatMissingTraderUrl)
-            case _ => Ok(agentHubView(details, user.vrn, dateService.now()))
-          }
-        case Left(error) =>
-          Logger.warn(s"[AgentHubController][show] - received an error from CustomerDetailsService: $error")
-          serviceErrorHandler.showInternalServerError
-      }
-    }
-  }
-  // scalastyle:on cyclomatic.complexity
-
-  private[controllers] def ddInterrupt(directDebitInfo: HttpResult[DirectDebit]): Boolean = {
-
-    val ddStatus: Option[Boolean] = directDebitInfo.fold(_ => None, dd => Some(dd.directDebitMandateFound))
-
-    ddStatus.contains(false)
-
-  }
-
-  private[controllers] def migratedWithin4M(customerInfo: HttpResult[CustomerDetails]): Boolean = {
-    val monthLimit: Int = 4
-    lazy val cutOffDate: LocalDate = dateService.now().minusMonths(monthLimit)
-
-    customerInfo match {
-      case Right(details) => details.customerMigratedToETMPDate.map(LocalDate.parse) match {
-        case Some(date) => date.isAfter(cutOffDate)
-        case None => false
-      }
-      case Left(_) => false
+      case Left(error) =>
+        Logger.warn(s"[AgentHubController][show] - received an error from CustomerDetailsService: $error")
+        serviceErrorHandler.showInternalServerError
     }
   }
 }
