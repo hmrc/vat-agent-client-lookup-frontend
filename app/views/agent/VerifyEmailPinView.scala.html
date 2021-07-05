@@ -31,15 +31,17 @@ text: Text)
     <span id="form-hint" class="form-hint">@messages("pinView.formHint")</span>
 }
 
+@backLink = {
+    <a class="link-back" href=@startJourneyUrl>@messages("base.back")</a>
+}
+
 @startJourneyUrl = @{controllers.agent.routes.CapturePreferenceController.show().url}
 
 @resendVerificationUrl = @{controllers.agent.routes.VerifyEmailPinController.requestPasscode().url}
 
 @mainTemplate(
-    title = if(pinviewForm.hasErrors) messages("common.error.prefixTitle", messages("pinView.title")) else messages("pinView.title")
+    title = if(pinviewForm.hasErrors) messages("common.error.prefixTitle", messages("pinView.title")) else messages("pinView.title"), backLinkContent = Some(backLink)
 ){
-
-    <a class="link-back" href=@startJourneyUrl>@messages("base.back")</a>
 
     @errorSummary(messages("common.error.heading"), pinviewForm)
 

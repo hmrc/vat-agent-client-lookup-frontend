@@ -36,11 +36,13 @@
   <span id="form-hint" class="form-hint">@messages("capturePref.email.hintAlternative")</span>
 }
 
+@backLink = {
+    <a class="link-back" href='@controllers.agent.routes.AgentHubController.show()'>@messages("base.back")</a>
+}
+
 @defining(messages("capturePref.noLetterTitle")) { pageTitle  =>
 
-  @mainTemplate(if(preferenceForm.errors.nonEmpty) messages("common.error.prefixTitle", pageTitle) else pageTitle) {
-
-    <a class="link-back" href='@controllers.agent.routes.AgentHubController.show()'>@messages("base.back")</a>
+  @mainTemplate(if(preferenceForm.errors.nonEmpty) messages("common.error.prefixTitle", pageTitle) else pageTitle, backLinkContent = Some(backLink)) {
 
     @errorSummary(messages("common.error.heading"), preferenceForm)
 

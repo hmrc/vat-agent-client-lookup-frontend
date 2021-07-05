@@ -30,19 +30,22 @@
                                                                           appConfig: AppConfig,
                                                                           user: User[_])
 
-@mainTemplate(title = messages("agentHub.heading"), bodyClasses = None, mainClass = Some("full-width")) {
-
-  <div id="breadcrumb" class="breadcrumbs soft--top">
+@breadcrumbLinks = {
+<div id="breadcrumb" class="breadcrumbs soft--top">
     <ol class="push--top">
-      <li>
-        <a id="breadcrumb-asa"
-           href="@{appConfig.agentServicesUrl}">@messages("breadcrumb.agentServices")</a>
-      </li>
-      <li aria-current="page" id="clients-vat-account">
-        @messages("agentHub.heading")
-      </li>
+        <li>
+            <a id="breadcrumb-asa"
+               href="@{appConfig.agentServicesUrl}">@messages("breadcrumb.agentServices")</a>
+        </li>
+        <li aria-current="page" id="clients-vat-account">
+            @messages("agentHub.heading")
+        </li>
     </ol>
-  </div>
+</div>
+}
+
+@mainTemplate(title = messages("agentHub.heading"), bodyClasses = None, backLinkContent = Some(breadcrumbLinks), mainClass = Some("full-width")) {
+
   <header class="page-heading push--top">
     <h1 class="heading-xlarge">@messages("agentHub.heading")</h1>
     <span class="form-hint bottom-margin">@messages("agentHub.vrn", vrn)<br/>
