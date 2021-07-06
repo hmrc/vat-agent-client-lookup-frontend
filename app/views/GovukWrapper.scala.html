@@ -34,6 +34,7 @@ hmrcGovUkTemplate: GovUkTemplate)
 
 @(appConfig: AppConfig,
   title: String,
+  backLinkContent: Option[Html] = None,
   mainClass: Option[String] = None,
   mainDataAttributes: Option[Html] = None,
   bodyClasses: Option[String] = None,
@@ -96,7 +97,30 @@ hmrcGovUkTemplate: GovUkTemplate)
       navLinks = Some(headerNavLinks))
 }
 
-@afterHeader = {}
+@phaseBanner = {
+<div class="beta-banner">
+    <p>
+        <strong id="phase" class="phase-tag">@messages("banner.phaseName")</strong>
+        <span>@messages("banner.newService")
+                <a id="beta-banner-feedback" href="@appConfig.feedbackUrl">@messages("banner.feedback")</a>
+            @messages("banner.feedbackImprove")</span>
+    </p>
+</div>
+}
+
+@afterHeader = {
+    <div class="centered-content">
+        <div class="service-info">
+            @phaseBanner
+        </div>
+        @views.html.language_selection(
+        appConfig.languageMap,
+        appConfig.routeToSwitchLanguage,
+        customClass = Some("text--right")
+        )
+        @backLinkContent
+    </div>
+}
 
 @bodyEnd = {
     @footer(
@@ -109,17 +133,6 @@ hmrcGovUkTemplate: GovUkTemplate)
 
 @footerTop = {}
 
-@phaseBanner = {
-    <div class="beta-banner">
-        <p>
-            <strong id="phase" class="phase-tag">@messages("banner.phaseName")</strong>
-            <span>@messages("banner.newService")
-                <a id="beta-banner-feedback" href="@appConfig.feedbackUrl">@messages("banner.feedback")</a>
-            @messages("banner.feedbackImprove")</span>
-        </p>
-    </div>
-}
-
 @serviceInfoHtml = {
     @serviceInfo(
       betaBanner = phaseBanner,
@@ -129,12 +142,6 @@ hmrcGovUkTemplate: GovUkTemplate)
 }
 
 @mainContentHeaderContent = {
-    <div class="text--right">@views.html.language_selection(
-        appConfig.languageMap,
-        appConfig.routeToSwitchLanguage,
-        customClass = None
-    )</div>
-
     @if(contentHeader.isDefined) {
         @mainContentHeader(contentHeader = contentHeader.get)
     }
@@ -148,9 +155,9 @@ hmrcGovUkTemplate: GovUkTemplate)
       mainClass = mainClass,
       mainDataAttributes = mainDataAttributes,
       mainContentHeader = mainContentHeaderContent,
-      serviceInfo = serviceInfoHtml,
       getHelpForm = getHelpForm,
-      sidebar = sidebar)
+      sidebar = sidebar
+    )
 }
 
 @pageTitle = @{

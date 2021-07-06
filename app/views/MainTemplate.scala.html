@@ -25,6 +25,7 @@
   sidebarLinks: Option[Html] = None,
   contentHeader: Option[Html] = None,
   bodyClasses: Option[String] = None,
+  backLinkContent: Option[Html] = None,
   mainClass: Option[String] = None,
   scriptElem: Option[Html] = None,
   showSignOut: Boolean = true,
@@ -40,6 +41,7 @@
 
 @govukWrapper(appConfig = appConfig,
                title = title,
+               backLinkContent = backLinkContent,
                mainClass = mainClass,
                bodyClasses = bodyClasses,
                sidebar = sidebarContent,
