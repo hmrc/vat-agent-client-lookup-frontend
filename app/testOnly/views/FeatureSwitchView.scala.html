@@ -18,7 +18,7 @@
 @import helper.CSRF
 @import views.html.templates.inputs.SingleCheckbox
 
-@this(mainTemplate: MainTemplate,
+@this(mainTemplate: MainTemplateOriginal,
     singleCheckbox: SingleCheckbox)
 
 @(form: Form[FeatureSwitchModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
