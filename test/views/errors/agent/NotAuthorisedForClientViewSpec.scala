@@ -32,8 +32,8 @@ class NotAuthorisedForClientViewSpec extends ViewBaseSpec {
     object Selectors {
       val serviceName = ".header__menu__proposition-name"
       val pageHeading = "article h1"
-      val information = "article > p:nth-child(3)"
-      val agentServicesLink = "article > p:nth-child(3) > a:nth-child(1)"
+      val information = "article > p:nth-child(2)"
+      val agentServicesLink = "article > p:nth-child(2) > a:nth-child(1)"
       val button = "article .button"
       val backLink = ".link-back"
     }
