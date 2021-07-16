@@ -21,9 +21,9 @@
 @(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @mainContent = {
-<h1 class="govuk-heading-xl">@messages(heading)</h1>
+  <h1 class="govuk-heading-xl">@messages(heading)</h1>
 
-<p class="govuk-body">@messages(message)</p>
+  <p class="govuk-body">@messages(message)</p>
 }
 
 @mainTemplate(pageTitle = messages(pageTitle))(mainContent)

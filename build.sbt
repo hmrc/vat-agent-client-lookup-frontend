@@ -29,8 +29,8 @@ resolvers += "hmrc-releases-local" at "https://artefacts.tax.service.gov.uk/arti
 
 val bootstrapPlayVersion       = "5.4.0"
 val govTemplateVersion         = "5.68.0-play-26"
-val playFrontendGovUk          = "0.71.0-play-26"
-val playFrontendHmrc           = "0.58.0-play-26"
+val playFrontendGovUk          = "0.80.0-play-26"
+val playFrontendHmrc           = "0.83.0-play-26"
 val playPartialsVersion        = "8.1.0-play-26"
 val playUiVersion              = "9.6.0-play-26"
 val playLanguageVersion        = "5.1.0-play-26"
