@@ -67,6 +67,7 @@ trait AppConfig {
   val difficultiesPayingUrl: String
   val gtmContainer: String
   val financialTransactionsBaseUrl: String
+  val contactFormServiceIdentifier: String
 }
 
 @Singleton
@@ -77,7 +78,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override val features = new Features(runModeConfiguration)
 
   override lazy val contactHost: String = sc.getString(Keys.contactFrontendHost)
-  private val contactFormServiceIdentifier = "VATC"
+  override lazy val contactFormServiceIdentifier = "VATC"
   override lazy val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   override lazy val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
 

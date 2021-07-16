@@ -29,6 +29,8 @@ resolvers += "hmrc-releases-local" at "https://artefacts.tax.service.gov.uk/arti
 
 val bootstrapPlayVersion       = "5.4.0"
 val govTemplateVersion         = "5.68.0-play-26"
+val playFrontendGovUk          = "0.71.0-play-26"
+val playFrontendHmrc           = "0.58.0-play-26"
 val playPartialsVersion        = "8.1.0-play-26"
 val playUiVersion              = "9.6.0-play-26"
 val playLanguageVersion        = "5.1.0-play-26"
@@ -46,6 +48,8 @@ val playJodaVersion            = "2.6.14"
 val compile = Seq(
   ws,
   "uk.gov.hmrc" %% "bootstrap-frontend-play-26" % bootstrapPlayVersion,
+  "uk.gov.hmrc" %% "play-frontend-govuk" % playFrontendGovUk,
+  "uk.gov.hmrc" %% "play-frontend-hmrc" % playFrontendHmrc,
   "uk.gov.hmrc" %% "govuk-template" % govTemplateVersion,
   "uk.gov.hmrc" %% "play-ui" % playUiVersion,
   "uk.gov.hmrc" %% "play-partials" % playPartialsVersion,
@@ -103,6 +107,12 @@ def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] = tests map {
     ))
 }
 
+TwirlKeys.templateImports ++= Seq(
+  "uk.gov.hmrc.govukfrontend.views.html.components._",
+  "uk.gov.hmrc.govukfrontend.views.html.helpers._",
+  "uk.gov.hmrc.hmrcfrontend.views.html.components._",
+  "uk.gov.hmrc.hmrcfrontend.views.html.helpers._"
+)
 
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(Seq(play.sbt.PlayScala, SbtDistributablesPlugin) ++ plugins : _*)

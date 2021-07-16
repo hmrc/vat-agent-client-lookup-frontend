@@ -20,7 +20,7 @@
 @import uk.gov.hmrc.play.views.html.helpers.FormWithCSRF
 @import views.html.templates.errors.ErrorSummary
 
-@this(mainTemplate: MainTemplate, formWithCSRF: FormWithCSRF, errorSummary: ErrorSummary, text: Text)
+@this(mainTemplate: MainTemplateOriginal, formWithCSRF: FormWithCSRF, errorSummary: ErrorSummary, text: Text)
 
 @(form: Form[ClientVrnModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 

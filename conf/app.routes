@@ -2,6 +2,10 @@
 
 GET        /language/:lang                              controllers.LanguageController.switchToLanguage(lang: String)
 
+->          /govuk-frontend                            govuk.Routes
+->          /hmrc-frontend                             hmrcfrontend.Routes
+
+
 GET        /sign-out                                    controllers.SignOutController.signOut(feedbackOnSignOut: Boolean)
 
 GET        /client-vat-number                           controllers.agent.SelectClientVrnController.show(redirectUrl: String ?= "")
@@ -31,3 +35,4 @@ POST       /direct-debit-interrupt                      controllers.agent.DDInte
 
 # Map static resources from the /public folder to the /assets URL path
 GET        /assets/*file              controllers.Assets.at(path="/public", file)
+
