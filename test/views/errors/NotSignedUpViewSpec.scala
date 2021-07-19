@@ -39,14 +39,14 @@ class NotSignedUpViewSpec extends ViewBaseSpec {
     }
 
     "have the correct main paragraph" in {
-      elementText("#content article p:nth-of-type(1)") shouldBe
+      elementText("#content p:nth-of-type(1)") shouldBe
         "If you want to make any changes to your client’s details, you’ll need to sign them up to Making Tax Digital for VAT (opens in a new tab)."
     }
 
     "have the correct second paragraph" should {
 
       "have the correct text" in {
-        elementText("#content article p:nth-of-type(2)") shouldBe
+        elementText("#content p:nth-of-type(2)") shouldBe
           "You can sign out and use your existing HMRC online services account to submit VAT Returns and manage your client’s business details."
       }
 
@@ -58,11 +58,11 @@ class NotSignedUpViewSpec extends ViewBaseSpec {
     "have the correct link for making changes to a different client which" should {
 
       "have the correct text" in {
-        elementText("#content article > a") shouldBe "Make changes for a different client"
+        elementText("#content > a") shouldBe "Make changes for a different client"
       }
 
       "have the correct href" in {
-        element("#content article > a").attr("href") shouldBe "/vat-through-software/representative/client-vat-number"
+        element("#content > a").attr("href") shouldBe "/vat-through-software/representative/client-vat-number"
       }
     }
   }

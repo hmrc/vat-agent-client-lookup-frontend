@@ -104,7 +104,7 @@ class VerifyEmailPinPageSpec extends BasePageISpec {
 
           res should have(
             httpStatus(BAD_REQUEST),
-            elementText("#content > article > p:nth-child(2)")("This is because you have entered the wrong code too many times.")
+            elementText("#content > p:nth-child(2)")("This is because you have entered the wrong code too many times.")
           )
         }
       }
@@ -121,7 +121,7 @@ class VerifyEmailPinPageSpec extends BasePageISpec {
 
           res should have(
             httpStatus(BAD_REQUEST),
-            elementText("#content > article > p:nth-child(2)")("The code we sent you has expired.")
+            elementText("#content > p:nth-child(2)")("The code we sent you has expired.")
           )
         }
       }
