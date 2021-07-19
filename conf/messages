@@ -44,8 +44,7 @@ confirmClientVrn.vrn = VAT number
 confirmClientVrn.edit = Change client
 
 clientsVrn.heading = What is your client’s VAT number?
-clientsVrn.p1 = This is the 9-digit number they received when they registered for VAT.
-clientsVrn.example = For example, 123456789.
+clientsVrn.p1 = This is the 9-digit number they received when they registered for VAT. For example, 123456789.
 clientsVrn.label = What is your client’s VAT number?
 
 clientVrnForm.error.missing = Enter your client’s VAT number

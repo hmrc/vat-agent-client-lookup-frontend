@@ -169,14 +169,14 @@ class SelectClientVrnPageSpec extends BasePageISpec {
               httpStatus(BAD_REQUEST),
 
               //Error Summary
-              isElementVisible("#error-summary-display")(isVisible = true),
-              isElementVisible("#vrn-error-summary")(isVisible = true),
-              elementText("#vrn-error-summary")("Enter a VAT number in the correct format"),
-              elementWithLinkTo("#vrn-error-summary")("#vrn"),
+              isElementVisible("#content > div")(isVisible = true),
+              isElementVisible(".govuk-error-summary")(isVisible = true),
+              elementText("#content > div > div > ul > li > a")("Enter a VAT number in the correct format"),
+              elementWithLinkTo("#content > div > div > ul > li > a")("#vrn"),
 
               //Error against Input Label
-              isElementVisible(".form-field--error .error-message")(isVisible = true),
-              elementText(".form-field--error .error-message")("Error: Enter a VAT number in the correct format")
+              isElementVisible("#vrn-error")(isVisible = true),
+              elementText("#vrn-error")("Error: Enter a VAT number in the correct format")
             )
           }
         }

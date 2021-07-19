@@ -27,6 +27,9 @@ class SelectClientVrnViewSpec extends ViewBaseSpec {
 
   val injectedView: SelectClientVrnView = inject[SelectClientVrnView]
 
+  val headerName = "body > header > div.govuk-header.hmrc-header.hmrc-header--with-additional-navigation > div > div.govuk-header__content > a"
+
+  val signOutLink = "body > header > div.govuk-header.hmrc-header.hmrc-header--with-additional-navigation > div > div.govuk-header__content > nav > a"
   "Rendering the Select Client VRN page" when {
 
     "there are no errors in the form" should {
@@ -39,7 +42,7 @@ class SelectClientVrnViewSpec extends ViewBaseSpec {
       }
 
       s"have the correct service name" in {
-        elementText(".header__menu__proposition-name") shouldBe BaseMessages.agentServiceName
+        elementText(headerName) shouldBe BaseMessages.agentServiceName
       }
 
       s"have the correct page heading of '${viewMessages.heading}'" in {
@@ -47,7 +50,7 @@ class SelectClientVrnViewSpec extends ViewBaseSpec {
       }
 
       s"have the correct form hint of '${viewMessages.hint}'" in {
-        elementText(".form-hint") shouldBe s"${viewMessages.p1} ${viewMessages.hint}"
+        elementText(".govuk-hint") shouldBe s"${viewMessages.p1} ${viewMessages.hint}"
       }
 
       s"have an input box for the VRN" in {
@@ -63,11 +66,11 @@ class SelectClientVrnViewSpec extends ViewBaseSpec {
       }
 
       "have the sign out link in the page header" in {
-        elementText("#sign-out") shouldBe "Sign out"
+        elementText(signOutLink) shouldBe "Sign out"
       }
 
       "redirect to the feedback survey on sign out" in {
-        element("#sign-out").attr("href") shouldBe
+        element(signOutLink).attr("href") shouldBe
           controllers.routes.SignOutController.signOut(feedbackOnSignOut = true).url
       }
     }
@@ -84,16 +87,16 @@ class SelectClientVrnViewSpec extends ViewBaseSpec {
       "have a form error box" which {
 
         "has the correct heading" in {
-          elementText("#error-summary-heading") shouldBe viewMessages.formErrorHeading
+          elementText("#error-summary-title") shouldBe viewMessages.formErrorHeading
         }
 
         "has the correct error message" in {
-          elementText("#vrn-error-summary") shouldBe viewMessages.formErrorInvalidVrn
+          elementText("#content > div > div > ul") shouldBe viewMessages.formErrorInvalidVrn
         }
       }
 
       "have the correct error notification text above the input box" in {
-        elementText(".error-message") shouldBe s"Error: ${viewMessages.formErrorInvalidVrn}"
+        elementText("#vrn-error") shouldBe s"Error: ${viewMessages.formErrorInvalidVrn}"
       }
     }
   }
