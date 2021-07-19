@@ -16,18 +16,18 @@
 
 @import config.AppConfig
 
-@this(mainTemplate: MainTemplateOriginal)
+@this(mainTemplate: MainTemplate)
 
 @(errorMessage: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@mainTemplate(title = messages("incorrectPasscode.title")) {
+@mainTemplate(pageTitle = messages("incorrectPasscode.title")) {
 
-    <h1 class="heading-large">@messages("incorrectPasscode.heading")</h1>
+    <h1 class="govuk-heading-l">@messages("incorrectPasscode.heading")</h1>
 
-    <p>@messages(errorMessage)</p>
+    <p class="govuk-body">@messages(errorMessage)</p>
 
-    <p>
-      <a href="@controllers.agent.routes.AgentHubController.show()">@messages("incorrectPasscode.lineTwo.1")</a>
+    <p class="govuk-body">
+      <a class="govuk-link" href="@controllers.agent.routes.AgentHubController.show()">@messages("incorrectPasscode.lineTwo.1")</a>
         @messages("incorrectPasscode.lineTwo.2")
     </p>
 }

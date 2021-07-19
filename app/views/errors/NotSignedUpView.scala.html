@@ -16,28 +16,28 @@
 
 @import config.AppConfig
 
-@this(mainTemplate: MainTemplateOriginal)
+@this(mainTemplate: MainTemplate)
 
 @()(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@mainTemplate(title = messages("common.agentService")) {
+@mainTemplate(pageTitle = messages("common.agentService")) {
 
-  <h1>@messages("notSignedUp.heading")</h1>
+  <h1 class="govuk-heading-l">@messages("notSignedUp.heading")</h1>
 
-  <p>
+  <p class="govuk-body">
     @messages("notSignedUp.paragraph1Text")
-    <a href = "https://www.gov.uk/guidance/making-tax-digital-for-vat-as-an-agent-step-by-step"
+    <a class="govuk-link" href = "https://www.gov.uk/guidance/making-tax-digital-for-vat-as-an-agent-step-by-step"
     id="sign-up-to-mtd" target="_blank">@messages("notSignedUp.paragraph1Link")</a>
   </p>
 
-  <p>
+  <p class="govuk-body">
     @messages("notSignedUp.paragraph2Text1")
-    <a href="@appConfig.classicServicesSignInUrl"
+    <a class="govuk-link" href="@appConfig.classicServicesSignInUrl"
     id="use-existing-hmrc-service-account">@messages("notSignedUp.paragraph2Link")</a>
     @messages("notSignedUp.paragraph2Text2")
   </p>
 
-  <a id="change-client-link" href="@controllers.agent.routes.SelectClientVrnController.show()">
+  <a class="govuk-link govuk-body" id="change-client-link" href="@controllers.agent.routes.SelectClientVrnController.show()">
     @messages("common.differentClient")
   </a>
 }
