@@ -29,11 +29,11 @@ class UnauthorisedNoEnrolmentViewSpec extends ViewBaseSpec {
   "Rendering the unauthorised page" should {
 
     object Selectors {
-      val serviceName = ".header__menu__proposition-name"
+      val serviceName = ".govuk-header__link--service-name"
       val pageHeading = "#content h1"
-      val instructions = "#content article p"
-      val instructionsLink = "#content article p > a"
-      val button = "#content .button"
+      val instructions = "#content p"
+      val instructionsLink = "#content p > a"
+      val button = ".govuk-button"
     }
 
     lazy val view = injectedView()(request, messages, mockConfig)
