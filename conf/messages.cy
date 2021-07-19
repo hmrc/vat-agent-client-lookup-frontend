@@ -70,8 +70,7 @@ confirmClientVrn.vrn = Rhif TAW
 confirmClientVrn.edit = Newid cleient
 
 clientsVrn.heading = Beth yw rhif TAW eich cleient?
-clientsVrn.p1 = Dyma’r rhif 9 digid a gafodd wrth gofrestru ar gyfer TAW.
-clientsVrn.example = Er enghraifft, 123456789.
+clientsVrn.p1 = Dyma’r rhif 9 digid a gafodd wrth gofrestru ar gyfer TAW. Er enghraifft, 123456789.
 clientsVrn.label = Beth yw rhif TAW eich cleient?
 
 clientVrnForm.error.missing = Nodwch rif TAW eich cleient
