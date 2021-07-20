@@ -22,19 +22,19 @@
 @(mandationStatus: String)(implicit messages: Messages,appConfig: AppConfig)
 <div class="tile tile-no-border">
     <div id="vat-returns" class="tile-body">
-        <h2 class="heading-medium push--top">@messages("vatReturnsPartial.heading")</h2>
+        <h2 class="govuk-heading-m push--top">@messages("vatReturnsPartial.heading")</h2>
         @if(mandationStatus==MandationStatus.nonMTDfB || mandationStatus==MandationStatus.nonDigital || mandationStatus==MandationStatus.MTDfBExempt){
-        <p>@messages("vatReturnsPartial.paragraphNonMandated")</p>
-        <ul>
+        <p class="govuk-body">@messages("vatReturnsPartial.paragraphNonMandated")</p>
+        <ul class="govuk-list">
             <li class="link-bottom-margin">
-                <a id="submit-vat-returns-link" href="@{appConfig.returnDeadlinesUrl}">@messages("vatReturnsPartial.submitReturnLink")</a>
+                <a id="submit-vat-returns-link" href="@{appConfig.returnDeadlinesUrl}" class="govuk-link">@messages("vatReturnsPartial.submitReturnLink")</a>
             </li>
         } else {
-            <p>@messages("vatReturnsPartial.paragraphMandated")</p>
+            <p class="govuk-body">@messages("vatReturnsPartial.paragraphMandated")</p>
             <ul>
         }
             <li>
-                <a id="view-submitted-returns-link" href="@{appConfig.submittedReturnsUrl}">@messages("vatReturnsPartial.viewReturnsLink")</a>
+                <a id="view-submitted-returns-link" href="@{appConfig.submittedReturnsUrl}" class="govuk-link">@messages("vatReturnsPartial.viewReturnsLink")</a>
             </li>
         </ul>
     </div>

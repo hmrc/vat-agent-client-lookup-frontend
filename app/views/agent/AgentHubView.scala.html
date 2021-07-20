@@ -18,56 +18,63 @@
 @import views.html.agent.partials._
 @import java.time.LocalDate
 
-@this(mainTemplate: MainTemplateOriginal,
+@this(mainTemplate: MainTemplate,
       clientDetailsPartials: ClientDetailsPartials,
       optOutForMTDVATPartial: OptOutForMTDVATPartial,
       registrationPartial: RegistrationPartial,
       signUpPartial: SignUpPartial,
       vatCertificatePartials: VatCertificatePartials,
-      vatReturnsPartial: VatReturnsPartial)
+      vatReturnsPartial: VatReturnsPartial,
+      govukBreadcrumbs: GovukBreadcrumbs,
+      govukInsetText : GovukInsetText)
 
 @(details: CustomerDetails, vrn: String, currentDate: LocalDate)(implicit messages: Messages,
                                                                           appConfig: AppConfig,
                                                                           user: User[_])
 
 @breadcrumbLinks = {
-<div id="breadcrumb" class="breadcrumbs soft--top">
-    <ol class="push--top">
-        <li>
-            <a id="breadcrumb-asa"
-               href="@{appConfig.agentServicesUrl}">@messages("breadcrumb.agentServices")</a>
-        </li>
-        <li aria-current="page" id="clients-vat-account">
-            @messages("agentHub.heading")
-        </li>
-    </ol>
-</div>
+    @govukBreadcrumbs(Breadcrumbs(
+        items = Seq(
+            BreadcrumbsItem(
+                content = Text(messages("breadcrumb.agentServices")),
+                href = Some(appConfig.agentServicesUrl)
+            ),
+            BreadcrumbsItem(
+                content = Text(messages("agentHub.heading")),
+            )
+        )
+    ))
 }
 
-@mainTemplate(title = messages("agentHub.heading"), bodyClasses = None, backLinkContent = Some(breadcrumbLinks), mainClass = Some("full-width")) {
+@mainTemplate(pageTitle = messages("agentHub.heading"), backLinkContent = Some(breadcrumbLinks)) {
 
-  <header class="page-heading push--top">
-    <h1 class="heading-xlarge">@messages("agentHub.heading")</h1>
-    <span class="form-hint bottom-margin">@messages("agentHub.vrn", vrn)<br/>
-      @details.clientName<br/>
-      <a href="@controllers.agent.routes.ConfirmClientVrnController.changeClient()">
-        @messages("agentHub.changeClient")
-      </a>
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">@messages("agentHub.heading")</h1>
+    <span class="govuk-caption-m">@messages("agentHub.vrn", vrn)
     </span>
-    <div class="warning-banner">
-      <div class="panel panel-border-wide">
-        @messages("agentHub.noDDclient")
-      </div>
-    </div>
-  </header>
-  <div class="flex-container grid-row">
+    <span class="govuk-caption-m govuk-!-margin-bottom-0">@details.clientName</span>
+    <span class="govuk-caption-m govuk-!-margin-bottom-6"><a href="@controllers.agent.routes.ConfirmClientVrnController.changeClient()" class="govuk-link">
+        @messages("agentHub.changeClient")
+    </a></span>
+
+    @govukInsetText(InsetText(
+        content = Text(messages("agentHub.noDDclient"))
+    ))
+
+<div class="flex-container govuk-grid-row">
     @clientDetailsPartials()
     @vatReturnsPartial(details.mandationStatus)
     @vatCertificatePartials()
-  </div>
-  <div class="grid-row">
-    @signUpPartial(details.mandationStatus,vrn)
-    @optOutForMTDVATPartial(details.mandationStatus)
-    @registrationPartial(details, currentDate)
-  </div>
+</div>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-third">
+            @signUpPartial(details.mandationStatus,vrn)
+        </div>
+        <div class="govuk-grid-column-one-third">
+            @optOutForMTDVATPartial(details.mandationStatus)
+        </div>
+        <div class="govuk-grid-column-one-third">
+            @registrationPartial(details, currentDate)
+        </div>
+    </div>
 }
