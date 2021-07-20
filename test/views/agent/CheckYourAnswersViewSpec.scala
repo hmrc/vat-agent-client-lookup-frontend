@@ -28,14 +28,13 @@ class CheckYourAnswersViewSpec extends ViewBaseSpec {
   val testEmail: String = "test@email.com"
 
   object Selectors {
-    val heading         = ".heading-large"
-    val heading2        = "h2"
-    val backLink        = "#content > article > a"
-    val email           = ".cya-answer"
-    val continueButton  = ".button"
-    val editLink        = ".cya-change > a"
-    val editLinkText    = ".cya-change > a > span:nth-of-type(1)"
-    val editLinkContext = ".cya-change > a > span:nth-of-type(2)"
+    val heading         = ".govuk-heading-l"
+    val heading2        = ".govuk-heading-m"
+    val email           = ".govuk-summary-list__value"
+    val continueButton  = ".govuk-button"
+    val editLink        = ".govuk-summary-list__actions > a"
+    val editLinkMessage = ".govuk-summary-list__actions > a > span:nth-child(1)"
+    val editLinkHiddenMessage = ".govuk-summary-list__actions > a > span.govuk-visually-hidden"
   }
 
   "The Check Your Answers view" should {
@@ -61,7 +60,7 @@ class CheckYourAnswersViewSpec extends ViewBaseSpec {
     "have a link to edit email address" which {
 
       "has the correct text" in {
-        elementText(Selectors.editLinkText) shouldBe "Change"
+        elementText(Selectors.editLinkMessage) shouldBe "Change"
       }
 
       "has the correct link" in {
@@ -69,7 +68,7 @@ class CheckYourAnswersViewSpec extends ViewBaseSpec {
       }
 
       "has the correct hidden context text" in {
-        elementText(Selectors.editLinkContext) shouldBe "Check your answers"
+        elementText(Selectors.editLinkHiddenMessage) shouldBe "Change the email address"
       }
     }
 
