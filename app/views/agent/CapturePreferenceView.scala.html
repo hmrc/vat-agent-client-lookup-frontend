@@ -17,56 +17,88 @@
 @import config.AppConfig
 @import models.PreferenceModel
 @import forms.PreferenceForm._
-@import uk.gov.hmrc.play.views.html.helpers.FormWithCSRF
-@import views.html.templates.errors.ErrorSummary
-@import views.html.templates.inputs.{OptionRevealHelper, Text}
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
-@this(mainTemplate: MainTemplateOriginal,
-      formWithCSRF: FormWithCSRF,
-      errorSummary: ErrorSummary,
-      text: Text,
-      optionRevealHelper: OptionRevealHelper)
+@this(mainTemplate: MainTemplate,
+      govukBackLink: GovukBackLink,
+      govukButton : GovukButton,
+      govukErrorSummary: GovukErrorSummary,
+      govukRadios : GovukRadios,
+      govukInput : GovukInput)
 
 @(preferenceForm: Form[PreferenceModel])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@content = {<p><strong class="bold">@messages("capturePref.confirmationEmailRequest")</strong></p>}
-
-@additionalContentAlternative = {
-  <span class="form-field">@messages("capturePref.email")</span>
-  <span id="form-hint" class="form-hint">@messages("capturePref.email.hintAlternative")</span>
+@backLink = {
+    @govukBackLink(BackLink(
+        href = controllers.agent.routes.AgentHubController.show().url,
+        content = Text(messages("base.back"))
+    ))
 }
 
-@backLink = {
-    <a class="link-back" href='@controllers.agent.routes.AgentHubController.show()'>@messages("base.back")</a>
+@yesHtml = {
+    @govukInput(Input(
+        id = "email-address",
+        name = "email-address",
+        inputType = "email",
+        label = Label(
+            content = Text(messages("capturePref.email"))
+        ),
+        value = preferenceForm("preference").value,
+        hint = Some(Hint(
+            content = Text(messages("capturePref.email.hintAlternative"))
+        )),
+        errorMessage = preferenceForm("preference").error.map { err =>
+            ErrorMessage(content = Text(messages(err.message)))
+        },
+        classes = "govuk-!-width-one-third",
+        autocomplete = Some("email"),
+        spellcheck = Some(false)
+    ))
 }
 
 @defining(messages("capturePref.noLetterTitle")) { pageTitle  =>
 
   @mainTemplate(if(preferenceForm.errors.nonEmpty) messages("common.error.prefixTitle", pageTitle) else pageTitle, backLinkContent = Some(backLink)) {
 
-    @errorSummary(messages("common.error.heading"), preferenceForm)
+    <h1 class="govuk-heading-l">@messages("capturePref.noLetterTitle")</h1>
 
-      @formWithCSRF(action = controllers.agent.routes.CapturePreferenceController.submit) {
-        @optionRevealHelper(
-          choices = Seq(
-            (yes, messages("common.yes")),
-            (no,  messages("common.no"))
-          ),
-          hiddenContent = text(preferenceForm(email),
-          additionalContent = Some(additionalContentAlternative)),
-          field          = preferenceForm(yesNo),
-          question       = messages("capturePref.noLetterTitle"),
-          inline         = false,
-          legendAsHeader = false,
-          subtext = Some(messages("capturePref.confirmationEmail")),
-          additionalContent = Some(content),
-          hiddenContentError = preferenceForm(email).hasErrors
+    <p class="govuk-body">@messages("capturePref.confirmationEmail")</p>
+
+    @if(preferenceForm.hasErrors) {
+        @govukErrorSummary(ErrorSummary(
+            title = Text(messages("common.error.heading")),
+            errorList = preferenceForm.errors.map { error =>
+                ErrorLink(content = Text(messages(error.message)), href = Some(s"#email"))
+            }
+        ))
+    }
+
+    @govukRadios(Radios(
+        fieldset = Some(Fieldset(
+            legend = Some(Legend(
+                content = Text(messages("capturePref.confirmationEmailRequest")),
+                classes = "govuk-fieldset__legend--s",
+                isPageHeading = false
+            ))
+        )),
+        idPrefix = Some("email"),
+        name = "email",
+        items = Seq(
+            RadioItem(
+                content = Text(messages("common.yes")),
+                value = Some("yes"),
+                conditionalHtml = Some(yesHtml)
+            ),
+            RadioItem(
+                content = Text(messages("common.no")),
+                value = Some("no"),
+            )
         )
+    ))
 
-        <div class="form-group">
-          <button class="button" type="submit">@messages("common.continue")</button>
-        </div>
-      }
+    @govukButton(Button(
+        content = Text(messages("common.continue"))
+    ))
 
   }
 }
