@@ -25,17 +25,15 @@
         <h2 class="govuk-heading-m push--top">@messages("vatReturnsPartial.heading")</h2>
         @if(mandationStatus==MandationStatus.nonMTDfB || mandationStatus==MandationStatus.nonDigital || mandationStatus==MandationStatus.MTDfBExempt){
         <p class="govuk-body">@messages("vatReturnsPartial.paragraphNonMandated")</p>
-        <ul class="govuk-list">
-            <li class="link-bottom-margin">
-                <a id="submit-vat-returns-link" href="@{appConfig.returnDeadlinesUrl}" class="govuk-link">@messages("vatReturnsPartial.submitReturnLink")</a>
-            </li>
+        <p class="govuk-body">
+            <a id="submit-vat-returns-link" href="@{appConfig.returnDeadlinesUrl}" class="govuk-link">@messages("vatReturnsPartial.submitReturnLink")</a>
+        </p>
         } else {
             <p class="govuk-body">@messages("vatReturnsPartial.paragraphMandated")</p>
-            <ul>
         }
-            <li>
+            <p class="govuk-body">
                 <a id="view-submitted-returns-link" href="@{appConfig.submittedReturnsUrl}" class="govuk-link">@messages("vatReturnsPartial.viewReturnsLink")</a>
-            </li>
+            </p>
         </ul>
     </div>
 </div>

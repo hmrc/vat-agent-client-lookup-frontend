@@ -22,14 +22,12 @@
 @(mandationStatus: String, vrn: String)(implicit messages: Messages,appConfig: AppConfig)
 
 @signUp = {
-<div class="govuk-grid-row">
     <div class="govuk-grid-column-one-third" id="sign-up-partial">
         <h3 class="govuk-heading-s">
             <a href="@{appConfig.signUpServiceUrl(vrn)}" class="govuk-link">@messages("signUpPartial.LinkText")</a>
         </h3>
         <p class="govuk-body">@messages("signUpPartial.Body")</p>
     </div>
-</div>
 }
 
 @{

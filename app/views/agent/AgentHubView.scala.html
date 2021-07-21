@@ -57,24 +57,19 @@
     </a></span>
 
     @govukInsetText(InsetText(
+        id = Some("noDDClient"),
         content = Text(messages("agentHub.noDDclient"))
     ))
 
-<div class="flex-container govuk-grid-row">
-    @clientDetailsPartials()
-    @vatReturnsPartial(details.mandationStatus)
-    @vatCertificatePartials()
-</div>
+    <div class="flex-container govuk-grid-row">
+        @clientDetailsPartials()
+        @vatReturnsPartial(details.mandationStatus)
+        @vatCertificatePartials()
+    </div>
 
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-third">
             @signUpPartial(details.mandationStatus,vrn)
-        </div>
-        <div class="govuk-grid-column-one-third">
             @optOutForMTDVATPartial(details.mandationStatus)
-        </div>
-        <div class="govuk-grid-column-one-third">
             @registrationPartial(details, currentDate)
-        </div>
     </div>
 }

@@ -41,7 +41,7 @@ class OptOutForMTDVATPartialSpec extends ViewBaseSpec {
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         s"have the correct title of ${OptOutForMTDVATMessages.title}" in {
-          elementText(".heading-small") shouldBe OptOutForMTDVATMessages.title
+          elementText(".govuk-heading-s") shouldBe OptOutForMTDVATMessages.title
         }
 
         s"have the correct link of ${controllers.agent.routes.CapturePreferenceController.show().url}" in {
@@ -64,7 +64,7 @@ class OptOutForMTDVATPartialSpec extends ViewBaseSpec {
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         s"have the correct title of ${OptOutForMTDVATMessages.title}" in {
-          elementText(".heading-small") shouldBe OptOutForMTDVATMessages.title
+          elementText(".govuk-heading-s") shouldBe OptOutForMTDVATMessages.title
         }
 
         s"have the correct link of ${mockConfig.optOutMtdVatUrl}" in {
