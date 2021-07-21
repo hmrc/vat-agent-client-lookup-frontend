@@ -30,12 +30,12 @@ class NotAuthorisedForClientViewSpec extends ViewBaseSpec {
   "Rendering the unauthorised for client page" should {
 
     object Selectors {
-      val serviceName = ".header__menu__proposition-name"
-      val pageHeading = "article h1"
-      val information = "article > p:nth-child(2)"
-      val agentServicesLink = "article > p:nth-child(2) > a:nth-child(1)"
-      val button = "article .button"
-      val backLink = ".link-back"
+      val serviceName = ".govuk-header__link--service-name"
+      val pageHeading = "#content h1"
+      val information = "#content > p:nth-child(2)"
+      val agentServicesLink = "#content > p:nth-child(2) > a:nth-child(1)"
+      val button = ".govuk-button"
+      val backLink = ".govuk-back-link"
     }
 
     lazy val view = injectedView()(request, messages, mockConfig)

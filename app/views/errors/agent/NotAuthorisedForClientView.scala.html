@@ -14,26 +14,32 @@
  * limitations under the License.
  *@
 
-@this(mainTemplate: MainTemplateOriginal)
+@this(mainTemplate: MainTemplate,
+        govukBackLink: GovukBackLink,
+        govukButton: GovukButton)
 
 @()(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @backLink = {
-    <a class="link-back" href="@controllers.agent.routes.SelectClientVrnController.show().url">@messages("base.back")</a>
+    @govukBackLink(BackLink(
+        content = Text(messages("base.back")),
+        href = controllers.agent.routes.SelectClientVrnController.show().url
+    ))
 }
 
-@mainTemplate(title = messages("unauthorised.agentForClient.title"), backLinkContent = Some(backLink)) {
+@mainTemplate(pageTitle = messages("unauthorised.agentForClient.title"), backLinkContent = Some(backLink)) {
 
-  <h1 class="heading-large">@messages("unauthorised.agentForClient.title")</h1>
+  <h1 class="govuk-heading-l">@messages("unauthorised.agentForClient.title")</h1>
 
-  <p>
+  <p class="govuk-body">
     @messages("unauthorised.agentForClient.forMoreInformation")
-    <a href="@appConfig.agentServicesUrl">
+    <a class="govuk-link" href="@appConfig.agentServicesUrl">
       @messages("unauthorised.agentForClient.agentServicesAccount")</a>@messages("common.fullStop")
   </p>
 
-  <a class="button"
-     role="button"
-     href="@controllers.routes.SignOutController.signOut(feedbackOnSignOut = true)">
-       @messages("base.signOut")</a>
+    @govukButton(Button(
+        href = Some(controllers.routes.SignOutController.signOut(feedbackOnSignOut = true).url),
+        content = Text(messages("base.signOut"))
+        ))
+
 }

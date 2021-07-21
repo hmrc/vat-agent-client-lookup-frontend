@@ -39,22 +39,22 @@ class AccountMigrationViewSpec extends ViewBaseSpec {
     }
 
     "have the correct main paragraph" in {
-      elementText("#content article p:nth-of-type(1)") shouldBe
+      elementText("#content > p:nth-of-type(1)") shouldBe
         "This is because the business’s Making Tax Digital account is being set up - this can take up to 72 hours."
     }
 
     "have the correct second paragraph" in {
-      elementText("#content article p:nth-of-type(2)") shouldBe "Check back again later."
+      elementText("#content > p:nth-of-type(2)") shouldBe "Check back again later."
     }
 
     "have the correct link for making changes to a different client which" should {
 
       "have the correct text" in {
-        elementText("#content article a") shouldBe "Make changes for a different client"
+        elementText("#content > a") shouldBe "Make changes for a different client"
       }
 
       "have the correct href" in {
-        element("#content article a").attr("href") shouldBe "/vat-through-software/representative/client-vat-number"
+        element("#content > a").attr("href") shouldBe "/vat-through-software/representative/client-vat-number"
       }
     }
   }
