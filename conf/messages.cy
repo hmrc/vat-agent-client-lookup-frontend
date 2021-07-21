@@ -79,8 +79,8 @@ clientVrnForm.error.invalid = Nodwch rif TAW yn y fformat cywir
 checkYourAnswers.title = Gwiriwch eich atebion
 checkYourAnswers.vatBusinessDetails = Manylion busnes TAW
 checkYourAnswers.change = Newid
-checkYourAnswers.changeContext = Gwiriwch eich atebion
 checkYourAnswers.email = Cyfeiriad e-bost
+checkYourAnswers.hiddenMessage = Newid y cyfeiriad e-bost
 
 clientDetailsCard.title = Manylion cleient
 clientDetailsCard.info = Newid manylion busnes a chyswllt eich cleient neu ddyddiadau Ffurflenni TAW eich cleient.
