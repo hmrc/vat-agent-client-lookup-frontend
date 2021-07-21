@@ -26,8 +26,9 @@
     <div id="client-details" class="tile-body">
         <h2 class="govuk-heading-m push--top">@messages("clientDetailsCard.title")</h2>
         <p class="govuk-body">@messages("clientDetailsCard.info")</p>
-
-        @capturePreferenceHelper(messages("clientDetailsCard.link"), appConfig.manageVatCustomerDetailsUrl)
+        <p class="govuk-body">
+            @capturePreferenceHelper(messages("clientDetailsCard.link"), appConfig.manageVatCustomerDetailsUrl)
+        </p>
 
     </div>
 </div>
