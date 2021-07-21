@@ -43,11 +43,11 @@ class DirectDebitInterruptViewSpec extends ViewBaseSpec {
       }
 
       "have the correct first paragraph" in {
-        elementText("#content > article p:nth-of-type(1)") shouldBe viewMessages.para1
+        elementText("#content > p:nth-of-type(1)") shouldBe viewMessages.para1
       }
 
       "have the correct second paragraph" in {
-        elementText("#content > article p:nth-of-type(2)") shouldBe viewMessages.para2
+        elementText("#content > p:nth-of-type(2)") shouldBe viewMessages.para2
       }
 
       "have the correct bold text in the second paragraph" in {
@@ -65,11 +65,12 @@ class DirectDebitInterruptViewSpec extends ViewBaseSpec {
       "have a button" which {
 
         "has the correct text" in {
-          elementText(".button") shouldBe viewMessages.buttonText
+          elementText(".govuk-button") shouldBe viewMessages.buttonText
         }
 
         "submits the form" in {
-          element(".button").attr("type") shouldBe "submit"
+          element(".govuk-button").parent().attr("action") shouldBe
+            "/vat-through-software/representative/direct-debit-interrupt"
         }
       }
     }
@@ -86,20 +87,20 @@ class DirectDebitInterruptViewSpec extends ViewBaseSpec {
       "have the error summary" which {
 
         "has the correct heading" in {
-          elementText("#error-summary-heading") shouldBe viewMessages.formErrorHeading
+          elementText("#error-summary-title") shouldBe viewMessages.formErrorHeading
         }
 
         "has the correct error message" in {
-          elementText("#checkbox-error-summary") shouldBe viewMessages.formErrorText
+          elementText(".govuk-error-summary__list a") shouldBe viewMessages.formErrorText
         }
 
         "has the correct link in the error message" in {
-          element("#checkbox-error-summary").attr("href") shouldBe "#checkbox"
+          element(".govuk-error-summary__list a").attr("href") shouldBe "#checkbox"
         }
       }
 
       "has the error message above the checkbox" in {
-        elementText(".error-message") shouldBe s"Error: ${viewMessages.formErrorText}"
+        elementText(".govuk-error-message") shouldBe s"Error: ${viewMessages.formErrorText}"
       }
     }
   }
