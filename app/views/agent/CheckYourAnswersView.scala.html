@@ -16,40 +16,42 @@
 
 @import config.AppConfig
 
-@this(mainTemplate: MainTemplateOriginal)
+@this(mainTemplate: MainTemplate,
+      govukSummaryList: GovukSummaryList,
+      govukButton: GovukButton)
 
 @(email: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@mainTemplate(title = messages("checkYourAnswers.title"), bodyClasses = None) {
+@mainTemplate(pageTitle = messages("checkYourAnswers.title")) {
 
- <h1 class="heading-large">@messages("checkYourAnswers.title")</h1>
+ <h1 class="govuk-heading-l">@messages("checkYourAnswers.title")</h1>
 
- <h2>@messages("checkYourAnswers.vatBusinessDetails")</h2>
+ <h2 class="govuk-heading-m">@messages("checkYourAnswers.vatBusinessDetails")</h2>
 
-<div class="form-group">
- <dl class="govuk-check-your-answers cya-questions-long">
+    @govukSummaryList(SummaryList(
+        rows = Seq(
+            SummaryListRow(
+              key = Key(
+                content = Text(messages("checkYourAnswers.email"))
+              ),
+              value = Value(
+                content = Text(email)
+              ),
+              actions = Some(Actions(
+                items = Seq(
+                  ActionItem(
+                    href = controllers.agent.routes.CapturePreferenceController.show().url,
+                    content = HtmlContent(s"""<span aria-hidden="true">${messages("checkYourAnswers.change")}</span>"""),
+                    visuallyHiddenText = Some(messages("checkYourAnswers.hiddenMessage"))
+                  )
+                )
+              ))
+            )
+        )
+    ))
 
-  <div>
-   <dt class="cya-question">
-    @messages("checkYourAnswers.email")
-   </dt>
-
-   <dd class="cya-answer">
-    @email
-   </dd>
-
-   <dd class="cya-change">
-    <a href="@controllers.agent.routes.CapturePreferenceController.show()">
-     <span aria-hidden="true">@messages("checkYourAnswers.change")</span>
-     <span class="visuallyhidden">@messages("checkYourAnswers.changeContext")</span>
-    </a>
-   </dd>
-
-  </div>
- </dl>
-</div>
-
- <a href='@controllers.agent.routes.ConfirmEmailController.isEmailVerified' role="button" tabindex="0" class="button">
-  @messages("common.confirmAndContinue")
- </a>
+    @govukButton(Button(
+      content = Text(messages("common.confirmAndContinue")),
+      href = Some(controllers.agent.routes.ConfirmEmailController.isEmailVerified.url)
+    ))
 }
