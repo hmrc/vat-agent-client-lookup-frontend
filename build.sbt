@@ -17,8 +17,6 @@
 import sbt._
 import uk.gov.hmrc.DefaultBuildSettings._
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
-import uk.gov.hmrc.versioning.SbtGitVersioning
-import uk.gov.hmrc.SbtAutoBuildPlugin
 import play.core.PlayVersion
 import play.sbt.routes.RoutesKeys
 import sbt.Tests.{Group, SubProcess}
@@ -78,14 +76,13 @@ lazy val coverageSettings: Seq[Setting[_]] = {
   val excludedPackages = Seq(
     "<empty>",
     ".*Reverse.*",
-    ".*standardError*.*",
-    ".*govuk_wrapper*.*",
-    ".*main_template*.*",
+    "views.html.*",
     "uk.gov.hmrc.BuildInfo",
     "app.*",
     "prod.*",
     "config.*",
-    "testOnly.*")
+    "testOnly.*"
+  )
 
   Seq(
     ScoverageKeys.coverageExcludedPackages := excludedPackages.mkString(";"),
