@@ -22,18 +22,20 @@
 @(mandationStatus: String)(implicit messages: Messages,appConfig: AppConfig)
 <div class="tile tile-no-border">
     <div id="vat-returns" class="tile-body">
-        <h2 class="govuk-heading-m push--top">@messages("vatReturnsPartial.heading")</h2>
+        <h2 class="govuk-heading-m">@messages("vatReturnsPartial.heading")</h2>
         @if(mandationStatus==MandationStatus.nonMTDfB || mandationStatus==MandationStatus.nonDigital || mandationStatus==MandationStatus.MTDfBExempt){
         <p class="govuk-body">@messages("vatReturnsPartial.paragraphNonMandated")</p>
-        <p class="govuk-body">
-            <a id="submit-vat-returns-link" href="@{appConfig.returnDeadlinesUrl}" class="govuk-link">@messages("vatReturnsPartial.submitReturnLink")</a>
-        </p>
+        <ul class="govuk-list">
+            <li>
+                <a id="submit-vat-returns-link" href="@{appConfig.returnDeadlinesUrl}" class="govuk-link">@messages("vatReturnsPartial.submitReturnLink")</a>
+            </li>
         } else {
             <p class="govuk-body">@messages("vatReturnsPartial.paragraphMandated")</p>
+            <ul class="govuk-list">
         }
-            <p class="govuk-body">
+            <li>
                 <a id="view-submitted-returns-link" href="@{appConfig.submittedReturnsUrl}" class="govuk-link">@messages("vatReturnsPartial.viewReturnsLink")</a>
-            </p>
+            <li>
         </ul>
     </div>
 </div>

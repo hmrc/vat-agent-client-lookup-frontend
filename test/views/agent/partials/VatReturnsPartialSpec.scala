@@ -42,19 +42,19 @@ class VatReturnsPartialSpec extends ViewBaseSpec {
       }
 
       "display the correct text in link 1" in {
-        elementText("p:nth-of-type(2) > a") shouldBe Messages.submitVatReturn
+        elementText("li:nth-child(1)") shouldBe Messages.submitVatReturn
       }
 
       "have the correct url for the 1st link" in {
-        element("p:nth-of-type(2) > a").getAllElements.attr("href") shouldBe mockConfig.returnDeadlinesUrl
+        element("li:nth-child(1)").getAllElements.attr("href") shouldBe mockConfig.returnDeadlinesUrl
       }
 
       "display the correct text in link 2" in {
-        elementText("p:nth-of-type(3) > a") shouldBe Messages.submittedReturns
+        elementText("li:nth-child(2)") shouldBe Messages.submittedReturns
       }
 
       "have the correct url for the 2nd link" in {
-        element("p:nth-of-type(3) > a").getAllElements.attr("href") shouldBe mockConfig.submittedReturnsUrl
+        element("li:nth-child(2)").getAllElements.attr("href") shouldBe mockConfig.submittedReturnsUrl
       }
     }
 
@@ -72,19 +72,19 @@ class VatReturnsPartialSpec extends ViewBaseSpec {
       }
 
       "display the correct text in link 1" in {
-        elementText("p:nth-of-type(2) > a") shouldBe Messages.submitVatReturn
+        elementText("li:nth-child(1)") shouldBe Messages.submitVatReturn
       }
 
       "have the correct url for the 1st link" in {
-        element("p:nth-of-type(2) > a").getAllElements.attr("href") shouldBe mockConfig.returnDeadlinesUrl
+        element("li:nth-child(1)").getAllElements.attr("href") shouldBe mockConfig.returnDeadlinesUrl
       }
 
       "display the correct text in link 2" in {
-        elementText("p:nth-of-type(3) > a") shouldBe Messages.submittedReturns
+        elementText("li:nth-child(2)") shouldBe Messages.submittedReturns
       }
 
       "have the correct url for the 2nd link" in {
-        element("p:nth-of-type(3) > a").getAllElements.attr("href") shouldBe mockConfig.submittedReturnsUrl
+        element("li:nth-child(2)").getAllElements.attr("href") shouldBe mockConfig.submittedReturnsUrl
       }
     }
 
@@ -102,11 +102,11 @@ class VatReturnsPartialSpec extends ViewBaseSpec {
       }
 
       "display the correct text in link 1" in {
-        elementText("p:nth-of-type(2) > a") shouldBe Messages.submittedReturns
+        elementText("li:nth-child(1)") shouldBe Messages.submittedReturns
       }
 
       "have the correct url for the 1st link" in {
-        element("p:nth-of-type(2) > a").getAllElements.attr("href") shouldBe mockConfig.submittedReturnsUrl
+        element("li:nth-child(1)").getAllElements.attr("href") shouldBe mockConfig.submittedReturnsUrl
       }
     }
   }

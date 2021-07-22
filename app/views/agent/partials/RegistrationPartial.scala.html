@@ -45,24 +45,24 @@
     val title = messages(cancelVatTitleKey)
 
     details.partyType match {
-        case Some(partyType) if partyType == VatGroup => Html(s"<a href='${appConfig.vat7FormUrl}' target='_blank'>$title</a>")
+        case Some(partyType) if partyType == VatGroup => Html(s"<a href='${appConfig.vat7FormUrl}' target='_blank' rel='noreferrer noopener' class='govuk-link'>$title</a>")
         case _ => capturePreferenceHelper(title, appConfig.cancelRegistrationUrl)
     }
 }
 
 @cancelRegistration = {
     <div class="govuk-grid-column-one-third" id="cancel-vat">
-        <h3 class="govuk-heading-s">@cancelVatLink</h3>
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">@cancelVatLink</h3>
         <p class="govuk-body">@messages(cancelVatContentKey)</p>
     </div>
 }
 
 @historicDeregistration(date: LocalDate) = {
     <div class="govuk-grid-column-one-third" id="cancel-vat">
-        <h3 class="govuk-heading-s">@messages("registrationPartial.historicDeregistration.title")</h3>
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">@messages("registrationPartial.historicDeregistration.title")</h3>
         <p class="govuk-body">@messages("registrationPartial.historicDeregistration.content", displayDate(date))</p>
         <p class="govuk-body">
-            <a id="agent-services-link" href="@appConfig.onlineAgentServicesUrl" target="_blank" class="govuk-link">
+            <a id="agent-services-link" href="@appConfig.onlineAgentServicesUrl" target="_blank" rel="noreferrer noopener" class="govuk-link">
                 @messages("registrationPartial.historicDeregistration.link")
             </a>
         </p>
@@ -70,19 +70,23 @@
 }
 
 @futureDeregistration(date: LocalDate) = {
-    <div id="cancel-vat" class="column-one-third">
-        <h3 class="heading-small">
+    <div class="govuk-grid-column-one-third" id="cancel-vat">
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">
         @messages("registrationPartial.futureDeregistration.title")
         </h3>
-        <p>@messages("registrationPartial.futureDeregistration.content", displayDate(date))</p>
-        <p><a id="agent-services-link" href="@appConfig.onlineAgentServicesUrl" target="_blank" class="govuk-link">@messages("registrationPartial.futureDeregistration.link")</a></p>
+        <p class="govuk-body">@messages("registrationPartial.futureDeregistration.content", displayDate(date))</p>
+        <p class="govuk-body">
+            <a id="agent-services-link" href="@appConfig.onlineAgentServicesUrl" target="_blank" rel="noreferrer noopener" class="govuk-link">
+                @messages("registrationPartial.futureDeregistration.link")
+            </a>
+        </p>
     </div>
 }
 
 
 @pendingDeregistration()={
     <div class="govuk-grid-column-one-third" id="cancel-vat">
-        <h3 class="govuk-heading-s">@messages("registrationPartial.pendingDeregistration.title")</h3>
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">@messages("registrationPartial.pendingDeregistration.title")</h3>
         <p class="govuk-body">@messages("registrationPartial.pendingDeregistration.content")</p>
     </div>
 }
