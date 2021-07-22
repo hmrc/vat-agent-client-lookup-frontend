@@ -23,9 +23,9 @@ import models.FeatureSwitchModel
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import testOnly.views.html.FeatureSwitchView
+import testOnly.views.html.featureSwitch.FeatureSwitch
 
-class FeatureSwitchController @Inject()(featureSwitchView: FeatureSwitchView, mcc: MessagesControllerComponents, implicit val appConfig: AppConfig)
+class FeatureSwitchController @Inject()(featureSwitchView: FeatureSwitch, mcc: MessagesControllerComponents, implicit val appConfig: AppConfig)
   extends FrontendController(mcc) with I18nSupport {
 
   def featureSwitch: Action[AnyContent] = Action { implicit request =>

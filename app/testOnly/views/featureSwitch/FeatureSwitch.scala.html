@@ -14,33 +14,36 @@
  * limitations under the License.
  *@
 
-@import config.ConfigKeys
 @import helper.CSRF
-@import views.html.templates.inputs.SingleCheckbox
+@import testOnly.views.featureSwitch.FeatureSwitchItems
 
-@this(mainTemplate: MainTemplateOriginal,
-    singleCheckbox: SingleCheckbox)
+@this(mainTemplate: MainTemplate,
+      govukButton: GovukButton,
+      govukCheckboxes: GovukCheckboxes,
+      featureSwitchItems: FeatureSwitchItems)
 
 @(form: Form[FeatureSwitchModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-@mainTemplate(title = "Feature switches", bodyClasses = None) {
+@mainTemplate(pageTitle = "Feature switches") {
 
   @helper.form(action = testOnly.controllers.routes.FeatureSwitchController.submitFeatureSwitch) {
     @CSRF.formField
 
-    <div class="form-group">
-      <fieldset>
-        <legend>
-          <h1 class="heading-medium">Features</h1>
-        </legend>
+    @govukCheckboxes(Checkboxes(
+      name = "feature-switch",
+      fieldset = Some(Fieldset(
+        legend = Some(Legend(
+          content = Text("Features"),
+          classes = "govuk-fieldset__legend govuk-fieldset__legend--l",
+          isPageHeading = true
+        )),
+      )),
+      items = featureSwitchItems.items(form)
+    ))
 
-
-        @singleCheckbox(form(ConfigKeys.emailVerificationFeature), "Email Verification")
-        @singleCheckbox(form(ConfigKeys.useStaticDateFeature), "Use Static Date (2018-05-01)")
-        @singleCheckbox(form(ConfigKeys.directDebitInterruptFeature), "Direct Debit Interrupt Screen")
-      </fieldset>
-    </div>
-
-    <button class="button" type="submit" id="continue-button">Submit</button>
+    @govukButton(Button(
+      content = Text("Submit"),
+      inputType = Some("submit")
+    ))
   }
 }

@@ -19,12 +19,12 @@ package testOnly.controllers
 import controllers.ControllerBaseSpec
 import play.api.http.Status
 import play.api.test.Helpers._
-import testOnly.views.html.FeatureSwitchView
+import testOnly.views.html.featureSwitch.FeatureSwitch
 import play.api.test.CSRFTokenHelper._
 
 class FeatureSwitchControllerSpec extends ControllerBaseSpec {
 
-  private lazy val target = new FeatureSwitchController(inject[FeatureSwitchView], mcc, mockConfig)
+  private lazy val target = new FeatureSwitchController(inject[FeatureSwitch], mcc, mockConfig)
 
   "Calling the .featureSwitch action" should {
 
