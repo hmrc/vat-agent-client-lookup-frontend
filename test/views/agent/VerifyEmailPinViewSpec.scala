@@ -44,31 +44,32 @@ class VerifyEmailPinViewSpec extends ViewBaseSpec {
     "have a back link" which {
 
       "has the correct text" in {
-        elementText(".link-back") shouldBe "Back"
+        elementText(".govuk-back-link") shouldBe "Back"
       }
 
       "has the correct destination" in {
-        element(".link-back").attr("href") shouldBe controllers.agent.routes.CapturePreferenceController.show().url
+        element(".govuk-back-link").attr("href") shouldBe controllers.agent.routes.CapturePreferenceController.show().url
       }
     }
 
     "have the correct first paragraph" in {
-      elementText("#content article p:nth-of-type(1)") shouldBe s"We have sent a code to: $testEmail"
-    }
-    "have the correct panel paragraph" in {
-      elementText("p.panel") shouldBe "Open a new tab or window if you need to access your emails online."
+      elementText("#content p:nth-of-type(1)") shouldBe s"We have sent a code to: $testEmail"
     }
 
-    "have the correct subheading for the form" in {
-      elementText("h2") shouldBe "Confirmation code"
+    "have the correct inset text" in {
+      elementText(".govuk-inset-text") shouldBe "Open a new tab or window if you need to access your emails online."
+    }
+
+    "have the correct subheading for the input box" in {
+      elementText("label[for = passcode]") shouldBe "Confirmation code"
     }
 
     "have the correct form hint" in {
-      elementText("#form-hint") shouldBe "For example, DNCLRK"
+      elementText(".govuk-hint") shouldBe "For example, DNCLRK"
     }
 
     "have the correct progressive disclosure text" in {
-      elementText(".summary") shouldBe "I have not received the email"
+      elementText(".govuk-details__summary") shouldBe "I have not received the email"
     }
 
     "have the correct first paragraph inside of the progressive disclosure" in {
@@ -106,7 +107,7 @@ class VerifyEmailPinViewSpec extends ViewBaseSpec {
     }
 
     "have a button with the correct text" in {
-      elementText(".button") shouldBe "Continue"
+      elementText(".govuk-button") shouldBe "Continue"
     }
   }
 
@@ -122,20 +123,20 @@ class VerifyEmailPinViewSpec extends ViewBaseSpec {
     "have an error summary" which {
 
       "has the correct heading" in {
-        elementText("#error-summary-heading") shouldBe "There is a problem"
+        elementText(".govuk-error-summary__title") shouldBe "There is a problem"
       }
 
       "has the correct error message" in {
-        elementText("#passcode-error-summary") shouldBe "Enter the 6 character confirmation code"
+        elementText(".govuk-error-summary__body") shouldBe "Enter the 6 character confirmation code"
       }
 
       "has a link to the input with the error" in {
-        element("#passcode-error-summary").attr("href") shouldBe "#passcode"
+        element("#content > div.govuk-error-summary > div > ul > li > a").attr("href") shouldBe "#passcode"
       }
     }
 
     "have the correct error notification text above the input box" in {
-      elementText(".error-message") shouldBe "Error: Enter the 6 character confirmation code"
+      elementText(".govuk-error-message") shouldBe "Error: Enter the 6 character confirmation code"
     }
   }
 }
