@@ -18,8 +18,10 @@
 @import models.PreferenceModel
 @import forms.PreferenceForm._
 @import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.play.views.html.helpers.FormWithCSRF
 
 @this(mainTemplate: MainTemplate,
+      formWithCSRF: FormWithCSRF,
       govukBackLink: GovukBackLink,
       govukButton : GovukButton,
       govukErrorSummary: GovukErrorSummary,
@@ -60,10 +62,6 @@
 
   @mainTemplate(if(preferenceForm.errors.nonEmpty) messages("common.error.prefixTitle", pageTitle) else pageTitle, backLinkContent = Some(backLink)) {
 
-    <h1 class="govuk-heading-l">@messages("capturePref.noLetterTitle")</h1>
-
-    <p class="govuk-body">@messages("capturePref.confirmationEmail")</p>
-
     @if(preferenceForm.hasErrors) {
         @govukErrorSummary(ErrorSummary(
             title = Text(messages("common.error.heading")),
@@ -73,32 +71,38 @@
         ))
     }
 
-    @govukRadios(Radios(
-        fieldset = Some(Fieldset(
-            legend = Some(Legend(
-                content = Text(messages("capturePref.confirmationEmailRequest")),
-                classes = "govuk-fieldset__legend--s",
-                isPageHeading = false
-            ))
-        )),
-        idPrefix = Some("email"),
-        name = "email",
-        items = Seq(
-            RadioItem(
-                content = Text(messages("common.yes")),
-                value = Some("yes"),
-                conditionalHtml = Some(yesHtml)
-            ),
-            RadioItem(
-                content = Text(messages("common.no")),
-                value = Some("no"),
+    @formWithCSRF(action = controllers.agent.routes.CapturePreferenceController.submit) {
+
+        <h1 class="govuk-heading-l">@messages("capturePref.noLetterTitle")</h1>
+
+        <p class="govuk-body">@messages("capturePref.confirmationEmail")</p>
+
+        @govukRadios(Radios(
+            fieldset = Some(Fieldset(
+                legend = Some(Legend(
+                    content = Text(messages("capturePref.confirmationEmailRequest")),
+                    classes = "govuk-fieldset__legend--s",
+                    isPageHeading = false
+                ))
+            )),
+            idPrefix = Some("email"),
+            name = "email",
+            items = Seq(
+                RadioItem(
+                    content = Text(messages("common.yes")),
+                    value = Some("yes"),
+                    conditionalHtml = Some(yesHtml)
+                ),
+                RadioItem(
+                    content = Text(messages("common.no")),
+                    value = Some("no"),
+                )
             )
-        )
-    ))
+        ))
 
-    @govukButton(Button(
-        content = Text(messages("common.continue"))
-    ))
-
+        @govukButton(Button(
+            content = Text(messages("common.continue")),
+        ))
+    }
   }
 }
