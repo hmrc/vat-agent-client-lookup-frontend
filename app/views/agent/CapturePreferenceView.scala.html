@@ -66,7 +66,9 @@
         @govukErrorSummary(ErrorSummary(
             title = Text(messages("common.error.heading")),
             errorList = preferenceForm.errors.map { error =>
-                ErrorLink(content = Text(messages(error.message)), href = Some(s"#email"))
+                ErrorLink(
+                    content = Text(messages(error.message)),
+                    href = Some(s"#email"))
             }
         ))
     }
@@ -85,19 +87,24 @@
                     isPageHeading = false
                 ))
             )),
-            idPrefix = Some("email"),
-            name = "email",
+            idPrefix = Some(preferenceForm("yes_no").id),
+            name = "yes_no",
             items = Seq(
                 RadioItem(
                     content = Text(messages("common.yes")),
                     value = Some("yes"),
+                    checked = preferenceForm("yes_no").value.contains("yes"),
                     conditionalHtml = Some(yesHtml)
                 ),
                 RadioItem(
                     content = Text(messages("common.no")),
                     value = Some("no"),
+                    checked = preferenceForm("yes_no").value.contains("no")
                 )
-            )
+            ),
+            errorMessage = preferenceForm("yes_no").error.map { err =>
+                ErrorMessage(content = Text(messages(err.message)))
+            }
         ))
 
         @govukButton(Button(
