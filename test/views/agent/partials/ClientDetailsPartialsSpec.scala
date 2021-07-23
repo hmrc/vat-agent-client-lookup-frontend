@@ -39,7 +39,7 @@ class ClientDetailsPartialsSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct card heading of ${ClientDetailsPartialMessages.heading}" in {
-        elementText(".heading-medium") shouldBe ClientDetailsPartialMessages.heading
+        elementText(".govuk-heading-m") shouldBe ClientDetailsPartialMessages.heading
       }
 
       s"display the correct line 1 of ${ClientDetailsPartialMessages.paragraphOne}" in {
@@ -69,7 +69,7 @@ class ClientDetailsPartialsSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct card heading of ${ClientDetailsPartialMessages.heading}" in {
-        elementText(".heading-medium") shouldBe ClientDetailsPartialMessages.heading
+        elementText(".govuk-heading-m") shouldBe ClientDetailsPartialMessages.heading
       }
 
       s"display the correct line 1 of ${ClientDetailsPartialMessages.paragraphOne}" in {
@@ -96,7 +96,7 @@ class ClientDetailsPartialsSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct card heading of ${ClientDetailsPartialMessages.heading}" in {
-        elementText(".heading-medium") shouldBe ClientDetailsPartialMessages.heading
+        elementText(".govuk-heading-m") shouldBe ClientDetailsPartialMessages.heading
       }
 
       s"display the correct line 1 of ${ClientDetailsPartialMessages.paragraphOne}" in {

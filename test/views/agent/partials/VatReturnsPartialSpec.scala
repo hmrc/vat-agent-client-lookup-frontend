@@ -34,7 +34,7 @@ class VatReturnsPartialSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct card heading" in {
-        elementText(".heading-medium") shouldBe Messages.heading
+        elementText(".govuk-heading-m") shouldBe Messages.heading
       }
 
       "display the body of text for the card" in {
@@ -64,7 +64,7 @@ class VatReturnsPartialSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct card heading" in {
-        elementText(".heading-medium") shouldBe Messages.heading
+        elementText(".govuk-heading-m") shouldBe Messages.heading
       }
 
       "display the body of text for the card" in {
@@ -94,7 +94,7 @@ class VatReturnsPartialSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct card heading" in {
-        elementText(".heading-medium") shouldBe Messages.heading
+        elementText(".govuk-heading-m") shouldBe Messages.heading
       }
 
       "display the correct body of text for the card" in {
@@ -102,11 +102,11 @@ class VatReturnsPartialSpec extends ViewBaseSpec {
       }
 
       "display the correct text in link 1" in {
-        elementText("li") shouldBe Messages.submittedReturns
+        elementText("li:nth-child(1)") shouldBe Messages.submittedReturns
       }
 
       "have the correct url for the 1st link" in {
-        element("li").getAllElements.attr("href") shouldBe mockConfig.submittedReturnsUrl
+        element("li:nth-child(1)").getAllElements.attr("href") shouldBe mockConfig.submittedReturnsUrl
       }
     }
   }

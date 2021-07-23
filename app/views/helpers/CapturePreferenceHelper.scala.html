@@ -22,7 +22,7 @@
 @(heading: String, location: String)(implicit user: User[_])
 
 @if(user.session.get(SessionKeys.verifiedAgentEmail).isDefined | user.session.get(SessionKeys.preference).contains("no")) {
-    <a href="@location">@heading</a>
+    <a href="@location" class="govuk-link">@heading</a>
 } else {
-    <a href="@{controllers.agent.routes.CapturePreferenceController.show(location).url}">@heading</a>
+    <a href="@{controllers.agent.routes.CapturePreferenceController.show(location).url}" class="govuk-link">@heading</a>
 }

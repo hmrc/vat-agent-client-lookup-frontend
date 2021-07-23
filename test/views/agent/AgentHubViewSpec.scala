@@ -49,22 +49,23 @@ class AgentHubViewSpec extends ViewBaseSpec {
       }
 
       "display the correct client details" in {
-        elementText(".form-hint") should include(Messages.vatNo(vrn))
-        elementText(".form-hint") should include(customerDetailsFnameOnly.clientName)
-        elementText(".form-hint > a") shouldBe Messages.changeClient
+        elementText(".govuk-caption-m") should include(Messages.vatNo(vrn))
+        elementText("span.govuk-caption-m:nth-of-type(2)") should include(customerDetailsFnameOnly.clientName)
+        elementText(".govuk-caption-m > a") shouldBe Messages.changeClient
       }
 
       "has the correct URL for changing client" in {
-        element(".form-hint > a").attr("href") shouldBe controllers.agent.routes.ConfirmClientVrnController.changeClient().url
+        element(".govuk-caption-m:nth-of-type(3) > a").attr("href") shouldBe controllers.agent.routes.ConfirmClientVrnController.changeClient().url
       }
 
        "display the correct warning message" in {
-         elementText("#content > article > header > div > div") shouldBe Messages.noDDclient
+         elementText(".govuk-inset-text") shouldBe Messages.noDDclient
+
        }
 
       "have a breadcrumb link to agent services" in {
-        elementText("#breadcrumb-asa") shouldBe Messages.agentServicesAccount
-        element("#breadcrumb-asa").attr("href") shouldBe mockConfig.agentServicesUrl
+        elementText("li.govuk-breadcrumbs__list-item:nth-child(1)") shouldBe Messages.agentServicesAccount
+        element(".govuk-breadcrumbs__link").attr("href") shouldBe mockConfig.agentServicesUrl
       }
 
       "display the client details partial" in {

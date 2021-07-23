@@ -24,10 +24,8 @@
 @(mandationStatus: String)(implicit messages: Messages, appConfig: AppConfig, user: User[_])
 
 @if(!List(MandationStatus.nonMTDfB, MandationStatus.nonDigital, MandationStatus.MTDfBExempt).contains(mandationStatus)) {
-<div id="opt-out" class="column-one-third">
-    <h3 class="heading-small">
-        @capturePreferenceHelper(messages("optOutCard.heading"), appConfig.optOutMtdVatUrl)
-    </h3>
-    <p>@messages("optOutCard.content")</p>
-</div>
+    <div class="govuk-grid-column-one-third" id="opt-out">
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">@capturePreferenceHelper(messages("optOutCard.heading"), appConfig.optOutMtdVatUrl)</h3>
+        <p class="govuk-body">@messages("optOutCard.content")</p>
+    </div>
 }

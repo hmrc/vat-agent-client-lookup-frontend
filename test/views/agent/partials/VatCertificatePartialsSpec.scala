@@ -32,7 +32,7 @@ class VatCertificatePartialsSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct card heading as ${VatCertificatePartialMessages.heading}" in {
-      elementText(".heading-medium") shouldBe VatCertificatePartialMessages.heading
+      elementText(".govuk-heading-m") shouldBe VatCertificatePartialMessages.heading
     }
 
     s"display the correct line 1 as ${VatCertificatePartialMessages.paragraphOne}" in {
