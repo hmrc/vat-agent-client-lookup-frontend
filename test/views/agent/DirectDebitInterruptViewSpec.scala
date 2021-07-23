@@ -73,6 +73,17 @@ class DirectDebitInterruptViewSpec extends ViewBaseSpec {
             "/vat-through-software/representative/direct-debit-interrupt"
         }
       }
+
+      "have a back link" which {
+
+        "has the correct text" in {
+          elementText(".govuk-back-link") shouldBe "Back"
+        }
+
+        "has the correct href" in {
+          element(".govuk-back-link").attr("href") shouldBe controllers.agent.routes.ConfirmClientVrnController.show().url
+        }
+      }
     }
 
     "there is an error in the form" should {

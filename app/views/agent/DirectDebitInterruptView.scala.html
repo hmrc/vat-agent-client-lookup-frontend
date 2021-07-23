@@ -20,13 +20,22 @@
       formWithCSRF: FormWithCSRF,
       govukButton: GovukButton,
       govukCheckboxes: GovukCheckboxes,
-      govukErrorSummary: GovukErrorSummary)
+      govukErrorSummary: GovukErrorSummary,
+      govukBackLink: GovukBackLink)
 
 @(form: Form[Boolean])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
+@backLink = {
+  @govukBackLink(BackLink(
+    content = Text(messages("base.back")),
+    href = controllers.agent.routes.ConfirmClientVrnController.show().url
+  ))
+}
+
 @mainTemplate(
   pageTitle = if(form.hasErrors) messages("common.error.prefixTitle", messages("directDebitInterrupt.title"))
-              else messages("directDebitInterrupt.title")
+              else messages("directDebitInterrupt.title"),
+  backLinkContent = Some(backLink)
 ) {
 
   @if(form.hasErrors) {
