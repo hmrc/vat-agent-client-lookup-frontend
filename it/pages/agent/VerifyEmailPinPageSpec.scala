@@ -138,14 +138,14 @@ class VerifyEmailPinPageSpec extends BasePageISpec {
             httpStatus(BAD_REQUEST),
 
             //Error Summary
-            isElementVisible("#error-summary-display")(isVisible = true),
-            isElementVisible("#passcode-error-summary")(isVisible = true),
-            elementText("#passcode-error-summary")("Enter the 6 character confirmation code"),
-            elementWithLinkTo("#passcode-error-summary")("#passcode"),
+            isElementVisible(".govuk-error-summary")(isVisible = true),
+            isElementVisible(".govuk-error-summary__body")(isVisible = true),
+            elementText(".govuk-error-summary__body")("Enter the 6 character confirmation code"),
+            elementWithLinkTo("#content > div.govuk-error-summary > div > ul > li > a")("#passcode"),
 
             //Error against Input Label
-            isElementVisible(".form-field--error .error-message")(isVisible = true),
-            elementText(".form-field--error .error-message")("Error: Enter the 6 character confirmation code")
+            isElementVisible(".govuk-error-message")(isVisible = true),
+            elementText(".govuk-error-message")("Error: Enter the 6 character confirmation code")
           )
         }
       }
@@ -161,8 +161,8 @@ class VerifyEmailPinPageSpec extends BasePageISpec {
 
           res should have(
             httpStatus(BAD_REQUEST),
-            elementText("#passcode-error-summary")("Enter the 6 character confirmation code"),
-            elementText(".form-field--error .error-message")("Error: Enter the 6 character confirmation code")
+            elementText(".govuk-error-summary__body")("Enter the 6 character confirmation code"),
+            elementText(".govuk-error-message")("Error: Enter the 6 character confirmation code")
           )
         }
       }
