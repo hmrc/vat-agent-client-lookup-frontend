@@ -16,34 +16,52 @@
 
 @import models.CustomerDetails
 
-@this(mainTemplate: MainTemplateOriginal)
+@this(mainTemplate: MainTemplate,
+      govukButton: GovukButton,
+      govukSummaryList: GovukSummaryList)
 
 @(vrn: String, customerDetails: CustomerDetails)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-@mainTemplate(
-    title = messages("confirmClientVrn.title"),
-    bodyClasses = None) {
+@mainTemplate(pageTitle = messages("confirmClientVrn.title")) {
 
-    <h1 class="heading-large">
-        @messages("confirmClientVrn.heading")
-    </h1>
+  <h1 class="govuk-heading-l">
+    @messages("confirmClientVrn.heading")
+  </h1>
 
-    <dl>
-        <dt class="bold-medium bottom-padding">@messages("confirmClientVrn.name")</dt>
-        <dd class="link-bottom-margin">@customerDetails.clientName</dd>
-        <dt class="bold-medium bottom-padding">@messages("confirmClientVrn.vrn")</dt>
-        <dd class="bottom-margin">@vrn</dd>
-    </dl>
+  @govukSummaryList(SummaryList(
+    rows = Seq(
+      SummaryListRow(
+        key = Key(
+          content = Text(messages("confirmClientVrn.name")),
+          classes = "govuk-body-l"
+        ),
+        value = Value(
+          content = Text(customerDetails.clientName),
+          classes = "confirm-client-vrn-dd"
+        )
+      ),
+      SummaryListRow(
+        key = Key(
+          content = Text(messages("confirmClientVrn.vrn")),
+          classes = "govuk-body-l"
+        ),
+        value = Value(
+          content = Text(vrn),
+          classes = "confirm-client-vrn-dd"
+        )
+      )
+    ),
+    classes = "govuk-summary-list--no-border confirm-client-vrn-dl"
+  ))
 
-    <p>
-        <a href="@controllers.agent.routes.ConfirmClientVrnController.changeClient()">
-        @messages("confirmClientVrn.edit")
-        </a>
-    </p>
-
-    <a href="@controllers.agent.routes.ConfirmClientVrnController.redirect()"
-       class="button form-group"
-       role="button">
-        @messages("common.confirmAndContinue")
+  <p class="govuk-body">
+    <a id="change-client" class="govuk-link" href="@controllers.agent.routes.ConfirmClientVrnController.changeClient()">
+      @messages("confirmClientVrn.edit")
     </a>
+  </p>
+
+  @govukButton(Button(
+    content = Text(messages("common.confirmAndContinue")),
+    href = Some(controllers.agent.routes.ConfirmClientVrnController.redirect().url)
+  ))
 }

@@ -27,6 +27,16 @@ class ConfirmClientVrnViewSpec extends ViewBaseSpec {
 
   val injectedView: ConfirmClientVrnView = inject[ConfirmClientVrnView]
 
+  object Selectors {
+    val title = "h1"
+    val clientNameTitle = ".govuk-summary-list__row:nth-child(1) > dt"
+    val clientName = ".govuk-summary-list__row:nth-child(1) > dd"
+    val vrnTitle = ".govuk-summary-list__row:nth-child(2) > dt"
+    val vrn = ".govuk-summary-list__row:nth-child(2) > dd"
+    val button = ".govuk-button"
+    val changeClientLink = "#change-client"
+  }
+
   "The Confirm Change Client VRN page" when {
 
     "given an individual with no trading name" should {
@@ -43,42 +53,41 @@ class ConfirmClientVrnViewSpec extends ViewBaseSpec {
       }
 
       s"have the correct page heading of '${viewMessages.heading}'" in {
-        elementText("h1") shouldBe viewMessages.heading
+        elementText(Selectors.title) shouldBe viewMessages.heading
       }
 
       "have the correct heading and text for the business name section" in {
-        elementText("article > dl > dt:nth-of-type(1)") shouldBe viewMessages.name
-        elementText("article > dl > dd.link-bottom-margin:nth-of-type(1)") shouldBe CustomerDetailsTestConstants.customerDetailsIndividual.userName.get
+        elementText(Selectors.clientNameTitle) shouldBe viewMessages.name
+        elementText(Selectors.clientName) shouldBe CustomerDetailsTestConstants.userName
       }
 
       "have the correct heading and text for the VAT number section" in {
-        elementText("article > dl > dt:nth-of-type(2)") shouldBe viewMessages.vrn
-        elementText("article > dl > dd.bottom-margin:nth-of-type(2)") shouldBe BaseTestConstants.vrn
+        elementText(Selectors.vrnTitle) shouldBe viewMessages.vrn
+        elementText(Selectors.vrn) shouldBe BaseTestConstants.vrn
       }
 
       "have a confirm button" which {
 
         s"has the text '${BaseMessages.confirm}'" in {
-          elementText("a.button") shouldBe BaseMessages.confirmAndContinue
+          elementText(Selectors.button) shouldBe BaseMessages.confirmAndContinue
         }
 
         "has a link to the what to do URL" in {
-          element("a.button").attr("href") shouldBe controllers.agent.routes.ConfirmClientVrnController.redirect().url
+          element(Selectors.button).attr("href") shouldBe controllers.agent.routes.ConfirmClientVrnController.redirect().url
         }
       }
 
       "have a change client link" which {
 
         s"has the text '${viewMessages.edit}'" in {
-          elementText("article > p > a") shouldBe viewMessages.edit
+          elementText(Selectors.changeClientLink) shouldBe viewMessages.edit
         }
 
         "has the correct URL" in {
-          element("article > p > a").attr("href") shouldBe controllers.agent.routes.ConfirmClientVrnController.changeClient().url
+          element(Selectors.changeClientLink).attr("href") shouldBe controllers.agent.routes.ConfirmClientVrnController.changeClient().url
         }
       }
     }
-
 
     "given an individual with a trading name" should {
 
@@ -94,12 +103,12 @@ class ConfirmClientVrnViewSpec extends ViewBaseSpec {
       }
 
       s"have the correct page heading of '${viewMessages.heading}'" in {
-        elementText("h1") shouldBe viewMessages.heading
+        elementText(Selectors.title) shouldBe viewMessages.heading
       }
 
       "have the correct heading and text for the client name section" in {
-        elementText("article > dl > dt:nth-of-type(1)") shouldBe viewMessages.name
-        elementText("article > dl > dd.link-bottom-margin:nth-of-type(1)") shouldBe CustomerDetailsTestConstants.customerDetailsAllInfo.tradingName.get
+        elementText(Selectors.clientNameTitle) shouldBe viewMessages.name
+        elementText(Selectors.clientName) shouldBe CustomerDetailsTestConstants.tradingName
       }
     }
   }

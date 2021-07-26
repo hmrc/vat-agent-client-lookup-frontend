@@ -27,6 +27,7 @@ object CustomerDetailsTestConstants {
   val tradingName = "Dusty Relics"
   val firstName = "Fred"
   val lastName = "Flintstone"
+  val userName = "Fred Flintstone"
   val mandationStatus = "MTDfB Mandated"
   val nonMTDfB = "Non MTDfB"
   val nonDigital = "Non Digital"

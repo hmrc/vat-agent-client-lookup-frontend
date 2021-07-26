@@ -16,10 +16,8 @@
 
 package utils
 
-import java.time.format.DateTimeFormatter
-import java.time.format.TextStyle._
 import java.time.LocalDate
-import java.util.Locale._
+import java.time.format.DateTimeFormatter
 
 trait ImplicitDateFormatter {
 
@@ -29,9 +27,6 @@ trait ImplicitDateFormatter {
     def toLocalDate: LocalDate = LocalDate.parse(s, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
   }
 
-  implicit class longDate(d: LocalDate) {
-    def toLongDate: String = d.getDayOfMonth + " " + d.getMonth.getDisplayName(FULL, UK) + " " + d.getYear
-  }
 
   implicit def toLocalDate(s: String): LocalDate = localDate(s).toLocalDate
 
