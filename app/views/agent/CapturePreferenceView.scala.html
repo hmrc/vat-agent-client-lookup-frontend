@@ -39,17 +39,17 @@
 
 @yesHtml = {
     @govukInput(Input(
-        id = "email-address",
-        name = "email-address",
+        id = "email",
+        name = "email",
         inputType = "email",
         label = Label(
             content = Text(messages("capturePref.email"))
         ),
-        value = preferenceForm("preference").value,
+        value = preferenceForm("email-address").value,
         hint = Some(Hint(
             content = Text(messages("capturePref.email.hintAlternative"))
         )),
-        errorMessage = preferenceForm("preference").error.map { err =>
+        errorMessage = preferenceForm("email").error.map { err =>
             ErrorMessage(content = Text(messages(err.message)))
         },
         classes = "govuk-!-width-one-third",
@@ -68,7 +68,7 @@
             errorList = preferenceForm.errors.map { error =>
                 ErrorLink(
                     content = Text(messages(error.message)),
-                    href = Some(s"#email"))
+                    href = Some(s"#${error.key}"))
             }
         ))
     }
