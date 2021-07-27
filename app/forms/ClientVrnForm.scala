@@ -19,9 +19,9 @@ package forms
 import models.agent.ClientVrnModel
 import play.api.data.Form
 import play.api.data.Forms._
-import uk.gov.hmrc.play.mappers.StopOnFirstFail
-import uk.gov.hmrc.play.mappers.StopOnFirstFail.constraint
 import uk.gov.hmrc.referencechecker.VatReferenceChecker
+import utils.StopOnFirstFail
+import utils.StopOnFirstFail.constraint
 
 object ClientVrnForm {
 
@@ -29,7 +29,7 @@ object ClientVrnForm {
     mapping(
       "vrn" -> text.verifying(
           StopOnFirstFail(
-            constraint[String]("clientVrnForm.error.missing", _.length != 0),
+            constraint[String]("clientVrnForm.error.missing", _.nonEmpty),
             constraint[String]("clientVrnForm.error.invalid", VatReferenceChecker.isValid)
           )
         )
