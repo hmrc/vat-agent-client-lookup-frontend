@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package views.templates.formatters.dates
+package views.helpers
 
 import java.time.LocalDate
-
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import views.ViewBaseSpec
 import views.html.helpers.DisplayDate
-import views.templates.TemplateBaseSpec
 
-class DisplayDateSpec extends TemplateBaseSpec {
+class DisplayDateSpec extends ViewBaseSpec {
 
   val displayDate: DisplayDate = inject[DisplayDate]
 
