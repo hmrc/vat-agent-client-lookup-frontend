@@ -15,10 +15,6 @@
  *@
 
 @import config.AppConfig
-@import models.PreferenceModel
-@import forms.PreferenceForm._
-@import uk.gov.hmrc.govukfrontend.views.html.components._
-@import uk.gov.hmrc.play.views.html.helpers.FormWithCSRF
 
 @this(mainTemplate: MainTemplate,
       formWithCSRF: FormWithCSRF,
@@ -45,14 +41,14 @@
         label = Label(
             content = Text(messages("capturePref.email"))
         ),
-        value = preferenceForm("email-address").value,
+        value = preferenceForm("email").value,
         hint = Some(Hint(
             content = Text(messages("capturePref.email.hintAlternative"))
         )),
         errorMessage = preferenceForm("email").error.map { err =>
             ErrorMessage(content = Text(messages(err.message)))
         },
-        classes = "govuk-!-width-one-third",
+        classes = "govuk-!-width-one-half",
         autocomplete = Some("email"),
         spellcheck = Some(false)
     ))
