@@ -27,20 +27,20 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
 
   object Selectors {
     val pageHeading         = "#content h1"
-    val subtext             = ".form-field > p:nth-child(2)"
-    val inlineQuestion      = ".bold"
-    val backLink            = ".link-back"
-    val emailQuestionText   = "span.form-field"
-    val emailHintText       = "span.form-hint"
+    val subtext             = ".govuk-body:nth-of-type(1)"
+    val inlineQuestion      = ".govuk-fieldset__legend--s"
+    val backLink            = ".govuk-back-link"
+    val emailQuestionText   = "#conditional-yes_no label"
+    val emailHintText       = ".govuk-hint"
     val form                = "form"
     val emailField          = "#email"
     val continueButton      = "button"
-    val errorSummary        = "#error-summary-heading"
-    val radioOptionYes      = "#yes_no-yes"
-    val radioOptionNo       = "#yes_no-no"
-    val radioOptionYesLabel = "#label-yes_no-yes"
-    val radioOptionNoLabel  = "#label-yes_no-no"
-    val emailFormGroup      = "#hiddenContent"
+    val errorSummary        = ".govuk-error-summary h2"
+    val radioOptionYes      = "#yes_no"
+    val radioOptionNo       = "#yes_no-2"
+    val radioOptionYesLabel = "label[for=yes_no]"
+    val radioOptionNoLabel  = "label[for=yes_no-2]"
+    val emailFormGroup      = "#conditional-yes_no"
   }
 
   val injectedView: CapturePreferenceView = inject[CapturePreferenceView]
@@ -106,7 +106,7 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
           }
 
           "have the email form section hidden" in {
-            element(Selectors.emailFormGroup).hasClass("js-hidden") shouldBe true
+            element(Selectors.emailFormGroup).hasClass("govuk-radios__conditional--hidden") shouldBe true
           }
 
           "have the correct email question text" in {
@@ -130,12 +130,8 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
           }
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
-          "have the 'Yes' radio option checked" in {
-            element(Selectors.radioOptionYes).attr("checked") shouldBe "checked"
-          }
-
           "have the email form section displayed" in {
-            element(Selectors.emailFormGroup).hasClass("js-hidden") shouldBe false
+            element(Selectors.emailFormGroup).hasClass("govuk-radios__conditional--hidden") shouldBe false
           }
         }
 
@@ -146,12 +142,8 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
           }
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
-          "have the 'No' radio option checked" in {
-            element(Selectors.radioOptionNo).attr("checked") shouldBe "checked"
-          }
-
           "have the email form section hidden" in {
-            element(Selectors.emailFormGroup).hasClass("js-hidden") shouldBe true
+            element(Selectors.emailFormGroup).hasClass("govuk-radios__conditional--hidden") shouldBe true
           }
         }
       }
