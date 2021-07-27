@@ -26,7 +26,6 @@ val appName = "vat-agent-client-lookup-frontend"
 resolvers += "hmrc-releases-local" at "https://artefacts.tax.service.gov.uk/artifactory/hmrc-releases-local"
 
 val bootstrapPlayVersion       = "5.4.0"
-val govTemplateVersion         = "5.68.0-play-26"
 val playFrontendGovUk          = "0.80.0-play-26"
 val playFrontendHmrc           = "0.83.0-play-26"
 val playPartialsVersion        = "8.1.0-play-26"
@@ -48,7 +47,6 @@ val compile = Seq(
   "uk.gov.hmrc" %% "bootstrap-frontend-play-26" % bootstrapPlayVersion,
   "uk.gov.hmrc" %% "play-frontend-govuk" % playFrontendGovUk,
   "uk.gov.hmrc" %% "play-frontend-hmrc" % playFrontendHmrc,
-  "uk.gov.hmrc" %% "govuk-template" % govTemplateVersion,
   "uk.gov.hmrc" %% "play-ui" % playUiVersion,
   "uk.gov.hmrc" %% "play-partials" % playPartialsVersion,
   "uk.gov.hmrc" %% "play-language" % playLanguageVersion,
