@@ -190,7 +190,7 @@ class DDInterruptControllerSpec extends ControllerBaseSpec with MockDateService 
             }
 
             "add a value to the session to confirm the user has seen and accepted the terms of the DD interrupt" in {
-              session(result).get(SessionKeys.viewedDDInterrupt) shouldBe Some("true")
+              session(result).get(SessionKeys.viewedDDInterrupt) shouldBe Some("blueBox")
             }
           }
 

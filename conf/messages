@@ -148,3 +148,8 @@ directDebitInterrupt.needToLogIn = will need to log in to or create an online Bu
 directDebitInterrupt.iWillInform = I will inform my client about this change
 directDebitInterrupt.continue = Continue to your client’s VAT account
 directDebitInterrupt.formError = Select the checkbox to confirm you will inform your client about this change
+
+ddNotificationBanner.title = Important
+ddNotificationBanner.p1 = HMRC has had to cancel some VAT Direct Debit agreements.
+ddNotificationBanner.p2 = If your client pays by Direct Debit, ask them to check that their mandate is still in place.
+ddNotificationBanner.p3 = If they have already done this they do not need to do it again.

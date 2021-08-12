@@ -37,7 +37,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
 
      "the user is a valid agent for an opted-in client" should {
 
-      lazy val view = injectedView(customerDetailsFnameOnly, vrn, date)(messages,mockConfig,user)
+      lazy val view = injectedView(customerDetailsFnameOnly, vrn, date, showBlueBox = false)(messages,mockConfig,user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {
@@ -60,7 +60,6 @@ class AgentHubViewSpec extends ViewBaseSpec {
 
        "display the correct warning message" in {
          elementText(".govuk-inset-text") shouldBe Messages.noDDclient
-
        }
 
       "have a breadcrumb link to agent services" in {
@@ -93,9 +92,35 @@ class AgentHubViewSpec extends ViewBaseSpec {
       }
     }
 
+    "the user has the blueBox value in session" should {
+
+      lazy val view = injectedView(customerDetailsFnameOnly, vrn, date, showBlueBox = true)(messages,mockConfig,user)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have a notification banner" that {
+
+        "has the correct title" in {
+          elementText("#govuk-notification-banner-title") shouldBe Messages.notificationBannerTitle
+        }
+
+        "has the correct first sentence" in {
+          elementText("#noti-p1") shouldBe Messages.notificationBannerP1
+        }
+
+        "has the correct second sentence" in {
+          elementText("#noti-p2") shouldBe Messages.notificationBannerP2
+        }
+
+        "has the correct third sentence" in {
+          elementText("#noti-p3") shouldBe Messages.notificationBannerP3
+        }
+
+      }
+    }
+
     "the user is an agent for an opted out client" should {
 
-      lazy val view = injectedView(customerDetailsOptedOut, vrn, date)(messages, mockConfig, user)
+      lazy val view = injectedView(customerDetailsOptedOut, vrn, date, showBlueBox = false)(messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not display the opt-out partial" in {
@@ -109,7 +134,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
 
     "the user is an agent for a 'Non-Digital' client" should {
 
-      lazy val view = injectedView(customerDetailsNonDigital, vrn, date)(messages, mockConfig, user)
+      lazy val view = injectedView(customerDetailsNonDigital, vrn, date, showBlueBox = false)(messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not display the opt-out partial" in {
@@ -124,7 +149,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
     "the user is an agent for a deregistered client with a dereg date in the past" should {
       val otherDate: LocalDate = LocalDate.parse("2020-01-01")
 
-      lazy val view = injectedView(customerDetailsAllInfo, vrn, otherDate)(messages,mockConfig,user)
+      lazy val view = injectedView(customerDetailsAllInfo, vrn, otherDate, showBlueBox = false)(messages,mockConfig,user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the Cancel VAT registration historic partial" in {
@@ -135,7 +160,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
     "the user is an agent for a deregistered client with a dereg date in the future" should {
 
       val date: LocalDate = LocalDate.parse("2010-01-01")
-      lazy val view = injectedView(customerDetailsAllInfo, vrn, date)(messages,mockConfig,user)
+      lazy val view = injectedView(customerDetailsAllInfo, vrn, date, showBlueBox = false)(messages,mockConfig,user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'cancel vat registration' partial with the correct future of historic date" in {

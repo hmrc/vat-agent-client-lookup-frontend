@@ -16,6 +16,7 @@
 
 package controllers.agent
 
+import common.SessionKeys
 import config.{AppConfig, ErrorHandler}
 import controllers.BaseController
 import controllers.predicates.AuthoriseAsAgentWithClient
@@ -38,12 +39,14 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
 
   def show: Action[AnyContent] = authenticate.async { implicit user =>
 
+    lazy val showBlueBox: Boolean = user.session.get(SessionKeys.viewedDDInterrupt).contains("blueBox")
+
     customerDetailsService.getCustomerDetails(user.vrn).map {
       case Right(details) =>
         if (details.missingTrader && !details.hasPendingPPOB) {
           Redirect(appConfig.manageVatMissingTraderUrl)
         } else {
-          Ok(agentHubView(details, user.vrn, dateService.now()))
+          Ok(agentHubView(details, user.vrn, dateService.now(), showBlueBox))
         }
       case Left(error) =>
         Logger.warn(s"[AgentHubController][show] - received an error from CustomerDetailsService: $error")
