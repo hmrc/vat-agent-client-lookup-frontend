@@ -26,50 +26,74 @@
       vatCertificatePartials: VatCertificatePartials,
       vatReturnsPartial: VatReturnsPartial,
       govukBreadcrumbs: GovukBreadcrumbs,
-      govukInsetText : GovukInsetText)
+      govukInsetText : GovukInsetText,
+      govukNotificationBanner: GovukNotificationBanner)
 
-@(details: CustomerDetails, vrn: String, currentDate: LocalDate)(implicit messages: Messages,
-                                                                          appConfig: AppConfig,
-                                                                          user: User[_])
+@(details: CustomerDetails,
+  vrn: String,
+  currentDate: LocalDate,
+  showBlueBox: Boolean)(implicit messages: Messages,
+                                 appConfig: AppConfig,
+                                 user: User[_])
+
+@notificationBannerContent = {
+  <h3 id="noti-p1" class="govuk-heading-l govuk-notification-banner__heading">@messages("ddNotificationBanner.p1")</h3>
+  <p id="noti-p2" class="govuk-body">@messages("ddNotificationBanner.p2")</p>
+  <p id="noti-p3" class="govuk-body">@messages("ddNotificationBanner.p3")</p>
+}
+
+@blueBox = {
+  @if(showBlueBox) {
+    @govukNotificationBanner(NotificationBanner(
+      title = Text(messages("ddNotificationBanner.title")),
+      content = HtmlContent(notificationBannerContent),
+      classes = "govuk-notification-banner__heading"
+    ))
+  }
+}
 
 @breadcrumbLinks = {
-    @govukBreadcrumbs(Breadcrumbs(
-        items = Seq(
-            BreadcrumbsItem(
-                content = Text(messages("breadcrumb.agentServices")),
-                href = Some(appConfig.agentServicesUrl)
-            ),
-            BreadcrumbsItem(
-                content = Text(messages("agentHub.heading")),
-            )
-        )
-    ))
+  @govukBreadcrumbs(Breadcrumbs(
+    items = Seq(
+      BreadcrumbsItem(
+        content = Text(messages("breadcrumb.agentServices")),
+        href = Some(appConfig.agentServicesUrl)
+      ),
+      BreadcrumbsItem(
+        content = Text(messages("agentHub.heading")),
+      )
+    )
+  ))
 }
 
 @mainTemplate(pageTitle = messages("agentHub.heading"), backLinkContent = Some(breadcrumbLinks), isTwoThirdsWidth = false) {
 
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">@messages("agentHub.heading")</h1>
-    <span class="govuk-caption-m">@messages("agentHub.vrn", vrn)
-    </span>
-    <span class="govuk-caption-m govuk-!-margin-bottom-0">@details.clientName</span>
-    <span class="govuk-caption-m govuk-!-margin-bottom-6"><a href="@controllers.agent.routes.ConfirmClientVrnController.changeClient()" class="govuk-link">
-        @messages("agentHub.changeClient")
-    </a></span>
+  @blueBox
 
-    @govukInsetText(InsetText(
-        id = Some("noDDClient"),
-        content = Text(messages("agentHub.noDDclient"))
-    ))
+  <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">@messages("agentHub.heading")</h1>
+  <span class="govuk-caption-m">@messages("agentHub.vrn", vrn)
+  </span>
+  <span class="govuk-caption-m govuk-!-margin-bottom-0">@details.clientName</span>
+  <span class="govuk-caption-m govuk-!-margin-bottom-6">
+    <a href="@controllers.agent.routes.ConfirmClientVrnController.changeClient()" class="govuk-link">
+      @messages("agentHub.changeClient")
+    </a>
+  </span>
 
-    <div class="flex-container govuk-grid-row">
-        @clientDetailsPartials()
-        @vatReturnsPartial(details.mandationStatus)
-        @vatCertificatePartials()
-    </div>
+  @govukInsetText(InsetText(
+    id = Some("noDDClient"),
+    content = Text(messages("agentHub.noDDclient"))
+  ))
 
-    <div class="govuk-grid-row">
-            @signUpPartial(details.mandationStatus,vrn)
-            @optOutForMTDVATPartial(details.mandationStatus)
-            @registrationPartial(details, currentDate)
-    </div>
+  <div class="flex-container govuk-grid-row">
+    @clientDetailsPartials()
+    @vatReturnsPartial(details.mandationStatus)
+    @vatCertificatePartials()
+  </div>
+
+  <div class="govuk-grid-row">
+    @signUpPartial(details.mandationStatus,vrn)
+    @optOutForMTDVATPartial(details.mandationStatus)
+    @registrationPartial(details, currentDate)
+  </div>
 }

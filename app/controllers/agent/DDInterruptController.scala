@@ -67,7 +67,7 @@ class DDInterruptController @Inject()(mcc: MessagesControllerComponents,
         DDInterruptForm.form.bindFromRequest().fold(
           error => BadRequest(ddInterruptView(error)),
           _ => Redirect(controllers.agent.routes.AgentHubController.show())
-                .addingToSession(SessionKeys.viewedDDInterrupt -> "true")
+                .addingToSession(SessionKeys.viewedDDInterrupt -> "blueBox")
         )
     }
   }

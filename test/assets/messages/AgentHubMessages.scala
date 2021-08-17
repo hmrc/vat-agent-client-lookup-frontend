@@ -29,4 +29,8 @@ object AgentHubMessages {
   val optOut = "Opt out of Making Tax Digital for VAT"
   val cancelVat = "Cancel VAT registration"
   val noDDclient = "Agents cannot access a client’s Direct Debit or payment details"
+  val notificationBannerTitle = "Important"
+  val notificationBannerP1 = "HMRC has had to cancel some VAT Direct Debit agreements."
+  val notificationBannerP2 = "If your client pays by Direct Debit, ask them to check that their mandate is still in place."
+  val notificationBannerP3 = "If they have already done this they do not need to do it again."
 }
