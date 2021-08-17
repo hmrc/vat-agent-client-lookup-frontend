@@ -176,6 +176,6 @@ directDebitInterrupt.continue = Yn eich blaen i gyfrif TAW eich cleient
 directDebitInterrupt.formError = Ticiwch y blwch i gadarnhau y byddwch yn rhoi gwybod i’ch cleient am y newid hwn
 
 ddNotificationBanner.title = Pwysig
-ddNotificationBanner.p1 = Mae CThEM wedi gorfod canslo rhai cytundebau Debyd Uniongyrchol.
+ddNotificationBanner.p1 = Mae CThEM wedi gorfod canslo rhai cytundebau Debyd Uniongyrchol TAW.
 ddNotificationBanner.p2 = Os yw’ch cleient yn talu drwy Ddebyd Uniongyrchol, gofynnwch iddo wirio bod ei fandad yn dal i fod ar waith.
 ddNotificationBanner.p3 = Os yw eisoes wedi gwirio bod ei fandad yn dal i fod ar waith, nid oes angen iddo wneud hyn eto.
