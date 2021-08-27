@@ -118,6 +118,10 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
               "render the Confirm Client Vrn Page" in {
                 messages(document.select("h1").text) shouldBe Messages.heading
               }
+
+              "add the client name to the session" in {
+                session(result).get(SessionKeys.mtdVatAgentClientName) shouldBe Some(customerDetailsOrganisation.clientName)
+              }
             }
           }
 
@@ -233,6 +237,10 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
 
           "remove the client VRN" in {
             session(result).get(SessionKeys.clientVRN) shouldBe None
+          }
+
+          "remove the client name" in {
+            session(result).get(SessionKeys.mtdVatAgentClientName) shouldBe None
           }
 
           "retain the agent email" in {

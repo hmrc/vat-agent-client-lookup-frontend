@@ -25,10 +25,10 @@ val appName = "vat-agent-client-lookup-frontend"
 
 resolvers += "hmrc-releases-local" at "https://artefacts.tax.service.gov.uk/artifactory/hmrc-releases-local"
 
-val bootstrapPlayVersion       = "5.7.0"
+val bootstrapPlayVersion       = "5.12.0"
 val playFrontendGovUk          = "0.81.0-play-26"
 val playFrontendHmrc           = "0.86.0-play-26"
-val playPartialsVersion        = "8.1.0-play-26"
+val playPartialsVersion        = "8.2.0-play-26"
 val playLanguageVersion        = "5.1.0-play-26"
 val scalaTestPlusVersion       = "3.1.3"
 val hmrcTestVersion            = "3.10.0-play-26"
@@ -119,7 +119,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     Keys.fork in Test := true,
     javaOptions in Test += "-Dlogger.resource=logback-test.xml",
-    scalaVersion := "2.12.12",
+    scalaVersion := "2.12.14",
     majorVersion := 0,
     libraryDependencies ++= appDependencies,
     retrieveManaged := true,
