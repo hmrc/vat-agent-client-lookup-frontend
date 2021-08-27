@@ -63,7 +63,7 @@ class ConfirmClientVrnController @Inject()(authenticate: AuthoriseAsAgentWithCli
             Some(controllers.agent.routes.ConfirmClientVrnController.show().url)
           )
 
-          Ok(confirmClientVrnView(user.vrn, customerDetails))
+          Ok(confirmClientVrnView(user.vrn, customerDetails)).addingToSession(SessionKeys.mtdVatAgentClientName -> customerDetails.clientName)
         case Left(Migration) => PreconditionFailed(accountMigrationView())
         case Left(NotSignedUp) => NotFound(notSignedUpView())
         case _ =>
@@ -79,6 +79,7 @@ class ConfirmClientVrnController @Inject()(authenticate: AuthoriseAsAgentWithCli
       Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectUrl))
         .removingFromSession(SessionKeys.clientVRN)
         .removingFromSession(SessionKeys.viewedDDInterrupt)
+        .removingFromSession(SessionKeys.mtdVatAgentClientName)
   }
 
   def redirect: Action[AnyContent] = (authenticate andThen ddInterrupt) {
