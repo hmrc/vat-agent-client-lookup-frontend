@@ -33,7 +33,8 @@
 @mainTemplate(
   pageTitle = if(form.hasErrors) messages("common.error.prefixTitle", messages("directDebitInterrupt.title"))
               else messages("directDebitInterrupt.title"),
-  backLinkContent = Some(backLink)
+  backLinkContent = Some(backLink),
+  headerLink = false
 ) {
 
   @if(form.hasErrors) {

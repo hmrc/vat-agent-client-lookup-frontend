@@ -46,7 +46,7 @@ trait TestUtil extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach
   implicit lazy val mockConfig: MockAppConfig = new MockAppConfig(app.configuration)
   implicit lazy val serviceErrorHandler: ErrorHandler = inject[ErrorHandler]
 
-  lazy val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+  lazy implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
   lazy val language: Lang = mockConfig.languageMap("english")
 
 
