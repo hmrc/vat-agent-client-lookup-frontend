@@ -17,46 +17,51 @@
 @import models.agent.ClientVrnModel
 @import play.api.data.Form
 
-@this(mainTemplate: MainTemplate, formWithCSRF: FormWithCSRF, govukInput : GovukInput, govukButton: GovukButton,
-govukErrorSummary: GovukErrorSummary)
+@this(mainTemplate: MainTemplate,
+      formWithCSRF: FormWithCSRF,
+      govukInput : GovukInput,
+      govukButton: GovukButton,
+      govukErrorSummary: GovukErrorSummary)
 
 @(form: Form[ClientVrnModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @mainTemplate(
-    if(form.errors.nonEmpty) messages("common.error.prefixTitle", messages("clientsVrn.heading")) else messages("clientsVrn.heading")
+  pageTitle = if(form.errors.nonEmpty) messages("common.error.prefixTitle", messages("clientsVrn.heading"))
+              else messages("clientsVrn.heading"),
+  headerLink = false
 ) {
 
-    @if(form.hasErrors) {
+  @if(form.hasErrors) {
     @govukErrorSummary(ErrorSummary(
-    errorList = form.errors.map { error =>
-    ErrorLink(content = Text(messages(error.message)), href = Some(s"#vrn"))
-    },
-    title = Text(messages("common.error.heading"))
+      errorList = form.errors.map { error =>
+        ErrorLink(content = Text(messages(error.message)), href = Some(s"#vrn"))
+      },
+      title = Text(messages("common.error.heading"))
     ))
-    }
+  }
 
 
-@formWithCSRF(action = controllers.agent.routes.SelectClientVrnController.submit) {
+  @formWithCSRF(action = controllers.agent.routes.SelectClientVrnController.submit) {
 
     @govukInput(Input(
-    id = "vrn",
-    name = "vrn",
-    label = Label(
-    isPageHeading = true,
-    classes = "govuk-label--l",
-    content = Text(messages("clientsVrn.heading"))
-    ),
-    hint = Some(Hint(
-    content = Text(messages("clientsVrn.p1"))
-    )),
-    errorMessage = form("vrn").error.map { err =>
-    ErrorMessage(content = Text(messages(err.message)))
-    },
-    classes = "govuk-input--width-10"
+      id = "vrn",
+      name = "vrn",
+      label = Label(
+        isPageHeading = true,
+        classes = "govuk-label--l",
+        content = Text(messages("clientsVrn.heading"))
+      ),
+      hint = Some(Hint(
+        content = Text(messages("clientsVrn.p1"))
+      )),
+      errorMessage = form("vrn").error.map { err =>
+        ErrorMessage(content = Text(messages(err.message)))
+      },
+      classes = "govuk-input--width-10"
     ))
 
     @govukButton(Button(
-    content = Text(messages("common.continue"))
+      content = Text(messages("common.continue"))
     ))
   }
 }

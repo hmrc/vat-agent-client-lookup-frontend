@@ -30,7 +30,8 @@
   showSignOut: Boolean = true,
   feedbackOnSignOut: Boolean = true,
   backLinkContent: Option[Html] = None,
-  isTwoThirdsWidth: Boolean = true
+  isTwoThirdsWidth: Boolean = true,
+  headerLink: Boolean = true
 )(mainContent: Html)(implicit request : Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @navTitle = @{
@@ -74,6 +75,7 @@
 @header = @{
   hmrcStandardHeader(
     serviceName = Some(navTitle),
+    serviceUrl = if(headerLink) Some(controllers.agent.routes.AgentHubController.show().url) else None,
     signOutUrl = if(showSignOut) Some(routes.SignOutController.signOut(feedbackOnSignOut).url) else None,
     phaseBanner = Some(standardBetaBanner(url = appConfig.feedbackUrl)),
     displayHmrcBanner = false
