@@ -26,14 +26,22 @@
 
   <p class="govuk-body">
     @messages("notSignedUp.paragraph1Text")
-    <a class="govuk-link" href = "https://www.gov.uk/guidance/making-tax-digital-for-vat-as-an-agent-step-by-step"
-    id="sign-up-to-mtd" target="_blank">@messages("notSignedUp.paragraph1Link")</a>
+    <a class="govuk-link"
+       href="https://www.gov.uk/guidance/making-tax-digital-for-vat-as-an-agent-step-by-step"
+       id="sign-up-to-mtd"
+       target="_blank"
+       rel="noreferrer noopener">
+      @messages("notSignedUp.paragraph1Link")
+    </a>
   </p>
 
   <p class="govuk-body">
     @messages("notSignedUp.paragraph2Text1")
-    <a class="govuk-link" href="@appConfig.classicServicesSignInUrl"
-    id="use-existing-hmrc-service-account">@messages("notSignedUp.paragraph2Link")</a>
+    <a class="govuk-link"
+       href="@appConfig.classicServicesSignInUrl"
+       id="use-existing-hmrc-service-account">
+      @messages("notSignedUp.paragraph2Link")
+    </a>
     @messages("notSignedUp.paragraph2Text2")
   </p>
 
