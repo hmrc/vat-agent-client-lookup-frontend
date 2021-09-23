@@ -74,11 +74,11 @@ object IntegrationTestConstants {
       "lastName" -> "Mac",
       "tradingName" -> "PepsiCo",
       "isInsolvent" -> false,
+      "isPartialMigration" -> isPartialMigration,
       "customerMigratedToETMPDate" -> "2018-03-03"
     ),
     "mandationStatus" -> mandated,
-    "missingTrader" -> false,
-    "isPartialMigration" -> isPartialMigration
+    "missingTrader" -> false
   )
 
   val individualNonMTDfBJson: JsObject = Json.obj(
@@ -87,10 +87,10 @@ object IntegrationTestConstants {
       "lastName" -> "Mac",
       "tradingName" -> "PepsiCo",
       "isInsolvent" -> false,
+      "isPartialMigration" -> isPartialMigration,
       "customerMigratedToETMPDate" -> "2018-03-03"
     ),
     "mandationStatus" -> nonMTDfB,
-    "missingTrader" -> false,
-    "isPartialMigration" -> isPartialMigration
+    "missingTrader" -> false
   )
 }

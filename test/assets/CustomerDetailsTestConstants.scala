@@ -39,11 +39,11 @@ object CustomerDetailsTestConstants {
 
   val noOptionalInfoJson: JsObject = Json.obj(
     "customerDetails" -> Json.obj(
-      "isInsolvent" -> false
+      "isInsolvent" -> false,
+      "isPartialMigration" -> isPartialMigration
     ),
     "mandationStatus" -> mandationStatus,
-    "missingTrader" -> missingTrader,
-    "isPartialMigration" -> isPartialMigration
+    "missingTrader" -> missingTrader
   )
 
   val allInfoJson: JsObject = Json.obj(
@@ -53,6 +53,7 @@ object CustomerDetailsTestConstants {
       "organisationName" -> orgName,
       "tradingName" -> tradingName,
       "isInsolvent" -> false,
+      "isPartialMigration" -> isPartialMigration,
       "customerMigratedToETMPDate" -> "2018-03-03"
     ),
     "partyType" -> "2",
@@ -60,8 +61,7 @@ object CustomerDetailsTestConstants {
     "deregistration" -> Json.obj(
       "effectDateOfCancellation" -> "2019-01-01"
     ),
-    "missingTrader" -> true,
-    "isPartialMigration" -> isPartialMigration
+    "missingTrader" -> true
   )
 
   val pendingInfoJson: JsObject = Json.obj(
@@ -71,6 +71,7 @@ object CustomerDetailsTestConstants {
       "organisationName" -> orgName,
       "tradingName" -> tradingName,
       "isInsolvent" -> false,
+      "isPartialMigration" -> isPartialMigration,
       "customerMigratedToETMPDate" -> "2018-03-03"
     ),
     "partyType" -> "2",
@@ -79,7 +80,6 @@ object CustomerDetailsTestConstants {
       "effectDateOfCancellation" -> "2019-01-01"
     ),
     "missingTrader" -> true,
-    "isPartialMigration" -> isPartialMigration,
     "pendingChanges" -> Json.obj(
       "organisationName" -> s"New $orgName",
       "tradingName" -> s"New $tradingName"

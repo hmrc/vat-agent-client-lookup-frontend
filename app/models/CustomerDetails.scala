@@ -63,7 +63,7 @@ object CustomerDetails {
   private val isInsolventPath = __ \ "customerDetails" \ "isInsolvent"
   private val changeIndicatorsPath = __ \ "changeIndicators"
   private val missingTraderPath = __ \ "missingTrader"
-  private val isPartialMigrationPath = __ \ "isPartialMigration"
+  private val isPartialMigrationPath = __ \ "customerDetails"\ "isPartialMigration"
   private val migratedToETMPDatePath = __ \ "customerDetails" \ "customerMigratedToETMPDate"
 
   implicit val reads: Reads[CustomerDetails] = (
