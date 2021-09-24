@@ -34,11 +34,13 @@ object CustomerDetailsTestConstants {
   val vatGroup = "Z2"
   val validParty = "2"
   val missingTrader = true
+  val isPartialMigration = false
   val migratedToETMPDate = "2018-03-03"
 
   val noOptionalInfoJson: JsObject = Json.obj(
     "customerDetails" -> Json.obj(
-      "isInsolvent" -> false
+      "isInsolvent" -> false,
+      "isPartialMigration" -> isPartialMigration
     ),
     "mandationStatus" -> mandationStatus,
     "missingTrader" -> missingTrader
@@ -51,6 +53,7 @@ object CustomerDetailsTestConstants {
       "organisationName" -> orgName,
       "tradingName" -> tradingName,
       "isInsolvent" -> false,
+      "isPartialMigration" -> isPartialMigration,
       "customerMigratedToETMPDate" -> "2018-03-03"
     ),
     "partyType" -> "2",
@@ -68,6 +71,7 @@ object CustomerDetailsTestConstants {
       "organisationName" -> orgName,
       "tradingName" -> tradingName,
       "isInsolvent" -> false,
+      "isPartialMigration" -> isPartialMigration,
       "customerMigratedToETMPDate" -> "2018-03-03"
     ),
     "partyType" -> "2",
@@ -91,6 +95,7 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     Some(Deregistration(Some(LocalDate.parse("2019-01-01")))),
     isInsolvent = false,
+    isPartialMigration = isPartialMigration,
     Some(migratedToETMPDate),
     None,
     missingTrader = missingTrader
@@ -105,6 +110,7 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     Some(Deregistration(Some(LocalDate.parse("2019-01-01")))),
     isInsolvent = false,
+    isPartialMigration = isPartialMigration,
     Some(migratedToETMPDate),
     None,
     missingTrader
@@ -119,6 +125,7 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None,
     isInsolvent = false,
+    isPartialMigration = isPartialMigration,
     None,
     None,
     missingTrader
@@ -133,6 +140,7 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None,
     isInsolvent = false,
+    isPartialMigration = isPartialMigration,
     None
   )
 
@@ -145,6 +153,7 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None,
     isInsolvent = false,
+    isPartialMigration = isPartialMigration,
     None
   )
 
@@ -157,6 +166,7 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None,
     isInsolvent = false,
+    isPartialMigration = isPartialMigration,
     None
   )
 
@@ -169,6 +179,7 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None,
     isInsolvent = false,
+    isPartialMigration = isPartialMigration,
     None
   )
 
@@ -181,6 +192,7 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None,
     isInsolvent = false,
+    isPartialMigration = isPartialMigration,
     None
   )
 
@@ -193,6 +205,7 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None,
     isInsolvent = false,
+    isPartialMigration = isPartialMigration,
     Some(migratedToETMPDate)
   )
 
@@ -205,6 +218,7 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None,
     isInsolvent = false,
+    isPartialMigration = isPartialMigration,
     Some(migratedToETMPDate)
   )
 
@@ -217,6 +231,7 @@ object CustomerDetailsTestConstants {
     nonDigital,
     None,
     isInsolvent = false,
+    isPartialMigration = isPartialMigration,
     Some(migratedToETMPDate)
   )
 
@@ -229,6 +244,7 @@ object CustomerDetailsTestConstants {
     nonMTDfB,
     Some(Deregistration(Some(LocalDate.parse("2019-01-01")))),
     isInsolvent = false,
+    isPartialMigration = isPartialMigration,
     Some(migratedToETMPDate)
   )
 
@@ -246,6 +262,7 @@ object CustomerDetailsTestConstants {
     nonMTDfB,
     Some(Deregistration(Some(LocalDate.parse("2020-01-01")))),
     isInsolvent = false,
+    isPartialMigration = isPartialMigration,
     Some(migratedToETMPDate)
   )
 
@@ -258,6 +275,7 @@ object CustomerDetailsTestConstants {
     nonMTDfB,
     Some(Deregistration(Some(LocalDate.parse("2020-01-01")))),
     isInsolvent = false,
+    isPartialMigration = isPartialMigration,
     Some(migratedToETMPDate)
   )
 
@@ -270,6 +288,7 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None,
     isInsolvent = false,
+    isPartialMigration = isPartialMigration,
     None
   )
 

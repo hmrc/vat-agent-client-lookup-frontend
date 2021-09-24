@@ -29,6 +29,7 @@ case class CustomerDetails(firstName: Option[String],
                            mandationStatus: String,
                            deregistration: Option[Deregistration],
                            isInsolvent: Boolean,
+                           isPartialMigration: Boolean,
                            customerMigratedToETMPDate: Option[String],
                            changeIndicators: Option[ChangeIndicators] = None,
                            missingTrader: Boolean = false) {
@@ -62,6 +63,7 @@ object CustomerDetails {
   private val isInsolventPath = __ \ "customerDetails" \ "isInsolvent"
   private val changeIndicatorsPath = __ \ "changeIndicators"
   private val missingTraderPath = __ \ "missingTrader"
+  private val isPartialMigrationPath = __ \ "customerDetails"\ "isPartialMigration"
   private val migratedToETMPDatePath = __ \ "customerDetails" \ "customerMigratedToETMPDate"
 
   implicit val reads: Reads[CustomerDetails] = (
@@ -73,6 +75,7 @@ object CustomerDetails {
     mandationStatusPath.read[String] and
     deregistrationPath.readNullable[Deregistration] and
     isInsolventPath.read[Boolean] and
+    isPartialMigrationPath.read[Boolean] and
     migratedToETMPDatePath.readNullable[String] and
     changeIndicatorsPath.readNullable[ChangeIndicators] and
     missingTraderPath.read[Boolean]

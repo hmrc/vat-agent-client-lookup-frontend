@@ -30,6 +30,8 @@ object IntegrationTestConstants {
   val nonMTDfB = "Non MTDfB"
   val mandated = "MTDfB Mandated"
 
+  val isPartialMigration = false
+
   val notificationsEmail = "notifyme@email.com"
 
   val website = "www.test.com"
@@ -49,6 +51,7 @@ object IntegrationTestConstants {
     deregistration = None,
     partyType = Some("2"),
     isInsolvent = false,
+    isPartialMigration = isPartialMigration,
     customerMigratedToETMPDate = Some("2018-03-03")
   )
 
@@ -61,6 +64,7 @@ object IntegrationTestConstants {
     deregistration = None,
     partyType = Some("2"),
     isInsolvent = false,
+    isPartialMigration = isPartialMigration,
     customerMigratedToETMPDate = Some("2018-03-03")
   )
 
@@ -70,6 +74,7 @@ object IntegrationTestConstants {
       "lastName" -> "Mac",
       "tradingName" -> "PepsiCo",
       "isInsolvent" -> false,
+      "isPartialMigration" -> isPartialMigration,
       "customerMigratedToETMPDate" -> "2018-03-03"
     ),
     "mandationStatus" -> mandated,
@@ -82,6 +87,7 @@ object IntegrationTestConstants {
       "lastName" -> "Mac",
       "tradingName" -> "PepsiCo",
       "isInsolvent" -> false,
+      "isPartialMigration" -> isPartialMigration,
       "customerMigratedToETMPDate" -> "2018-03-03"
     ),
     "mandationStatus" -> nonMTDfB,
