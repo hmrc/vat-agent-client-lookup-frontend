@@ -95,7 +95,7 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     Some(Deregistration(Some(LocalDate.parse("2019-01-01")))),
     isInsolvent = false,
-    isPartialMigration = isPartialMigration,
+    isHybridUser = isPartialMigration,
     Some(migratedToETMPDate),
     None,
     missingTrader = missingTrader
@@ -110,7 +110,7 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     Some(Deregistration(Some(LocalDate.parse("2019-01-01")))),
     isInsolvent = false,
-    isPartialMigration = isPartialMigration,
+    isHybridUser = isPartialMigration,
     Some(migratedToETMPDate),
     None,
     missingTrader
@@ -125,7 +125,7 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None,
     isInsolvent = false,
-    isPartialMigration = isPartialMigration,
+    isHybridUser = isPartialMigration,
     None,
     None,
     missingTrader
@@ -140,7 +140,7 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None,
     isInsolvent = false,
-    isPartialMigration = isPartialMigration,
+    isHybridUser = isPartialMigration,
     None
   )
 
@@ -153,7 +153,7 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None,
     isInsolvent = false,
-    isPartialMigration = isPartialMigration,
+    isHybridUser = isPartialMigration,
     None
   )
 
@@ -166,7 +166,7 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None,
     isInsolvent = false,
-    isPartialMigration = isPartialMigration,
+    isHybridUser = isPartialMigration,
     None
   )
 
@@ -179,7 +179,7 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None,
     isInsolvent = false,
-    isPartialMigration = isPartialMigration,
+    isHybridUser = isPartialMigration,
     None
   )
 
@@ -192,7 +192,7 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None,
     isInsolvent = false,
-    isPartialMigration = isPartialMigration,
+    isHybridUser = isPartialMigration,
     None
   )
 
@@ -205,7 +205,7 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None,
     isInsolvent = false,
-    isPartialMigration = isPartialMigration,
+    isHybridUser = isPartialMigration,
     Some(migratedToETMPDate)
   )
 
@@ -218,7 +218,7 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None,
     isInsolvent = false,
-    isPartialMigration = isPartialMigration,
+    isHybridUser = isPartialMigration,
     Some(migratedToETMPDate)
   )
 
@@ -231,7 +231,7 @@ object CustomerDetailsTestConstants {
     nonDigital,
     None,
     isInsolvent = false,
-    isPartialMigration = isPartialMigration,
+    isHybridUser = isPartialMigration,
     Some(migratedToETMPDate)
   )
 
@@ -244,7 +244,7 @@ object CustomerDetailsTestConstants {
     nonMTDfB,
     Some(Deregistration(Some(LocalDate.parse("2019-01-01")))),
     isInsolvent = false,
-    isPartialMigration = isPartialMigration,
+    isHybridUser = isPartialMigration,
     Some(migratedToETMPDate)
   )
 
@@ -262,7 +262,7 @@ object CustomerDetailsTestConstants {
     nonMTDfB,
     Some(Deregistration(Some(LocalDate.parse("2020-01-01")))),
     isInsolvent = false,
-    isPartialMigration = isPartialMigration,
+    isHybridUser = isPartialMigration,
     Some(migratedToETMPDate)
   )
 
@@ -275,7 +275,7 @@ object CustomerDetailsTestConstants {
     nonMTDfB,
     Some(Deregistration(Some(LocalDate.parse("2020-01-01")))),
     isInsolvent = false,
-    isPartialMigration = isPartialMigration,
+    isHybridUser = isPartialMigration,
     Some(migratedToETMPDate)
   )
 
@@ -288,9 +288,10 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None,
     isInsolvent = false,
-    isPartialMigration = isPartialMigration,
+    isHybridUser = isPartialMigration,
     None
   )
 
   val customerDetailsInsolvent: CustomerDetails = customerDetailsAllInfo.copy(isInsolvent = true)
+  val customerDetailsHybrid: CustomerDetails = customerDetailsAllInfo.copy(isHybridUser = true, missingTrader = false)
 }

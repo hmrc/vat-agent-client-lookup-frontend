@@ -14,20 +14,14 @@
  * limitations under the License.
  */
 
-package models
+package messages.partials
 
-import play.api.libs.json.{JsPath, Reads}
-import java.time.LocalDate
-
-import play.api.libs.functional.syntax.{toAlternativeOps, toFunctionalBuilderOps}
-
-case class Charge(dueDate: LocalDate,
-                  ddCollectionInProgress: Boolean)
-
-object Charge {
-
-  implicit val reads: Reads[Charge] = (
-    (JsPath \ "items")(0).\("dueDate").read[LocalDate] and
-    (JsPath \ "items")(0).\("DDcollectionInProgress").read[Boolean].or(Reads.pure(false))
-  ) (Charge.apply _)
+object NextPaymentPartialMessages {
+  val heading: String = "Next payment due"
+  val headingPayments: String = "Payments due"
+  val noPayments: String = "No payments due right now"
+  val payments: String = "You have 10 payments due"
+  val linkText: String = "Check what you owe"
+  val date: String = "1 January 2018"
+  val overdue: String = "overdue"
 }

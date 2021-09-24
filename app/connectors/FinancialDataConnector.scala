@@ -39,5 +39,5 @@ class FinancialDataConnector @Inject()(httpClient: HttpClient,
     s"${appConfig.financialTransactionsBaseUrl}/financial-transactions/vat/$vrn"
 
   def getPaymentsDue(vrn: String)(implicit hc: HeaderCarrier): Future[HttpResult[Seq[Charge]]] =
-    httpClient.GET(paymentUrl(vrn))(ChargeReads, hc, ec)
+    httpClient.GET(paymentUrl(vrn), Seq("onlyOpenItems" -> "true"))(ChargeReads, hc, ec)
 }

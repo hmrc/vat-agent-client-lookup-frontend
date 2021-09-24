@@ -18,25 +18,30 @@ package controllers.agent
 
 import assets.BaseTestConstants
 import assets.CustomerDetailsTestConstants._
+import assets.FinancialDataConstants._
 import controllers.ControllerBaseSpec
 import mocks.services._
 import org.jsoup.Jsoup
 import play.api.mvc.Result
 import play.mvc.Http.Status._
 import views.html.agent.AgentHubView
-
 import java.time.LocalDate
+
+import models.HubViewModel
+
 import scala.concurrent.Future
 
 class AgentHubControllerSpec extends ControllerBaseSpec
                               with MockCustomerDetailsService
-                              with MockDateService {
+                              with MockDateService
+                              with MockFinancialDataService {
 
   lazy val controller = new AgentHubController(
     mockAuthAsAgentWithClient,
     mockErrorHandler,
     mockCustomerDetailsService,
     mockDateService,
+    mockFinancialDataService,
     mcc,
     inject[AgentHubView],
     mockConfig,
@@ -55,6 +60,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           mockAgentAuthorised()
           mockCustomerDetailsSuccess(customerDetailsAllInfo)
           setupMockDateService(staticDate)
+          mockPaymentResponse(paymentResponse)
 
           val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
@@ -68,6 +74,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           mockAgentAuthorised()
           mockCustomerDetailsSuccess(customerDetailsAllPending.copy(missingTrader = true))
           setupMockDateService(staticDate)
+          mockPaymentResponse(paymentResponse)
 
           val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
@@ -83,6 +90,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
         mockAgentAuthorised()
         mockCustomerDetailsSuccess(customerDetailsFnameOnly)
         setupMockDateService(staticDate)
+        mockPaymentResponse(paymentResponse)
 
         val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
@@ -97,11 +105,84 @@ class AgentHubControllerSpec extends ControllerBaseSpec
         mockAgentAuthorised()
         mockCustomerDetailsError(BaseTestConstants.unexpectedError)
         setupMockDateService(staticDate)
+        mockPaymentResponse(paymentResponse)
 
         val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
         status(result) shouldBe INTERNAL_SERVER_ERROR
         Jsoup.parse(bodyOf(result)).title() shouldBe "There is a problem with the service - Your client’s VAT details - GOV.UK"
+      }
+    }
+
+    "the customer is a hybrid user" should {
+
+      "return OK but not make a payment API call" in {
+        mockAgentAuthorised()
+        mockCustomerDetailsSuccess(customerDetailsHybrid)
+        setupMockDateService(staticDate)
+
+        val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
+        status(result) shouldBe OK
+      }
+    }
+  }
+
+  "AgentHubController.constructViewModel()" should {
+
+    "build the correct view model" when {
+
+      "the user has 1 payment and it is overdue" in {
+        mockAgentAuthorised()
+        setupMockDateService(staticDate)
+
+        val expected = HubViewModel(
+          customerDetailsAllInfo,
+          BaseTestConstants.vrn,
+          LocalDate.parse("2018-05-01"),
+          showBlueBox = true,
+          Some(LocalDate.parse("2018-01-01")),
+          isOverdue = true,
+          payments = 1
+        )
+
+        val result = controller.constructViewModel(customerDetailsAllInfo, paymentOverdue)(userWithBlueBox)
+        result shouldBe expected
+      }
+
+      "the user has several payments and 1 is overdue" in {
+        mockAgentAuthorised()
+        setupMockDateService(staticDate)
+
+        val expected = HubViewModel(
+          customerDetailsAllInfo,
+          BaseTestConstants.vrn,
+          LocalDate.parse("2018-05-01"),
+          showBlueBox = true,
+          Some(LocalDate.parse("2018-01-01")),
+          isOverdue = false,
+          payments = 2
+        )
+
+        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsOverdue)(userWithBlueBox)
+        result shouldBe expected
+      }
+
+      "the user has several payments and none are overdue" in {
+        mockAgentAuthorised()
+        setupMockDateService(staticDate)
+
+        val expected = HubViewModel(
+          customerDetailsAllInfo,
+          BaseTestConstants.vrn,
+          LocalDate.parse("2018-05-01"),
+          showBlueBox = true,
+          Some(LocalDate.parse("2020-01-01")),
+          isOverdue = false,
+          payments = 2
+        )
+
+        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsNotOverdue)(userWithBlueBox)
+        result shouldBe expected
       }
     }
   }

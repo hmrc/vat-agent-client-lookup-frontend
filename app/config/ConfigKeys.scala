@@ -61,6 +61,8 @@ object ConfigKeys {
   val staticDateValue: String = "date-service.staticDate.value"
 
   val vatSummaryFrontendHost: String = "vat-summary-frontend.host"
+  val vatWhatYouOweEndpoint: String = "vat-summary-frontend.endpoints.what-you-owe"
+  val paymentHistoryEndpoint: String = "vat-summary-frontend.endpoints.payment-history"
   val vatCertificateEndpoint: String = "vat-summary-frontend.endpoints.vat-certificate"
   val vatSummaryAccessibilityUrl: String = "vat-summary-frontend.endpoints.accessibilityUrl"
 

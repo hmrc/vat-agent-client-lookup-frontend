@@ -18,39 +18,82 @@ package controllers.agent
 
 import common.SessionKeys
 import config.{AppConfig, ErrorHandler}
+import connectors.httpParsers.ResponseHttpParser.HttpResult
 import controllers.BaseController
 import controllers.predicates.AuthoriseAsAgentWithClient
 import javax.inject.{Inject, Singleton}
+import models.{Charge, CustomerDetails, HubViewModel, User}
 import play.api.Logger
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.{CustomerDetailsService, DateService}
+import services.{CustomerDetailsService, DateService, FinancialDataService}
 import views.html.agent.AgentHubView
-import scala.concurrent.ExecutionContext
+
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
                                    serviceErrorHandler: ErrorHandler,
                                    customerDetailsService: CustomerDetailsService,
                                    dateService: DateService,
+                                   financialDataService: FinancialDataService,
                                    mcc: MessagesControllerComponents,
                                    agentHubView: AgentHubView,
                                    implicit val appConfig: AppConfig,
                                    implicit val executionContext: ExecutionContext) extends BaseController(mcc) {
 
   def show: Action[AnyContent] = authenticate.async { implicit user =>
-
-    lazy val showBlueBox: Boolean = user.session.get(SessionKeys.viewedDDInterrupt).contains("blueBox")
-
-    customerDetailsService.getCustomerDetails(user.vrn).map {
-      case Right(details) =>
-        if (details.missingTrader && !details.hasPendingPPOB) {
-          Redirect(appConfig.manageVatMissingTraderUrl)
-        } else {
-          Ok(agentHubView(details, user.vrn, dateService.now(), showBlueBox))
-        }
-      case Left(error) =>
-        Logger.warn(s"[AgentHubController][show] - received an error from CustomerDetailsService: $error")
-        serviceErrorHandler.showInternalServerError
+    for {
+      customerDetails <- customerDetailsService.getCustomerDetails(user.vrn)
+      payments <- if (userIsHybrid(customerDetails)) Future.successful(Seq()) else retrievePayments
+    } yield {
+      customerDetails match {
+        case Right(details) =>
+          if (details.missingTrader && !details.hasPendingPPOB) {
+            Redirect(appConfig.manageVatMissingTraderUrl)
+          } else {
+            Ok(agentHubView(constructViewModel(details, payments)))
+          }
+        case Left(error) =>
+          Logger.warn(s"[AgentHubController][show] - received an error from CustomerDetailsService: $error")
+          serviceErrorHandler.showInternalServerError
+      }
     }
   }
+
+  def constructViewModel(details: CustomerDetails, payments: Seq[Charge])(implicit user: User[_]): HubViewModel = {
+
+    val showBlueBox: Boolean = user.session.get(SessionKeys.viewedDDInterrupt).contains("blueBox")
+    val nextPaymentDate = payments.headOption.map(payment => payment.dueDate)
+    val paymentsNumber  = payments.length
+    val isOverdue       =
+      if(paymentsNumber > 1) {
+        false
+      } else {
+        payments.headOption.fold(false) {
+          payment => payment.dueDate.isBefore(dateService.now()) && !payment.ddCollectionInProgress
+        }
+      }
+
+    HubViewModel(
+      details,
+      user.vrn,
+      dateService.now(),
+      showBlueBox,
+      nextPaymentDate,
+      isOverdue,
+      paymentsNumber
+    )
+  }
+
+  private def retrievePayments(implicit user: User[_]): Future[Seq[Charge]] =
+    financialDataService.getPayment(user.vrn) map {
+      case Right(payments) => payments
+      case Left (_) => Seq()
+    }
+
+  private def userIsHybrid(accountDetails: HttpResult[CustomerDetails]): Boolean =
+    accountDetails match {
+      case Right(model) => model.isHybridUser
+      case Left(_) => false
+    }
 }

@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,22 +12,25 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package assets
+@import config.AppConfig
 
-import connectors.httpParsers.ResponseHttpParser.HttpResult
-import models.DirectDebit
+@this()
 
-object DirectDebitConstants {
+@(optedIn: Boolean)(implicit messages: Messages, appConfig: AppConfig)
 
-  val ddNoMandateFound: HttpResult[DirectDebit] = Right(DirectDebit(
-    directDebitMandateFound = false
-  ))
-
-  val ddMandateFound: HttpResult[DirectDebit] = Right(DirectDebit(
-    directDebitMandateFound = true
-  ))
-
-  val ddFailureResponse = Left(models.errors.UnexpectedError(500, "problems"))
-}
+<div class="tile tile-no-border">
+  <div id="vat-returns" class="tile-body">
+    <h2 id="next-return-heading" class="govuk-heading-m">@messages("nextReturnPartial.heading")</h2>
+    <p class="govuk-body">
+      <a class="govuk-link" id="next-return-link" href="@appConfig.returnDeadlinesUrl">
+        @if(optedIn) {
+          @messages("nextReturnPartial.link")
+        } else {
+          @messages("nextReturnPartial.optedOut.link")
+        }
+      </a>
+    </p>
+  </div>
+</div>

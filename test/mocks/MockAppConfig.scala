@@ -60,6 +60,8 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
 
   override val emailVerificationBaseUrl: String = "mockEmailBaseUrl"
   override val vatCertificateUrl: String = "/certificate"
+  override val whatYouOweUrl: String = "/what-you-owe"
+  override val paymentHistoryUrl: String = "/payment-history"
   override val onlineAgentServicesUrl: String = "/onlineAgentServices"
   override val submittedReturnsUrl: String = "/submitted-returns"
   override val returnDeadlinesUrl: String = "/vat-through-software/vat-returns/return-deadlines"

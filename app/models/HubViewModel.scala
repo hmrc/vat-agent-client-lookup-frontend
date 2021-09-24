@@ -16,18 +16,12 @@
 
 package models
 
-import play.api.libs.json.{JsPath, Reads}
 import java.time.LocalDate
 
-import play.api.libs.functional.syntax.{toAlternativeOps, toFunctionalBuilderOps}
-
-case class Charge(dueDate: LocalDate,
-                  ddCollectionInProgress: Boolean)
-
-object Charge {
-
-  implicit val reads: Reads[Charge] = (
-    (JsPath \ "items")(0).\("dueDate").read[LocalDate] and
-    (JsPath \ "items")(0).\("DDcollectionInProgress").read[Boolean].or(Reads.pure(false))
-  ) (Charge.apply _)
-}
+case class HubViewModel(details: CustomerDetails,
+                        vrn: String,
+                        currentDate: LocalDate,
+                        showBlueBox: Boolean,
+                        nextPaymentDate: Option[LocalDate],
+                        isOverdue: Boolean,
+                        payments: Int)

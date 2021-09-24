@@ -23,88 +23,87 @@
 @import common.PartyTypes.VatGroup
 
 @this(capturePreferenceHelper: CapturePreferenceHelper,
-    displayDate: DisplayDate)
+      displayDate: DisplayDate)
 
 @(details: CustomerDetails, currentDate: LocalDate)(implicit messages: Messages, appConfig: AppConfig, user: User[_])
 
 @cancelVatTitleKey = @{
-    details.partyType match {
-        case Some(partyType) if partyType == VatGroup => "registrationPartial.vatGroups.VAT7.title"
-        case _ => "registrationPartial.cancelRegistration.title"
-    }
+  details.partyType match {
+    case Some(partyType) if partyType == VatGroup => "registrationPartial.vatGroups.VAT7.title"
+    case _ => "registrationPartial.cancelRegistration.title"
+  }
 }
 
 @cancelVatContentKey = @{
-    details.partyType match {
-        case Some(partyType) if partyType == VatGroup => "registrationPartial.vatGroups.VAT7.content"
-        case _ => "registrationPartial.cancelRegistration.content"
-    }
+  details.partyType match {
+    case Some(partyType) if partyType == VatGroup => "registrationPartial.vatGroups.VAT7.content"
+    case _ => "registrationPartial.cancelRegistration.content"
+  }
 }
 
 @cancelVatLink = @{
-    val title = messages(cancelVatTitleKey)
+  val title = messages(cancelVatTitleKey)
 
-    details.partyType match {
-        case Some(partyType) if partyType == VatGroup => Html(s"<a href='${appConfig.vat7FormUrl}' target='_blank' rel='noreferrer noopener' class='govuk-link'>$title</a>")
-        case _ => capturePreferenceHelper(title, appConfig.cancelRegistrationUrl)
-    }
+  details.partyType match {
+    case Some(partyType) if partyType == VatGroup => Html(s"<a href='${appConfig.vat7FormUrl}' target='_blank' rel='noreferrer noopener' class='govuk-link'>$title</a>")
+    case _ => capturePreferenceHelper(title, appConfig.cancelRegistrationUrl)
+  }
 }
 
 @cancelRegistration = {
-    <div class="govuk-grid-column-one-third" id="cancel-vat">
-        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">@cancelVatLink</h3>
-        <p class="govuk-body">@messages(cancelVatContentKey)</p>
-    </div>
+  <div class="govuk-grid-column-one-third" id="cancel-vat">
+    <h3 id="cancel-vat-link" class="govuk-heading-s govuk-!-margin-bottom-1">@cancelVatLink</h3>
+    <p class="govuk-body">@messages(cancelVatContentKey)</p>
+  </div>
 }
 
 @historicDeregistration(date: LocalDate) = {
-    <div class="govuk-grid-column-one-third" id="cancel-vat">
-        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">@messages("registrationPartial.historicDeregistration.title")</h3>
-        <p class="govuk-body">@messages("registrationPartial.historicDeregistration.content", displayDate(date))</p>
-        <p class="govuk-body">
-            <a id="agent-services-link" href="@appConfig.onlineAgentServicesUrl" target="_blank" rel="noreferrer noopener" class="govuk-link">
-                @messages("registrationPartial.historicDeregistration.link")
-            </a>
-        </p>
-    </div>
+  <div class="govuk-grid-column-one-third" id="cancel-vat">
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">@messages("registrationPartial.historicDeregistration.title")</h3>
+    <p class="govuk-body">@messages("registrationPartial.historicDeregistration.content", displayDate(date))</p>
+    <p class="govuk-body">
+    <a id="agent-services-link" href="@appConfig.onlineAgentServicesUrl" target="_blank" rel="noreferrer noopener" class="govuk-link">
+      @messages("registrationPartial.historicDeregistration.link")
+    </a>
+    </p>
+  </div>
 }
 
 @futureDeregistration(date: LocalDate) = {
-    <div class="govuk-grid-column-one-third" id="cancel-vat">
-        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">
-        @messages("registrationPartial.futureDeregistration.title")
-        </h3>
-        <p class="govuk-body">@messages("registrationPartial.futureDeregistration.content", displayDate(date))</p>
-        <p class="govuk-body">
-            <a id="agent-services-link" href="@appConfig.onlineAgentServicesUrl" target="_blank" rel="noreferrer noopener" class="govuk-link">
-                @messages("registrationPartial.futureDeregistration.link")
-            </a>
-        </p>
-    </div>
+  <div class="govuk-grid-column-one-third" id="cancel-vat">
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">
+      @messages("registrationPartial.futureDeregistration.title")
+    </h3>
+    <p class="govuk-body">@messages("registrationPartial.futureDeregistration.content", displayDate(date))</p>
+    <p class="govuk-body">
+      <a id="agent-services-link" href="@appConfig.onlineAgentServicesUrl" target="_blank" rel="noreferrer noopener" class="govuk-link">
+        @messages("registrationPartial.futureDeregistration.link")
+      </a>
+    </p>
+  </div>
 }
 
-
 @pendingDeregistration()={
-    <div class="govuk-grid-column-one-third" id="cancel-vat">
-        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">@messages("registrationPartial.pendingDeregistration.title")</h3>
-        <p class="govuk-body">@messages("registrationPartial.pendingDeregistration.content")</p>
-    </div>
+  <div class="govuk-grid-column-one-third" id="cancel-vat">
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">@messages("registrationPartial.pendingDeregistration.title")</h3>
+    <p class="govuk-body">@messages("registrationPartial.pendingDeregistration.content")</p>
+  </div>
 }
 
 @{
-        if(details.deregistration.isDefined){
-            details.deregistration.flatMap(_.effectDateOfCancellation) match {
-                case Some(date) => date match {
-                    case future if future.isAfter(currentDate) => futureDeregistration(future)
-                    case historic => historicDeregistration(historic)
-                }
-                case _ =>
-                    Logger.warn("[registrationPartial][deregistrationDate] - 'deregistration' contained no 'effectDateOfCancellation'")
-            }
-        } else {
-            details.changeIndicators.map(_.deregister) match {
-                case Some(true) => pendingDeregistration
-                case _ => cancelRegistration
-            }
-        }
+  if(details.deregistration.isDefined){
+    details.deregistration.flatMap(_.effectDateOfCancellation) match {
+      case Some(date) => date match {
+        case future if future.isAfter(currentDate) => futureDeregistration(future)
+        case historic => historicDeregistration(historic)
+      }
+      case _ =>
+        Logger.warn("[registrationPartial][deregistrationDate] - 'deregistration' contained no 'effectDateOfCancellation'")
+    }
+  } else {
+    details.changeIndicators.map(_.deregister) match {
+      case Some(true) => pendingDeregistration
+      case _ => cancelRegistration
+    }
+  }
 }
