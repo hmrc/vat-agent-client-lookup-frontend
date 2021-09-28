@@ -18,7 +18,7 @@ package mocks.services
 
 import org.mockito.stubbing.OngoingStubbing
 import org.scalatestplus.mockito.MockitoSugar.mock
-import services.DirectDebitService
+import services.FinancialDataService
 import utils.TestUtil
 import connectors.httpParsers.ResponseHttpParser.HttpResult
 import models.DirectDebit
@@ -30,7 +30,7 @@ import scala.concurrent.Future
 
 trait MockDirectDebitService extends TestUtil {
 
-  val mockDirectDebitService: DirectDebitService = mock[DirectDebitService]
+  val mockDirectDebitService: FinancialDataService = mock[FinancialDataService]
 
   def mockDirectDebitResponse(response: HttpResult[DirectDebit]): OngoingStubbing[Future[HttpResult[DirectDebit]]] =
     when(mockDirectDebitService.getDirectDebit(ArgumentMatchers.any())(ArgumentMatchers.any[HeaderCarrier]))

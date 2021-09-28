@@ -23,7 +23,7 @@ import controllers.predicates.AuthoriseAsAgentWithClient
 import forms.DDInterruptForm
 import models.CustomerDetails
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.{CustomerDetailsService, DateService, DirectDebitService}
+import services.{CustomerDetailsService, DateService, FinancialDataService}
 import views.html.agent.DirectDebitInterruptView
 
 import java.time.LocalDate
@@ -36,7 +36,7 @@ class DDInterruptController @Inject()(mcc: MessagesControllerComponents,
                                       ddInterruptView: DirectDebitInterruptView,
                                       dateService: DateService,
                                       customerDetailsService: CustomerDetailsService,
-                                      directDebitService: DirectDebitService)
+                                      directDebitService: FinancialDataService)
                                      (implicit val appConfig: AppConfig,
                                       ec: ExecutionContext) extends BaseController(mcc) {
 

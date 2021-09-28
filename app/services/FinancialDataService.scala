@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-package connectors
+package services
 
-import config.AppConfig
-import connectors.httpParsers.DirectDebitHttpParser.DirectDebitReads
+import connectors.FinancialDataConnector
 import connectors.httpParsers.ResponseHttpParser.HttpResult
-import models.DirectDebit
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import models.{Charge, DirectDebit}
+import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DirectDebitConnector @Inject()(httpClient: HttpClient, appConfig: AppConfig)(implicit ec: ExecutionContext) {
-
-  def directDebitUrl(vrn: String): String =
-    s"${appConfig.financialTransactionsBaseUrl}/financial-transactions/has-direct-debit/$vrn"
+class FinancialDataService @Inject()(financialDataConnector: FinancialDataConnector) {
 
   def getDirectDebit(vrn: String)(implicit hc: HeaderCarrier): Future[HttpResult[DirectDebit]] =
-    httpClient.GET(directDebitUrl(vrn))(DirectDebitReads, hc, ec)
+    financialDataConnector.getDirectDebit(vrn)
+
+  def getPayment(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[Seq[Charge]]] =
+    financialDataConnector.getPaymentsDue(vrn)
 }

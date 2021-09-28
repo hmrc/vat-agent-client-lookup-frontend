@@ -16,7 +16,7 @@
 
 package services
 
-import connectors.DirectDebitConnector
+import connectors.FinancialDataConnector
 import models.DirectDebit
 import models.errors.UnexpectedError
 import org.mockito.Mockito.when
@@ -24,13 +24,12 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
-
 import scala.concurrent.Future
 
-class DirectDebitServiceSpec extends UnitSpec with MockitoSugar {
+class FinancialDataServiceSpec extends UnitSpec with MockitoSugar {
 
-  val mockConnector: DirectDebitConnector = mock[DirectDebitConnector]
-  val service = new DirectDebitService(mockConnector)
+  val mockConnector: FinancialDataConnector = mock[FinancialDataConnector]
+  val service = new FinancialDataService(mockConnector)
   val vrn = "999999999"
   implicit val hc: HeaderCarrier = HeaderCarrier()
 

@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package services
+package models
 
-import com.kenshoo.play.metrics.Metrics
-import javax.inject.{Inject, Singleton}
+import play.api.libs.json.{JsPath, Reads}
+import java.time.LocalDate
 
-trait MetricsService
+case class Charge(dueDate: LocalDate)
 
-@Singleton
-class MetricsServiceImpl @Inject()(metrics: Metrics) extends MetricsService
+object Charge {
+
+  implicit val reads: Reads[Charge] =
+    (JsPath \ "items")(0).\("dueDate").read[LocalDate].map(Charge.apply)
+}
