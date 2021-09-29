@@ -21,7 +21,7 @@ import assets.CustomerDetailsTestConstants._
 import assets.DirectDebitConstants._
 import common.SessionKeys
 import controllers.ControllerBaseSpec
-import mocks.services.{MockCustomerDetailsService, MockDateService, MockDirectDebitService}
+import mocks.services.{MockCustomerDetailsService, MockDateService, MockFinancialDataService}
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.FakeRequest
@@ -32,7 +32,7 @@ import java.time.LocalDate
 import scala.concurrent.Future
 
 class DDInterruptControllerSpec extends ControllerBaseSpec with MockDateService with
-  MockCustomerDetailsService with MockDirectDebitService {
+  MockCustomerDetailsService with MockFinancialDataService {
 
   lazy val controller = new DDInterruptController(
     mcc,
@@ -40,7 +40,7 @@ class DDInterruptControllerSpec extends ControllerBaseSpec with MockDateService 
     inject[DirectDebitInterruptView],
     mockDateService,
     mockCustomerDetailsService,
-    mockDirectDebitService,
+    mockFinancialDataService,
   )
   lazy val ddSessionRequest: FakeRequest[AnyContentAsEmpty.type] =
     fakeRequestWithMtdVatAgentData.withSession(SessionKeys.viewedDDInterrupt -> "true")

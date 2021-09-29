@@ -17,20 +17,27 @@
 package connectors
 
 import config.AppConfig
-import connectors.httpParsers.DirectDebitHttpParser.DirectDebitReads
+import connectors.httpParsers.FinancialDataHttpParser.DirectDebitReads
+import connectors.httpParsers.FinancialDataHttpParser.ChargeReads
 import connectors.httpParsers.ResponseHttpParser.HttpResult
-import models.DirectDebit
+import models.{Charge, DirectDebit}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DirectDebitConnector @Inject()(httpClient: HttpClient, appConfig: AppConfig)(implicit ec: ExecutionContext) {
+class FinancialDataConnector @Inject()(httpClient: HttpClient,
+                                       appConfig: AppConfig)(implicit ec: ExecutionContext) {
 
   def directDebitUrl(vrn: String): String =
     s"${appConfig.financialTransactionsBaseUrl}/financial-transactions/has-direct-debit/$vrn"
 
   def getDirectDebit(vrn: String)(implicit hc: HeaderCarrier): Future[HttpResult[DirectDebit]] =
     httpClient.GET(directDebitUrl(vrn))(DirectDebitReads, hc, ec)
+
+  private[connectors] def paymentUrl(vrn: String): String =
+    s"${appConfig.financialTransactionsBaseUrl}/financial-transactions/vat/$vrn"
+
+  def getPaymentsDue(vrn: String)(implicit hc: HeaderCarrier): Future[HttpResult[Seq[Charge]]] =
+    httpClient.GET(paymentUrl(vrn))(ChargeReads, hc, ec)
 }

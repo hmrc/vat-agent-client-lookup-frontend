@@ -31,6 +31,8 @@ import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.{Application, Environment, Mode}
 import stubs.AuthStub
 
+import scala.concurrent.ExecutionContext
+
 trait IntegrationBaseSpec extends TestSuite with CustomMatchers
   with GuiceOneServerPerSuite with ScalaFutures with IntegrationPatience with Matchers
   with WireMockHelper with BeforeAndAfterEach with BeforeAndAfterAll with Eventually {
@@ -42,6 +44,8 @@ trait IntegrationBaseSpec extends TestSuite with CustomMatchers
   lazy val mockAppConfig: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
   lazy val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
   implicit lazy val messages: Messages = MessagesImpl(Lang("en-GB"), messagesApi)
+
+  implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
 
   override def beforeEach() {
     mockAppConfig.features.emailVerificationEnabled(true)

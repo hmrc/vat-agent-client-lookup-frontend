@@ -14,26 +14,21 @@
  * limitations under the License.
  */
 
-package mocks.services
+package services
 
-import org.mockito.stubbing.OngoingStubbing
-import org.scalatestplus.mockito.MockitoSugar.mock
-import services.DirectDebitService
-import utils.TestUtil
+import connectors.FinancialDataConnector
 import connectors.httpParsers.ResponseHttpParser.HttpResult
-import models.DirectDebit
-import org.mockito.ArgumentMatchers
-import org.mockito.Mockito.when
+import models.{Charge, DirectDebit}
 import uk.gov.hmrc.http.HeaderCarrier
-
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
-trait MockDirectDebitService extends TestUtil {
+@Singleton
+class FinancialDataService @Inject()(financialDataConnector: FinancialDataConnector) {
 
-  val mockDirectDebitService: DirectDebitService = mock[DirectDebitService]
+  def getDirectDebit(vrn: String)(implicit hc: HeaderCarrier): Future[HttpResult[DirectDebit]] =
+    financialDataConnector.getDirectDebit(vrn)
 
-  def mockDirectDebitResponse(response: HttpResult[DirectDebit]): OngoingStubbing[Future[HttpResult[DirectDebit]]] =
-    when(mockDirectDebitService.getDirectDebit(ArgumentMatchers.any())(ArgumentMatchers.any[HeaderCarrier]))
-      .thenReturn(Future.successful(response))
-
+  def getPayment(vrn: String)(implicit hc: HeaderCarrier): Future[HttpResult[Seq[Charge]]] =
+    financialDataConnector.getPaymentsDue(vrn)
 }
