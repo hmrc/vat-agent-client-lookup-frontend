@@ -17,13 +17,14 @@
 package services
 
 import connectors.FinancialDataConnector
-import models.DirectDebit
+import models.{Charge, DirectDebit}
 import models.errors.UnexpectedError
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class FinancialDataServiceSpec extends UnitSpec with MockitoSugar {
@@ -44,6 +45,20 @@ class FinancialDataServiceSpec extends UnitSpec with MockitoSugar {
       when(mockConnector.getDirectDebit(vrn)(hc))
         .thenReturn(Future.successful(Left(UnexpectedError(INTERNAL_SERVER_ERROR, "Fail"))))
       await(service.getDirectDebit(vrn)) shouldBe Left(UnexpectedError(INTERNAL_SERVER_ERROR, "Fail"))
+    }
+  }
+
+  "PaymentService should return the result of the connector call" when {
+
+    "there is a successful response" in {
+      when(mockConnector.getPaymentsDue(vrn)(hc)).thenReturn(Future.successful(Right(Seq(Charge(LocalDate.parse("2019-09-13"))))))
+      await(service.getPayment(vrn)) shouldBe Right(Seq(Charge(LocalDate.parse("2019-09-13"))))
+    }
+
+    "there is an error response" in {
+      when(mockConnector.getPaymentsDue(vrn)(hc))
+        .thenReturn(Future.successful(Left(UnexpectedError(INTERNAL_SERVER_ERROR, "Fail"))))
+      await(service.getPayment(vrn)) shouldBe Left(UnexpectedError(INTERNAL_SERVER_ERROR, "Fail"))
     }
   }
 }

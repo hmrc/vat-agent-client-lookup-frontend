@@ -20,9 +20,8 @@ import connectors.FinancialDataConnector
 import connectors.httpParsers.ResponseHttpParser.HttpResult
 import models.{Charge, DirectDebit}
 import uk.gov.hmrc.http.HeaderCarrier
-
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 @Singleton
 class FinancialDataService @Inject()(financialDataConnector: FinancialDataConnector) {
@@ -30,6 +29,6 @@ class FinancialDataService @Inject()(financialDataConnector: FinancialDataConnec
   def getDirectDebit(vrn: String)(implicit hc: HeaderCarrier): Future[HttpResult[DirectDebit]] =
     financialDataConnector.getDirectDebit(vrn)
 
-  def getPayment(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[Seq[Charge]]] =
+  def getPayment(vrn: String)(implicit hc: HeaderCarrier): Future[HttpResult[Seq[Charge]]] =
     financialDataConnector.getPaymentsDue(vrn)
 }

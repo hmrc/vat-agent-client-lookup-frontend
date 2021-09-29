@@ -28,12 +28,12 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
-trait MockDirectDebitService extends TestUtil {
+trait MockFinancialDataService extends TestUtil {
 
-  val mockDirectDebitService: FinancialDataService = mock[FinancialDataService]
+  val mockFinancialDataService: FinancialDataService = mock[FinancialDataService]
 
   def mockDirectDebitResponse(response: HttpResult[DirectDebit]): OngoingStubbing[Future[HttpResult[DirectDebit]]] =
-    when(mockDirectDebitService.getDirectDebit(ArgumentMatchers.any())(ArgumentMatchers.any[HeaderCarrier]))
+    when(mockFinancialDataService.getDirectDebit(ArgumentMatchers.any())(ArgumentMatchers.any[HeaderCarrier]))
       .thenReturn(Future.successful(response))
 
 }

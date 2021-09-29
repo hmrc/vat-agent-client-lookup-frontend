@@ -30,7 +30,7 @@ object FinancialDataStub extends WireMockMethods {
   val directDebitJson: JsObject = Json.obj("directDebitMandateFound" -> false)
   val errorJson: JsObject = Json.obj("FAILURE" -> "Oh dear")
 
-  private val paidTransactions: JsValue = Json.parse(
+  private val outstandingTransactions: JsValue = Json.parse(
     s"""{
        |    "idType" : "VRN",
        |    "idNumber" : "555555555",
@@ -54,13 +54,13 @@ object FinancialDataStub extends WireMockMethods {
        |        "chargeReference" : "XD002750002155",
        |        "mainTransaction" : "1234",
        |        "subTransaction" : "5678",
-       |        "originalAmount" : 150,
+       |        "originalAmount" : 10000,
+       |        "outstandingAmount" : 10000,
        |        "items" : [
        |          {
        |            "subItem" : "000",
-       |            "clearingDate" : "2018-01-10",
-       |            "dueDate" : "2018-12-07",
-       |            "paymentAmount" : 150
+       |            "dueDate" : "2018-09-13",
+       |            "amount" : 10000
        |          }
        |        ]
        |      },
@@ -81,13 +81,13 @@ object FinancialDataStub extends WireMockMethods {
        |        "chargeReference" : "XD002750002155",
        |        "mainTransaction" : "1234",
        |        "subTransaction" : "5678",
-       |        "originalAmount" : -600,
+       |        "originalAmount" : 500,
+       |        "outstandingAmount" : 500,
        |        "items" : [
        |          {
        |            "subItem" : "000",
-       |            "clearingDate" : "2018-03-10",
-       |            "dueDate" : "2018-09-07",
-       |            "paymentAmount" : -600
+       |            "dueDate" : "2018-12-11",
+       |            "amount" : 10000
        |          }
        |        ]
        |      }
@@ -105,7 +105,7 @@ object FinancialDataStub extends WireMockMethods {
 
   def getPaymentSuccess(vrn: String): StubMapping =
     when(method = GET, uri = paymentUri(vrn))
-      .thenReturn(status = OK, body = paidTransactions)
+      .thenReturn(status = OK, body = outstandingTransactions)
 
   def getPaymentFailure(vrn: String): StubMapping =
     when(method = GET, uri = paymentUri(vrn))

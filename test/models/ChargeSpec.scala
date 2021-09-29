@@ -26,7 +26,7 @@ class ChargeSpec extends UnitSpec {
   val endDate = "2017-03-01"
   val dueDate = "2017-03-08"
 
-  "Financial Transactions JSON should parse to PaymentsDue model correctly" when {
+  "Financial Transactions JSON should parse to Charge model correctly" when {
 
     "there is only one payment due" in {
 

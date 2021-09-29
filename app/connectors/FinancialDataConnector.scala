@@ -38,6 +38,6 @@ class FinancialDataConnector @Inject()(httpClient: HttpClient,
   private[connectors] def paymentUrl(vrn: String): String =
     s"${appConfig.financialTransactionsBaseUrl}/financial-transactions/vat/$vrn"
 
-  def getPaymentsDue(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[Seq[Charge]]] =
+  def getPaymentsDue(vrn: String)(implicit hc: HeaderCarrier): Future[HttpResult[Seq[Charge]]] =
     httpClient.GET(paymentUrl(vrn))(ChargeReads, hc, ec)
 }

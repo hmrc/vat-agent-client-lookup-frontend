@@ -28,20 +28,19 @@ import java.time.LocalDate
 
 class FinancialDataConnectorISpec extends IntegrationBaseSpec {
 
-  val ddConnector: FinancialDataConnector = app.injector.instanceOf[FinancialDataConnector]
-  val paymentConnector: FinancialDataConnector = app.injector.instanceOf[FinancialDataConnector]
+  val financialDataConnector: FinancialDataConnector = app.injector.instanceOf[FinancialDataConnector]
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
   val vrn = "999999999"
 
-  "Calling getDirectDebitSuccess" when {
+  "Calling getDirectDebit" when {
 
     "the endpoint returns a successful Direct Debit response" should {
 
       "parse the JSON response and return a DirectDebit model" in {
         FinancialDataStub.getDirectDebitSuccess(vrn)
         val expected = Right(DirectDebit(false))
-        val result: HttpResult[DirectDebit] = await(ddConnector.getDirectDebit(vrn))
+        val result: HttpResult[DirectDebit] = await(financialDataConnector.getDirectDebit(vrn))
 
         result shouldBe expected
       }
@@ -52,24 +51,24 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
       "return an UnexpectedError model containing the response body" in {
         FinancialDataStub.getDirectDebitFailure(vrn)
         val expected = Left(UnexpectedError(INTERNAL_SERVER_ERROR, """{"FAILURE":"Oh dear"}"""))
-        val result: HttpResult[DirectDebit] = await(ddConnector.getDirectDebit(vrn))
+        val result: HttpResult[DirectDebit] = await(financialDataConnector.getDirectDebit(vrn))
 
         result shouldBe expected
       }
     }
   }
 
-  "Calling getPaymentSuccess" when {
+  "Calling getPaymentsDue" when {
 
     "the endpoint returns a successful payment response" should {
 
       "parse the JSON response and return a Payment model" in {
         FinancialDataStub.getPaymentSuccess(vrn)
         val expected = Right(Seq(
-          Charge(LocalDate.parse("2018-12-07")),
-          Charge(LocalDate.parse("2018-09-07"))
+          Charge(LocalDate.parse("2018-09-13")),
+          Charge(LocalDate.parse("2018-12-11"))
         ))
-        val result: HttpResult[Seq[Charge]] = await(paymentConnector.getPaymentsDue(vrn))
+        val result: HttpResult[Seq[Charge]] = await(financialDataConnector.getPaymentsDue(vrn))
 
         result shouldBe expected
       }
@@ -80,7 +79,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
       "return an UnexpectedError model containing the response body" in {
         FinancialDataStub.getPaymentFailure(vrn)
         val expected = Left(UnexpectedError(INTERNAL_SERVER_ERROR, """{"FAILURE":"Oh dear"}"""))
-        val result: HttpResult[Seq[Charge]] = await(paymentConnector.getPaymentsDue(vrn))
+        val result: HttpResult[Seq[Charge]] = await(financialDataConnector.getPaymentsDue(vrn))
 
         result shouldBe expected
       }
