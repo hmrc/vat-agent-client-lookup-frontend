@@ -19,7 +19,7 @@ package assets.messages.partials
 object SignUpPartialMessages {
 
   val signUpLinkText = "Sign up for Making Tax Digital for VAT"
-  val signUpBody = "Your client must sign up to Making Tax Digital for VAT if they are not exempt from VAT, and their " +
-    "taxable turnover exceeds the £85,000 threshold."
+  val signUpBody = "If your client is not exempt from VAT and their taxable turnover exceeds the threshold, they must" +
+    " sign up to Making Tax Digital for VAT."
 
 }

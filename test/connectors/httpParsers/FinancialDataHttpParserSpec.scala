@@ -37,7 +37,8 @@ class FinancialDataHttpParserSpec extends TestUtil {
             "chargeType" -> "VAT Return Debit Charge",
             "items" -> Json.arr(
               Json.obj(
-                "dueDate" -> "2020-01-01"
+                "dueDate" -> "2020-01-01",
+                "DDcollectionInProgress" -> true
               )
             ),
             "chargeReference" -> "XD002750002155"
@@ -64,9 +65,9 @@ class FinancialDataHttpParserSpec extends TestUtil {
       )
 
       val expectedModel = Seq(
-        Charge(LocalDate.parse("2020-01-01")),
-        Charge(LocalDate.parse("2020-02-02")),
-        Charge(LocalDate.parse("2020-03-03"))
+        Charge(LocalDate.parse("2020-01-01"), ddCollectionInProgress = true),
+        Charge(LocalDate.parse("2020-02-02"), ddCollectionInProgress = false),
+        Charge(LocalDate.parse("2020-03-03"), ddCollectionInProgress = false)
       )
 
       "return a collection of charges" in {

@@ -18,8 +18,7 @@ package assets.messages.partials
 
 object VatCertificatePartialMessages {
 
-    val heading = "VAT certificate"
-    val paragraphOne = "View and print your client’s VAT certificate."
-    val linkText = "View VAT certificate"
+  val linkText = "View VAT certificate"
+  val paragraphOne = "View and print your client’s VAT certificate."
 
 }

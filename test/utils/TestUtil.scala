@@ -64,6 +64,13 @@ trait TestUtil extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach
       SessionKeys.mtdVatAgentMandationStatus -> nonMTDfB
     )
 
+  lazy val fakeRequestWithBlueBoxSession: FakeRequest[AnyContentAsEmpty.type] =
+    FakeRequest().withSession(SessionKeys.viewedDDInterrupt -> "blueBox")
+
+  lazy val userWithBlueBox: User[AnyContentAsEmpty.type] =
+    User[AnyContentAsEmpty.type](vrn, active = true)(fakeRequestWithBlueBoxSession)
+
+
   lazy val user: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn, active = true)(request)
   lazy val agent: Agent[AnyContentAsEmpty.type] = Agent[AnyContentAsEmpty.type](arn)(fakeRequestWithVrnAndRedirectUrl)
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()

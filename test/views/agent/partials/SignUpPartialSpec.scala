@@ -27,6 +27,11 @@ class SignUpPartialSpec extends ViewBaseSpec {
 
   val signUpPartial: SignUpPartial = inject[SignUpPartial]
 
+  object Selectors {
+    val link = "#sign-up-link"
+    val content = "#sign-up-body"
+  }
+
   "sign up partial" when {
 
     "passed a mandation status of 'MTDfB Exempt'" should {
@@ -35,15 +40,15 @@ class SignUpPartialSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the correct link text" in {
-        elementText("a") shouldBe Messages.signUpLinkText
+        elementText(Selectors.link) shouldBe Messages.signUpLinkText
       }
 
       s"display the correct link of ${mockConfig.signUpServiceUrl(user.vrn)}" in {
-        element("a").attr("href") shouldBe mockConfig.signUpServiceUrl(user.vrn)
+        element(Selectors.link).attr("href") shouldBe mockConfig.signUpServiceUrl(user.vrn)
       }
 
       "display the correct body of text" in {
-        elementText("p") shouldBe Messages.signUpBody
+        elementText(Selectors.content) shouldBe Messages.signUpBody
       }
     }
 
@@ -53,15 +58,15 @@ class SignUpPartialSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the correct link text" in {
-        elementText("a") shouldBe Messages.signUpLinkText
+        elementText(Selectors.link) shouldBe Messages.signUpLinkText
       }
 
       s"display the correct link of ${mockConfig.signUpServiceUrl(user.vrn)}" in {
-        element("a").attr("href") shouldBe mockConfig.signUpServiceUrl(user.vrn)
+        element(Selectors.link).attr("href") shouldBe mockConfig.signUpServiceUrl(user.vrn)
       }
 
       "display the correct body of text" in {
-        elementText("p") shouldBe Messages.signUpBody
+        elementText(Selectors.content) shouldBe Messages.signUpBody
       }
     }
 
@@ -71,15 +76,15 @@ class SignUpPartialSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the correct link text" in {
-        elementText("a") shouldBe Messages.signUpLinkText
+        elementText(Selectors.link) shouldBe Messages.signUpLinkText
       }
 
       s"display the correct link of ${mockConfig.signUpServiceUrl(user.vrn)}" in {
-        element("a").attr("href") shouldBe mockConfig.signUpServiceUrl(user.vrn)
+        element(Selectors.link).attr("href") shouldBe mockConfig.signUpServiceUrl(user.vrn)
       }
 
       "display the correct body of text" in {
-        elementText("p") shouldBe Messages.signUpBody
+        elementText(Selectors.content) shouldBe Messages.signUpBody
       }
 
     }
@@ -90,11 +95,11 @@ class SignUpPartialSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not display link text" in {
-        elementExtinct("a")
+        elementExtinct(Selectors.link)
       }
 
       "not display body of text" in {
-        elementExtinct("p")
+        elementExtinct(Selectors.content)
       }
     }
 
@@ -104,11 +109,11 @@ class SignUpPartialSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not display link text" in {
-        elementExtinct("a")
+        elementExtinct(Selectors.link)
       }
 
       "not display body of text" in {
-        elementExtinct("p")
+        elementExtinct(Selectors.content)
       }
 
     }

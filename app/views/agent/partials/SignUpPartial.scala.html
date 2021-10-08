@@ -22,19 +22,19 @@
 @(mandationStatus: String, vrn: String)(implicit messages: Messages,appConfig: AppConfig)
 
 @signUp = {
-    <div class="govuk-grid-column-one-third" id="sign-up-partial">
-        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">
-            <a href="@{appConfig.signUpServiceUrl(vrn)}" class="govuk-link">@messages("signUpPartial.LinkText")</a>
-        </h3>
-        <p class="govuk-body">@messages("signUpPartial.Body")</p>
-    </div>
+  <div class="govuk-grid-column-one-third" id="sign-up-partial">
+    <h3 id="sign-up-heading" class="govuk-heading-s govuk-!-margin-bottom-1">
+      <a id="sign-up-link" href="@{appConfig.signUpServiceUrl(vrn)}" class="govuk-link">@messages("signUpPartial.LinkText")</a>
+    </h3>
+    <p id="sign-up-body" class="govuk-body">@messages("signUpPartial.Body")</p>
+  </div>
 }
 
 @{
-   mandationStatus match {
-        case MandationStatus.nonMTDfB => signUp
-        case MandationStatus.nonDigital => signUp
-        case MandationStatus.MTDfBExempt => signUp
-        case _ => {}
-   }
+  mandationStatus match {
+    case MandationStatus.nonMTDfB => signUp
+    case MandationStatus.nonDigital => signUp
+    case MandationStatus.MTDfBExempt => signUp
+    case _ => {}
+  }
 }

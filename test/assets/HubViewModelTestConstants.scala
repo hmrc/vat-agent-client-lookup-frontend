@@ -14,20 +14,26 @@
  * limitations under the License.
  */
 
-package models
+package assets
 
-import play.api.libs.json.{JsPath, Reads}
 import java.time.LocalDate
 
-import play.api.libs.functional.syntax.{toAlternativeOps, toFunctionalBuilderOps}
+import assets.BaseTestConstants._
+import models.{CustomerDetails, HubViewModel}
 
-case class Charge(dueDate: LocalDate,
-                  ddCollectionInProgress: Boolean)
+object HubViewModelTestConstants {
 
-object Charge {
+  def hubViewModel(customerDetails: CustomerDetails): HubViewModel = HubViewModel(
+    customerDetails,
+    vrn,
+    LocalDate.parse("2019-01-01"),
+    showBlueBox = false,
+    Some(LocalDate.parse("2020-01-01")),
+    isOverdue = false,
+    payments = 1
+  )
 
-  implicit val reads: Reads[Charge] = (
-    (JsPath \ "items")(0).\("dueDate").read[LocalDate] and
-    (JsPath \ "items")(0).\("DDcollectionInProgress").read[Boolean].or(Reads.pure(false))
-  ) (Charge.apply _)
+  def hubViewModelBlueBox(customerDetails: CustomerDetails): HubViewModel =
+    hubViewModel(customerDetails).copy(showBlueBox = true)
+
 }

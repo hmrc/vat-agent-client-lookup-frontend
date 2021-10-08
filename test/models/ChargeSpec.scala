@@ -45,7 +45,7 @@ class ChargeSpec extends UnitSpec {
           "chargeReference" -> "XD002750002155"
         )
       )
-      val paymentWithOnePaymentDue = Seq(Charge(LocalDate.parse(dueDate)))
+      val paymentWithOnePaymentDue = Seq(Charge(LocalDate.parse(dueDate), ddCollectionInProgress = false))
       paymentJson.as[Seq[Charge]] shouldBe paymentWithOnePaymentDue
     }
 
@@ -94,9 +94,9 @@ class ChargeSpec extends UnitSpec {
       )
 
       val paymentsWithFewPaymentDue = Seq(
-        Charge(LocalDate.parse(dueDate)),
-        Charge(LocalDate.parse("2017-03-15")),
-        Charge(LocalDate.parse("2017-03-20"))
+        Charge(LocalDate.parse(dueDate), ddCollectionInProgress = false),
+        Charge(LocalDate.parse("2017-03-15"), ddCollectionInProgress = false),
+        Charge(LocalDate.parse("2017-03-20"), ddCollectionInProgress = false)
       )
 
       paymentsJson.as[Seq[Charge]] shouldBe paymentsWithFewPaymentDue
@@ -113,7 +113,8 @@ class ChargeSpec extends UnitSpec {
           "items" -> Json.arr(
             Json.obj(
               "dueDate" -> dueDate,
-              "amount" -> 80
+              "amount" -> 80,
+              "DDcollectionInProgress" -> true
             ),
             Json.obj(
               "dueDate" -> dueDate,
@@ -125,7 +126,7 @@ class ChargeSpec extends UnitSpec {
           "chargeReference" -> "XD002750002155"
         )
       )
-      val partialPayment = Seq(Charge(LocalDate.parse(dueDate)))
+      val partialPayment = Seq(Charge(LocalDate.parse(dueDate), ddCollectionInProgress = true))
       partialPaymentJson.as[Seq[Charge]] shouldBe partialPayment
     }
   }

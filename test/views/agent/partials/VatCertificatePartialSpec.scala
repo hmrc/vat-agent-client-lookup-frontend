@@ -20,32 +20,29 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
 import assets.messages.partials.VatCertificatePartialMessages
-import views.html.agent.partials.VatCertificatePartials
+import views.html.agent.partials.VatCertificatePartial
 
-class VatCertificatePartialsSpec extends ViewBaseSpec {
+class VatCertificatePartialSpec extends ViewBaseSpec {
 
-  val vatCertificatePartials: VatCertificatePartials = inject[VatCertificatePartials]
+  val vatCertificatePartials: VatCertificatePartial = inject[VatCertificatePartial]
 
-  "ClientDetailsPartials" should {
+  "VatCertificatePartial" should {
 
     lazy val view = vatCertificatePartials()(messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct card heading as ${VatCertificatePartialMessages.heading}" in {
-      elementText(".govuk-heading-m") shouldBe VatCertificatePartialMessages.heading
-    }
-
-    s"display the correct line 1 as ${VatCertificatePartialMessages.paragraphOne}" in {
-      elementText("p") shouldBe VatCertificatePartialMessages.paragraphOne
-    }
-
     s"display the correct link text as ${VatCertificatePartialMessages.linkText}" in {
-      elementText("a") shouldBe VatCertificatePartialMessages.linkText
+      elementText("#certificate-link") shouldBe VatCertificatePartialMessages.linkText
     }
 
     s"display the correct link of ${mockConfig.vatCertificateUrl}" in {
-      element("a").attr("href") shouldBe mockConfig.vatCertificateUrl
+      element("#certificate-link").attr("href") shouldBe mockConfig.vatCertificateUrl
     }
+
+    s"display the correct line 1 as ${VatCertificatePartialMessages.paragraphOne}" in {
+      elementText("#certificate-body") shouldBe VatCertificatePartialMessages.paragraphOne
+    }
+
   }
 
 }

@@ -20,14 +20,11 @@
 
 @()(implicit messages: Messages, appConfig: AppConfig)
 
-<div class="tile tile-no-border">
-    <div id="vat-certificate" class="tile-body">
-        <h2 class="govuk-heading-m">@messages("VatCertificateCard.title")</h2>
-        <p class="govuk-body"> @messages("VatCertificateCard.info")</p>
-        <p class="govuk-body">
-            <a id=card-link href="@{appConfig.vatCertificateUrl}" class="govuk-link">
-                @messages("VatCertificateCard.link")
-            </a>
-        </p>
-    </div>
+<div id="vat-certificate" class="govuk-grid-column-one-third">
+  <h3 class="govuk-heading-s">
+    <a id="certificate-link" href="@{appConfig.vatCertificateUrl}" class="govuk-link">
+      @messages("VatCertificateCard.link")
+    </a>
+  </h3>
+  <p id="certificate-body" class="govuk-body">@messages("VatCertificateCard.info")</p>
 </div>

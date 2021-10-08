@@ -14,20 +14,11 @@
  * limitations under the License.
  */
 
-package models
+package assets.messages.partials
 
-import play.api.libs.json.{JsPath, Reads}
-import java.time.LocalDate
+object HistoryPartialMessages {
 
-import play.api.libs.functional.syntax.{toAlternativeOps, toFunctionalBuilderOps}
-
-case class Charge(dueDate: LocalDate,
-                  ddCollectionInProgress: Boolean)
-
-object Charge {
-
-  implicit val reads: Reads[Charge] = (
-    (JsPath \ "items")(0).\("dueDate").read[LocalDate] and
-    (JsPath \ "items")(0).\("DDcollectionInProgress").read[Boolean].or(Reads.pure(false))
-  ) (Charge.apply _)
+  val heading = "History"
+  val link1 = "View past payments"
+  val link2 = "View past returns"
 }

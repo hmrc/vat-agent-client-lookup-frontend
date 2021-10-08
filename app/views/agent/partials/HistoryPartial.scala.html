@@ -15,20 +15,23 @@
  *@
 
 @import config.AppConfig
-@import models.User
-@import helpers.CapturePreferenceHelper
 
-@this(capturePreferenceHelper: CapturePreferenceHelper)
+@this()
 
-@()(implicit messages: Messages, appConfig: AppConfig ,user: User[_])
+@(hybridUser: Boolean)(implicit messages: Messages, appConfig: AppConfig)
 
 <div class="tile tile-no-border">
-    <div id="client-details" class="tile-body">
-        <h2 class="govuk-heading-m">@messages("clientDetailsCard.title")</h2>
-        <p class="govuk-body">@messages("clientDetailsCard.info")</p>
-        <p class="govuk-body">
-            @capturePreferenceHelper(messages("clientDetailsCard.link"), appConfig.manageVatCustomerDetailsUrl)
-        </p>
-
-    </div>
+  <div id="payment-history" class="tile-body">
+    <h2 class="govuk-heading-m" id="history-title">@messages("paymentHistory.heading")</h2>
+    @if(!hybridUser) {
+    <p class="govuk-body govuk-!-margin-0">
+      <a class="govuk-link" id="past-payments-link" href="@appConfig.paymentHistoryUrl">
+        @messages("paymentHistory.viewPastPayments")
+      </a>
+    </p>
+    }
+    <p class="govuk-body"><a class="govuk-link" id="past-returns-link" href="@appConfig.submittedReturnsUrl">
+      @messages("paymentHistory.viewPastReturns")
+    </a></p>
+  </div>
 </div>

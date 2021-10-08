@@ -16,6 +16,7 @@
 
 package models
 
+import common.MandationStatus
 import play.api.Logger
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
@@ -29,7 +30,7 @@ case class CustomerDetails(firstName: Option[String],
                            mandationStatus: String,
                            deregistration: Option[Deregistration],
                            isInsolvent: Boolean,
-                           isPartialMigration: Boolean,
+                           isHybridUser: Boolean,
                            customerMigratedToETMPDate: Option[String],
                            changeIndicators: Option[ChangeIndicators] = None,
                            missingTrader: Boolean = false) {
@@ -37,6 +38,10 @@ case class CustomerDetails(firstName: Option[String],
   val userName: Option[String] = {
     val name = s"${firstName.getOrElse("")} ${lastName.getOrElse("")}".trim
     if (name.isEmpty) None else Some(name)
+  }
+
+  lazy val optedIn: Boolean = {
+    !List(MandationStatus.nonMTDfB, MandationStatus.nonDigital, MandationStatus.MTDfBExempt).contains(mandationStatus)
   }
 
   lazy val clientName: String = (tradingName, organisationName, userName) match {

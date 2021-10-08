@@ -21,7 +21,7 @@ import org.scalatestplus.mockito.MockitoSugar.mock
 import services.FinancialDataService
 import utils.TestUtil
 import connectors.httpParsers.ResponseHttpParser.HttpResult
-import models.DirectDebit
+import models.{Charge, DirectDebit}
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.when
 import uk.gov.hmrc.http.HeaderCarrier
@@ -34,6 +34,10 @@ trait MockFinancialDataService extends TestUtil {
 
   def mockDirectDebitResponse(response: HttpResult[DirectDebit]): OngoingStubbing[Future[HttpResult[DirectDebit]]] =
     when(mockFinancialDataService.getDirectDebit(ArgumentMatchers.any())(ArgumentMatchers.any[HeaderCarrier]))
+      .thenReturn(Future.successful(response))
+
+  def mockPaymentResponse(response: HttpResult[Seq[Charge]]): OngoingStubbing[Future[HttpResult[Seq[Charge]]]] =
+    when(mockFinancialDataService.getPayment(ArgumentMatchers.any())(ArgumentMatchers.any[HeaderCarrier]))
       .thenReturn(Future.successful(response))
 
 }

@@ -55,7 +55,6 @@ clientDetailsCard.title = Client details
 clientDetailsCard.info = Change your client’s business and contact details or VAT Return dates.
 clientDetailsCard.link = View business details
 
-VatCertificateCard.title = VAT certificate
 VatCertificateCard.info = View and print your client’s VAT certificate.
 VatCertificateCard.link = View VAT certificate
 
@@ -121,21 +120,31 @@ registrationPartial.futureDeregistration.link = VAT online services for agents (
 registrationPartial.vatGroups.VAT7.title = Cancel VAT registration (opens in a new window or tab)
 registrationPartial.vatGroups.VAT7.content = To disband VAT group, you need to cancel the registration using the VAT7 form.
 
-vatReturnsPartial.heading = VAT Returns
-vatReturnsPartial.paragraphMandated = View your client’s submitted returns.
-vatReturnsPartial.paragraphNonMandated = Submit your client’s VAT returns and view submitted returns.
-vatReturnsPartial.viewReturnsLink = View submitted returns
-vatReturnsPartial.submitReturnLink = Submit VAT Return
+nextPaymentPartial.heading = Next payment due
+nextPaymentPartial.heading.multiple = Payments due
+nextPaymentPartial.multiple = You have {0} payments due
+nextPaymentPartial.noPayments = No payments due right now
+nextPaymentPartial.overdue = overdue
+nextPaymentPartial.link = Check what you owe
+
+nextReturnPartial.heading = Next return due
+nextReturnPartial.link = View return deadlines
+nextReturnPartial.optedOut.link = Submit VAT Return
+
+paymentHistory.heading = History
+paymentHistory.viewPastPayments = View past payments
+paymentHistory.viewPastReturns = View past returns
 
 agentHub.heading = Your client’s VAT details
 agentHub.vrn = VAT registration number: {0}
 agentHub.changeClient = Change client
-agentHub.noDDclient = Agents cannot access a client’s Direct Debit or payment details
+agentHub.noDDclient = Agents cannot access a client’s Direct Debit or payment details.
+agentHub.manageVat = Manage VAT
 
 breadcrumb.agentServices = Agent Services Account
 
 signUpPartial.LinkText = Sign up for Making Tax Digital for VAT
-signUpPartial.Body = Your client must sign up to Making Tax Digital for VAT if they are not exempt from VAT, and their taxable turnover exceeds the £85,000 threshold.
+signUpPartial.Body = If your client is not exempt from VAT and their taxable turnover exceeds the threshold, they must sign up to Making Tax Digital for VAT.
 
 passcode.error.empty = Enter the confirmation code
 passcode.error.invalid = Enter the 6 character confirmation code

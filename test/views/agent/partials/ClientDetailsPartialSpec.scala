@@ -25,38 +25,37 @@ import views.ViewBaseSpec
 import assets.messages.partials.ClientDetailsPartialMessages
 import common.SessionKeys
 import models.User
-import views.html.agent.partials.ClientDetailsPartials
+import views.html.agent.partials.ClientDetailsPartial
 
-class ClientDetailsPartialsSpec extends ViewBaseSpec {
+class ClientDetailsPartialSpec extends ViewBaseSpec {
 
-  val clientDetailsPartials: ClientDetailsPartials = inject[ClientDetailsPartials]
+  val clientDetailsPartials: ClientDetailsPartial = inject[ClientDetailsPartial]
+  object Selectors {
+    val link = "#client-details-link > a"
+    val content = "#client-details-body"
+  }
 
-  "ClientDetailsPartials" when {
+  "ClientDetailPartials" when {
 
     "when the user has no contact preference in session" should {
 
       lazy val view = clientDetailsPartials()(messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      s"have the correct card heading of ${ClientDetailsPartialMessages.heading}" in {
-        elementText(".govuk-heading-m") shouldBe ClientDetailsPartialMessages.heading
-      }
-
-      s"display the correct line 1 of ${ClientDetailsPartialMessages.paragraphOne}" in {
-        elementText("p") shouldBe ClientDetailsPartialMessages.paragraphOne
-      }
-
       s"display the correct link text of ${ClientDetailsPartialMessages.linkText}" in {
-        elementText("a") shouldBe ClientDetailsPartialMessages.linkText
+        elementText(Selectors.link) shouldBe ClientDetailsPartialMessages.linkText
       }
 
       s"display the correct link of ${controllers.agent.routes.CapturePreferenceController.show().url}" in {
-        element("a").attr("href") shouldBe
+        element(Selectors.link).attr("href") shouldBe
           controllers.agent.routes.CapturePreferenceController.show().url +
             s"?altRedirectUrl=%2F${mockConfig.manageVatCustomerDetailsUrl.substring(1)}"
       }
-    }
 
+      s"display the correct line 1 of ${ClientDetailsPartialMessages.paragraphOne}" in {
+        elementText(Selectors.content) shouldBe ClientDetailsPartialMessages.paragraphOne
+      }
+    }
 
     "when the user has a valid agent email in session" should {
 
@@ -68,21 +67,18 @@ class ClientDetailsPartialsSpec extends ViewBaseSpec {
       lazy val view = clientDetailsPartials()(messages, mockConfig, testuser)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      s"have the correct card heading of ${ClientDetailsPartialMessages.heading}" in {
-        elementText(".govuk-heading-m") shouldBe ClientDetailsPartialMessages.heading
-      }
-
-      s"display the correct line 1 of ${ClientDetailsPartialMessages.paragraphOne}" in {
-        elementText("p") shouldBe ClientDetailsPartialMessages.paragraphOne
-      }
-
       s"display the correct link text of ${ClientDetailsPartialMessages.linkText}" in {
-        elementText("a") shouldBe ClientDetailsPartialMessages.linkText
+        elementText(Selectors.link) shouldBe ClientDetailsPartialMessages.linkText
       }
 
       s"display the correct link of ${mockConfig.manageVatCustomerDetailsUrl}" in {
-        element("a").attr("href") shouldBe mockConfig.manageVatCustomerDetailsUrl
+        element(Selectors.link).attr("href") shouldBe mockConfig.manageVatCustomerDetailsUrl
       }
+
+      s"display the correct line 1 of ${ClientDetailsPartialMessages.paragraphOne}" in {
+        elementText(Selectors.content) shouldBe ClientDetailsPartialMessages.paragraphOne
+      }
+
     }
 
     "when the user has email notification in session as no" should {
@@ -95,21 +91,18 @@ class ClientDetailsPartialsSpec extends ViewBaseSpec {
       lazy val view = clientDetailsPartials()(messages, mockConfig, testuser)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      s"have the correct card heading of ${ClientDetailsPartialMessages.heading}" in {
-        elementText(".govuk-heading-m") shouldBe ClientDetailsPartialMessages.heading
-      }
-
-      s"display the correct line 1 of ${ClientDetailsPartialMessages.paragraphOne}" in {
-        elementText("p") shouldBe ClientDetailsPartialMessages.paragraphOne
-      }
-
       s"display the correct link text of ${ClientDetailsPartialMessages.linkText}" in {
-        elementText("a") shouldBe ClientDetailsPartialMessages.linkText
+        elementText(Selectors.link) shouldBe ClientDetailsPartialMessages.linkText
       }
 
       s"display the correct link of ${mockConfig.manageVatCustomerDetailsUrl}" in {
-        element("a").attr("href") shouldBe mockConfig.manageVatCustomerDetailsUrl
+        element(Selectors.link).attr("href") shouldBe mockConfig.manageVatCustomerDetailsUrl
       }
+
+      s"display the correct line 1 of ${ClientDetailsPartialMessages.paragraphOne}" in {
+        elementText(Selectors.content) shouldBe ClientDetailsPartialMessages.paragraphOne
+      }
+
     }
   }
 

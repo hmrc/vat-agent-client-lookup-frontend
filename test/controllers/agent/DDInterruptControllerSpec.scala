@@ -18,7 +18,7 @@ package controllers.agent
 
 import assets.BaseTestConstants
 import assets.CustomerDetailsTestConstants._
-import assets.DirectDebitConstants._
+import assets.FinancialDataConstants._
 import common.SessionKeys
 import controllers.ControllerBaseSpec
 import mocks.services.{MockCustomerDetailsService, MockDateService, MockFinancialDataService}

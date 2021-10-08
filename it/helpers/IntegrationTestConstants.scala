@@ -51,7 +51,7 @@ object IntegrationTestConstants {
     deregistration = None,
     partyType = Some("2"),
     isInsolvent = false,
-    isPartialMigration = isPartialMigration,
+    isHybridUser = isPartialMigration,
     customerMigratedToETMPDate = Some("2018-03-03")
   )
 
@@ -64,7 +64,7 @@ object IntegrationTestConstants {
     deregistration = None,
     partyType = Some("2"),
     isInsolvent = false,
-    isPartialMigration = isPartialMigration,
+    isHybridUser = isPartialMigration,
     customerMigratedToETMPDate = Some("2018-03-03")
   )
 

@@ -51,8 +51,10 @@ class FinancialDataServiceSpec extends UnitSpec with MockitoSugar {
   "PaymentService should return the result of the connector call" when {
 
     "there is a successful response" in {
-      when(mockConnector.getPaymentsDue(vrn)(hc)).thenReturn(Future.successful(Right(Seq(Charge(LocalDate.parse("2019-09-13"))))))
-      await(service.getPayment(vrn)) shouldBe Right(Seq(Charge(LocalDate.parse("2019-09-13"))))
+      val response = Right(Seq(Charge(LocalDate.parse("2019-09-13"), ddCollectionInProgress = false)))
+
+      when(mockConnector.getPaymentsDue(vrn)(hc)).thenReturn(Future.successful(response))
+      await(service.getPayment(vrn)) shouldBe response
     }
 
     "there is an error response" in {

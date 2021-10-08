@@ -81,8 +81,7 @@ clientDetailsCard.title = Manylion cleient
 clientDetailsCard.info = Newid manylion busnes a chyswllt eich cleient neu ddyddiadau Ffurflenni TAW eich cleient.
 clientDetailsCard.link = Bwrw golwg dros y manylion busnes
 
-VatCertificateCard.title = Tystysgrif TAW
-VatCertificateCard.info = Bwrw golwg dros dystysgrif TAW eich cleient a’i hargraffu
+VatCertificateCard.info = Bwrw golwg dros dystysgrif TAW eich cleient a’i hargraffu.
 VatCertificateCard.link = Bwrw golwg dros y dystysgrif TAW
 
 optOutCard.heading = Optio allan o’r cynllun Troi Treth yn Ddigidol ar gyfer TAW
@@ -147,6 +146,21 @@ registrationPartial.futureDeregistration.link = Gwasanaethau TAW ar-lein ar gyfe
 registrationPartial.vatGroups.VAT7.title = Canslo cofrestriad TAW (yn agor ffenestr neu dab newydd)
 registrationPartial.vatGroups.VAT7.content = I ddiddymu’r grŵp TAW, mae’n rhaid i chi ganslo’r cofrestriad drwy ddefnyddio ffurflen VAT7.
 
+nextPaymentPartial.heading = Taliad nesaf yn ddyledus
+nextPaymentPartial.heading.multiple = Taliadau sy’n ddyledus
+nextPaymentPartial.multiple = Mae gennych {0} o daliadau’n ddyledus
+nextPaymentPartial.noPayments = Nid oes taliadau’n ddyledus nawr
+nextPaymentPartial.overdue = hwyr
+nextPaymentPartial.link = Gwirio’r hyn sydd arnoch
+
+nextReturnPartial.heading = Ffurflen TAW nesaf i’w chyflwyno
+nextReturnPartial.link = Bwrw golwg dros ddyddiadau cau ar gyfer Ffurflenni TAW
+nextReturnPartial.optedOut.link = Cyflwyno Ffurflen TAW
+
+paymentHistory.heading = Hanes
+paymentHistory.viewPastPayments = Bwrw golwg dros daliadau blaenorol
+paymentHistory.viewPastReturns = Bwrw golwg dros Ffurflenni TAW blaenorol
+
 vatReturnsPartial.heading = Ffurflenni TAW
 vatReturnsPartial.paragraphMandated = Bwrw golwg dros Ffurflenni TAW eich cleient a gyflwynwyd.
 vatReturnsPartial.paragraphNonMandated = Cyflwyno Ffurflenni TAW eich cleient a bwrw golwg dros y Ffurflenni TAW a gyflwynwyd.
@@ -157,6 +171,7 @@ agentHub.heading = Manylion TAW eich cleient
 agentHub.vrn = Rhif cofrestru TAW: {0}
 agentHub.changeClient = Newid cleient
 agentHub.noDDclient = Ni all asiantau gael at fanylion Debyd Uniongyrchol na thaliadau cleient
+agentHub.manageVat = Rheoli TAW
 
 breadcrumb.agentServices = Cyfrif Gwasanaethau Asiant
 

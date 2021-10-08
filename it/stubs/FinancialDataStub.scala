@@ -25,7 +25,7 @@ object FinancialDataStub extends WireMockMethods {
 
   private def directDebitUri(vrn: String) = s"/financial-transactions/has-direct-debit/$vrn"
 
-  private def paymentUri(vrn: String) = s"/financial-transactions/vat/$vrn"
+  private def paymentUri(vrn: String) = s"/financial-transactions/vat/$vrn\\?onlyOpenItems=true"
 
   val directDebitJson: JsObject = Json.obj("directDebitMandateFound" -> false)
   val errorJson: JsObject = Json.obj("FAILURE" -> "Oh dear")
