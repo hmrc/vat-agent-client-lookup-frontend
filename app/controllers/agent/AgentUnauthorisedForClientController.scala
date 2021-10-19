@@ -19,7 +19,7 @@ package controllers.agent
 import audit.AuditService
 import audit.models.AuthenticateAgentAuditModel
 import common.SessionKeys
-import config.{AppConfig, ErrorHandler}
+import config.AppConfig
 import controllers.BaseController
 import controllers.predicates.AuthoriseAsAgentOnly
 import javax.inject.{Inject, Singleton}
@@ -29,13 +29,12 @@ import views.html.errors.agent.NotAuthorisedForClientView
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class AgentUnauthorisedForClientController @Inject()(val authenticate: AuthoriseAsAgentOnly,
-                                                     val serviceErrorHandler: ErrorHandler,
-                                                     val auditService: AuditService,
+class AgentUnauthorisedForClientController @Inject()(authenticate: AuthoriseAsAgentOnly,
+                                                     auditService: AuditService,
                                                      mcc: MessagesControllerComponents,
-                                                     notAuthorisedForClientView: NotAuthorisedForClientView,
-                                                     implicit val executionContext: ExecutionContext,
-                                                     implicit val appConfig: AppConfig) extends BaseController(mcc) {
+                                                     notAuthorisedForClientView: NotAuthorisedForClientView)
+                                                    (implicit executionContext: ExecutionContext,
+                                                     appConfig: AppConfig) extends BaseController(mcc) {
 
   def show(redirectUrl: String = ""): Action[AnyContent] = authenticate {
     implicit agent => {
@@ -43,7 +42,7 @@ class AgentUnauthorisedForClientController @Inject()(val authenticate: Authorise
         case Some(vrn) =>
           auditService.extendedAudit(
             AuthenticateAgentAuditModel(agent.arn, vrn, isAuthorisedForClient = false),
-            Some(controllers.agent.routes.ConfirmClientVrnController.show().url)
+            Some(controllers.agent.routes.ConfirmClientVrnController.show.url)
           )
           Ok(notAuthorisedForClientView()).removingFromSession(SessionKeys.clientVRN)
 

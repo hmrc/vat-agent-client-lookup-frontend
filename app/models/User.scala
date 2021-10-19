@@ -20,13 +20,14 @@ import common.EnrolmentKeys
 import play.api.mvc.{Request, WrappedRequest}
 import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments, InternalError}
 
-case class User[A](vrn: String, active: Boolean = true, arn: Option[String] = None) (implicit request: Request[A]) extends WrappedRequest[A](request) {
+case class User[A](vrn: String, active: Boolean = true, arn: Option[String] = None)
+                  (implicit request: Request[A]) extends WrappedRequest[A](request) {
   val isAgent: Boolean = arn.isDefined
 }
 
 object User {
   def apply[A](enrolments: Enrolments)(implicit request: Request[A]): User[A] =
     enrolments.enrolments.collectFirst {
-      case Enrolment(EnrolmentKeys.vatEnrolmentId, EnrolmentIdentifier(_, vatId) :: _, _, _) => User(vatId)
+      case Enrolment(EnrolmentKeys.vatEnrolmentId, Seq(EnrolmentIdentifier(_, vatId)), _, _) => User(vatId)
   }.getOrElse(throw InternalError("VAT enrolment invalid"))
 }

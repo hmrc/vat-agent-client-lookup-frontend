@@ -19,11 +19,12 @@ package connectors.httpParsers
 import connectors.httpParsers.GetEmailVerificationStateHttpParser.{EmailNotVerified, EmailVerified}
 import connectors.httpParsers.GetEmailVerificationStateHttpParser.GetEmailVerificationStateHttpReads.read
 import models.errors.UnexpectedError
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.http.Status._
 import uk.gov.hmrc.http.HttpResponse
-import uk.gov.hmrc.play.test.UnitSpec
 
-class GetEmailVerificationStateHttpParserSpec extends UnitSpec {
+class GetEmailVerificationStateHttpParserSpec extends AnyWordSpecLike with Matchers {
 
   "GetEmailVerificationStateHttpReads" when {
 

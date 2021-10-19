@@ -37,7 +37,7 @@ class DDInterruptController @Inject()(mcc: MessagesControllerComponents,
                                       dateService: DateService,
                                       customerDetailsService: CustomerDetailsService,
                                       directDebitService: FinancialDataService)
-                                     (implicit val appConfig: AppConfig,
+                                     (implicit appConfig: AppConfig,
                                       ec: ExecutionContext) extends BaseController(mcc) {
 
   def show: Action[AnyContent] = authenticate.async { implicit agent =>
@@ -47,14 +47,14 @@ class DDInterruptController @Inject()(mcc: MessagesControllerComponents,
           directDebitService.getDirectDebit(agent.vrn).map {
             case Right(directDebit) if !directDebit.directDebitMandateFound =>
               Ok(ddInterruptView(DDInterruptForm.form))
-            case _ => Redirect(routes.ConfirmClientVrnController.redirect().url)
+            case _ => Redirect(routes.ConfirmClientVrnController.redirect.url)
                         .addingToSession(SessionKeys.viewedDDInterrupt -> "true")
           }
-        case _ => Future.successful(Redirect(routes.ConfirmClientVrnController.redirect().url)
+        case _ => Future.successful(Redirect(routes.ConfirmClientVrnController.redirect.url)
                     .addingToSession(SessionKeys.viewedDDInterrupt -> "true"))
       }
     } else {
-      Future.successful(Redirect(routes.ConfirmClientVrnController.redirect().url)
+      Future.successful(Redirect(routes.ConfirmClientVrnController.redirect.url)
         .addingToSession(SessionKeys.viewedDDInterrupt -> "true"))
     }
   }
@@ -62,11 +62,11 @@ class DDInterruptController @Inject()(mcc: MessagesControllerComponents,
   def submit: Action[AnyContent] = authenticate { implicit agent =>
     (appConfig.features.directDebitInterruptFeature(), agent.session.get(SessionKeys.viewedDDInterrupt).isDefined) match {
       case (true, true) | (false, _) =>
-        Redirect(controllers.agent.routes.AgentHubController.show())
+        Redirect(controllers.agent.routes.AgentHubController.show)
       case (true, _) =>
         DDInterruptForm.form.bindFromRequest().fold(
           error => BadRequest(ddInterruptView(error)),
-          _ => Redirect(controllers.agent.routes.AgentHubController.show())
+          _ => Redirect(controllers.agent.routes.AgentHubController.show)
                 .addingToSession(SessionKeys.viewedDDInterrupt -> "blueBox")
         )
     }

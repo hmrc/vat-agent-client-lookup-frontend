@@ -17,7 +17,6 @@
 package audit
 
 import audit.models.TestExtendedAuditModel
-import config.FrontendAppConfig
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -34,13 +33,12 @@ class AuditingServiceSpec extends TestUtil with MockitoSugar with BeforeAndAfter
 
   val appName: String = "vat-agent-client-lookup-frontend"
   val mockAuditConnector: AuditConnector = mock[AuditConnector]
-  val mockConfiguration: FrontendAppConfig = mock[FrontendAppConfig]
 
-  val testAuditingService = new AuditService(mockConfiguration, mockAuditConnector)
+  val testAuditingService = new AuditService(mockAuditConnector)
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    reset(mockAuditConnector, mockConfiguration)
+    reset(mockAuditConnector)
   }
 
   "AuditService" should {

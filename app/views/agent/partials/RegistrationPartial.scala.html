@@ -16,7 +16,6 @@
 
 @import config.AppConfig
 @import java.time.LocalDate
-@import play.api.Logger
 @import views.html.helpers.DisplayDate
 @import models.User
 @import helpers.CapturePreferenceHelper
@@ -98,7 +97,6 @@
         case historic => historicDeregistration(historic)
       }
       case _ =>
-        Logger.warn("[registrationPartial][deregistrationDate] - 'deregistration' contained no 'effectDateOfCancellation'")
     }
   } else {
     details.changeIndicators.map(_.deregister) match {

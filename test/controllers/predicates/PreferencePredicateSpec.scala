@@ -22,6 +22,7 @@ import controllers.ControllerBaseSpec
 import models.Agent
 import org.scalatest.BeforeAndAfterAll
 import play.api.mvc.Results.Redirect
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 
 class PreferencePredicateSpec extends ControllerBaseSpec with BeforeAndAfterAll {
 

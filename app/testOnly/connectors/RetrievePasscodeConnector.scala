@@ -20,14 +20,14 @@ import config.AppConfig
 import connectors.httpParsers.ResponseHttpParser.HttpResult
 import javax.inject.Inject
 import models.errors.UnexpectedError
-import play.api.Logger
 import play.api.http.Status
 import testOnly.models.Passcode
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads, HttpResponse}
+import utils.LoggerUtil
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class RetrievePasscodeConnector @Inject()(http: HttpClient, appConfig: AppConfig) {
+class RetrievePasscodeConnector @Inject()(http: HttpClient, appConfig: AppConfig) extends LoggerUtil {
 
   val getPasscodeUrl: String = appConfig.emailVerificationBaseUrl + "/test-only/passcodes"
 
@@ -36,7 +36,7 @@ class RetrievePasscodeConnector @Inject()(http: HttpClient, appConfig: AppConfig
       response.status match {
         case Status.OK => Right(response.json.as[Passcode])
         case status =>
-          Logger.warn("[RetrievePasscodeConnector][read] - Failed to retrieve passcode. " +
+          logger.warn("[RetrievePasscodeConnector][read] - Failed to retrieve passcode. " +
             s"Received status: $status. Received body: ${response.body}")
           Left(UnexpectedError(status, response.body))
       }

@@ -16,18 +16,16 @@
 
 package controllers.agent
 
+import javax.inject.{Inject, Singleton}
 import common.SessionKeys
 import config.{AppConfig, ErrorHandler}
 import connectors.httpParsers.VerifyPasscodeHttpParser._
+import controllers.BaseController
 import controllers.predicates.{AuthoriseAsAgentOnly, PreferencePredicate}
 import forms.PasscodeForm
-import javax.inject.{Inject, Singleton}
 import models.Agent
-import play.api.Logger
-import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.EmailVerificationService
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.agent.VerifyEmailPinView
 import views.html.errors.agent.IncorrectPasscodeView
 
@@ -36,13 +34,13 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class VerifyEmailPinController @Inject()(emailVerificationService: EmailVerificationService,
                                          authenticate: AuthoriseAsAgentOnly,
-                                         val preferenceCheck: PreferencePredicate,
-                                         val errorHandler: ErrorHandler,
+                                         preferenceCheck: PreferencePredicate,
+                                         errorHandler: ErrorHandler,
                                          mcc: MessagesControllerComponents,
                                          verifyEmailPinView: VerifyEmailPinView,
-                                         incorrectPasscodeView: IncorrectPasscodeView,
-                                         implicit val executionContext: ExecutionContext,
-                                         implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
+                                         incorrectPasscodeView: IncorrectPasscodeView)
+                                        (implicit executionContext: ExecutionContext,
+                                         appConfig: AppConfig) extends BaseController(mcc) {
 
   def extractSessionEmail(implicit agent: Agent[AnyContent]): Option[String] =
     agent.session.get(SessionKeys.notificationsEmail).filter(_.nonEmpty)
@@ -63,9 +61,9 @@ class VerifyEmailPinController @Inject()(emailVerificationService: EmailVerifica
     extractSessionEmail(agent) match {
       case Some(email) =>
         emailVerificationService.createEmailPasscodeRequest(email, langCookieValue) map {
-          case Some(true) => Redirect(routes.VerifyEmailPinController.show())
+          case Some(true) => Redirect(routes.VerifyEmailPinController.show)
           case Some(false) =>
-            Logger.debug(
+            logger.debug(
               "[VerifyEmailPinController][requestPasscode] - " +
                 "Unable to send email verification request. Service responded with 'already verified'"
             )
@@ -82,7 +80,7 @@ class VerifyEmailPinController @Inject()(emailVerificationService: EmailVerifica
       case Some(email) =>
         PasscodeForm.form.bindFromRequest().fold(
           error => {
-            Logger.debug(s"[VerifyEmailPinController][submit] Error submitting form: $error")
+            logger.debug(s"[VerifyEmailPinController][submit] Error submitting form: $error")
             Future.successful(BadRequest(verifyEmailPinView(email, error)))
           },
           passcode => {

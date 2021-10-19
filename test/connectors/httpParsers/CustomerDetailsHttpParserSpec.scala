@@ -20,14 +20,14 @@ import assets.CustomerDetailsTestConstants._
 import connectors.httpParsers.CustomerDetailsHttpParser.CustomerDetailsReads.read
 import models.errors._
 import play.api.http.Status
-import play.api.libs.json.Json
+import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.http.HttpResponse
 import utils.TestUtil
 
 class CustomerDetailsHttpParserSpec extends TestUtil {
 
-  val successBadJson = Json.obj("firstName" -> 1)
-  val errorModel = UnexpectedError(Status.BAD_REQUEST, "Error Message")
+  val successBadJson: JsObject = Json.obj("firstName" -> 1)
+  val errorModel: UnexpectedError = UnexpectedError(Status.BAD_REQUEST, "Error Message")
 
   "The CustomerDetailsHttpParser" when {
 

@@ -17,9 +17,10 @@
 package models
 
 import assets.CustomerDetailsTestConstants._
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 
-class CustomerDetailsSpec extends UnitSpec {
+class CustomerDetailsSpec extends AnyWordSpecLike with Matchers {
 
   "CustomerDetailsModel" when {
 

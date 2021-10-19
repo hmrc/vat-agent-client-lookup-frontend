@@ -20,7 +20,6 @@ import controllers.predicates._
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.{reset, when}
 import org.mockito.stubbing.OngoingStubbing
-import org.scalatest.BeforeAndAfterEach
 import _root_.services.EnrolmentsAuthService
 import audit.AuditService
 import config.ErrorHandler
@@ -34,7 +33,7 @@ import views.html.errors.{SessionTimeoutView, StandardErrorView}
 
 import scala.concurrent.Future
 
-trait MockAuth extends TestUtil with BeforeAndAfterEach with MockitoSugar {
+trait MockAuth extends TestUtil with MockitoSugar {
 
   override def beforeEach(): Unit = {
     super.beforeEach()
@@ -131,10 +130,10 @@ trait MockAuth extends TestUtil with BeforeAndAfterEach with MockitoSugar {
       )
     ))
 
-  def mockMissingBearerToken()(): OngoingStubbing[Future[~[Option[AffinityGroup], Enrolments]]] =
+  def mockMissingBearerToken(): OngoingStubbing[Future[~[Option[AffinityGroup], Enrolments]]] =
     setupAuthResponse(Future.failed(MissingBearerToken()))
 
-  def mockUnauthorised()(): OngoingStubbing[Future[~[Option[AffinityGroup], Enrolments]]] =
+  def mockUnauthorised(): OngoingStubbing[Future[~[Option[AffinityGroup], Enrolments]]] =
     setupAuthResponse(Future.failed(InsufficientEnrolments()))
 
 }

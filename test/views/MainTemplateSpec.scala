@@ -24,7 +24,7 @@ import views.html.MainTemplate
 class MainTemplateSpec extends ViewBaseSpec {
 
   val injectedView: MainTemplate = inject[MainTemplate]
-  val headerSelector: String = ".govuk-header__link--service-name"
+  val headerSelector: String = ".hmrc-header__service-name"
 
   "The MainTemplate" should {
 
@@ -36,7 +36,7 @@ class MainTemplateSpec extends ViewBaseSpec {
     }
 
     "have the correct header link" in {
-      element(headerSelector).attr("href") shouldBe controllers.agent.routes.AgentHubController.show().url
+      element(headerSelector).attr("href") shouldBe controllers.agent.routes.AgentHubController.show.url
     }
   }
 }

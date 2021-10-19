@@ -18,14 +18,13 @@ package controllers
 
 import com.google.inject.{Inject, Singleton}
 import config.AppConfig
-import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 
 import scala.concurrent.Future
 
 @Singleton
 class SignOutController @Inject()(mcc: MessagesControllerComponents, implicit val appConfig: AppConfig)
-  extends BaseController(mcc) with I18nSupport {
+  extends BaseController(mcc) {
 
   def signOut(feedbackOnSignOut: Boolean): Action[AnyContent] = Action.async {
     val redirectUrl: String = if(feedbackOnSignOut) appConfig.feedbackSignOutUrl else appConfig.unauthorisedSignOutUrl

@@ -23,7 +23,7 @@ govukErrorSummary: GovukErrorSummary, govukInsetText : GovukInsetText, govukDeta
 
 @startJourneyUrl = @{controllers.agent.routes.CapturePreferenceController.show().url}
 
-@resendVerificationUrl = @{controllers.agent.routes.VerifyEmailPinController.requestPasscode().url}
+@resendVerificationUrl = @{controllers.agent.routes.VerifyEmailPinController.requestPasscode.url}
 
 @detailsContent = {
     <p class="govuk-body">@messages("pinView.subjectLine")</p>
@@ -35,14 +35,15 @@ govukErrorSummary: GovukErrorSummary, govukInsetText : GovukInsetText, govukDeta
 }
 
 @backLink = {
-        @govukBackLink(BackLink(
-            href = startJourneyUrl,
-            content = Text(messages("base.back"))
-        ))
+  @govukBackLink(BackLink(
+    href = startJourneyUrl,
+    content = Text(messages("base.back"))
+  ))
 }
 
 @mainTemplate(
-    pageTitle = if(pinviewForm.hasErrors) messages("common.error.prefixTitle", messages("pinView.title")) else messages("pinView.title"), backLinkContent = Some(backLink)
+  pageTitle = if(pinviewForm.hasErrors) messages("common.error.prefixTitle", messages("pinView.title"))
+              else messages("pinView.title"), backLinkContent = Some(backLink)
 ){
 
     @if(pinviewForm.hasErrors) {

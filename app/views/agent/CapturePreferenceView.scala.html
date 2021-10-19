@@ -28,7 +28,7 @@
 
 @backLink = {
     @govukBackLink(BackLink(
-        href = controllers.agent.routes.AgentHubController.show().url,
+        href = controllers.agent.routes.AgentHubController.show.url,
         content = Text(messages("base.back"))
     ))
 }
@@ -56,7 +56,10 @@
 
 @defining(messages("capturePref.noLetterTitle")) { pageTitle  =>
 
-  @mainTemplate(if(preferenceForm.errors.nonEmpty) messages("common.error.prefixTitle", pageTitle) else pageTitle, backLinkContent = Some(backLink)) {
+  @mainTemplate(
+    if(preferenceForm.errors.nonEmpty) messages("common.error.prefixTitle", pageTitle)
+    else pageTitle, backLinkContent = Some(backLink)
+  ) {
 
     @if(preferenceForm.hasErrors) {
         @govukErrorSummary(ErrorSummary(

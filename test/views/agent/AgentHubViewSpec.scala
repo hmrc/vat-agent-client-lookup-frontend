@@ -59,7 +59,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
 
       "has the correct URL for changing client" in {
         element("#change-client-link").attr("href") shouldBe
-          controllers.agent.routes.ConfirmClientVrnController.changeClient().url
+          controllers.agent.routes.ConfirmClientVrnController.changeClient.url
       }
 
       "display the next payment due partial" in {

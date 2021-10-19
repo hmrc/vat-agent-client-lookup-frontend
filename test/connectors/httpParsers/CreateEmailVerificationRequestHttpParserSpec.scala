@@ -19,11 +19,12 @@ package connectors.httpParsers
 import connectors.httpParsers.CreateEmailVerificationRequestHttpParser.{EmailAlreadyVerified, EmailVerificationRequestSent}
 import connectors.httpParsers.CreateEmailVerificationRequestHttpParser.CreateEmailVerificationRequestHttpReads.read
 import models.errors.UnexpectedError
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.http.Status._
 import uk.gov.hmrc.http.HttpResponse
-import uk.gov.hmrc.play.test.UnitSpec
 
-class CreateEmailVerificationRequestHttpParserSpec extends UnitSpec {
+class CreateEmailVerificationRequestHttpParserSpec extends AnyWordSpecLike with Matchers {
 
   "CreateEmailVerificationRequestHttpReads" when {
 

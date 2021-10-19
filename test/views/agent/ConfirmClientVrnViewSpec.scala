@@ -73,7 +73,7 @@ class ConfirmClientVrnViewSpec extends ViewBaseSpec {
         }
 
         "has a link to the what to do URL" in {
-          element(Selectors.button).attr("href") shouldBe controllers.agent.routes.ConfirmClientVrnController.redirect().url
+          element(Selectors.button).attr("href") shouldBe controllers.agent.routes.ConfirmClientVrnController.redirect.url
         }
       }
 
@@ -84,7 +84,7 @@ class ConfirmClientVrnViewSpec extends ViewBaseSpec {
         }
 
         "has the correct URL" in {
-          element(Selectors.changeClientLink).attr("href") shouldBe controllers.agent.routes.ConfirmClientVrnController.changeClient().url
+          element(Selectors.changeClientLink).attr("href") shouldBe controllers.agent.routes.ConfirmClientVrnController.changeClient.url
         }
       }
     }

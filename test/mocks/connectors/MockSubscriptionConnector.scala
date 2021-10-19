@@ -22,12 +22,13 @@ import models.errors.UnexpectedError
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
-import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.Future
 
-trait MockSubscriptionConnector extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
+trait MockSubscriptionConnector extends AnyWordSpecLike with Matchers with MockitoSugar with BeforeAndAfterEach {
 
   val mockSubscriptionConnector: SubscriptionConnector = mock[SubscriptionConnector]
 

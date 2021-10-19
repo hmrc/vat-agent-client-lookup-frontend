@@ -53,7 +53,7 @@ class DDInterruptControllerSpec extends ControllerBaseSpec with MockDateService 
     }
 
     "redirect to the ConfirmClientVrnController" in {
-      redirectLocation(result) shouldBe Some(controllers.agent.routes.ConfirmClientVrnController.redirect().url)
+      redirectLocation(result) shouldBe Some(controllers.agent.routes.ConfirmClientVrnController.redirect.url)
     }
 
     "add the DD session key to the session" in {
@@ -168,7 +168,7 @@ class DDInterruptControllerSpec extends ControllerBaseSpec with MockDateService 
           }
 
           "redirect to the Agent Hub controller" in {
-            redirectLocation(result) shouldBe Some(controllers.agent.routes.AgentHubController.show().url)
+            redirectLocation(result) shouldBe Some(controllers.agent.routes.AgentHubController.show.url)
           }
         }
 
@@ -186,7 +186,7 @@ class DDInterruptControllerSpec extends ControllerBaseSpec with MockDateService 
             }
 
             "redirect to the Agent Hub controller" in {
-              redirectLocation(result) shouldBe Some(controllers.agent.routes.AgentHubController.show().url)
+              redirectLocation(result) shouldBe Some(controllers.agent.routes.AgentHubController.show.url)
             }
 
             "add a value to the session to confirm the user has seen and accepted the terms of the DD interrupt" in {
@@ -228,7 +228,7 @@ class DDInterruptControllerSpec extends ControllerBaseSpec with MockDateService 
           }
 
           "redirect to the Agent Hub controller" in {
-            redirectLocation(result) shouldBe Some(controllers.agent.routes.AgentHubController.show().url)
+            redirectLocation(result) shouldBe Some(controllers.agent.routes.AgentHubController.show.url)
           }
         }
 
@@ -245,7 +245,7 @@ class DDInterruptControllerSpec extends ControllerBaseSpec with MockDateService 
           }
 
           "redirect to the Agent Hub controller" in {
-            redirectLocation(result) shouldBe Some(controllers.agent.routes.AgentHubController.show().url)
+            redirectLocation(result) shouldBe Some(controllers.agent.routes.AgentHubController.show.url)
           }
         }
       }

@@ -19,12 +19,12 @@ package testOnly.controllers
 import controllers.ControllerBaseSpec
 import play.api.http.Status
 import play.api.test.Helpers._
-import testOnly.views.html.featureSwitch.FeatureSwitch
 import play.api.test.CSRFTokenHelper._
+import testOnly.views.html.featureSwitch.FeatureSwitch
 
 class FeatureSwitchControllerSpec extends ControllerBaseSpec {
 
-  private lazy val target = new FeatureSwitchController(inject[FeatureSwitch], mcc, mockConfig)
+  private lazy val target = new FeatureSwitchController(inject[FeatureSwitch], mcc)
 
   "Calling the .featureSwitch action" should {
 
@@ -52,7 +52,7 @@ class FeatureSwitchControllerSpec extends ControllerBaseSpec {
     }
 
     "redirect the user to the feature switch page" in {
-      redirectLocation(result) shouldBe Some(routes.FeatureSwitchController.featureSwitch().url)
+      redirectLocation(result) shouldBe Some(routes.FeatureSwitchController.featureSwitch.url)
     }
   }
 }

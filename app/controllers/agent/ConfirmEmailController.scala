@@ -16,32 +16,30 @@
 
 package controllers.agent
 
+import javax.inject.{Inject, Singleton}
 import audit.AuditService
 import audit.models.YesPreferenceVerifiedAuditModel
 import common.SessionKeys
 import config.{AppConfig, ErrorHandler}
+import controllers.BaseController
 import controllers.predicates.{AuthoriseAsAgentOnly, PreferencePredicate}
-import javax.inject.{Inject, Singleton}
 import models.Agent
-import play.api.Logger
-import play.api.i18n.I18nSupport
-import play.api.mvc._
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, RequestHeader, Result}
 import services.EmailVerificationService
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.agent.CheckYourAnswersView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ConfirmEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
-                                       val preferenceCheck: PreferencePredicate,
-                                       val emailVerificationService: EmailVerificationService,
-                                       val errorHandler: ErrorHandler,
-                                       val auditService: AuditService,
+class ConfirmEmailController @Inject()(authenticate: AuthoriseAsAgentOnly,
+                                       preferenceCheck: PreferencePredicate,
+                                       emailVerificationService: EmailVerificationService,
+                                       errorHandler: ErrorHandler,
+                                       auditService: AuditService,
                                        mcc: MessagesControllerComponents,
-                                       confirmEmailView: CheckYourAnswersView,
-                                       implicit val executionContext: ExecutionContext,
-                                       implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
+                                       confirmEmailView: CheckYourAnswersView)
+                                      (implicit executionContext: ExecutionContext,
+                                       appConfig: AppConfig) extends BaseController(mcc) {
 
   def show: Action[AnyContent] = (authenticate andThen preferenceCheck) { implicit agent =>
     agent.session.get(SessionKeys.notificationsEmail) match {
@@ -58,15 +56,13 @@ class ConfirmEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
         emailVerificationService.isEmailVerified(email) map {
           case Some(true) =>
             handleRedirect(agent, email)
-          case Some(false) => {
-              Redirect(routes.VerifyEmailPinController.requestPasscode())
-            }
-
+          case Some(false) =>
+            Redirect(routes.VerifyEmailPinController.requestPasscode)
           case _ =>
             errorHandler.showInternalServerError
         }
       case _ =>
-        Logger.info("[ConfirmEmailController][updateNotificationPreference] no email address found in session")
+        logger.info("[ConfirmEmailController][updateNotificationPreference] no email address found in session")
         Future.successful(Redirect(routes.CapturePreferenceController.show()))
     }
   }
@@ -76,7 +72,7 @@ class ConfirmEmailController @Inject()(val authenticate: AuthoriseAsAgentOnly,
 
     auditService.extendedAudit(
       YesPreferenceVerifiedAuditModel(agent.arn, email),
-      Some(controllers.agent.routes.ConfirmEmailController.isEmailVerified().url)
+      Some(controllers.agent.routes.ConfirmEmailController.isEmailVerified.url)
     )
     Redirect(redirectUrl).addingToSession(SessionKeys.verifiedAgentEmail -> email)
   }

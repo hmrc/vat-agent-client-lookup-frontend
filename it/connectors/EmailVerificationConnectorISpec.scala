@@ -25,6 +25,7 @@ import connectors.httpParsers.VerifyPasscodeHttpParser.{PasscodeNotFound, Succes
 import helpers.IntegrationBaseSpec
 import models.errors.UnexpectedError
 import play.api.http.Status.INTERNAL_SERVER_ERROR
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import stubs.EmailVerificationStub
 import uk.gov.hmrc.http.HeaderCarrier
 

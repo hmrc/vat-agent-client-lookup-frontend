@@ -21,6 +21,7 @@ import helpers.IntegrationBaseSpec
 import models.{Charge, DirectDebit}
 import models.errors.UnexpectedError
 import play.api.http.Status.INTERNAL_SERVER_ERROR
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import stubs.FinancialDataStub
 import uk.gov.hmrc.http.HeaderCarrier
 

@@ -26,7 +26,7 @@
 @backLink = {
   @govukBackLink(BackLink(
     content = Text(messages("base.back")),
-    href = controllers.agent.routes.ConfirmClientVrnController.show().url
+    href = controllers.agent.routes.ConfirmClientVrnController.show.url
   ))
 }
 
@@ -60,7 +60,7 @@
     @messages("directDebitInterrupt.needToLogIn")
   </p>
 
-  @formWithCSRF(action = controllers.agent.routes.DDInterruptController.submit()) {
+  @formWithCSRF(action = controllers.agent.routes.DDInterruptController.submit) {
     @govukCheckboxes(Checkboxes(
       fieldset = Some(Fieldset(
         legend = Some(Legend(

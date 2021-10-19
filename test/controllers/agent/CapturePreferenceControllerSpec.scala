@@ -43,9 +43,7 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
     mockPreferencePredicate,
     mockAuditingService,
     mcc,
-    inject[CapturePreferenceView],
-    ec,
-    mockConfig
+    inject[CapturePreferenceView]
   )
 
   "Calling the show action" when {
@@ -69,7 +67,7 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
           }
 
           "render CapturePreferenceView page" in {
-            messages(Jsoup.parse(bodyOf(result)).select("h1").text()) shouldBe "We no longer send confirmation letters in the post"
+            messages(Jsoup.parse(contentAsString(result)).select("h1").text()) shouldBe "We no longer send confirmation letters in the post"
           }
 
           "store the new redirectUrl in session" in {
@@ -221,7 +219,7 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
         }
 
         "redirect to the confirm email controller" in {
-          redirectLocation(result) shouldBe Some(controllers.agent.routes.ConfirmEmailController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.agent.routes.ConfirmEmailController.show.url)
         }
 
         "add the preference to the session" in {
@@ -237,7 +235,7 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
           await(target.submit(testRequest))
           verifyExtendedAudit(
             YesPreferenceAttemptedAuditModel(arn, testValidEmail),
-            Some(controllers.agent.routes.CapturePreferenceController.submit().url)
+            Some(controllers.agent.routes.CapturePreferenceController.submit.url)
           )
         }
       }

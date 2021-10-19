@@ -16,17 +16,16 @@
 
 package testOnly.controllers
 
-import config.AppConfig
-import forms.FeatureSwitchForm
 import javax.inject.Inject
+import config.AppConfig
+import controllers.BaseController
+import forms.FeatureSwitchForm
 import models.FeatureSwitchModel
-import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import testOnly.views.html.featureSwitch.FeatureSwitch
 
-class FeatureSwitchController @Inject()(featureSwitchView: FeatureSwitch, mcc: MessagesControllerComponents, implicit val appConfig: AppConfig)
-  extends FrontendController(mcc) with I18nSupport {
+class FeatureSwitchController @Inject()(featureSwitchView: FeatureSwitch, mcc: MessagesControllerComponents)
+                                       (implicit appConfig: AppConfig) extends BaseController(mcc) {
 
   def featureSwitch: Action[AnyContent] = Action { implicit request =>
     Ok(featureSwitchView(FeatureSwitchForm.form.fill(
@@ -40,7 +39,7 @@ class FeatureSwitchController @Inject()(featureSwitchView: FeatureSwitch, mcc: M
 
   def submitFeatureSwitch: Action[AnyContent] = Action { implicit request =>
     FeatureSwitchForm.form.bindFromRequest().fold(
-      _ => Redirect(routes.FeatureSwitchController.featureSwitch()),
+      _ => Redirect(routes.FeatureSwitchController.featureSwitch),
       success = handleSuccess
     )
   }
@@ -49,6 +48,6 @@ class FeatureSwitchController @Inject()(featureSwitchView: FeatureSwitch, mcc: M
     appConfig.features.emailVerificationEnabled(model.emailVerificationEnabled)
     appConfig.features.useStaticDateFeature(model.useStaticDateFeature)
     appConfig.features.directDebitInterruptFeature(model.directDebitInterruptFeature)
-    Redirect(routes.FeatureSwitchController.featureSwitch())
+    Redirect(routes.FeatureSwitchController.featureSwitch)
   }
 }

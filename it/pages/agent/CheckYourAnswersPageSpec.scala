@@ -126,7 +126,7 @@ class CheckYourAnswersPageSpec extends BasePageISpec {
 
               res should have(
                 httpStatus(SEE_OTHER),
-                redirectURI(controllers.agent.routes.VerifyEmailPinController.requestPasscode().url)
+                redirectURI(controllers.agent.routes.VerifyEmailPinController.requestPasscode.url)
               )
             }
           }

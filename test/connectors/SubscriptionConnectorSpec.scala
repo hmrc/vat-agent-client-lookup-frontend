@@ -22,6 +22,7 @@ import connectors.httpParsers.ResponseHttpParser.HttpResult
 import mocks.MockHttp
 import models.CustomerDetails
 import play.api.http.Status
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.http.HttpResponse
 import utils.TestUtil
 
@@ -29,7 +30,7 @@ import scala.concurrent.Future
 
 class SubscriptionConnectorSpec extends TestUtil with MockHttp {
 
-  val errorResponse = HttpResponse(Status.BAD_REQUEST, "Error Message")
+  val errorResponse: HttpResponse = HttpResponse(Status.BAD_REQUEST, "Error Message")
 
   object TestSubscriptionConnector extends SubscriptionConnector(mockHttp,mockConfig)
 
