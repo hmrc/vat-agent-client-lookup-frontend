@@ -25,24 +25,24 @@ val appName = "vat-agent-client-lookup-frontend"
 
 resolvers += "hmrc-releases-local" at "https://artefacts.tax.service.gov.uk/artifactory/hmrc-releases-local"
 
-val bootstrapPlayVersion       = "5.14.0"
-val playFrontendHmrc           = "1.11.0-play-26"
-val playPartialsVersion        = "8.2.0-play-26"
-val playLanguageVersion        = "5.1.0-play-26"
-val scalaTestPlusVersion       = "3.1.3"
-val hmrcTestVersion            = "3.10.0-play-26"
-val scalatestVersion           = "3.0.9"
+val bootstrapPlayVersion       = "5.16.0"
+val playFrontendHmrc           = "1.21.0-play-28"
+val playPartialsVersion        = "8.2.0-play-28"
+val playLanguageVersion        = "5.1.0-play-28"
+val scalaTestPlusVersion       = "5.1.0"
+val scalatestVersion           = "3.1.4"
 val pegdownVersion             = "1.6.0"
 val jsoupVersion               = "1.13.1"
-val mockitoVersion             = "2.28.2"
+val mockitoVersion             = "3.1.2.0"
 val scalaMockVersion           = "3.6.0"
 val wiremockVersion            = "2.26.3"
 val referenceCheckerVersion    = "2.5.1"
-val playJodaVersion            = "2.6.14"
+val playJodaVersion            = "2.9.2"
+val flexmarkVersion            = "0.36.8"
 
 val compile = Seq(
   ws,
-  "uk.gov.hmrc" %% "bootstrap-frontend-play-26" % bootstrapPlayVersion,
+  "uk.gov.hmrc" %% "bootstrap-frontend-play-28" % bootstrapPlayVersion,
   "uk.gov.hmrc" %% "play-frontend-hmrc" % playFrontendHmrc,
   "uk.gov.hmrc" %% "play-partials" % playPartialsVersion,
   "uk.gov.hmrc" %% "play-language" % playLanguageVersion,
@@ -51,15 +51,15 @@ val compile = Seq(
 )
 
 def test(scope: String = "test,it"): Seq[ModuleID] = Seq(
-  "uk.gov.hmrc" %% "hmrctest" % hmrcTestVersion % scope,
   "org.scalatest" %% "scalatest" % scalatestVersion % scope,
   "org.scalatestplus.play" %% "scalatestplus-play" % scalaTestPlusVersion % scope,
   "org.scalamock" %% "scalamock-scalatest-support" % scalaMockVersion % scope,
   "org.pegdown" % "pegdown" % pegdownVersion % scope,
   "org.jsoup" % "jsoup" % jsoupVersion % scope,
   "com.typesafe.play" %% "play-test" % PlayVersion.current % scope,
-  "org.mockito" % "mockito-core" % mockitoVersion % scope,
-  "com.github.tomakehurst" % "wiremock-jre8" % wiremockVersion % scope
+  "org.scalatestplus" %% "mockito-3-3" % mockitoVersion % scope,
+  "com.github.tomakehurst" % "wiremock-jre8" % wiremockVersion % scope,
+  "com.vladsch.flexmark" % "flexmark-all" % flexmarkVersion % scope
 )
 
 RoutesKeys.routesImport := Seq.empty
@@ -71,7 +71,6 @@ lazy val coverageSettings: Seq[Setting[_]] = {
     "<empty>",
     ".*Reverse.*",
     "views.html.*",
-    "uk.gov.hmrc.BuildInfo",
     "app.*",
     "prod.*",
     "config.*",

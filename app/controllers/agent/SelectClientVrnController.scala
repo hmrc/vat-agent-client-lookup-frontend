@@ -17,21 +17,19 @@
 package controllers.agent
 
 import common.SessionKeys
-import config.{AppConfig, ErrorHandler}
+import config.AppConfig
 import controllers.BaseController
 import controllers.predicates.AuthoriseAsAgentOnly
 import forms.ClientVrnForm
 import javax.inject.{Inject, Singleton}
-import play.api.Logger
 import play.api.mvc._
 import views.html.agent.SelectClientVrnView
 
 @Singleton
-class SelectClientVrnController @Inject()(val authenticate: AuthoriseAsAgentOnly,
-                                          val serviceErrorHandler: ErrorHandler,
+class SelectClientVrnController @Inject()(authenticate: AuthoriseAsAgentOnly,
                                           mcc: MessagesControllerComponents,
-                                          selectClientVrnView: SelectClientVrnView,
-                                          implicit val appConfig: AppConfig) extends BaseController(mcc) {
+                                          selectClientVrnView: SelectClientVrnView)
+                                         (implicit appConfig: AppConfig) extends BaseController(mcc) {
 
   def show(redirectUrl: String): Action[AnyContent] = authenticate { implicit agent =>
 
@@ -45,12 +43,12 @@ class SelectClientVrnController @Inject()(val authenticate: AuthoriseAsAgentOnly
     implicit agent =>
       ClientVrnForm.form.bindFromRequest().fold(
         error => {
-          Logger.debug("[SelectClientVrnController][submit] Error")
+          logger.debug("[SelectClientVrnController][submit] Error")
           BadRequest(selectClientVrnView(error))
         },
         data => {
-          Logger.debug("[SelectClientVrnController][submit] Success")
-          Redirect(controllers.agent.routes.ConfirmClientVrnController.show())
+          logger.debug("[SelectClientVrnController][submit] Success")
+          Redirect(controllers.agent.routes.ConfirmClientVrnController.show)
             .removingFromSession(SessionKeys.clientMandationStatus)
             .addingToSession(SessionKeys.clientVRN -> data.vrn)
         }

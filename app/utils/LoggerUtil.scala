@@ -16,10 +16,9 @@
 
 package utils
 
-import akka.actor.ActorSystem
-import akka.stream.ActorMaterializer
+import org.slf4j.{Logger, LoggerFactory}
+import play.api.LoggerLike
 
-trait MaterializerSupport {
-  implicit val system: ActorSystem = ActorSystem("Sys")
-  implicit val materializer: ActorMaterializer = ActorMaterializer()
+trait LoggerUtil extends LoggerLike {
+  override val logger: Logger = LoggerFactory.getLogger("application")
 }

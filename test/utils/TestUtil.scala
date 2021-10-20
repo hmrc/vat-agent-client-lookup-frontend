@@ -23,16 +23,17 @@ import config.ErrorHandler
 import mocks.MockAppConfig
 import models.{Agent, User}
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{Lang, Messages, MessagesApi, MessagesImpl}
 import play.api.mvc.{AnyContentAsEmpty, MessagesControllerComponents}
 import play.api.test.{FakeRequest, Injecting}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.ExecutionContext
 
-trait TestUtil extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach with Injecting {
+trait TestUtil extends AnyWordSpecLike with Matchers with GuiceOneAppPerSuite with BeforeAndAfterEach with Injecting {
 
   override def beforeEach(): Unit = {
     mockConfig.features.useStaticDateFeature(true)

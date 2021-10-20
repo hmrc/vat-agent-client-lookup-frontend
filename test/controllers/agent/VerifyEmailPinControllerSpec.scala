@@ -39,9 +39,7 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfte
     mockErrorHandler,
     mcc,
     inject[VerifyEmailPinView],
-    inject[IncorrectPasscodeView],
-    ec,
-    mockConfig
+    inject[IncorrectPasscodeView]
   )
 
   val testEmail: String = "test@email.co.uk"
@@ -96,7 +94,7 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfte
         val result = TestVerifyEmailPinController.show(request)
 
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-        Jsoup.parse(bodyOf(result)).title shouldBe "There is a problem with the service - Your client’s VAT details - GOV.UK"
+        Jsoup.parse(contentAsString(result)).title shouldBe "There is a problem with the service - Your client’s VAT details - GOV.UK"
       }
     }
   }
@@ -261,7 +259,7 @@ class VerifyEmailPinControllerSpec extends ControllerBaseSpec with BeforeAndAfte
         val result = TestVerifyEmailPinController.submit(request)
 
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-        Jsoup.parse(bodyOf(result)).title shouldBe "There is a problem with the service - " +
+        Jsoup.parse(contentAsString(result)).title shouldBe "There is a problem with the service - " +
           "Your client’s VAT details - GOV.UK"
       }
     }

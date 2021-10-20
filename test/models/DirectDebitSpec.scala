@@ -16,10 +16,11 @@
 
 package models
 
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json.Json
-import uk.gov.hmrc.play.test.UnitSpec
 
-class DirectDebitSpec extends UnitSpec {
+class DirectDebitSpec extends AnyWordSpecLike with Matchers {
 
   "Direct debit JSON should parse to a DirectDebit model correctly" in {
     val json = Json.obj("directDebitMandateFound" -> true)

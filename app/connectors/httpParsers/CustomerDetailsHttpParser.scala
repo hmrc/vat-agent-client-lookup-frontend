@@ -19,11 +19,11 @@ package connectors.httpParsers
 import connectors.httpParsers.ResponseHttpParser.HttpResult
 import models.CustomerDetails
 import models.errors._
-import play.api.Logger
 import play.api.http.Status._
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
+import utils.LoggerUtil
 
-object CustomerDetailsHttpParser {
+object CustomerDetailsHttpParser extends LoggerUtil {
 
   implicit object CustomerDetailsReads extends HttpReads[HttpResult[CustomerDetails]] {
 
@@ -31,25 +31,25 @@ object CustomerDetailsHttpParser {
 
       response.status match {
         case OK =>
-          Logger.debug("[CustomerCircumstancesHttpParser][read]: Status OK")
+          logger.debug("[CustomerCircumstancesHttpParser][read]: Status OK")
           response.json.validate[CustomerDetails].fold(
             invalid => {
-              Logger.debug(s"[CustomerCircumstancesHttpParser][read]: Invalid Json - $invalid")
+              logger.debug(s"[CustomerCircumstancesHttpParser][read]: Invalid Json - $invalid")
               Left(UnexpectedError(INTERNAL_SERVER_ERROR, "Invalid Json"))
             },
             valid => Right(valid)
           )
 
         case PRECONDITION_FAILED =>
-          Logger.debug(s"[CustomerCircumstancesHttpParser][read]: Status $PRECONDITION_FAILED")
+          logger.debug(s"[CustomerCircumstancesHttpParser][read]: Status $PRECONDITION_FAILED")
           Left(Migration)
 
         case NOT_FOUND =>
-          Logger.debug(s"[CustomerCircumstancesHttpParser][read]: Status $NOT_FOUND")
+          logger.debug(s"[CustomerCircumstancesHttpParser][read]: Status $NOT_FOUND")
           Left(NotSignedUp)
 
         case status =>
-          Logger.warn(
+          logger.warn(
             s"[CustomerCircumstancesHttpParser][read]: - Unexpected Response " +
               s"Status $status returned, with response: ${response.body}"
           )

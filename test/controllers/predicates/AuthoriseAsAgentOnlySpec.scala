@@ -22,14 +22,14 @@ import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.mvc.Results.Ok
 import play.api.mvc.{Action, AnyContent}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, status}
 
 import scala.concurrent.Future
 
 class AuthoriseAsAgentOnlySpec extends ControllerBaseSpec {
 
-  def target: Action[AnyContent] = {
-    mockAgentOnlyAuthPredicate.async {Future.successful(Ok("test"))
-    }
+  def target: Action[AnyContent] = mockAgentOnlyAuthPredicate.async {
+    Future.successful(Ok("test"))
   }
 
   "The AuthoriseAsAgentOnlySpec" when {
@@ -46,7 +46,7 @@ class AuthoriseAsAgentOnlySpec extends ControllerBaseSpec {
 
         "return a body" in {
           mockAgentAuthorised()
-          val result = await(bodyOf(target(request)))
+          val result = contentAsString(target(request))
           result shouldBe "test"
         }
       }
@@ -61,7 +61,7 @@ class AuthoriseAsAgentOnlySpec extends ControllerBaseSpec {
         }
 
         "render the Unauthorised Agent page" in {
-          messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe AgentUnauthorisedPageMessages.title
+          messages(Jsoup.parse(contentAsString(result)).select("h1").text) shouldBe AgentUnauthorisedPageMessages.title
         }
       }
     }

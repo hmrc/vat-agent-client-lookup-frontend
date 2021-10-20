@@ -21,7 +21,6 @@ import audit.AuditService
 import common.{EnrolmentKeys, SessionKeys}
 import config.{AppConfig, ErrorHandler}
 import models.{Agent, User}
-import play.api.Logger
 import play.api.mvc._
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
@@ -53,7 +52,7 @@ class AuthoriseAsAgentWithClient @Inject()(enrolmentsAuthService: EnrolmentsAuth
 
     request.session.get(SessionKeys.clientVRN) match {
       case Some(vrn) =>
-        Logger.debug(s"[AuthoriseAsAgentWithClient][invokeBlock] - Client VRN from Session: $vrn")
+        logger.debug(s"[AuthoriseAsAgentWithClient][invokeBlock] - Client VRN from Session: $vrn")
         enrolmentsAuthService.authorised(delegatedAuthRule(vrn)).retrieve(Retrievals.affinityGroup and Retrievals.allEnrolments) {
           case None ~ _ =>
             Future.successful(serviceErrorHandler.showInternalServerError)
@@ -63,14 +62,14 @@ class AuthoriseAsAgentWithClient @Inject()(enrolmentsAuthService: EnrolmentsAuth
             block(user)
         } recover {
           case _: NoActiveSession =>
-            Logger.debug("[AuthoriseAsAgentWithClient][invokeBlock] - Agent does not have an active session, rendering Session Timeout")
+            logger.debug("[AuthoriseAsAgentWithClient][invokeBlock] - Agent does not have an active session, rendering Session Timeout")
             Unauthorized(sessionTimeoutView())
           case _: AuthorisationException =>
-            Logger.debug("[AuthoriseAsAgentWithClient][invokeBlock] - Agent does not have delegated authority for Client")
+            logger.debug("[AuthoriseAsAgentWithClient][invokeBlock] - Agent does not have delegated authority for Client")
             Redirect(controllers.agent.routes.AgentUnauthorisedForClientController.show())
         }
       case _ =>
-        Logger.debug("[AuthoriseAsAgentWithClient][invokeBlock] - No Client VRN in session, redirecting to Select Client page")
+        logger.debug("[AuthoriseAsAgentWithClient][invokeBlock] - No Client VRN in session, redirecting to Select Client page")
         Future.successful(Redirect(controllers.agent.routes.SelectClientVrnController.show()))
     }
   }

@@ -17,8 +17,8 @@
 package controllers.predicates
 
 import common.SessionKeys
-import controllers.Assets.Redirect
 import models.User
+import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
 
 import javax.inject.Inject
@@ -30,6 +30,6 @@ class DDInterruptPredicate @Inject()(override val executionContext: ExecutionCon
     if(request.session.get(SessionKeys.viewedDDInterrupt).isDefined) {
       Future.successful(Right(request))
     } else {
-      Future.successful(Left(Redirect(controllers.agent.routes.DDInterruptController.show().url)))
+      Future.successful(Left(Redirect(controllers.agent.routes.DDInterruptController.show.url)))
     }
 }

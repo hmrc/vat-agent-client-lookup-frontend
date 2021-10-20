@@ -72,7 +72,7 @@ class CapturePreferenceViewSpec extends ViewBaseSpec {
             }
 
             "has the correct link location" in {
-              element(Selectors.backLink).attr("href") shouldBe controllers.agent.routes.AgentHubController.show().url
+              element(Selectors.backLink).attr("href") shouldBe controllers.agent.routes.AgentHubController.show.url
             }
           }
 

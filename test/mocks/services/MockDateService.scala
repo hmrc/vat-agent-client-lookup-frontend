@@ -20,12 +20,13 @@ import java.time.LocalDate
 
 import org.mockito.stubbing.OngoingStubbing
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import services.DateService
-import uk.gov.hmrc.play.test.UnitSpec
 import org.mockito.Mockito._
 
-trait MockDateService extends UnitSpec with MockitoSugar with BeforeAndAfterEach {
+trait MockDateService extends AnyWordSpecLike with Matchers with MockitoSugar with BeforeAndAfterEach {
 
   val mockDateService: DateService = mock[DateService]
 

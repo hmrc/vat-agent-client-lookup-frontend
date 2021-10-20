@@ -16,14 +16,13 @@
 
 package controllers.agent
 
+import javax.inject.{Inject, Singleton}
 import common.SessionKeys
 import config.{AppConfig, ErrorHandler}
 import connectors.httpParsers.ResponseHttpParser.HttpResult
 import controllers.BaseController
 import controllers.predicates.AuthoriseAsAgentWithClient
-import javax.inject.{Inject, Singleton}
 import models.{Charge, CustomerDetails, HubViewModel, User}
-import play.api.Logger
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{CustomerDetailsService, DateService, FinancialDataService}
 import views.html.agent.AgentHubView
@@ -37,9 +36,9 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
                                    dateService: DateService,
                                    financialDataService: FinancialDataService,
                                    mcc: MessagesControllerComponents,
-                                   agentHubView: AgentHubView,
-                                   implicit val appConfig: AppConfig,
-                                   implicit val executionContext: ExecutionContext) extends BaseController(mcc) {
+                                   agentHubView: AgentHubView)
+                                  (implicit appConfig: AppConfig,
+                                   executionContext: ExecutionContext) extends BaseController(mcc) {
 
   def show: Action[AnyContent] = authenticate.async { implicit user =>
     for {
@@ -51,10 +50,13 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
           if (details.missingTrader && !details.hasPendingPPOB) {
             Redirect(appConfig.manageVatMissingTraderUrl)
           } else {
+            if(details.deregistration.isDefined && details.deregistration.flatMap(_.effectDateOfCancellation).isEmpty) {
+              logger.warn("[AgentHubController][show] - 'deregistration' contained no 'effectDateOfCancellation'")
+            }
             Ok(agentHubView(constructViewModel(details, payments)))
           }
         case Left(error) =>
-          Logger.warn(s"[AgentHubController][show] - received an error from CustomerDetailsService: $error")
+          logger.warn(s"[AgentHubController][show] - received an error from CustomerDetailsService: $error")
           serviceErrorHandler.showInternalServerError
       }
     }

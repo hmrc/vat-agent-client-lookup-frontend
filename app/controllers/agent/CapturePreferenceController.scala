@@ -30,19 +30,23 @@ import views.html.agent.CapturePreferenceView
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class CapturePreferenceController @Inject()(val authenticate: AuthoriseAsAgentOnly,
-                                            val preferenceCheck: PreferencePredicate,
-                                            val auditService: AuditService,
+class CapturePreferenceController @Inject()(authenticate: AuthoriseAsAgentOnly,
+                                            preferenceCheck: PreferencePredicate,
+                                            auditService: AuditService,
                                             mcc: MessagesControllerComponents,
-                                            capturePreferenceView: CapturePreferenceView,
-                                            implicit val executionContext: ExecutionContext,
-                                            implicit val appConfig: AppConfig) extends BaseController(mcc) {
+                                            capturePreferenceView: CapturePreferenceView)
+                                           (implicit executionContext: ExecutionContext,
+                                            appConfig: AppConfig) extends BaseController(mcc) {
 
   def show(altRedirectUrl: String = ""): Action[AnyContent] = (authenticate andThen preferenceCheck) { implicit user =>
     val preference = user.session.get(SessionKeys.preference)
     val notificationEmail = user.session.get(SessionKeys.notificationsEmail)
     val clientVrn = user.session.get(SessionKeys.clientVRN)
-    val redirectUrl = if(altRedirectUrl.nonEmpty) altRedirectUrl else user.session.get(SessionKeys.redirectUrl).getOrElse(routes.AgentHubController.show().url)
+    val redirectUrl = if(altRedirectUrl.nonEmpty) {
+      altRedirectUrl
+    } else {
+      user.session.get(SessionKeys.redirectUrl).getOrElse(routes.AgentHubController.show.url)
+    }
     if (clientVrn.isEmpty) {
       Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectUrl))
     } else {
@@ -64,15 +68,15 @@ class CapturePreferenceController @Inject()(val authenticate: AuthoriseAsAgentOn
         if (formData.yesNo.value) {
           auditService.extendedAudit(
             YesPreferenceAttemptedAuditModel(user.arn, formData.email.getOrElse("")),
-            Some(controllers.agent.routes.CapturePreferenceController.submit().url)
+            Some(controllers.agent.routes.CapturePreferenceController.submit.url)
           )
-          Redirect(controllers.agent.routes.ConfirmEmailController.show())
+          Redirect(controllers.agent.routes.ConfirmEmailController.show)
             .addingToSession(SessionKeys.preference -> yes)
             .addingToSession(SessionKeys.notificationsEmail -> formData.email.getOrElse(""))
         } else {
           auditService.extendedAudit(
             NoPreferenceAuditModel(user.arn),
-            Some(controllers.agent.routes.CapturePreferenceController.submit().url)
+            Some(controllers.agent.routes.CapturePreferenceController.submit.url)
           )
 
           val redirectUrl = user.session.get(SessionKeys.redirectUrl)

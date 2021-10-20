@@ -16,9 +16,10 @@
 
 package forms
 
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 
-class DDInterruptFormSpec extends UnitSpec {
+class DDInterruptFormSpec extends AnyWordSpecLike with Matchers {
 
   "Binding the DD Interrupt Form" when {
 

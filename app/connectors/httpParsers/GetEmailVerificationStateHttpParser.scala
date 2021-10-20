@@ -18,23 +18,23 @@ package connectors.httpParsers
 
 import connectors.httpParsers.ResponseHttpParser.HttpResult
 import models.errors.UnexpectedError
-import play.api.Logger
 import play.api.http.Status._
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
+import utils.LoggerUtil
 
-object GetEmailVerificationStateHttpParser {
+object GetEmailVerificationStateHttpParser extends LoggerUtil {
 
   implicit object GetEmailVerificationStateHttpReads extends HttpReads[HttpResult[EmailVerificationState]] {
     override def read(method: String, url: String, response: HttpResponse): HttpResult[EmailVerificationState] =
       response.status match {
         case OK => Right(EmailVerified)
         case NOT_FOUND =>
-          Logger.debug(
+          logger.debug(
             "[GetEmailVerificationStateHttpParser][GetEmailVerificationStateHttpReads][read] - Email not verified"
           )
           Right(EmailNotVerified)
         case status =>
-          Logger.warn(
+          logger.warn(
             "[GetEmailVerificationStateHttpParser][GetEmailVerificationStateHttpReads][read] - " +
               s"Unexpected Response, Status $status returned, with response: ${response.body}"
           )

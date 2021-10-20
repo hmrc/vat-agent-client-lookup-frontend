@@ -23,7 +23,7 @@
 @()(implicit messages: Messages, appConfig: AppConfig ,user: User[_])
 
 <div id="client-details" class="govuk-grid-column-one-third">
-  <h3 id="client-details-link" class="govuk-heading-s">
+  <h3 id="client-details-link" class="govuk-heading-s govuk-!-margin-bottom-1">
     @capturePreferenceHelper(messages("clientDetailsCard.link"), appConfig.manageVatCustomerDetailsUrl)
   </h3>
   <p id="client-details-body" class="govuk-body">@messages("clientDetailsCard.info")</p>

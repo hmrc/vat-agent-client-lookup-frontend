@@ -20,7 +20,6 @@ import common.EnrolmentKeys
 import config.{AppConfig, ErrorHandler}
 import javax.inject.{Inject, Singleton}
 import models.Agent
-import play.api.Logger
 import play.api.mvc._
 import services.EnrolmentsAuthService
 import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolments, NoActiveSession}
@@ -51,32 +50,32 @@ class AuthoriseAsAgentOnly @Inject()(enrolmentsAuthService: EnrolmentsAuthServic
       case Some(affinityGroup) ~ allEnrolments =>
         (isAgent(affinityGroup), allEnrolments) match {
           case (true, _) =>
-            Logger.debug("[AuthoriseAsAgentOnly][invokeBlock] - Is an Agent, checking HMRC-AS-AGENT enrolment")
+            logger.debug("[AuthoriseAsAgentOnly][invokeBlock] - Is an Agent, checking HMRC-AS-AGENT enrolment")
             checkAgentEnrolment(allEnrolments, block)
           case (_, _) =>
-            Logger.debug("[AuthoriseAsAgentOnly][invokeBlock] - Is NOT an Agent, rendering Technical Difficulties view")
+            logger.debug("[AuthoriseAsAgentOnly][invokeBlock] - Is NOT an Agent, rendering Technical Difficulties view")
             Future.successful(errorHandler.showInternalServerError)
         }
       case _ =>
-        Logger.warn("[AuthoriseAsAgentOnly][invokeBlock] - Missing affinity group")
+        logger.warn("[AuthoriseAsAgentOnly][invokeBlock] - Missing affinity group")
         Future.successful(errorHandler.showInternalServerError)
     } recover {
       case _: NoActiveSession =>
-        Logger.debug("[AuthoriseAsAgentOnly][invokeBlock] - No Active Session, rendering Session Timeout view")
+        logger.debug("[AuthoriseAsAgentOnly][invokeBlock] - No Active Session, rendering Session Timeout view")
         Unauthorized(sessionTimeoutView())
       case _: AuthorisationException =>
-        Logger.warn("[AuthoriseAsAgentOnly][invokeBlock] - Authorisation Exception, rendering Technical Difficulties view")
+        logger.warn("[AuthoriseAsAgentOnly][invokeBlock] - Authorisation Exception, rendering Technical Difficulties view")
         errorHandler.showInternalServerError
     }
   }
 
   private def checkAgentEnrolment[A](enrolments: Enrolments, block: Agent[A] => Future[Result])(implicit request: Request[A]) =
     if (enrolments.enrolments.exists(_.key == EnrolmentKeys.agentEnrolmentId)) {
-      Logger.debug("[AuthoriseAsAgentOnly][checkAgentEnrolment] - Authenticated as agent")
+      logger.debug("[AuthoriseAsAgentOnly][checkAgentEnrolment] - Authenticated as agent")
       block(Agent(enrolments))
     }
     else {
-      Logger.debug(s"[AuthoriseAsAgentOnly][checkAgentEnrolment] - Agent without HMRC-AS-AGENT enrolment. Enrolments: $enrolments")
+      logger.debug(s"[AuthoriseAsAgentOnly][checkAgentEnrolment] - Agent without HMRC-AS-AGENT enrolment. Enrolments: $enrolments")
       Future.successful(Forbidden(unauthorisedNoEnrolmentView()))
     }
 }

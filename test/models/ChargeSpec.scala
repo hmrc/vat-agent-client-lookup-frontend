@@ -16,11 +16,12 @@
 
 package models
 
-import play.api.libs.json.Json
-import uk.gov.hmrc.play.test.UnitSpec
 import java.time.LocalDate
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
+import play.api.libs.json.Json
 
-class ChargeSpec extends UnitSpec {
+class ChargeSpec extends AnyWordSpecLike with Matchers {
 
   val startDate = "2017-01-01"
   val endDate = "2017-03-01"

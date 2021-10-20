@@ -17,14 +17,15 @@
 package controllers
 
 import config.AppConfig
-import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl._
 import uk.gov.hmrc.play.bootstrap.binders.{AbsoluteWithHostnameFromAllowlist, OnlyRelative, RedirectUrl}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import utils.LoggerUtil
 
-abstract class BaseController(val mcc: MessagesControllerComponents) extends FrontendController(mcc) with I18nSupport {
+abstract class BaseController(val mcc: MessagesControllerComponents) extends FrontendController(mcc) with I18nSupport
+  with LoggerUtil {
 
   def extractRedirectUrl(url: String)(implicit appConfig: AppConfig): Option[String] = {
 
@@ -34,16 +35,16 @@ abstract class BaseController(val mcc: MessagesControllerComponents) extends Fro
           case Right(value) =>
             Some(value.toString())
           case Left(_) =>
-            Logger.warn("[BaseController][extractRedirectUrl] redirectUrl was an invalid absolute url")
+            logger.warn("[BaseController][extractRedirectUrl] redirectUrl was an invalid absolute url")
             None
         }
       } else {
-        Logger.info("[BaseController][extractRedirectUrl] couldn't create ContinueUrl from empty string.")
+        logger.info("[BaseController][extractRedirectUrl] couldn't create ContinueUrl from empty string.")
         None
       }
     } catch {
       case e: Exception =>
-        Logger.warn("[BaseController][extractRedirectUrl] couldn't create ContinueUrl from what was provided.", e)
+        logger.warn("[BaseController][extractRedirectUrl] couldn't create ContinueUrl from what was provided.", e)
         None
     }
   }

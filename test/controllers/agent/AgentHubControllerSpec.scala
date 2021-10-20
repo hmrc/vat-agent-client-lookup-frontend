@@ -16,6 +16,7 @@
 
 package controllers.agent
 
+import java.time.LocalDate
 import assets.BaseTestConstants
 import assets.CustomerDetailsTestConstants._
 import assets.FinancialDataConstants._
@@ -23,10 +24,9 @@ import controllers.ControllerBaseSpec
 import mocks.services._
 import org.jsoup.Jsoup
 import play.api.mvc.Result
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, status}
 import play.mvc.Http.Status._
 import views.html.agent.AgentHubView
-import java.time.LocalDate
-
 import models.HubViewModel
 
 import scala.concurrent.Future
@@ -43,9 +43,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
     mockDateService,
     mockFinancialDataService,
     mcc,
-    inject[AgentHubView],
-    mockConfig,
-    ec
+    inject[AgentHubView]
   )
 
   val staticDate: LocalDate = LocalDate.parse("2018-05-01")
@@ -79,7 +77,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
           status(result) shouldBe OK
-          messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client’s VAT details"
+          messages(Jsoup.parse(contentAsString(result)).select("h1").text) shouldBe "Your client’s VAT details"
         }
       }
     }
@@ -95,7 +93,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
         val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
         status(result) shouldBe OK
-        messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "Your client’s VAT details"
+        messages(Jsoup.parse(contentAsString(result)).select("h1").text) shouldBe "Your client’s VAT details"
       }
     }
 
@@ -110,7 +108,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
         val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
         status(result) shouldBe INTERNAL_SERVER_ERROR
-        Jsoup.parse(bodyOf(result)).title() shouldBe "There is a problem with the service - Your client’s VAT details - GOV.UK"
+        Jsoup.parse(contentAsString(result)).title() shouldBe "There is a problem with the service - Your client’s VAT details - GOV.UK"
       }
     }
 

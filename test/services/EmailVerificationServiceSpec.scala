@@ -23,6 +23,7 @@ import mocks.connectors.MockEmailVerificationConnector
 import models.errors.UnexpectedError
 import org.mockito.Mockito.{never, verify}
 import play.api.http.Status._
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import utils.TestUtil
 
 import scala.concurrent.Future

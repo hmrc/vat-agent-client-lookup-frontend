@@ -90,7 +90,7 @@ class VerifyEmailPinViewSpec extends ViewBaseSpec {
 
       "has the correct destination" in {
         element("details div p:nth-child(2) a:nth-child(1)").attr("href") shouldBe
-          controllers.agent.routes.VerifyEmailPinController.requestPasscode().url
+          controllers.agent.routes.VerifyEmailPinController.requestPasscode.url
       }
     }
 

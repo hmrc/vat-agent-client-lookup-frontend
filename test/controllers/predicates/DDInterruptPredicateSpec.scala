@@ -17,9 +17,10 @@
 package controllers.predicates
 
 import common.SessionKeys
-import controllers.Assets.Redirect
 import controllers.ControllerBaseSpec
 import models.User
+import play.api.mvc.Results.Redirect
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 
 class DDInterruptPredicateSpec extends ControllerBaseSpec {
 
@@ -32,7 +33,7 @@ class DDInterruptPredicateSpec extends ControllerBaseSpec {
     }
 
     "redirect the request to the DDInterruptController when the user does not have the DD session value" in {
-      await(mockDDPredicate.refine(user)) shouldBe Left(Redirect(controllers.agent.routes.DDInterruptController.show().url))
+      await(mockDDPredicate.refine(user)) shouldBe Left(Redirect(controllers.agent.routes.DDInterruptController.show.url))
     }
   }
 }

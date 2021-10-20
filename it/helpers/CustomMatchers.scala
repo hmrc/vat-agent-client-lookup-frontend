@@ -19,76 +19,63 @@ package helpers
 import org.jsoup.Jsoup
 import org.scalatest._
 import org.scalatest.matchers._
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.ws.WSResponse
-import uk.gov.hmrc.play.test.UnitSpec
 
-trait CustomMatchers extends UnitSpec with GivenWhenThen {
+trait CustomMatchers extends AnyWordSpecLike with Matchers with GivenWhenThen {
 
   def httpStatus(expectedValue: Int): HavePropertyMatcher[WSResponse, Int] =
-    new HavePropertyMatcher[WSResponse, Int] {
-
-      def apply(response: WSResponse): HavePropertyMatchResult[Int] = {
-        Then(s"the response status should be '$expectedValue'")
-        HavePropertyMatchResult(
-          response.status == expectedValue,
-          "httpStatus",
-          expectedValue,
-          response.status
-        )
-      }
+    (response: WSResponse) => {
+      Then(s"the response status should be '$expectedValue'")
+      HavePropertyMatchResult(
+        response.status == expectedValue,
+        "httpStatus",
+        expectedValue,
+        response.status
+      )
     }
 
   def pageTitle(expectedValue: String): HavePropertyMatcher[WSResponse, String] =
-    new HavePropertyMatcher[WSResponse, String] {
-
-      def apply(response: WSResponse): HavePropertyMatchResult[String] = {
-        val body = Jsoup.parse(response.body)
-        Then(s"the page title should be '$expectedValue'")
-        HavePropertyMatchResult(
-          body.title == expectedValue,
-          "pageTitle",
-          expectedValue,
-          body.title
-        )
-      }
+    (response: WSResponse) => {
+      val body = Jsoup.parse(response.body)
+      Then(s"the page title should be '$expectedValue'")
+      HavePropertyMatchResult(
+        body.title == expectedValue,
+        "pageTitle",
+        expectedValue,
+        body.title
+      )
     }
 
   def elementText(cssSelector: String)(expectedValue: String): HavePropertyMatcher[WSResponse, String] =
-    new HavePropertyMatcher[WSResponse, String] {
+    (response: WSResponse) => {
+      val body = Jsoup.parse(response.body)
+      Then(s"the text of '$cssSelector' should be '$expectedValue'")
 
-      def apply(response: WSResponse): HavePropertyMatchResult[String] = {
-        val body = Jsoup.parse(response.body)
-        Then(s"the text of '$cssSelector' should be '$expectedValue'")
-
-        HavePropertyMatchResult(
-          body.select(cssSelector).text == expectedValue,
-          cssSelector,
-          expectedValue,
-          body.select(cssSelector).text
-        )
-      }
+      HavePropertyMatchResult(
+        body.select(cssSelector).text == expectedValue,
+        cssSelector,
+        expectedValue,
+        body.select(cssSelector).text
+      )
     }
 
   def elementWithLinkTo(cssSelector: String)(link: String): HavePropertyMatcher[WSResponse, String] =
-    new HavePropertyMatcher[WSResponse, String] {
+    (response: WSResponse) => {
+      val body = Jsoup.parse(response.body)
+      Then(s"the link of '$cssSelector' should be '$link'")
 
-      def apply(response: WSResponse): HavePropertyMatchResult[String] = {
-        val body = Jsoup.parse(response.body)
-        Then(s"the link of '$cssSelector' should be '$link'")
-
-        HavePropertyMatchResult(
-          body.select(cssSelector).attr("href") == link,
-          cssSelector,
-          link,
-          body.select(cssSelector).attr("href")
-        )
-      }
+      HavePropertyMatchResult(
+        body.select(cssSelector).attr("href") == link,
+        cssSelector,
+        link,
+        body.select(cssSelector).attr("href")
+      )
     }
 
   def redirectURI(expectedValue: String): HavePropertyMatcher[WSResponse, String] =
-    new HavePropertyMatcher[WSResponse, String] {
-
-    def apply(response: WSResponse): HavePropertyMatchResult[String] = {
+    (response: WSResponse) => {
       val redirectLocation: Option[String] = response.header("Location")
       Then(s"the redirect location should be '$expectedValue'")
       HavePropertyMatchResult(
@@ -98,12 +85,9 @@ trait CustomMatchers extends UnitSpec with GivenWhenThen {
         redirectLocation.getOrElse("")
       )
     }
-  }
 
   def isElementVisible(cssSelector: String)(isVisible: Boolean): HavePropertyMatcher[WSResponse, Boolean] =
-    new HavePropertyMatcher[WSResponse, Boolean] {
-
-    def apply(response: WSResponse): HavePropertyMatchResult[Boolean] = {
+    (response: WSResponse) => {
       val body = Jsoup.parse(response.body)
       Then(s"it is $isVisible that '$cssSelector' should be on the page")
 
@@ -114,5 +98,4 @@ trait CustomMatchers extends UnitSpec with GivenWhenThen {
         !body.select(cssSelector).isEmpty
       )
     }
-  }
 }

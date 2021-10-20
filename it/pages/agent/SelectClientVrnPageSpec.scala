@@ -148,7 +148,7 @@ class SelectClientVrnPageSpec extends BasePageISpec {
 
             res should have(
               httpStatus(SEE_OTHER),
-              redirectURI(controllers.agent.routes.ConfirmClientVrnController.show().url)
+              redirectURI(controllers.agent.routes.ConfirmClientVrnController.show.url)
             )
 
             SessionCookieCrumbler.getSessionMap(res).get(SessionKeys.clientVRN) shouldBe Some(clientVRN)

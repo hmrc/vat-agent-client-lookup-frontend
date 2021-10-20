@@ -42,9 +42,7 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerifi
     mockErrorHandler,
     mockAuditingService,
     mcc,
-    inject[CheckYourAnswersView],
-    ec,
-    mockConfig
+    inject[CheckYourAnswersView]
   )
 
   val testEmail: String = "test@email.co.uk"
@@ -88,7 +86,7 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerifi
       lazy val result = {
         TestConfirmEmailController.show(testRequest)
       }
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return 500" in {
         mockUnauthorised()
@@ -109,7 +107,7 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerifi
           Agent[AnyContentAsEmpty.type](arn)(request.withSession(SessionKeys.notificationsEmail -> testEmail))
         lazy val result = {
           mockGetEmailVerificationState(testEmail)(Future(Some(true)))
-          TestConfirmEmailController.isEmailVerified()(testRequest)
+          TestConfirmEmailController.isEmailVerified(testRequest)
         }
 
         "return 303" in {
@@ -125,10 +123,10 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerifi
         "audit the event" in {
           mockAgentAuthorised()
           mockGetEmailVerificationState(testEmail)(Future(Some(true)))
-          await(TestConfirmEmailController.isEmailVerified()(testRequest))
+          await(TestConfirmEmailController.isEmailVerified(testRequest))
           verifyExtendedAudit(
             YesPreferenceVerifiedAuditModel(arn, testEmail),
-            Some(controllers.agent.routes.ConfirmEmailController.isEmailVerified().url)
+            Some(controllers.agent.routes.ConfirmEmailController.isEmailVerified.url)
           )
         }
       }
@@ -142,7 +140,7 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerifi
         ))
       lazy val result = {
         mockGetEmailVerificationState(testEmail)(Future(Some(true)))
-        TestConfirmEmailController.isEmailVerified()(testRequest)
+        TestConfirmEmailController.isEmailVerified(testRequest)
       }
 
       "return 303" in {
@@ -158,10 +156,10 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerifi
       "audit the event" in {
         mockAgentAuthorised()
         mockGetEmailVerificationState(testEmail)(Future(Some(true)))
-        await(TestConfirmEmailController.isEmailVerified()(testRequest))
+        await(TestConfirmEmailController.isEmailVerified(testRequest))
         verifyExtendedAudit(
           YesPreferenceVerifiedAuditModel(arn, testEmail),
-          Some(controllers.agent.routes.ConfirmEmailController.isEmailVerified().url)
+          Some(controllers.agent.routes.ConfirmEmailController.isEmailVerified.url)
         )
       }
     }
@@ -171,7 +169,7 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerifi
         lazy val testRequest = request.withSession(SessionKeys.notificationsEmail -> testEmail)
         lazy val result = {
           mockGetEmailVerificationState(testEmail)(Future(Some(false)))
-          TestConfirmEmailController.isEmailVerified()(testRequest)
+          TestConfirmEmailController.isEmailVerified(testRequest)
         }
 
         "return 303" in {
@@ -186,7 +184,7 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerifi
 
     "there isn't an email in session" should {
       lazy val result = {
-        TestConfirmEmailController.isEmailVerified()(request)
+        TestConfirmEmailController.isEmailVerified(request)
       }
 
       "return 303" in {
@@ -202,9 +200,9 @@ class ConfirmEmailControllerSpec extends ControllerBaseSpec with MockEmailVerifi
     "the user is not authorised" should {
       lazy val testRequest = request.withSession(SessionKeys.notificationsEmail -> testEmail)
       lazy val result = {
-        TestConfirmEmailController.isEmailVerified()(testRequest)
+        TestConfirmEmailController.isEmailVerified(testRequest)
       }
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return 500" in {
         mockUnauthorised()

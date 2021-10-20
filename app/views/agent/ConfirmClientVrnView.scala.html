@@ -55,13 +55,13 @@
   ))
 
   <p class="govuk-body">
-    <a id="change-client" class="govuk-link" href="@controllers.agent.routes.ConfirmClientVrnController.changeClient()">
+    <a id="change-client" class="govuk-link" href="@controllers.agent.routes.ConfirmClientVrnController.changeClient">
       @messages("confirmClientVrn.edit")
     </a>
   </p>
 
   @govukButton(Button(
     content = Text(messages("common.confirmAndContinue")),
-    href = Some(controllers.agent.routes.ConfirmClientVrnController.redirect().url)
+    href = Some(controllers.agent.routes.ConfirmClientVrnController.redirect.url)
   ))
 }

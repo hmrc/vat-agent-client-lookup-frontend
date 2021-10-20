@@ -49,9 +49,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
     mcc,
     inject[ConfirmClientVrnView],
     inject[AccountMigrationView],
-    inject[NotSignedUpView],
-    mockConfig,
-    ec
+    inject[NotSignedUpView]
   )
 
   "Calling the .show action" when {
@@ -84,7 +82,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
             "the agent is permitted through the insolvency check" should {
 
               lazy val result = TestConfirmClientVrnController.show(fakeRequestWithVrnAndRedirectUrl)
-              lazy val document = Jsoup.parse(bodyOf(result))
+              lazy val document = Jsoup.parse(contentAsString(result))
 
               "return 200" in {
                 mockAgentAuthorised()
@@ -94,7 +92,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
                 verify(mockAuditingService)
                   .extendedAudit(
                     ArgumentMatchers.eq(AuthenticateAgentAuditModel(arn, vrn, isAuthorisedForClient = true)),
-                    ArgumentMatchers.eq[Option[String]](Some(controllers.agent.routes.ConfirmClientVrnController.show().url))
+                    ArgumentMatchers.eq[Option[String]](Some(controllers.agent.routes.ConfirmClientVrnController.show.url))
                   )(
                     ArgumentMatchers.any[HeaderCarrier],
                     ArgumentMatchers.any[ExecutionContext]
@@ -103,7 +101,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
                 verify(mockAuditingService)
                   .extendedAudit(
                     ArgumentMatchers.eq(GetClientBusinessNameAuditModel(arn, vrn, customerDetailsOrganisation.clientName)),
-                    ArgumentMatchers.eq[Option[String]](Some(controllers.agent.routes.ConfirmClientVrnController.show().url))
+                    ArgumentMatchers.eq[Option[String]](Some(controllers.agent.routes.ConfirmClientVrnController.show.url))
                   )(
                     ArgumentMatchers.any[HeaderCarrier],
                     ArgumentMatchers.any[ExecutionContext]
@@ -141,7 +139,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
             }
 
             "return the migration error page" in {
-              lazy val document = Jsoup.parse(bodyOf(result))
+              lazy val document = Jsoup.parse(contentAsString(result))
               messages(document.select("h1").text) shouldBe "You cannot make changes for that client’s business right now"
             }
           }
@@ -162,7 +160,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
             }
 
             "return the not signed up error page" in {
-              lazy val document = Jsoup.parse(bodyOf(result))
+              lazy val document = Jsoup.parse(contentAsString(result))
               messages(document.select("h1").text) shouldBe "The business has not signed up to Making Tax Digital for VAT"
             }
           }
@@ -375,7 +373,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
 
           "redirect to the isEmailVerified action" in {
             redirectLocation(result) shouldBe Some(
-              controllers.agent.routes.ConfirmEmailController.isEmailVerified().url)
+              controllers.agent.routes.ConfirmEmailController.isEmailVerified.url)
           }
         }
 
@@ -438,7 +436,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           }
 
           "redirect to the the what to do page" in {
-            redirectLocation(result) shouldBe Some(controllers.agent.routes.AgentHubController.show().url)
+            redirectLocation(result) shouldBe Some(controllers.agent.routes.AgentHubController.show.url)
           }
         }
       }
@@ -461,7 +459,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
       }
 
       "redirect to WhatToDo controller" in {
-        redirectLocation(result) shouldBe Some(controllers.agent.routes.AgentHubController.show().url)
+        redirectLocation(result) shouldBe Some(controllers.agent.routes.AgentHubController.show.url)
       }
     }
 
@@ -481,7 +479,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
       }
 
       "redirect to the DD interrupt controller" in {
-        redirectLocation(result) shouldBe Some(controllers.agent.routes.DDInterruptController.show().url)
+        redirectLocation(result) shouldBe Some(controllers.agent.routes.DDInterruptController.show.url)
       }
     }
   }

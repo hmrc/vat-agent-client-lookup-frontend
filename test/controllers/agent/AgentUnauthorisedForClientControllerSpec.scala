@@ -19,7 +19,6 @@ package controllers.agent
 import assets.messages.{AgentUnauthorisedForClientPageMessages => Messages}
 import audit.mocks.MockAuditingService
 import audit.models.AuthenticateAgentAuditModel
-import config.ErrorHandler
 import controllers.ControllerBaseSpec
 import mocks.MockAuth
 import org.jsoup.Jsoup
@@ -38,12 +37,9 @@ class AgentUnauthorisedForClientControllerSpec extends ControllerBaseSpec with M
 
   object TestUnauthorisedForClientController extends AgentUnauthorisedForClientController(
     mockAgentOnlyAuthPredicate,
-    inject[ErrorHandler],
     mockAuditingService,
     mcc,
-    inject[NotAuthorisedForClientView],
-    ec,
-    mockConfig
+    inject[NotAuthorisedForClientView]
   )
 
   "Calling the .show action" when {
@@ -51,7 +47,7 @@ class AgentUnauthorisedForClientControllerSpec extends ControllerBaseSpec with M
     "A Clients VRN is in session" should {
 
       lazy val result = TestUnauthorisedForClientController.show()(fakeRequestWithVrnAndRedirectUrl)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return 200" in {
         mockAgentAuthorised()
@@ -62,7 +58,7 @@ class AgentUnauthorisedForClientControllerSpec extends ControllerBaseSpec with M
         verify(mockAuditingService)
           .extendedAudit(
             ArgumentMatchers.eq(expectedAuditModel),
-            ArgumentMatchers.eq[Option[String]](Some(controllers.agent.routes.ConfirmClientVrnController.show().url))
+            ArgumentMatchers.eq[Option[String]](Some(controllers.agent.routes.ConfirmClientVrnController.show.url))
           )(
             ArgumentMatchers.any[HeaderCarrier],
             ArgumentMatchers.any[ExecutionContext]
@@ -79,7 +75,7 @@ class AgentUnauthorisedForClientControllerSpec extends ControllerBaseSpec with M
       }
 
       "remove the client vrn from session" in {
-        result.session(request).get(SessionKeys.clientVRN) shouldBe None
+        session(result).get(SessionKeys.clientVRN) shouldBe None
       }
     }
 

@@ -56,7 +56,7 @@ class IncorrectPasscodeViewSpec extends ViewBaseSpec {
 
       "has the correct href" in {
         element("#content > p:nth-of-type(2) > a").attr("href") shouldBe
-          controllers.agent.routes.AgentHubController.show().url
+          controllers.agent.routes.AgentHubController.show.url
       }
     }
   }

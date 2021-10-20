@@ -20,14 +20,16 @@ import connectors.FinancialDataConnector
 import models.{Charge, DirectDebit}
 import models.errors.UnexpectedError
 import org.mockito.Mockito.when
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status.INTERNAL_SERVER_ERROR
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.UnitSpec
 import java.time.LocalDate
 import scala.concurrent.Future
 
-class FinancialDataServiceSpec extends UnitSpec with MockitoSugar {
+class FinancialDataServiceSpec extends AnyWordSpecLike with Matchers with MockitoSugar {
 
   val mockConnector: FinancialDataConnector = mock[FinancialDataConnector]
   val service = new FinancialDataService(mockConnector)

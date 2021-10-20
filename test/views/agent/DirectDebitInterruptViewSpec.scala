@@ -59,7 +59,7 @@ class DirectDebitInterruptViewSpec extends ViewBaseSpec {
       }
 
       "have the correct form action" in {
-        element("form").attr("action") shouldBe controllers.agent.routes.DDInterruptController.submit().url
+        element("form").attr("action") shouldBe controllers.agent.routes.DDInterruptController.submit.url
       }
 
       "have a button" which {
@@ -81,7 +81,7 @@ class DirectDebitInterruptViewSpec extends ViewBaseSpec {
         }
 
         "has the correct href" in {
-          element(".govuk-back-link").attr("href") shouldBe controllers.agent.routes.ConfirmClientVrnController.show().url
+          element(".govuk-back-link").attr("href") shouldBe controllers.agent.routes.ConfirmClientVrnController.show.url
         }
       }
     }

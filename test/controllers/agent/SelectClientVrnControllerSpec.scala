@@ -30,10 +30,8 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wit
 
   object TestClientVrnController extends SelectClientVrnController(
     mockAgentOnlyAuthPredicate,
-    serviceErrorHandler,
     mcc,
-    inject[SelectClientVrnView],
-    mockConfig
+    inject[SelectClientVrnView]
   )
 
   "Calling the .show() action" when {
@@ -52,7 +50,7 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wit
       }
 
       "render SelectClientVrnView page" in {
-        messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "What is your client’s VAT number?"
+        messages(Jsoup.parse(contentAsString(result)).select("h1").text) shouldBe "What is your client’s VAT number?"
       }
 
       "add redirectURL to session" in {
@@ -72,7 +70,7 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wit
       }
 
       "render SelectClientVrnView page" in {
-        messages(Jsoup.parse(bodyOf(result)).select("h1").text) shouldBe "What is your client’s VAT number?"
+        messages(Jsoup.parse(contentAsString(result)).select("h1").text) shouldBe "What is your client’s VAT number?"
       }
 
       "add the what to do redirect url" in {
@@ -103,15 +101,15 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wit
         }
 
         "contain the correct location header" in {
-          redirectLocation(result) shouldBe Some(controllers.agent.routes.ConfirmClientVrnController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.agent.routes.ConfirmClientVrnController.show.url)
         }
 
         "add Client VRN to session cookie" in {
-          result.session(request).get(SessionKeys.clientVRN).get shouldBe "999969202"
+          session(result).get(SessionKeys.clientVRN).get shouldBe "999969202"
         }
 
         "remove mandation status from session cookie" in {
-          result.session(request).get(SessionKeys.clientMandationStatus) shouldBe None
+          session(result).get(SessionKeys.clientMandationStatus) shouldBe None
         }
       }
 

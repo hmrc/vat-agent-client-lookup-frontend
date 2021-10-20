@@ -27,9 +27,9 @@ class SelectClientVrnViewSpec extends ViewBaseSpec {
 
   val injectedView: SelectClientVrnView = inject[SelectClientVrnView]
 
-  val headerName = "body > header > div.govuk-header.hmrc-header.hmrc-header--with-additional-navigation > div > div.govuk-header__content > a"
+  val headerName = ".hmrc-header__service-name"
+  val signOutLink = ".hmrc-sign-out-nav__link"
 
-  val signOutLink = "body > header > div.govuk-header.hmrc-header.hmrc-header--with-additional-navigation > div > div.govuk-header__content > nav > a"
   "Rendering the Select Client VRN page" when {
 
     "there are no errors in the form" should {
@@ -62,7 +62,7 @@ class SelectClientVrnViewSpec extends ViewBaseSpec {
       }
 
       "has the correct form action" in {
-        element("form").attr("action") shouldBe controllers.agent.routes.SelectClientVrnController.submit().url
+        element("form").attr("action") shouldBe controllers.agent.routes.SelectClientVrnController.submit.url
       }
 
       "have the sign out link in the page header" in {
