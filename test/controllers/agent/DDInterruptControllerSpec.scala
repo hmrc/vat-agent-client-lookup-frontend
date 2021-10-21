@@ -47,7 +47,7 @@ class DDInterruptControllerSpec extends ControllerBaseSpec with MockDateService 
 
   val staticDate: LocalDate = LocalDate.parse("2018-05-01")
 
-  def redirectAssertions(result: Future[Result]): Unit = {
+  def redirectAssertions(result: Future[Result], ddMandateFound: String): Unit = {
     "return 303" in {
       status(result) shouldBe Status.SEE_OTHER
     }
@@ -56,8 +56,12 @@ class DDInterruptControllerSpec extends ControllerBaseSpec with MockDateService 
       redirectLocation(result) shouldBe Some(controllers.agent.routes.ConfirmClientVrnController.redirect.url)
     }
 
-    "add the DD session key to the session" in {
+    "add the 'viewedDDInterrupt' key to the session" in {
       session(result).get(SessionKeys.viewedDDInterrupt) shouldBe Some("true")
+    }
+
+    "add the 'mtdVatAgentDDMandateFound' key to the session" in {
+      session(result).get(SessionKeys.mtdVatAgentDDMandateFound) shouldBe Some(ddMandateFound)
     }
   }
 
@@ -80,6 +84,10 @@ class DDInterruptControllerSpec extends ControllerBaseSpec with MockDateService 
           "return 200" in {
             status(result) shouldBe Status.OK
           }
+
+          "add the 'mtdVatAgentDDMandateFound' key to the session" in {
+            session(result).get(SessionKeys.mtdVatAgentDDMandateFound) shouldBe Some("false")
+          }
         }
 
         "the client has a direct debit mandate" should {
@@ -90,7 +98,7 @@ class DDInterruptControllerSpec extends ControllerBaseSpec with MockDateService 
             mockDirectDebitResponse(ddMandateFound)
             controller.show(fakeRequestWithVrnAndRedirectUrl)
           }
-          redirectAssertions(result)
+          redirectAssertions(result, "true")
         }
 
         "the DD call fails" should {
@@ -101,7 +109,7 @@ class DDInterruptControllerSpec extends ControllerBaseSpec with MockDateService 
             mockDirectDebitResponse(ddFailureResponse)
             controller.show(fakeRequestWithVrnAndRedirectUrl)
           }
-          redirectAssertions(result)
+          redirectAssertions(result, "")
         }
       }
 
@@ -110,28 +118,31 @@ class DDInterruptControllerSpec extends ControllerBaseSpec with MockDateService 
           mockAgentAuthorised()
           mockCustomerDetailsSuccess(customerDetailsIndividual.copy(customerMigratedToETMPDate = Some("2017-01-01")))
           setupMockDateService(staticDate)
+          mockDirectDebitResponse(ddNoMandateFound)
           controller.show(fakeRequestWithVrnAndRedirectUrl)
         }
-        redirectAssertions(result)
+        redirectAssertions(result, "false")
       }
 
       "the customer info call fails" should {
         lazy val result = {
           mockAgentAuthorised()
           mockCustomerDetailsError(BaseTestConstants.unexpectedError)
+          mockDirectDebitResponse(ddMandateFound)
           controller.show(fakeRequestWithVrnAndRedirectUrl)
         }
-        redirectAssertions(result)
+        redirectAssertions(result, "true")
       }
     }
 
     "the DD feature switch is off" should {
       lazy val result = {
         mockAgentAuthorised()
+        mockDirectDebitResponse(ddMandateFound)
         mockConfig.features.directDebitInterruptFeature(false)
         controller.show(fakeRequestWithVrnAndRedirectUrl)
       }
-      redirectAssertions(result)
+      redirectAssertions(result, "true")
     }
 
     "the user is unauthorised" should {

@@ -81,7 +81,7 @@
   </span>
 
   <div class="flex-container govuk-grid-row">
-    @nextPaymentPartial(model.details.isHybridUser, model.nextPaymentDate, model.payments, model.isOverdue)
+    @nextPaymentPartial(model.details.isHybridUser, model.nextPaymentDate, model.payments, model.isOverdue, model.directDebitSetup)
     @nextReturnPartial(model.details.optedIn)
     @historyPartial(model.details.isHybridUser)
   </div>

@@ -140,7 +140,8 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           showBlueBox = true,
           Some(LocalDate.parse("2018-01-01")),
           isOverdue = true,
-          payments = 1
+          payments = 1,
+          directDebitSetup = None
         )
 
         val result = controller.constructViewModel(customerDetailsAllInfo, paymentOverdue)(userWithBlueBox)
@@ -158,7 +159,8 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           showBlueBox = true,
           Some(LocalDate.parse("2018-01-01")),
           isOverdue = false,
-          payments = 2
+          payments = 2,
+          directDebitSetup = None
         )
 
         val result = controller.constructViewModel(customerDetailsAllInfo, paymentsOverdue)(userWithBlueBox)
@@ -176,7 +178,8 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           showBlueBox = true,
           Some(LocalDate.parse("2020-01-01")),
           isOverdue = false,
-          payments = 2
+          payments = 2,
+          directDebitSetup = None
         )
 
         val result = controller.constructViewModel(customerDetailsAllInfo, paymentsNotOverdue)(userWithBlueBox)

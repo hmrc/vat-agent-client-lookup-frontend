@@ -18,12 +18,13 @@
 @import java.time.LocalDate
 @import config.AppConfig
 
-@this(displayDate: DisplayDate)
+@this(displayDate: DisplayDate, govukTag: GovukTag)
 
 @(hybridUser: Boolean,
   nextPaymentDate: Option[LocalDate],
   payments: Int,
-  isOverdue: Boolean
+  isOverdue: Boolean,
+  directDebitSetup: Option[Boolean]
 )(implicit messages: Messages, appConfig: AppConfig)
 
 @hasMultiple = @{ payments > 1  }
@@ -33,6 +34,21 @@
     case (Some(date), 1) => displayDate(date)
     case (Some(date), _) => messages("nextPaymentPartial.multiple", payments)
     case _ => messages("nextPaymentPartial.noPayments")
+  }
+}
+
+@setUpDDNotification(colour: String, message: String) = {
+  @govukTag(Tag(
+    content = Text(messages(s"nextPaymentPartial.$message")),
+    classes = s"govuk-tag--$colour govuk-!-margin-bottom-3"
+  ))
+}
+
+@displayDDNotification = @{
+  directDebitSetup match {
+    case Some(true) => setUpDDNotification("green", "directDebitSetup")
+    case Some(false) => setUpDDNotification("red", "noDirectDebitSetup")
+    case _ =>
   }
 }
 
@@ -47,6 +63,7 @@
           @messages("nextPaymentPartial.heading")
         }
       </h2>
+      @displayDDNotification
       <p class="govuk-body" id="next-payment-paragraph">
         @paragraphContent
         @if(isOverdue) { <strong id="overdue" class="task-overdue">@messages("nextPaymentPartial.overdue")</strong> }

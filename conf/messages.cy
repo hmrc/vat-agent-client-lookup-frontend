@@ -152,6 +152,8 @@ nextPaymentPartial.multiple = Mae gennych {0} o daliadau’n ddyledus
 nextPaymentPartial.noPayments = Nid oes taliadau’n ddyledus nawr
 nextPaymentPartial.overdue = hwyr
 nextPaymentPartial.link = Gwirio’r hyn sydd arnoch
+nextPaymentPartial.directDebitSetup = Debyd Uniongyrchol wedi’i sefydlu
+nextPaymentPartial.noDirectDebitSetup = Dim Debyd Uniongyrchol wedi’i sefydlu
 
 nextReturnPartial.heading = Ffurflen TAW nesaf i’w chyflwyno
 nextReturnPartial.link = Bwrw golwg dros ddyddiadau cau ar gyfer Ffurflenni TAW
