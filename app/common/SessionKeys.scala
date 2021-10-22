@@ -27,4 +27,5 @@ object SessionKeys {
   val mtdVatAgentClientName: String = "mtdVatAgentClientName"
   val mtdVatAgentMandationStatus: String = "mtdVatAgentMandationStatus"
   val viewedDDInterrupt: String = "vatViewChangeHasViewedDDInterrupt"
+  val mtdVatAgentDDMandateFound: String = "mtdVatAgentDDMandateFound"
 }

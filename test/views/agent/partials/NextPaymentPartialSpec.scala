@@ -31,15 +31,16 @@ class NextPaymentPartialSpec extends ViewBaseSpec {
     val heading = "#next-payment-heading"
     val content = "#next-payment-paragraph"
     val link = "#what-you-owe-link"
+    val ddLabel = ".govuk-tag"
   }
 
   val nextPaymentPartial: NextPaymentPartial = inject[NextPaymentPartial]
 
   "The next payment partial" when {
 
-    "there are no payments due" should {
+    "there are no payments due and no DD information was retrieved" should {
 
-      lazy val view = nextPaymentPartial(hybridUser = false, None, 0, isOverdue = false)(messages, mockConfig)
+      lazy val view = nextPaymentPartial(hybridUser = false, None, 0, isOverdue = false, None)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the correct heading" in {
@@ -60,11 +61,15 @@ class NextPaymentPartialSpec extends ViewBaseSpec {
           element(Selectors.link).attr("href") shouldBe mockConfig.whatYouOweUrl
         }
       }
+
+      "not display a DD label" in {
+        elementExtinct(Selectors.ddLabel)
+      }
     }
 
     "there is one payment and it is not overdue" should {
 
-      lazy val view = nextPaymentPartial(hybridUser = false, Some(LocalDate.parse("2018-01-01")), 1, isOverdue = false)(messages, mockConfig)
+      lazy val view = nextPaymentPartial(hybridUser = false, Some(LocalDate.parse("2018-01-01")), 1, isOverdue = false, None)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the date of the payment correctly" in {
@@ -74,7 +79,7 @@ class NextPaymentPartialSpec extends ViewBaseSpec {
 
     "there is one payment that is overdue" should {
 
-      lazy val view = nextPaymentPartial(hybridUser = false, Some(LocalDate.parse("2018-01-01")), 1, isOverdue = true)(messages, mockConfig)
+      lazy val view = nextPaymentPartial(hybridUser = false, Some(LocalDate.parse("2018-01-01")), 1, isOverdue = true, None)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the overdue label next to the payment date" in {
@@ -84,7 +89,7 @@ class NextPaymentPartialSpec extends ViewBaseSpec {
 
     "there is more than one payment" should {
 
-      lazy val view = nextPaymentPartial(hybridUser = false, Some(LocalDate.parse("2018-01-01")), 10, isOverdue = false)(messages, mockConfig)
+      lazy val view = nextPaymentPartial(hybridUser = false, Some(LocalDate.parse("2018-01-01")), 10, isOverdue = false, None)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the correct title" in {
@@ -98,13 +103,46 @@ class NextPaymentPartialSpec extends ViewBaseSpec {
 
     "the user is hybrid" should {
 
-      lazy val view = nextPaymentPartial(hybridUser = true, Some(LocalDate.parse("2018-01-01")), 10, isOverdue = false)(messages, mockConfig)
+      lazy val view = nextPaymentPartial(hybridUser = true, None, 0, isOverdue = false, None)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not exist" in {
         elementExtinct(Selectors.tile)
       }
     }
-  }
 
+    "the client has a direct debit set up" should {
+
+      lazy val view = nextPaymentPartial(hybridUser = false, Some(LocalDate.parse("2018-01-01")), 1, isOverdue = false, Some(true))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "display the DD set up label" which {
+
+        "has the correct content" in {
+          elementText(Selectors.ddLabel) shouldBe Messages.ddSetUp
+        }
+
+        "has the correct label colour" in {
+          element(Selectors.ddLabel).hasClass("govuk-tag--green")
+        }
+      }
+    }
+
+    "the client does not have a direct debit set up" should {
+
+      lazy val view = nextPaymentPartial(hybridUser = false, Some(LocalDate.parse("2018-01-01")), 1, isOverdue = false, Some(false))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "display the DD is not set up label" which {
+
+        "has the correct content" in {
+          elementText(Selectors.ddLabel) shouldBe Messages.ddNotSetUp
+        }
+
+        "has the correct label colour" in {
+          element(Selectors.ddLabel).hasClass("govuk-tag--red")
+        }
+      }
+    }
+  }
 }

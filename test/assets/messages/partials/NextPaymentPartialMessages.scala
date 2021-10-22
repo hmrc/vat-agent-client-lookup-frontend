@@ -24,4 +24,6 @@ object NextPaymentPartialMessages {
   val linkText: String = "Check what you owe"
   val date: String = "1 January 2018"
   val overdue: String = "overdue"
+  val ddSetUp: String = "Direct Debit is set up"
+  val ddNotSetUp: String = "No Direct Debit set up"
 }

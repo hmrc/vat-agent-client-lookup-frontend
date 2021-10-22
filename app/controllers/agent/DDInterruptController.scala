@@ -41,21 +41,23 @@ class DDInterruptController @Inject()(mcc: MessagesControllerComponents,
                                       ec: ExecutionContext) extends BaseController(mcc) {
 
   def show: Action[AnyContent] = authenticate.async { implicit agent =>
-    if(appConfig.features.directDebitInterruptFeature()) {
-      customerDetailsService.getCustomerDetails(agent.vrn).flatMap {
-        case Right(details) if migratedWithin4M(details) =>
-          directDebitService.getDirectDebit(agent.vrn).map {
-            case Right(directDebit) if !directDebit.directDebitMandateFound =>
-              Ok(ddInterruptView(DDInterruptForm.form))
-            case _ => Redirect(routes.ConfirmClientVrnController.redirect.url)
-                        .addingToSession(SessionKeys.viewedDDInterrupt -> "true")
-          }
-        case _ => Future.successful(Redirect(routes.ConfirmClientVrnController.redirect.url)
-                    .addingToSession(SessionKeys.viewedDDInterrupt -> "true"))
+
+    directDebitService.getDirectDebit(agent.vrn).flatMap { ddResult =>
+      val hasDDSetup: String = ddResult.fold(_ => "", result => result.directDebitMandateFound.toString)
+      if (appConfig.features.directDebitInterruptFeature()) {
+        customerDetailsService.getCustomerDetails(agent.vrn).map {
+          case Right(details) if migratedWithin4M(details) && hasDDSetup.contains("false") =>
+            Ok(ddInterruptView(DDInterruptForm.form)).addingToSession(SessionKeys.mtdVatAgentDDMandateFound -> "false")
+          case Right(details) if migratedWithin4M(details) && hasDDSetup.contains("true") =>
+            Redirect(routes.ConfirmClientVrnController.redirect.url)
+              .addingToSession(SessionKeys.viewedDDInterrupt -> "true", SessionKeys.mtdVatAgentDDMandateFound -> "true")
+          case _ => Redirect(routes.ConfirmClientVrnController.redirect.url)
+            .addingToSession(SessionKeys.viewedDDInterrupt -> "true", SessionKeys.mtdVatAgentDDMandateFound -> hasDDSetup)
+        }
+      } else {
+        Future.successful(Redirect(routes.ConfirmClientVrnController.redirect.url)
+          .addingToSession(SessionKeys.viewedDDInterrupt -> "true", SessionKeys.mtdVatAgentDDMandateFound -> hasDDSetup))
       }
-    } else {
-      Future.successful(Redirect(routes.ConfirmClientVrnController.redirect.url)
-        .addingToSession(SessionKeys.viewedDDInterrupt -> "true"))
     }
   }
 

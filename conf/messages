@@ -126,6 +126,8 @@ nextPaymentPartial.multiple = You have {0} payments due
 nextPaymentPartial.noPayments = No payments due right now
 nextPaymentPartial.overdue = overdue
 nextPaymentPartial.link = Check what you owe
+nextPaymentPartial.directDebitSetup = Direct Debit is set up
+nextPaymentPartial.noDirectDebitSetup = No Direct Debit set up
 
 nextReturnPartial.heading = Next return due
 nextReturnPartial.link = View return deadlines

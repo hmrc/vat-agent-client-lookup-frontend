@@ -65,6 +65,11 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
   def constructViewModel(details: CustomerDetails, payments: Seq[Charge])(implicit user: User[_]): HubViewModel = {
 
     val showBlueBox: Boolean = user.session.get(SessionKeys.viewedDDInterrupt).contains("blueBox")
+    val hasDDSetup: Option[Boolean] = user.session.get(SessionKeys.mtdVatAgentDDMandateFound) match {
+      case Some("true") => Some(true)
+      case Some("false") => Some(false)
+      case _ => None
+    }
     val nextPaymentDate = payments.headOption.map(payment => payment.dueDate)
     val paymentsNumber  = payments.length
     val isOverdue       =
@@ -83,7 +88,8 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
       showBlueBox,
       nextPaymentDate,
       isOverdue,
-      paymentsNumber
+      paymentsNumber,
+      hasDDSetup
     )
   }
 

@@ -30,7 +30,8 @@ object HubViewModelTestConstants {
     showBlueBox = false,
     Some(LocalDate.parse("2020-01-01")),
     isOverdue = false,
-    payments = 1
+    payments = 1,
+    directDebitSetup = None
   )
 
   def hubViewModelBlueBox(customerDetails: CustomerDetails): HubViewModel =
