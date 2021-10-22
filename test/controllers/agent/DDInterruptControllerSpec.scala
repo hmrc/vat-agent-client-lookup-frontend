@@ -23,13 +23,12 @@ import common.SessionKeys
 import controllers.ControllerBaseSpec
 import mocks.services.{MockCustomerDetailsService, MockDateService, MockFinancialDataService}
 import play.api.http.Status
-import play.api.mvc.{AnyContentAsEmpty, Result}
+import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.agent.DirectDebitInterruptView
 
 import java.time.LocalDate
-import scala.concurrent.Future
 
 class DDInterruptControllerSpec extends ControllerBaseSpec with MockDateService with
   MockCustomerDetailsService with MockFinancialDataService {
@@ -46,24 +45,6 @@ class DDInterruptControllerSpec extends ControllerBaseSpec with MockDateService 
     fakeRequestWithMtdVatAgentData.withSession(SessionKeys.viewedDDInterrupt -> "true")
 
   val staticDate: LocalDate = LocalDate.parse("2018-05-01")
-
-  def redirectAssertions(result: Future[Result], ddMandateFound: String): Unit = {
-    "return 303" in {
-      status(result) shouldBe Status.SEE_OTHER
-    }
-
-    "redirect to the ConfirmClientVrnController" in {
-      redirectLocation(result) shouldBe Some(controllers.agent.routes.ConfirmClientVrnController.redirect.url)
-    }
-
-    "add the 'viewedDDInterrupt' key to the session" in {
-      session(result).get(SessionKeys.viewedDDInterrupt) shouldBe Some("true")
-    }
-
-    "add the 'mtdVatAgentDDMandateFound' key to the session" in {
-      session(result).get(SessionKeys.mtdVatAgentDDMandateFound) shouldBe Some(ddMandateFound)
-    }
-  }
 
   "The .show action" when {
 
@@ -98,7 +79,22 @@ class DDInterruptControllerSpec extends ControllerBaseSpec with MockDateService 
             mockDirectDebitResponse(ddMandateFound)
             controller.show(fakeRequestWithVrnAndRedirectUrl)
           }
-          redirectAssertions(result, "true")
+
+          "return 303" in {
+            status(result) shouldBe Status.SEE_OTHER
+          }
+
+          "redirect to the ConfirmClientVrnController" in {
+            redirectLocation(result) shouldBe Some(controllers.agent.routes.ConfirmClientVrnController.redirect.url)
+          }
+
+          "add the 'viewedDDInterrupt' key to the session" in {
+            session(result).get(SessionKeys.viewedDDInterrupt) shouldBe Some("true")
+          }
+
+          "add the 'mtdVatAgentDDMandateFound' key to the session" in {
+            session(result).get(SessionKeys.mtdVatAgentDDMandateFound) shouldBe Some("true")
+          }
         }
 
         "the DD call fails" should {
@@ -109,7 +105,22 @@ class DDInterruptControllerSpec extends ControllerBaseSpec with MockDateService 
             mockDirectDebitResponse(ddFailureResponse)
             controller.show(fakeRequestWithVrnAndRedirectUrl)
           }
-          redirectAssertions(result, "")
+
+          "return 303" in {
+            status(result) shouldBe Status.SEE_OTHER
+          }
+
+          "redirect to the ConfirmClientVrnController" in {
+            redirectLocation(result) shouldBe Some(controllers.agent.routes.ConfirmClientVrnController.redirect.url)
+          }
+
+          "add the 'viewedDDInterrupt' key to the session" in {
+            session(result).get(SessionKeys.viewedDDInterrupt) shouldBe Some("true")
+          }
+
+          "add the 'mtdVatAgentDDMandateFound' key to the session" in {
+            session(result).get(SessionKeys.mtdVatAgentDDMandateFound) shouldBe Some("")
+          }
         }
       }
 
@@ -121,7 +132,22 @@ class DDInterruptControllerSpec extends ControllerBaseSpec with MockDateService 
           mockDirectDebitResponse(ddNoMandateFound)
           controller.show(fakeRequestWithVrnAndRedirectUrl)
         }
-        redirectAssertions(result, "false")
+
+        "return 303" in {
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        "redirect to the ConfirmClientVrnController" in {
+          redirectLocation(result) shouldBe Some(controllers.agent.routes.ConfirmClientVrnController.redirect.url)
+        }
+
+        "add the 'viewedDDInterrupt' key to the session" in {
+          session(result).get(SessionKeys.viewedDDInterrupt) shouldBe Some("true")
+        }
+
+        "add the 'mtdVatAgentDDMandateFound' key to the session" in {
+          session(result).get(SessionKeys.mtdVatAgentDDMandateFound) shouldBe Some("false")
+        }
       }
 
       "the customer info call fails" should {
@@ -131,7 +157,22 @@ class DDInterruptControllerSpec extends ControllerBaseSpec with MockDateService 
           mockDirectDebitResponse(ddMandateFound)
           controller.show(fakeRequestWithVrnAndRedirectUrl)
         }
-        redirectAssertions(result, "true")
+
+        "return 303" in {
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        "redirect to the ConfirmClientVrnController" in {
+          redirectLocation(result) shouldBe Some(controllers.agent.routes.ConfirmClientVrnController.redirect.url)
+        }
+
+        "add the 'viewedDDInterrupt' key to the session" in {
+          session(result).get(SessionKeys.viewedDDInterrupt) shouldBe Some("true")
+        }
+
+        "add the 'mtdVatAgentDDMandateFound' key to the session" in {
+          session(result).get(SessionKeys.mtdVatAgentDDMandateFound) shouldBe Some("true")
+        }
       }
     }
 
@@ -142,7 +183,22 @@ class DDInterruptControllerSpec extends ControllerBaseSpec with MockDateService 
         mockConfig.features.directDebitInterruptFeature(false)
         controller.show(fakeRequestWithVrnAndRedirectUrl)
       }
-      redirectAssertions(result, "true")
+
+      "return 303" in {
+        status(result) shouldBe Status.SEE_OTHER
+      }
+
+      "redirect to the ConfirmClientVrnController" in {
+        redirectLocation(result) shouldBe Some(controllers.agent.routes.ConfirmClientVrnController.redirect.url)
+      }
+
+      "add the 'viewedDDInterrupt' key to the session" in {
+        session(result).get(SessionKeys.viewedDDInterrupt) shouldBe Some("true")
+      }
+
+      "add the 'mtdVatAgentDDMandateFound' key to the session" in {
+        session(result).get(SessionKeys.mtdVatAgentDDMandateFound) shouldBe Some("true")
+      }
     }
 
     "the user is unauthorised" should {
