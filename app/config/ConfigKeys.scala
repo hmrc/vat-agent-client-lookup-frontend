@@ -90,4 +90,6 @@ object ConfigKeys {
   val penaltiesServiceFeature: String = "features.penaltiesService.enabled"
   val penaltiesHost: String = "penalties.host"
   val penaltiesUrl: String = "penalties.url"
+  val penaltiesFrontendHost: String = "penalties-frontend.host"
+  val penaltiesFrontendUrl: String = "penalties-frontend.endpoints.home"
 }

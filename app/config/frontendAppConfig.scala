@@ -51,6 +51,7 @@ trait AppConfig {
   val onlineAgentServicesUrl: String
   val features: Features
   val vatCertificateUrl: String
+  val penaltiesFrontendUrl: String
   val whatYouOweUrl: String
   val paymentHistoryUrl: String
   val submittedReturnsUrl: String
@@ -136,6 +137,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override lazy val optOutMtdVatUrl: String = sc.getString(Keys.optOutMtdVatHost) + sc.getString(Keys.optOutMtdVatUrl)
 
   override lazy val vatCertificateUrl: String = sc.getString(Keys.vatSummaryFrontendHost) + sc.getString(Keys.vatCertificateEndpoint)
+  override lazy val penaltiesFrontendUrl: String = sc.getString(Keys.penaltiesFrontendHost) + sc.getString(Keys.penaltiesFrontendUrl)
   override lazy val whatYouOweUrl: String = sc.getString(Keys.vatSummaryFrontendHost) + sc.getString(Keys.vatWhatYouOweEndpoint)
   override lazy val paymentHistoryUrl: String = sc.getString(Keys.vatSummaryFrontendHost) + sc.getString(Keys.paymentHistoryEndpoint)
   override lazy val submittedReturnsUrl: String = sc.getString(Keys.viewVatReturnsFrontendHost) + sc.getString(Keys.submittedReturnsEndpoint)

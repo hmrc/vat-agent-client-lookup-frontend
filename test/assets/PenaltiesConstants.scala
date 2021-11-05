@@ -16,6 +16,7 @@
 
 package assets
 
+import connectors.httpParsers.ResponseHttpParser.HttpResult
 import models.penalties.PenaltiesSummary
 import play.api.libs.json.{JsValue, Json}
 
@@ -41,4 +42,7 @@ object PenaltiesConstants {
     crystalisedPenaltyAmountDue = BigDecimal(54.32),
     hasAnyPenaltyData = true
   )
+
+  val penaltiesSummaryResponse: Option[HttpResult[PenaltiesSummary]] = Some(Right(penaltiesSummaryAsModel))
+  val penaltiesSummaryNoResponse: Option[HttpResult[PenaltiesSummary]] = None
 }

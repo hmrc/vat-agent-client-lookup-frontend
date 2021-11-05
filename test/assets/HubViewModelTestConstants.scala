@@ -23,7 +23,7 @@ import models.{CustomerDetails, HubViewModel}
 
 object HubViewModelTestConstants {
 
-  def hubViewModel(customerDetails: CustomerDetails): HubViewModel = HubViewModel(
+  def hubViewModel(customerDetails: CustomerDetails, hasAnyPenalties: Boolean = false): HubViewModel = HubViewModel(
     customerDetails,
     vrn,
     LocalDate.parse("2019-01-01"),
@@ -31,7 +31,8 @@ object HubViewModelTestConstants {
     Some(LocalDate.parse("2020-01-01")),
     isOverdue = false,
     payments = 1,
-    directDebitSetup = None
+    directDebitSetup = None,
+    shouldShowPenaltiesTile = hasAnyPenalties
   )
 
   def hubViewModelBlueBox(customerDetails: CustomerDetails): HubViewModel =

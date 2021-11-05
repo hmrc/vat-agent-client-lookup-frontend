@@ -14,16 +14,11 @@
  * limitations under the License.
  */
 
-package models
+package messages.partials
 
-import java.time.LocalDate
+object PenaltiesTileMessages {
 
-case class HubViewModel(details: CustomerDetails,
-                        vrn: String,
-                        currentDate: LocalDate,
-                        showBlueBox: Boolean,
-                        nextPaymentDate: Option[LocalDate],
-                        isOverdue: Boolean,
-                        payments: Int,
-                        directDebitSetup: Option[Boolean],
-                        shouldShowPenaltiesTile: Boolean)
+  val title = "Penalties and appeals"
+  val description = "View your client’s penalties, make an appeal against a penalty and see the status of any current appeals."
+
+}
