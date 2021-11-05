@@ -26,7 +26,8 @@ object FeatureSwitchForm {
     mapping(
       ConfigKeys.emailVerificationFeature -> boolean,
       ConfigKeys.useStaticDateFeature -> boolean,
-      ConfigKeys.directDebitInterruptFeature -> boolean
+      ConfigKeys.directDebitInterruptFeature -> boolean,
+      ConfigKeys.penaltiesServiceFeature -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 }

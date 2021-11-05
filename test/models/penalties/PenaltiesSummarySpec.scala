@@ -14,9 +14,16 @@
  * limitations under the License.
  */
 
-package models
+package models.penalties
 
-case class FeatureSwitchModel(emailVerificationEnabled: Boolean,
-                              useStaticDateFeature: Boolean,
-                              directDebitInterruptFeature: Boolean,
-                              penaltiesServiceFeature: Boolean)
+import assets.PenaltiesConstants.{penaltiesSummaryAsModel, penaltiesSummaryJson}
+import utils.TestUtil
+
+class PenaltiesSummarySpec extends TestUtil {
+
+  "Penalties summary JSON should parse to PenaltiesSummary model" when {
+    "all fields are present" in {
+      penaltiesSummaryJson.as[PenaltiesSummary] shouldBe penaltiesSummaryAsModel
+    }
+  }
+}

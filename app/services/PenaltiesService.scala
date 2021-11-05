@@ -14,9 +14,18 @@
  * limitations under the License.
  */
 
-package models
+package services
 
-case class FeatureSwitchModel(emailVerificationEnabled: Boolean,
-                              useStaticDateFeature: Boolean,
-                              directDebitInterruptFeature: Boolean,
-                              penaltiesServiceFeature: Boolean)
+import connectors.PenaltiesConnector
+import connectors.httpParsers.ResponseHttpParser.HttpResult
+import models.penalties.PenaltiesSummary
+import uk.gov.hmrc.http.HeaderCarrier
+
+import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
+
+class PenaltiesService @Inject()(penaltiesConnector: PenaltiesConnector){
+  def getPenaltiesInformation(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[HttpResult[PenaltiesSummary]]] = {
+    penaltiesConnector.getPenaltiesDataForVRN(vrn)
+  }
+}
