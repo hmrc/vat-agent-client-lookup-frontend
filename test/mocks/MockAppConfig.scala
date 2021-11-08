@@ -89,4 +89,5 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val gtmContainer: String = "x"
   override val financialTransactionsBaseUrl: String = "http://myHost:9999"
   override val contactFormServiceIdentifier: String = "VATVC"
+  override val penaltiesUrl: String => String = (vrn: String) => s"/vat/penalties/summary/$vrn"
 }

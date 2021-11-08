@@ -70,6 +70,7 @@ trait AppConfig {
   val gtmContainer: String
   val financialTransactionsBaseUrl: String
   val contactFormServiceIdentifier: String
+  val penaltiesUrl: String => String
 }
 
 @Singleton
@@ -161,4 +162,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override val gtmContainer: String = sc.getString(Keys.gtmContainer)
 
   override val financialTransactionsBaseUrl: String = sc.baseUrl(Keys.financialTransactions)
+
+  override lazy val penaltiesUrl: String => String = vrn => sc.getString(Keys.penaltiesHost) + sc.getString(Keys.penaltiesUrl) + vrn
 }

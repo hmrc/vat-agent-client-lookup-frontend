@@ -120,6 +120,7 @@ trait IntegrationBaseSpec extends TestSuite with CustomMatchers with GuiceOneSer
     "microservice.services.manage-vat-subscription-frontend.endpoints.customer-details" -> "/customer-details?isAgent=true",
     "microservice.services.vat-subscription.host" -> mockHost,
     "microservice.services.vat-subscription.port" -> mockPort,
+    "penalties.host" -> s"http://$mockHost:$mockPort",
     "features.emailVerification.enabled" -> "true"
   )
 
