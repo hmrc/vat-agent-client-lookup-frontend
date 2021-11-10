@@ -28,8 +28,18 @@ object PenaltiesHttpParser extends LoggerUtil {
   implicit object PenaltiesReads extends HttpReads[HttpResult[PenaltiesSummary]] {
     override def read(method: String, url: String, response: HttpResponse): HttpResult[PenaltiesSummary] = {
       response.status match {
-        case OK => Right(response.json.as[PenaltiesSummary])
-        case NOT_FOUND => Right(PenaltiesSummary.empty)
+        case OK => {
+          logger.debug("[PenaltiesHttpParser][read]: Status OK")
+          Right(response.json.as[PenaltiesSummary])
+        }
+        case NOT_FOUND => {
+          logger.debug(s"[PenaltiesHttpParser][read]: Status $NOT_FOUND")
+          Right(PenaltiesSummary.empty)
+        }
+        case NO_CONTENT => {
+          logger.debug(s"[PenaltiesHttpParser][read]: Status $NO_CONTENT")
+          Right(PenaltiesSummary.empty)
+        }
         case status =>
           logger.warn(s"[PenaltiesHttpParser][PenaltiesReads][read] - Received unexpected error. Response status: $status, Response body: ${response.body}")
           Left(UnexpectedError(status, response.body))

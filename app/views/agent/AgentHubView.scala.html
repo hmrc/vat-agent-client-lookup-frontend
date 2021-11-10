@@ -23,6 +23,7 @@
       registrationPartial: RegistrationPartial,
       signUpPartial: SignUpPartial,
       vatCertificatePartial: VatCertificatePartial,
+      penaltiesTilePartial: PenaltiesTilePartial,
       govukBreadcrumbs: GovukBreadcrumbs,
       govukInsetText : GovukInsetText,
       govukNotificationBanner: GovukNotificationBanner,
@@ -98,6 +99,7 @@
   <div class="govuk-grid-row">
     @clientDetailsPartial()
     @vatCertificatePartial()
+    @penaltiesTilePartial(model.shouldShowPenaltiesTile)
     @signUpPartial(model.details.mandationStatus, model.vrn)
     @optOutForMTDVATPartial(model.details.mandationStatus)
     @registrationPartial(model.details, model.currentDate)

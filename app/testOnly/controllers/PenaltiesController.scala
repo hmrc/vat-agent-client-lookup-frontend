@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-package models
+package testOnly.controllers
 
-import java.time.LocalDate
+import config.AppConfig
+import controllers.BaseController
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import testOnly.views.html.PenaltiesHomeView
 
-case class HubViewModel(details: CustomerDetails,
-                        vrn: String,
-                        currentDate: LocalDate,
-                        showBlueBox: Boolean,
-                        nextPaymentDate: Option[LocalDate],
-                        isOverdue: Boolean,
-                        payments: Int,
-                        directDebitSetup: Option[Boolean],
-                        shouldShowPenaltiesTile: Boolean)
+import javax.inject.Inject
+
+class PenaltiesController @Inject()(penaltiesHomeView: PenaltiesHomeView, mcc: MessagesControllerComponents)
+                                   (implicit appConfig: AppConfig) extends BaseController(mcc) {
+
+  def show(): Action[AnyContent] = Action { implicit request =>
+    Ok(penaltiesHomeView())
+  }
+
+}

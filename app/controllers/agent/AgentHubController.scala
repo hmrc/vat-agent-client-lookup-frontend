@@ -22,9 +22,10 @@ import config.{AppConfig, ErrorHandler}
 import connectors.httpParsers.ResponseHttpParser.HttpResult
 import controllers.BaseController
 import controllers.predicates.AuthoriseAsAgentWithClient
+import models.penalties.PenaltiesSummary
 import models.{Charge, CustomerDetails, HubViewModel, User}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.{CustomerDetailsService, DateService, FinancialDataService}
+import services.{CustomerDetailsService, DateService, FinancialDataService, PenaltiesService}
 import views.html.agent.AgentHubView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -35,6 +36,7 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
                                    customerDetailsService: CustomerDetailsService,
                                    dateService: DateService,
                                    financialDataService: FinancialDataService,
+                                   penaltiesService: PenaltiesService,
                                    mcc: MessagesControllerComponents,
                                    agentHubView: AgentHubView)
                                   (implicit appConfig: AppConfig,
@@ -44,6 +46,7 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
     for {
       customerDetails <- customerDetailsService.getCustomerDetails(user.vrn)
       payments <- if (userIsHybrid(customerDetails)) Future.successful(Seq()) else retrievePayments
+      penaltiesInformation <- penaltiesService.getPenaltiesInformation(user.vrn)
     } yield {
       customerDetails match {
         case Right(details) =>
@@ -53,7 +56,8 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
             if(details.deregistration.isDefined && details.deregistration.flatMap(_.effectDateOfCancellation).isEmpty) {
               logger.warn("[AgentHubController][show] - 'deregistration' contained no 'effectDateOfCancellation'")
             }
-            Ok(agentHubView(constructViewModel(details, payments)))
+            val optPenaltiesSummary: Option[PenaltiesSummary] = penaltiesInformation.flatMap(_.fold(_ => None, Some(_)))
+            Ok(agentHubView(constructViewModel(details, payments, optPenaltiesSummary)))
           }
         case Left(error) =>
           logger.warn(s"[AgentHubController][show] - received an error from CustomerDetailsService: $error")
@@ -62,7 +66,8 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
     }
   }
 
-  def constructViewModel(details: CustomerDetails, payments: Seq[Charge])(implicit user: User[_]): HubViewModel = {
+  def constructViewModel(details: CustomerDetails, payments: Seq[Charge],
+                         penaltiesInformation: Option[PenaltiesSummary])(implicit user: User[_]): HubViewModel = {
 
     val showBlueBox: Boolean = user.session.get(SessionKeys.viewedDDInterrupt).contains("blueBox")
     val hasDDSetup: Option[Boolean] = user.session.get(SessionKeys.mtdVatAgentDDMandateFound) match {
@@ -80,6 +85,7 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
           payment => payment.dueDate.isBefore(dateService.now()) && !payment.ddCollectionInProgress
         }
       }
+    val shouldShowPenaltiesTile: Boolean = penaltiesInformation.fold(false)(penalties => penalties.hasAnyPenaltyData)
 
     HubViewModel(
       details,
@@ -89,7 +95,8 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
       nextPaymentDate,
       isOverdue,
       paymentsNumber,
-      hasDDSetup
+      hasDDSetup,
+      shouldShowPenaltiesTile
     )
   }
 

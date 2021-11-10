@@ -21,7 +21,7 @@ import assets.CustomerDetailsTestConstants._
 import assets.HubViewModelTestConstants.{hubViewModel, hubViewModelBlueBox}
 import assets.messages.partials._
 import assets.messages.{AgentHubMessages => Messages}
-import messages.partials.NextPaymentPartialMessages
+import messages.partials.{NextPaymentPartialMessages, PenaltiesTileMessages}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
@@ -184,6 +184,16 @@ class AgentHubViewSpec extends ViewBaseSpec {
 
       "display the 'cancel vat registration' partial with the correct future of historic date" in {
         elementText("#cancel-vat > h3") shouldBe RegistrationPartialMessages.futureDeregisterTitle
+      }
+    }
+
+    "the user is an agent for a client who has penalties" should {
+      lazy val view = injectedView(hubViewModel(customerDetailsAllInfo, hasAnyPenalties = true))(messages,mockConfig,user)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "display the 'penalties tile' partial" in {
+        elementText("#penalties-tile > h3") shouldBe PenaltiesTileMessages.title
+        elementText("#penalties-tile > p") shouldBe PenaltiesTileMessages.description
       }
     }
   }

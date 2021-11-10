@@ -16,25 +16,27 @@
 
 package controllers.agent
 
-import java.time.LocalDate
 import assets.BaseTestConstants
 import assets.CustomerDetailsTestConstants._
 import assets.FinancialDataConstants._
+import assets.PenaltiesConstants._
 import controllers.ControllerBaseSpec
 import mocks.services._
+import models.HubViewModel
 import org.jsoup.Jsoup
 import play.api.mvc.Result
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, status}
 import play.mvc.Http.Status._
 import views.html.agent.AgentHubView
-import models.HubViewModel
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class AgentHubControllerSpec extends ControllerBaseSpec
                               with MockCustomerDetailsService
                               with MockDateService
-                              with MockFinancialDataService {
+                              with MockFinancialDataService
+                              with MockPenaltiesService {
 
   lazy val controller = new AgentHubController(
     mockAuthAsAgentWithClient,
@@ -42,6 +44,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
     mockCustomerDetailsService,
     mockDateService,
     mockFinancialDataService,
+    mockPenaltiesService,
     mcc,
     inject[AgentHubView]
   )
@@ -59,6 +62,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           mockCustomerDetailsSuccess(customerDetailsAllInfo)
           setupMockDateService(staticDate)
           mockPaymentResponse(paymentResponse)
+          mockPenaltiesResponse(penaltiesSummaryNoResponse)
 
           val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
@@ -73,6 +77,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           mockCustomerDetailsSuccess(customerDetailsAllPending.copy(missingTrader = true))
           setupMockDateService(staticDate)
           mockPaymentResponse(paymentResponse)
+          mockPenaltiesResponse(penaltiesSummaryNoResponse)
 
           val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
@@ -89,11 +94,28 @@ class AgentHubControllerSpec extends ControllerBaseSpec
         mockCustomerDetailsSuccess(customerDetailsFnameOnly)
         setupMockDateService(staticDate)
         mockPaymentResponse(paymentResponse)
+        mockPenaltiesResponse(penaltiesSummaryNoResponse)
 
         val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
         status(result) shouldBe OK
         messages(Jsoup.parse(contentAsString(result)).select("h1").text) shouldBe "Your client’s VAT details"
+      }
+    }
+
+    "the customer has penalties" should {
+
+      "render the AgentHubPage" in {
+        mockAgentAuthorised()
+        mockCustomerDetailsSuccess(customerDetailsFnameOnly)
+        setupMockDateService(staticDate)
+        mockPaymentResponse(paymentResponse)
+        mockPenaltiesResponse(penaltiesSummaryResponse)
+
+        val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
+
+        status(result) shouldBe OK
+        messages(Jsoup.parse(contentAsString(result)).select("#penalties-heading").text) shouldBe "Penalties and appeals"
       }
     }
 
@@ -104,6 +126,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
         mockCustomerDetailsError(BaseTestConstants.unexpectedError)
         setupMockDateService(staticDate)
         mockPaymentResponse(paymentResponse)
+        mockPenaltiesResponse(penaltiesSummaryNoResponse)
 
         val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
@@ -118,6 +141,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
         mockAgentAuthorised()
         mockCustomerDetailsSuccess(customerDetailsHybrid)
         setupMockDateService(staticDate)
+        mockPenaltiesResponse(penaltiesSummaryNoResponse)
 
         val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
         status(result) shouldBe OK
@@ -141,10 +165,11 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           Some(LocalDate.parse("2018-01-01")),
           isOverdue = true,
           payments = 1,
-          directDebitSetup = None
+          directDebitSetup = None,
+          shouldShowPenaltiesTile = false
         )
 
-        val result = controller.constructViewModel(customerDetailsAllInfo, paymentOverdue)(userWithBlueBox)
+        val result = controller.constructViewModel(customerDetailsAllInfo, paymentOverdue, None)(userWithBlueBox)
         result shouldBe expected
       }
 
@@ -160,10 +185,11 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           Some(LocalDate.parse("2018-01-01")),
           isOverdue = false,
           payments = 2,
-          directDebitSetup = None
+          directDebitSetup = None,
+          shouldShowPenaltiesTile = false
         )
 
-        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsOverdue)(userWithBlueBox)
+        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsOverdue, None)(userWithBlueBox)
         result shouldBe expected
       }
 
@@ -179,10 +205,51 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           Some(LocalDate.parse("2020-01-01")),
           isOverdue = false,
           payments = 2,
-          directDebitSetup = None
+          directDebitSetup = None,
+          shouldShowPenaltiesTile = false
         )
 
-        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsNotOverdue)(userWithBlueBox)
+        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsNotOverdue, None)(userWithBlueBox)
+        result shouldBe expected
+      }
+
+      "the user has penalties" in {
+        mockAgentAuthorised()
+        setupMockDateService(staticDate)
+
+        val expected = HubViewModel(
+          customerDetailsAllInfo,
+          BaseTestConstants.vrn,
+          LocalDate.parse("2018-05-01"),
+          showBlueBox = true,
+          Some(LocalDate.parse("2020-01-01")),
+          isOverdue = false,
+          payments = 2,
+          directDebitSetup = None,
+          shouldShowPenaltiesTile = true
+        )
+
+        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsNotOverdue, Some(penaltiesSummaryAsModel))(userWithBlueBox)
+        result shouldBe expected
+      }
+
+      "the user has no penalties" in {
+        mockAgentAuthorised()
+        setupMockDateService(staticDate)
+
+        val expected = HubViewModel(
+          customerDetailsAllInfo,
+          BaseTestConstants.vrn,
+          LocalDate.parse("2018-05-01"),
+          showBlueBox = true,
+          Some(LocalDate.parse("2020-01-01")),
+          isOverdue = false,
+          payments = 2,
+          directDebitSetup = None,
+          shouldShowPenaltiesTile = false
+        )
+
+        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsNotOverdue, Some(penaltiesSummaryAsModelNoPenalties))(userWithBlueBox)
         result shouldBe expected
       }
     }
