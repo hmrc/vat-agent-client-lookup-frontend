@@ -66,7 +66,8 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
     }
   }
 
-  def constructViewModel(details: CustomerDetails, payments: Seq[Charge], penaltiesInformation: Option[PenaltiesSummary])(implicit user: User[_]): HubViewModel = {
+  def constructViewModel(details: CustomerDetails, payments: Seq[Charge],
+                         penaltiesInformation: Option[PenaltiesSummary])(implicit user: User[_]): HubViewModel = {
 
     val showBlueBox: Boolean = user.session.get(SessionKeys.viewedDDInterrupt).contains("blueBox")
     val hasDDSetup: Option[Boolean] = user.session.get(SessionKeys.mtdVatAgentDDMandateFound) match {
@@ -84,7 +85,7 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
           payment => payment.dueDate.isBefore(dateService.now()) && !payment.ddCollectionInProgress
         }
       }
-    val shouldShowPenaltiesTile = penaltiesInformation.fold(false)(penalties => penalties.hasAnyPenaltyData)
+    val shouldShowPenaltiesTile: Boolean = penaltiesInformation.fold(false)(penalties => penalties.hasAnyPenaltyData)
 
     HubViewModel(
       details,

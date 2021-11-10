@@ -232,6 +232,26 @@ class AgentHubControllerSpec extends ControllerBaseSpec
         val result = controller.constructViewModel(customerDetailsAllInfo, paymentsNotOverdue, Some(penaltiesSummaryAsModel))(userWithBlueBox)
         result shouldBe expected
       }
+
+      "the user has no penalties" in {
+        mockAgentAuthorised()
+        setupMockDateService(staticDate)
+
+        val expected = HubViewModel(
+          customerDetailsAllInfo,
+          BaseTestConstants.vrn,
+          LocalDate.parse("2018-05-01"),
+          showBlueBox = true,
+          Some(LocalDate.parse("2020-01-01")),
+          isOverdue = false,
+          payments = 2,
+          directDebitSetup = None,
+          shouldShowPenaltiesTile = false
+        )
+
+        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsNotOverdue, Some(penaltiesSummaryAsModelNoPenalties))(userWithBlueBox)
+        result shouldBe expected
+      }
     }
   }
 }

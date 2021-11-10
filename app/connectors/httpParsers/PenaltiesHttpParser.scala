@@ -36,6 +36,10 @@ object PenaltiesHttpParser extends LoggerUtil {
           logger.debug(s"[PenaltiesHttpParser][read]: Status $NOT_FOUND")
           Right(PenaltiesSummary.empty)
         }
+        case NO_CONTENT => {
+          logger.debug(s"[PenaltiesHttpParser][read]: Status $NO_CONTENT")
+          Right(PenaltiesSummary.empty)
+        }
         case status =>
           logger.warn(s"[PenaltiesHttpParser][PenaltiesReads][read] - Received unexpected error. Response status: $status, Response body: ${response.body}")
           Left(UnexpectedError(status, response.body))

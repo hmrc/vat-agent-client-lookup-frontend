@@ -53,7 +53,7 @@ class PenaltiesHttpParserSpec extends AnyWordSpecLike with Matchers {
       val expected = Right(PenaltiesSummary.empty)
       val result = PenaltiesReads.read("", "", httpResponse)
 
-      "return a 404 error" in {
+      "return an empty model" in {
         result shouldEqual expected
       }
     }
@@ -112,6 +112,16 @@ class PenaltiesHttpParserSpec extends AnyWordSpecLike with Matchers {
       val result = PenaltiesReads.read("", "", httpResponse)
 
       "return a UnexpectedError" in {
+        result shouldBe expected
+      }
+    }
+
+    "the HTTP response status is 204" should {
+      val httpResponse = HttpResponse(Status.NO_CONTENT, "")
+      val expected = Right(PenaltiesSummary.empty)
+      val result = PenaltiesReads.read("", "", httpResponse)
+
+      "return an empty model" in {
         result shouldBe expected
       }
     }

@@ -33,15 +33,15 @@ class PenaltiesTilePartialSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct title of ${PenaltiesTileMessages.title}" in {
-        elementText(".govuk-heading-s") shouldBe PenaltiesTileMessages.title
+        elementText("#penalties-heading") shouldBe PenaltiesTileMessages.title
       }
 
       s"have the correct link for the penalties-frontend homepage" in {
-        element("a").attr("href") shouldBe "/penalties"
+        element("#penalties-heading > a").attr("href") shouldBe "/penalties"
       }
 
       s"have the correct card information of ${PenaltiesTileMessages.description}" in {
-        elementText("p") shouldBe PenaltiesTileMessages.description
+        elementText("#penalties-tile-content") shouldBe PenaltiesTileMessages.description
       }
     }
   }
