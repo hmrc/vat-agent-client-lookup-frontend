@@ -37,7 +37,7 @@ class PenaltiesTilePartialSpec extends ViewBaseSpec {
       }
 
       s"have the correct link for the penalties-frontend homepage" in {
-        element("#penalties-heading > a").attr("href") shouldBe "/penalties"
+        element("#penalties-heading > a").attr("href") shouldBe "/vat-through-software/representative/test-only/penalties-stub"
       }
 
       s"have the correct card information of ${PenaltiesTileMessages.description}" in {
