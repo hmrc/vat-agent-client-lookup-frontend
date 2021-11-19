@@ -68,9 +68,20 @@ trait TestUtil extends AnyWordSpecLike with Matchers with GuiceOneAppPerSuite wi
   lazy val fakeRequestWithBlueBoxSession: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest().withSession(SessionKeys.viewedDDInterrupt -> "blueBox")
 
+  lazy val fakeRequestDDSetup: FakeRequest[AnyContentAsEmpty.type] =
+    FakeRequest().withSession(SessionKeys.mtdVatAgentDDMandateFound -> "true")
+
+  lazy val fakeRequestDDNotSetup: FakeRequest[AnyContentAsEmpty.type] =
+    FakeRequest().withSession(SessionKeys.mtdVatAgentDDMandateFound -> "false")
+
   lazy val userWithBlueBox: User[AnyContentAsEmpty.type] =
     User[AnyContentAsEmpty.type](vrn, active = true)(fakeRequestWithBlueBoxSession)
 
+  lazy val userHasDDSetup: User[AnyContentAsEmpty.type] =
+    User[AnyContentAsEmpty.type](vrn, active = true)(fakeRequestDDSetup)
+
+  lazy val userHasDDNotSetup: User[AnyContentAsEmpty.type] =
+    User[AnyContentAsEmpty.type](vrn, active = true)(fakeRequestDDNotSetup)
 
   lazy val user: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn, active = true)(request)
   lazy val agent: Agent[AnyContentAsEmpty.type] = Agent[AnyContentAsEmpty.type](arn)(fakeRequestWithVrnAndRedirectUrl)

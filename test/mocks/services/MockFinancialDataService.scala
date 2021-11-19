@@ -39,5 +39,4 @@ trait MockFinancialDataService extends TestUtil {
   def mockPaymentResponse(response: HttpResult[Seq[Charge]]): OngoingStubbing[Future[HttpResult[Seq[Charge]]]] =
     when(mockFinancialDataService.getPayment(ArgumentMatchers.any())(ArgumentMatchers.any[HeaderCarrier]))
       .thenReturn(Future.successful(response))
-
 }

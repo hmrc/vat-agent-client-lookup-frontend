@@ -21,6 +21,7 @@ import audit.mocks.MockAuditingService
 import audit.models.YesPreferenceAttemptedAuditModel
 import common.SessionKeys
 import controllers.ControllerBaseSpec
+import forms.PreferenceForm.yes
 import models.Agent
 import org.jsoup.Jsoup
 import org.scalatest.BeforeAndAfterAll
@@ -52,26 +53,53 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
 
       "client VRN is in session" when {
 
-        "a redirectUrl is in session and another is passed through in the 'show' method" should {
+        "a redirectUrl is in session and another is passed through in the 'show' method" when{
 
-          lazy val result = {
-            target.show("newRedirectUrl")(request.withSession(
-              SessionKeys.clientVRN -> "999999999",
-              SessionKeys.redirectUrl -> testRedirectUrl
-            ))
+          "the user has an email preference" should {
+
+            lazy val result = {
+              target.show("newRedirectUrl")(request.withSession(
+                SessionKeys.clientVRN -> "999999999",
+                SessionKeys.redirectUrl -> testRedirectUrl,
+                SessionKeys.preference -> yes
+              ))
+            }
+
+            "return 200" in {
+              mockAgentAuthorised()
+              status(result) shouldBe Status.OK
+            }
+
+            "render CapturePreferenceView page" in {
+              messages(Jsoup.parse(contentAsString(result)).select("h1").text()) shouldBe "We no longer send confirmation letters in the post"
+            }
+
+            "store the new redirectUrl in session" in {
+              session(result).get(SessionKeys.redirectUrl) shouldBe Some("newRedirectUrl")
+            }
           }
 
-          "return 200" in {
-            mockAgentAuthorised()
-            status(result) shouldBe Status.OK
-          }
+          "the user does not have an email preference" should {
 
-          "render CapturePreferenceView page" in {
-            messages(Jsoup.parse(contentAsString(result)).select("h1").text()) shouldBe "We no longer send confirmation letters in the post"
-          }
+            lazy val result = {
+              target.show("newRedirectUrl")(request.withSession(
+                SessionKeys.clientVRN -> "999999999",
+                SessionKeys.redirectUrl -> testRedirectUrl
+              ))
+            }
 
-          "store the new redirectUrl in session" in {
-            session(result).get(SessionKeys.redirectUrl) shouldBe Some("newRedirectUrl")
+            "return 200" in {
+              mockAgentAuthorised()
+              status(result) shouldBe Status.OK
+            }
+
+            "render CapturePreferenceView page" in {
+              messages(Jsoup.parse(contentAsString(result)).select("h1").text()) shouldBe "We no longer send confirmation letters in the post"
+            }
+
+            "store the new redirectUrl in session" in {
+              session(result).get(SessionKeys.redirectUrl) shouldBe Some("newRedirectUrl")
+            }
           }
         }
       }
