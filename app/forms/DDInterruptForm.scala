@@ -23,11 +23,6 @@ import utils.StopOnFirstFail.constraint
 
 object DDInterruptForm {
 
-//  val form: Form[Boolean] = Form(single(
-//    "checkbox" -> optional(boolean)
-//      .verifying("directDebitInterrupt.formError", _.nonEmpty).transform(_.get, (x: Boolean) => Some(x))
-//  ))
-
   val form: Form[Boolean] = Form(
     "checkbox" -> boolean.verifying(
       StopOnFirstFail(
