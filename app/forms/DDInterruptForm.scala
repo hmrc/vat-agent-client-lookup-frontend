@@ -17,12 +17,22 @@
 package forms
 
 import play.api.data.Form
-import play.api.data.Forms.{boolean, optional, single}
+import play.api.data.Forms._
+import utils.StopOnFirstFail
+import utils.StopOnFirstFail.constraint
 
 object DDInterruptForm {
 
-  val form: Form[Boolean] = Form(single(
-    "checkbox" -> optional(boolean)
-      .verifying("directDebitInterrupt.formError", _.nonEmpty).transform(_.get, (x: Boolean) => Some(x))
-  ))
+//  val form: Form[Boolean] = Form(single(
+//    "checkbox" -> optional(boolean)
+//      .verifying("directDebitInterrupt.formError", _.nonEmpty).transform(_.get, (x: Boolean) => Some(x))
+//  ))
+
+  val form: Form[Boolean] = Form(
+    "checkbox" -> boolean.verifying(
+      StopOnFirstFail(
+        constraint[Boolean]("directDebitInterrupt.formError", _.equals(true))
+      )
+    )
+  )
 }

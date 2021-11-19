@@ -23,6 +23,7 @@ import assets.PenaltiesConstants._
 import controllers.ControllerBaseSpec
 import mocks.services._
 import models.HubViewModel
+import models.errors.UnexpectedError
 import org.jsoup.Jsoup
 import play.api.mvc.Result
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, status}
@@ -119,6 +120,40 @@ class AgentHubControllerSpec extends ControllerBaseSpec
       }
     }
 
+    "the customer has no penalties" should {
+
+      "render the AgentHubPage" in {
+        mockAgentAuthorised()
+        mockCustomerDetailsSuccess(customerDetailsFnameOnly)
+        setupMockDateService(staticDate)
+        mockPaymentResponse(paymentResponse)
+        mockPenaltiesResponse(penaltiesSummaryNoPenaltiesResponse)
+
+        val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
+
+        status(result) shouldBe OK
+        messages(Jsoup.parse(contentAsString(result)).select("h1").text) shouldBe "Your client’s VAT details"
+        messages(Jsoup.parse(contentAsString(result)).select("#penalties-heading").text) shouldBe ""
+      }
+    }
+
+    "the penalties call fails" should {
+
+      "render the AgentHubPage" in {
+        mockAgentAuthorised()
+        mockCustomerDetailsSuccess(customerDetailsFnameOnly)
+        setupMockDateService(staticDate)
+        mockPaymentResponse(paymentResponse)
+        mockPenaltiesResponse(Some(Left(UnexpectedError(500, ""))))
+
+        val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
+
+        status(result) shouldBe OK
+        messages(Jsoup.parse(contentAsString(result)).select("h1").text) shouldBe "Your client’s VAT details"
+        messages(Jsoup.parse(contentAsString(result)).select("#penalties-heading").text) shouldBe ""
+      }
+    }
+
     "the customerDetails call fails" should {
 
       "return an error" in {
@@ -145,7 +180,22 @@ class AgentHubControllerSpec extends ControllerBaseSpec
 
         val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
         status(result) shouldBe OK
+        messages(Jsoup.parse(contentAsString(result)).select("h1").text) shouldBe "Your client’s VAT details"
       }
+    }
+  }
+
+  "the payments call fails" should {
+
+    "render the AgentHubPage" in {
+      mockAgentAuthorised()
+      mockCustomerDetailsSuccess(customerDetailsFnameOnly)
+      setupMockDateService(staticDate)
+      mockPaymentResponse(Left(UnexpectedError(500, "")))
+
+      val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
+
+      status(result) shouldBe OK
     }
   }
 
@@ -213,6 +263,66 @@ class AgentHubControllerSpec extends ControllerBaseSpec
         result shouldBe expected
       }
 
+      "the user has no payments" in {
+        mockAgentAuthorised()
+        setupMockDateService(staticDate)
+
+        val expected = HubViewModel(
+          customerDetailsAllInfo,
+          BaseTestConstants.vrn,
+          LocalDate.parse("2018-05-01"),
+          showBlueBox = true,
+          None,
+          isOverdue = false,
+          payments = 0,
+          directDebitSetup = None,
+          shouldShowPenaltiesTile = false
+        )
+
+        val result = controller.constructViewModel(customerDetailsAllInfo, Seq(), None)(userWithBlueBox)
+        result shouldBe expected
+      }
+
+      "the user has a DD set up" in {
+        mockAgentAuthorised()
+        setupMockDateService(staticDate)
+
+        val expected = HubViewModel(
+          customerDetailsAllInfo,
+          BaseTestConstants.vrn,
+          LocalDate.parse("2018-05-01"),
+          showBlueBox = false,
+          Some(LocalDate.parse("2020-01-01")),
+          isOverdue = false,
+          payments = 2,
+          directDebitSetup = Some(true),
+          shouldShowPenaltiesTile = false
+        )
+
+        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsNotOverdue,None)(userHasDDSetup)
+        result shouldBe expected
+      }
+
+      "the user has no DD set up" in {
+        mockAgentAuthorised()
+        setupMockDateService(staticDate)
+
+        val expected = HubViewModel(
+          customerDetailsAllInfo,
+          BaseTestConstants.vrn,
+          LocalDate.parse("2018-05-01"),
+          showBlueBox = false,
+          Some(LocalDate.parse("2020-01-01")),
+          isOverdue = false,
+          payments = 2,
+          directDebitSetup = Some(false),
+          shouldShowPenaltiesTile = false
+        )
+
+        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsNotOverdue,None)(userHasDDNotSetup)
+        result shouldBe expected
+      }
+
       "the user has penalties" in {
         mockAgentAuthorised()
         setupMockDateService(staticDate)
@@ -250,6 +360,27 @@ class AgentHubControllerSpec extends ControllerBaseSpec
         )
 
         val result = controller.constructViewModel(customerDetailsAllInfo, paymentsNotOverdue, Some(penaltiesSummaryAsModelNoPenalties))(userWithBlueBox)
+        result shouldBe expected
+      }
+
+      "the user has no penalties data" in {
+
+        mockAgentAuthorised()
+        setupMockDateService(staticDate)
+
+        val expected = HubViewModel(
+          customerDetailsAllInfo,
+          BaseTestConstants.vrn,
+          LocalDate.parse("2018-05-01"),
+          showBlueBox = true,
+          Some(LocalDate.parse("2020-01-01")),
+          isOverdue = false,
+          payments = 2,
+          directDebitSetup = None,
+          shouldShowPenaltiesTile = false
+        )
+
+        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsNotOverdue, None)(userWithBlueBox)
         result shouldBe expected
       }
     }

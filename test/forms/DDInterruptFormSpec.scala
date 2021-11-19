@@ -38,7 +38,7 @@ class DDInterruptFormSpec extends AnyWordSpecLike with Matchers {
 
     "no data is given" should {
 
-      val form = DDInterruptForm.form.bind(Map("checkbox" -> ""))
+      val form = DDInterruptForm.form.bind(Map("checkbox" -> "false"))
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true

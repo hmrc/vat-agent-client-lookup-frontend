@@ -53,5 +53,6 @@ object PenaltiesConstants {
   )
 
   val penaltiesSummaryResponse: Option[HttpResult[PenaltiesSummary]] = Some(Right(penaltiesSummaryAsModel))
+  val penaltiesSummaryNoPenaltiesResponse: Option[HttpResult[PenaltiesSummary]] = Some(Right(penaltiesSummaryAsModelNoPenalties))
   val penaltiesSummaryNoResponse: Option[HttpResult[PenaltiesSummary]] = None
 }

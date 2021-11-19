@@ -88,7 +88,7 @@ class DirectDebitInterruptViewSpec extends ViewBaseSpec {
 
     "there is an error in the form" should {
 
-      lazy val view = injectedView(DDInterruptForm.form.bind(Map("checkbox" -> "")))(request, messages, mockConfig)
+      lazy val view = injectedView(DDInterruptForm.form.bind(Map("checkbox" -> "false")))(request, messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
