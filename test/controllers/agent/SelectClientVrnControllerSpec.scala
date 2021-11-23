@@ -105,6 +105,7 @@ class SelectClientVrnControllerSpec extends ControllerBaseSpec with MockAuth wit
         }
 
         "add Client VRN to session cookie" in {
+          session(result).get(SessionKeys.clientVRNDeprecated).get shouldBe "999969202"
           session(result).get(SessionKeys.clientVRN).get shouldBe "999969202"
         }
 

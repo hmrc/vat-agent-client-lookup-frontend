@@ -60,7 +60,8 @@ class ClientDetailsPartialSpec extends ViewBaseSpec {
     "when the user has a valid agent email in session" should {
 
       lazy val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-        .withSession(SessionKeys.verifiedAgentEmail -> "exampleemail@email.com")
+        .withSession(SessionKeys.verifiedEmailDeprecated -> "exampleemail@email.com",
+          SessionKeys.verifiedEmail -> "exampleemail@email.com")
 
       lazy val testuser: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn, active = true)(testGetRequest)
 

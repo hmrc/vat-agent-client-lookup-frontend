@@ -84,7 +84,8 @@ class PreferencePredicateSpec extends ControllerBaseSpec with BeforeAndAfterAll 
 
           val agentWithPref = Agent(arn)(request.withSession(
             SessionKeys.preference -> "yes",
-            SessionKeys.verifiedAgentEmail -> "scala@gmail.com"
+            SessionKeys.verifiedEmailDeprecated -> "scala@gmail.com",
+            SessionKeys.verifiedEmail -> "scala@gmail.com"
           ))
           await(mockPreferencePredicate.refine(agentWithPref)) shouldBe
             Left(Redirect("/customer-details"))
@@ -97,7 +98,8 @@ class PreferencePredicateSpec extends ControllerBaseSpec with BeforeAndAfterAll 
 
           val agentWithPref = Agent(arn)(request.withSession(
             SessionKeys.preference -> "yes",
-            SessionKeys.verifiedAgentEmail -> "scala@gmail.com",
+            SessionKeys.verifiedEmailDeprecated -> "scala@gmail.com",
+            SessionKeys.verifiedEmail -> "scala@gmail.com",
             SessionKeys.redirectUrl -> "/immafiringmuhlaserbwaaaaaaaaaaah"
           ))
           await(mockPreferencePredicate.refine(agentWithPref)) shouldBe

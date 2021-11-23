@@ -41,7 +41,7 @@ class CapturePreferenceController @Inject()(authenticate: AuthoriseAsAgentOnly,
   def show(altRedirectUrl: String = ""): Action[AnyContent] = (authenticate andThen preferenceCheck) { implicit user =>
     val preference = user.session.get(SessionKeys.preference)
     val notificationEmail = user.session.get(SessionKeys.notificationsEmail)
-    val clientVrn = user.session.get(SessionKeys.clientVRN)
+    val clientVrn = user.session.get(SessionKeys.clientVRNDeprecated)
     val redirectUrl = if(altRedirectUrl.nonEmpty) {
       altRedirectUrl
     } else {

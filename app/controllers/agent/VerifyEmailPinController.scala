@@ -68,7 +68,7 @@ class VerifyEmailPinController @Inject()(emailVerificationService: EmailVerifica
                 "Unable to send email verification request. Service responded with 'already verified'"
             )
             Redirect(agent.session.get(SessionKeys.redirectUrl).getOrElse(appConfig.manageVatCustomerDetailsUrl))
-              .addingToSession(SessionKeys.verifiedAgentEmail -> email)
+              .addingToSession(SessionKeys.verifiedEmailDeprecated -> email, SessionKeys.verifiedEmail -> email)
           case _ => errorHandler.showInternalServerError
         }
       case _ => Future.successful(Redirect(routes.CapturePreferenceController.show()))
@@ -87,7 +87,7 @@ class VerifyEmailPinController @Inject()(emailVerificationService: EmailVerifica
             emailVerificationService.verifyPasscode(email, passcode).map {
               case Right(SuccessfullyVerified) | Right(AlreadyVerified) =>
                 Redirect(agent.session.get(SessionKeys.redirectUrl).getOrElse(appConfig.manageVatCustomerDetailsUrl))
-                  .addingToSession(SessionKeys.verifiedAgentEmail -> email)
+                  .addingToSession(SessionKeys.verifiedEmailDeprecated -> email, SessionKeys.verifiedEmail -> email)
               case Right(TooManyAttempts) => BadRequest(incorrectPasscodeView("incorrectPasscode.tooManyAttempts"))
               case Right(PasscodeNotFound) => BadRequest(incorrectPasscodeView("incorrectPasscode.expired"))
               case Right(IncorrectPasscode) =>
