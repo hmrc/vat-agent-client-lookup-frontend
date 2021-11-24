@@ -63,7 +63,6 @@ trait TestUtil extends AnyWordSpecLike with Matchers with GuiceOneAppPerSuite wi
       SessionKeys.clientVRNDeprecated -> vrn,
       SessionKeys.clientVRN -> vrn,
       SessionKeys.redirectUrl -> "/homepage",
-      SessionKeys.clientNameDeprecated -> "l'biz",
       SessionKeys.clientName -> "l'biz",
       SessionKeys.mtdVatAgentMandationStatus -> nonMTDfB
     )

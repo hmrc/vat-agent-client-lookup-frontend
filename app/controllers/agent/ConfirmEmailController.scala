@@ -74,6 +74,6 @@ class ConfirmEmailController @Inject()(authenticate: AuthoriseAsAgentOnly,
       YesPreferenceVerifiedAuditModel(agent.arn, email),
       Some(controllers.agent.routes.ConfirmEmailController.isEmailVerified.url)
     )
-    Redirect(redirectUrl).addingToSession(SessionKeys.verifiedEmailDeprecated -> email, SessionKeys.verifiedEmail -> email)
+    Redirect(redirectUrl).addingToSession(SessionKeys.verifiedEmail -> email)
   }
 }

@@ -21,12 +21,8 @@ object SessionKeys {
   val clientVRNDeprecated: String = "CLIENT_VRN"
   val clientVRN: String = "mtdVatvcClientVrn"
 
-  val verifiedEmailDeprecated: String = "verifiedAgentEmail"
   val verifiedEmail: String = "mtdVatvcVerifiedAgentEmail"
-
-  val clientNameDeprecated: String = "mtdVatAgentClientName"
   val clientName: String = "mtdVatvcAgentClientName"
-
   val clientMandationStatus: String = "mtdVatMandationStatus"
   val redirectUrl: String = "vatAgentLookupRedirectUrl"
   val preference: String = "vatAgentLookupEmailPreference"

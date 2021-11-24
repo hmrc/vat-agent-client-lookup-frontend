@@ -60,10 +60,9 @@ class ConfirmClientVrnController @Inject()(authenticate: AuthoriseAsAgentWithCli
             Some(controllers.agent.routes.ConfirmClientVrnController.show.url)
           )
 
-          Ok(confirmClientVrnView(user.vrn, customerDetails)).addingToSession(
-            SessionKeys.clientNameDeprecated -> customerDetails.clientName,
-            SessionKeys.clientName -> customerDetails.clientName
-          )
+          Ok(confirmClientVrnView(user.vrn, customerDetails))
+            .addingToSession(SessionKeys.clientName -> customerDetails.clientName)
+
         case Left(Migration) => PreconditionFailed(accountMigrationView())
         case Left(NotSignedUp) => NotFound(notSignedUpView())
         case _ =>
@@ -77,8 +76,8 @@ class ConfirmClientVrnController @Inject()(authenticate: AuthoriseAsAgentWithCli
       val redirectUrl = user.session.get(SessionKeys.redirectUrl).getOrElse("")
 
       Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectUrl))
-        .removingFromSession(SessionKeys.clientVRNDeprecated, SessionKeys.clientVRN, SessionKeys.viewedDDInterrupt,
-          SessionKeys.clientNameDeprecated, SessionKeys.clientName)
+        .removingFromSession(SessionKeys.clientVRNDeprecated, SessionKeys.clientVRN,
+                             SessionKeys.viewedDDInterrupt, SessionKeys.clientName)
   }
 
   def redirect: Action[AnyContent] = (authenticate andThen ddInterrupt) {
@@ -86,7 +85,7 @@ class ConfirmClientVrnController @Inject()(authenticate: AuthoriseAsAgentWithCli
     implicit user =>
 
       val redirectUrl = user.session.get(SessionKeys.redirectUrl)
-      val hasVerifiedAgentEmail: Boolean = user.session.get(SessionKeys.verifiedEmailDeprecated).isDefined
+      val hasVerifiedAgentEmail: Boolean = user.session.get(SessionKeys.verifiedEmail).isDefined
       val manageVatUrl = appConfig.manageVatCustomerDetailsUrl
 
       redirectUrl match {

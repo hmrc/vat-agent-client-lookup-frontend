@@ -57,9 +57,8 @@ class OptOutForMTDVATPartialSpec extends ViewBaseSpec {
 
       "agent has entered their contact preference" should {
 
-        lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-          .withSession(SessionKeys.verifiedEmailDeprecated -> "exampleemail@email.com",
-            SessionKeys.verifiedEmail -> "exampleemail@email.com")
+        lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] =
+          FakeRequest("GET", "").withSession(SessionKeys.verifiedEmail -> "exampleemail@email.com")
         lazy val testUser: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn, active = true)(testGetRequest)
         lazy val view = optOutForMTDVATPartial("MTDfB Mandated")(messages, mockConfig, testUser)
         lazy implicit val document: Document = Jsoup.parse(view.body)
