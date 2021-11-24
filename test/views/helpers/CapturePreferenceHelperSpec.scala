@@ -36,7 +36,8 @@ class CapturePreferenceHelperSpec extends ViewBaseSpec {
     "the agent has entered their email address" should {
 
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-        .withSession(SessionKeys.verifiedAgentEmail -> "exampleemail@email.com")
+        .withSession(SessionKeys.verifiedEmailDeprecated -> "exampleemail@email.com",
+          SessionKeys.verifiedEmail -> "exampleemail@email.com")
       lazy val testUser: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn, active = true)(testGetRequest)
       lazy val view: Html = capturePreferenceHelper("Heading", mockConfig.optOutMtdVatUrl)(testUser)
       lazy implicit val document: Document = Jsoup.parse(view.body)

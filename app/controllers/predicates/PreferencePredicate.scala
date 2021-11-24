@@ -35,7 +35,7 @@ class PreferencePredicate @Inject()(implicit val appConfig: AppConfig,
 
     val redirectUrl = agent.session.get(SessionKeys.redirectUrl).getOrElse(appConfig.manageVatCustomerDetailsUrl)
     val preference = agent.session.get(SessionKeys.preference)
-    val hasVerifiedEmail = agent.session.get(SessionKeys.verifiedAgentEmail).isDefined
+    val hasVerifiedEmail = agent.session.get(SessionKeys.verifiedEmailDeprecated).isDefined
 
       preference match {
         case Some("no") => Future.successful(Left(Redirect(redirectUrl)))

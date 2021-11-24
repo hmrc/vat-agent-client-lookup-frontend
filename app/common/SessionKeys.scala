@@ -18,13 +18,19 @@ package common
 
 object SessionKeys {
 
-  val clientVRN: String = "CLIENT_VRN"
+  val clientVRNDeprecated: String = "CLIENT_VRN"
+  val clientVRN: String = "mtdVatvcClientVrn"
+
+  val verifiedEmailDeprecated: String = "verifiedAgentEmail"
+  val verifiedEmail: String = "mtdVatvcVerifiedAgentEmail"
+
+  val clientNameDeprecated: String = "mtdVatAgentClientName"
+  val clientName: String = "mtdVatvcAgentClientName"
+
   val clientMandationStatus: String = "mtdVatMandationStatus"
   val redirectUrl: String = "vatAgentLookupRedirectUrl"
   val preference: String = "vatAgentLookupEmailPreference"
   val notificationsEmail: String = "vatAgentLookupNotificationsPreferenceEmail"
-  val verifiedAgentEmail: String = "verifiedAgentEmail"
-  val mtdVatAgentClientName: String = "mtdVatAgentClientName"
   val mtdVatAgentMandationStatus: String = "mtdVatAgentMandationStatus"
   val viewedDDInterrupt: String = "vatViewChangeHasViewedDDInterrupt"
   val mtdVatAgentDDMandateFound: String = "mtdVatAgentDDMandateFound"
