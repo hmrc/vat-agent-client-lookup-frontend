@@ -90,11 +90,11 @@ class RegistrationPartialSpec extends ViewBaseSpec {
 
         "agent has entered their contact preference" should {
 
-          lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-            .withSession(SessionKeys.verifiedEmailDeprecated -> "exampleemail@email.com",
-              SessionKeys.verifiedEmail -> "exampleemail@email.com")
+          lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] =
+            FakeRequest("GET", "").withSession(SessionKeys.verifiedEmail -> "exampleemail@email.com")
           lazy val testUser: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn, active = true)(testGetRequest)
-          lazy val view = registrationPartial(customerDetailsNoInfoWithPartyType, toLocalDate("2019-01-01"))(messages, mockConfig, testUser)
+          lazy val view =
+            registrationPartial(customerDetailsNoInfoWithPartyType, toLocalDate("2019-01-01"))(messages, mockConfig, testUser)
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "display a section for cancelling registration" which {
@@ -115,11 +115,11 @@ class RegistrationPartialSpec extends ViewBaseSpec {
 
         "agent has entered their contact preference, while the client is of partyType VatGroup" should {
 
-          lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
-            .withSession(SessionKeys.verifiedEmailDeprecated -> "exampleemail@email.com",
-              SessionKeys.verifiedEmail -> "exampleemail@email.com")
+          lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] =
+            FakeRequest("GET", "").withSession(SessionKeys.verifiedEmail -> "exampleemail@email.com")
           lazy val testUser: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn, active = true)(testGetRequest)
-          lazy val view = registrationPartial(customerDetailsNoInfoVatGroup, toLocalDate("2019-01-01"))(messages, mockConfig, testUser)
+          lazy val view =
+            registrationPartial(customerDetailsNoInfoVatGroup, toLocalDate("2019-01-01"))(messages, mockConfig, testUser)
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "display a section for cancelling registration" which {

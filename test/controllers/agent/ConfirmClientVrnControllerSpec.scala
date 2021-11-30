@@ -118,7 +118,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
               }
 
               "add the client name to the session" in {
-                session(result).get(SessionKeys.clientNameDeprecated) shouldBe Some(customerDetailsOrganisation.clientName)
                 session(result).get(SessionKeys.clientName) shouldBe Some(customerDetailsOrganisation.clientName)
               }
             }
@@ -241,7 +240,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           }
 
           "remove the client name" in {
-            session(result).get(SessionKeys.clientNameDeprecated) shouldBe None
             session(result).get(SessionKeys.clientName) shouldBe None
           }
 
@@ -340,7 +338,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
               SessionKeys.clientVRNDeprecated -> vrn,
               SessionKeys.clientVRN -> vrn,
               SessionKeys.redirectUrl -> "/vat-through-software/account/change-something-about-vat",
-              SessionKeys.verifiedEmailDeprecated -> "an.email@host.com",
               SessionKeys.verifiedEmail -> "an.email@host.com"
             ))
           }
@@ -361,7 +358,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           }
 
           "retain the agent email" in {
-            session(result).get(SessionKeys.verifiedEmailDeprecated) shouldBe Some("an.email@host.com")
             session(result).get(SessionKeys.verifiedEmail) shouldBe Some("an.email@host.com")
           }
         }
