@@ -99,7 +99,9 @@
   <div class="govuk-grid-row">
     @clientDetailsPartial()
     @vatCertificatePartial()
-    @penaltiesTilePartial(model.shouldShowPenaltiesTile)
+    @if(model.penaltiesSummary.fold(false)(_.hasAnyPenaltyData)){
+        @penaltiesTilePartial()
+    }
     @signUpPartial(model.details.mandationStatus, model.vrn)
     @optOutForMTDVATPartial(model.details.mandationStatus)
     @registrationPartial(model.details, model.currentDate)

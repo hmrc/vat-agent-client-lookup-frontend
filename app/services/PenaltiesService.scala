@@ -25,7 +25,7 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class PenaltiesService @Inject()(penaltiesConnector: PenaltiesConnector){
-  def getPenaltiesInformation(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[HttpResult[PenaltiesSummary]]] = {
+  def getPenaltiesInformation(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[PenaltiesSummary]] = {
     penaltiesConnector.getPenaltiesDataForVRN(vrn)
   }
 }
