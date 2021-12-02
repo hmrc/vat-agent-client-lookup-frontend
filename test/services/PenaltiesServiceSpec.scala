@@ -33,7 +33,7 @@ import scala.concurrent.Future
 
 class PenaltiesServiceSpec extends AnyWordSpecLike with Matchers with MockitoSugar {
 
-  val penaltiesSummary: Option[HttpResult[PenaltiesSummary]] = Some(Right(penaltiesSummaryAsModel))
+  val penaltiesSummary: HttpResult[PenaltiesSummary] = Right(penaltiesSummaryAsModel)
   val vrn = "999999999"
   val mockPenaltiesConnector: PenaltiesConnector = mock[PenaltiesConnector]
   implicit val hc: HeaderCarrier = HeaderCarrier()
@@ -42,8 +42,8 @@ class PenaltiesServiceSpec extends AnyWordSpecLike with Matchers with MockitoSug
   "Calling getPenaltiesDataForVRN" should {
     "retrieve the penalties summary for the vrn" in {
       when(mockPenaltiesConnector.getPenaltiesDataForVRN(ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
-        .thenReturn(Future.successful(Some(Right(penaltiesSummaryAsModel))))
-      val summary: Option[HttpResult[PenaltiesSummary]] = await(penaltiesService.getPenaltiesInformation("123"))
+        .thenReturn(Future.successful(Right(penaltiesSummaryAsModel)))
+      val summary: HttpResult[PenaltiesSummary] = await(penaltiesService.getPenaltiesInformation("123"))
       summary shouldBe penaltiesSummary
     }
   }

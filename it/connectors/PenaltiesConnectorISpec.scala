@@ -3,6 +3,7 @@ package connectors
 
 import config.AppConfig
 import helpers.IntegrationBaseSpec
+import models.errors.PenaltiesFeatureSwitchError
 import models.penalties.PenaltiesSummary
 import play.api.libs.json.Json
 import play.api.test.Helpers._
@@ -44,7 +45,7 @@ class PenaltiesConnectorISpec extends IntegrationBaseSpec {
         )
 
         val result = await(connector.getPenaltiesDataForVRN("123"))
-        result.get shouldBe Right(expectedContent)
+        result shouldBe Right(expectedContent)
       }
 
       "return an Empty PenaltiesSummary model when given an invalid vrn" in new Test {
@@ -60,12 +61,12 @@ class PenaltiesConnectorISpec extends IntegrationBaseSpec {
         val expectedContent: PenaltiesSummary = PenaltiesSummary.empty
 
         val result = await(connector.getPenaltiesDataForVRN("123"))
-        result.get shouldBe Right(expectedContent)
+        result shouldBe Right(expectedContent)
       }
     }
 
     "when the feature switch is disabled" should {
-      "return None" in new Test {
+      "return the penalties feature switch error" in new Test {
         appConfig.features.penaltiesServiceFeature(false)
         val responseBody = Json.parse(
           """
@@ -74,7 +75,7 @@ class PenaltiesConnectorISpec extends IntegrationBaseSpec {
             |""".stripMargin)
         PenaltiesStub.stubPenaltiesSummary(OK, responseBody, "123")
         val result = await(connector.getPenaltiesDataForVRN("123"))
-        result shouldBe None
+        result shouldBe Left(PenaltiesFeatureSwitchError)
       }
     }
   }

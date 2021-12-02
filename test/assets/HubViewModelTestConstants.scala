@@ -17,13 +17,13 @@
 package assets
 
 import java.time.LocalDate
-
 import assets.BaseTestConstants._
+import models.penalties.PenaltiesSummary
 import models.{CustomerDetails, HubViewModel}
 
 object HubViewModelTestConstants {
 
-  def hubViewModel(customerDetails: CustomerDetails, hasAnyPenalties: Boolean = false): HubViewModel = HubViewModel(
+  def hubViewModel(customerDetails: CustomerDetails, penalties: Option[PenaltiesSummary] = None): HubViewModel = HubViewModel(
     customerDetails,
     vrn,
     LocalDate.parse("2019-01-01"),
@@ -32,7 +32,7 @@ object HubViewModelTestConstants {
     isOverdue = false,
     payments = 1,
     directDebitSetup = None,
-    shouldShowPenaltiesTile = hasAnyPenalties
+    penaltiesSummary = penalties
   )
 
   def hubViewModelBlueBox(customerDetails: CustomerDetails): HubViewModel =

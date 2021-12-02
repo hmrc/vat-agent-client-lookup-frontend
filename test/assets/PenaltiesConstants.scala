@@ -17,6 +17,7 @@
 package assets
 
 import connectors.httpParsers.ResponseHttpParser.HttpResult
+import models.errors.UnexpectedError
 import models.penalties.PenaltiesSummary
 import play.api.libs.json.{JsValue, Json}
 
@@ -52,7 +53,7 @@ object PenaltiesConstants {
     hasAnyPenaltyData = false
   )
 
-  val penaltiesSummaryResponse: Option[HttpResult[PenaltiesSummary]] = Some(Right(penaltiesSummaryAsModel))
-  val penaltiesSummaryNoPenaltiesResponse: Option[HttpResult[PenaltiesSummary]] = Some(Right(penaltiesSummaryAsModelNoPenalties))
-  val penaltiesSummaryNoResponse: Option[HttpResult[PenaltiesSummary]] = None
+  val penaltiesSummaryResponse: HttpResult[PenaltiesSummary] = Right(penaltiesSummaryAsModel)
+  val penaltiesSummaryNoPenaltiesResponse: HttpResult[PenaltiesSummary] = Right(penaltiesSummaryAsModelNoPenalties)
+  val penaltiesSummaryNotFoundResponse: HttpResult[PenaltiesSummary] = Left(UnexpectedError(404, "Not found"))
 }

@@ -30,7 +30,7 @@ import scala.concurrent.Future
 trait MockPenaltiesService extends TestUtil {
   val mockPenaltiesService: PenaltiesService = mock[PenaltiesService]
 
-  def mockPenaltiesResponse(response: Option[HttpResult[PenaltiesSummary]]): OngoingStubbing[Future[Option[HttpResult[PenaltiesSummary]]]] =
+  def mockPenaltiesResponse(response: HttpResult[PenaltiesSummary]): OngoingStubbing[Future[HttpResult[PenaltiesSummary]]] =
     when(mockPenaltiesService.getPenaltiesInformation(ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
       .thenReturn(Future.successful(response))
 }

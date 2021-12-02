@@ -167,11 +167,3 @@ ddNotificationBanner.title = Important
 ddNotificationBanner.p1 = HMRC has had to cancel some VAT Direct Debit agreements.
 ddNotificationBanner.p2 = If your client pays by Direct Debit, ask them to check that their mandate is still in place.
 ddNotificationBanner.p3 = If they have already done this they do not need to do it again.
-
-penaltiesBanner.heading = Late submission and late payment penalties
-penaltiesBanner.totalPoints = Total penalty points: {0}
-penaltiesBanner.crystalisedPenalty = Penalty amount to pay: £{0}
-penaltiesBanner.estimatedPenaltyWithoutCrystalisedPenalty = Estimated penalty amount: £{0}
-penaltiesBanner.estimatedPenaltyWithCrystalisedPenalty = Estimated further penalty amount: £{0}
-penaltiesBanner.linkSingular = Find out why your client has a penalty
-penaltiesBanner.linkPlural = Find out why your client has penalties

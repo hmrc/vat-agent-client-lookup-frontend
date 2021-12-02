@@ -19,6 +19,7 @@ package views.agent
 import assets.BaseTestConstants.vrn
 import assets.CustomerDetailsTestConstants._
 import assets.HubViewModelTestConstants.{hubViewModel, hubViewModelBlueBox}
+import assets.PenaltiesConstants.penaltiesSummaryAsModel
 import assets.messages.partials._
 import assets.messages.{AgentHubMessages => Messages}
 import messages.partials.{NextPaymentPartialMessages, PenaltiesTileMessages}
@@ -188,7 +189,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
     }
 
     "the user is an agent for a client who has penalties" should {
-      lazy val view = injectedView(hubViewModel(customerDetailsAllInfo, hasAnyPenalties = true))(messages,mockConfig,user)
+      lazy val view = injectedView(hubViewModel(customerDetailsAllInfo, penalties = Some(penaltiesSummaryAsModel)))(messages,mockConfig,user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'penalties tile' partial" in {
