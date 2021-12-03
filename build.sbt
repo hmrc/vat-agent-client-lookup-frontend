@@ -26,7 +26,7 @@ val appName = "vat-agent-client-lookup-frontend"
 resolvers += "hmrc-releases-local" at "https://artefacts.tax.service.gov.uk/artifactory/hmrc-releases-local"
 
 val bootstrapPlayVersion       = "5.16.0"
-val playFrontendHmrc           = "1.26.0-play-28"
+val playFrontendHmrc           = "1.28.0-play-28"
 val playPartialsVersion        = "8.2.0-play-28"
 val playLanguageVersion        = "5.1.0-play-28"
 val scalaTestPlusVersion       = "5.1.0"
