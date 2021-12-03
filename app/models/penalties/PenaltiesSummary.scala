@@ -23,7 +23,14 @@ case class PenaltiesSummary(noOfPoints: Int,
                             noOfCrystalisedPenalties: Int,
                             estimatedPenaltyAmount: BigDecimal,
                             crystalisedPenaltyAmountDue: BigDecimal,
-                            hasAnyPenaltyData: Boolean)
+                            hasAnyPenaltyData: Boolean) {
+
+  val hasActivePenalties: Boolean = noOfPoints > 0 || noOfCrystalisedPenalties > 0  || noOfEstimatedPenalties > 0
+
+  val hasMultiplePenalties: Boolean = {
+     noOfPoints + noOfEstimatedPenalties + noOfCrystalisedPenalties > 1
+  }
+}
 
 object PenaltiesSummary {
   implicit val reads: Reads[PenaltiesSummary] = Json.reads[PenaltiesSummary]

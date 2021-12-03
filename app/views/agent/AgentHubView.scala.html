@@ -16,6 +16,7 @@
 
 @import config.AppConfig
 @import views.html.agent.partials._
+@import views.html.helpers.PenaltiesBanner
 
 @this(mainTemplate: MainTemplate,
       clientDetailsPartial: ClientDetailsPartial,
@@ -29,7 +30,8 @@
       govukNotificationBanner: GovukNotificationBanner,
       nextPaymentPartial: NextPaymentPartial,
       nextReturnPartial: NextReturnPartial,
-      historyPartial: HistoryPartial)
+      historyPartial: HistoryPartial,
+      penaltiesBanner: PenaltiesBanner)
 
 @(model: HubViewModel)(implicit messages: Messages, appConfig: AppConfig, user: User[_])
 
@@ -80,6 +82,10 @@
       @messages("agentHub.changeClient")
     </a>
   </span>
+
+  @model.penaltiesSummary.map { summary =>
+    @penaltiesBanner(summary)
+  }
 
   <div class="flex-container govuk-grid-row">
     @nextPaymentPartial(model.details.isHybridUser, model.nextPaymentDate, model.payments, model.isOverdue, model.directDebitSetup)
