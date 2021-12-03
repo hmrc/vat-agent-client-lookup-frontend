@@ -200,10 +200,11 @@ class AgentHubViewSpec extends ViewBaseSpec {
 
       "display the Penalties notification banner" which {
 
-        lazy val penaltiesBanner = element("#govuk-notification-banner-penalties-banner")
+        lazy val penaltiesBanner = element(".govuk-notification-banner")
+
 
         "has the correct heading" in {
-          penaltiesBanner.select("h2").text shouldBe penaltiesBannerHeading
+          penaltiesBanner.select("#govuk-notification-banner-title-penalties-banner").text shouldBe penaltiesBannerHeading
         }
 
         "has content relating to the number of penalties the user has" in {
