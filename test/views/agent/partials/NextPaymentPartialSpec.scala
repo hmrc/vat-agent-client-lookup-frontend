@@ -17,7 +17,6 @@
 package views.agent.partials
 
 import java.time.LocalDate
-
 import messages.partials.{NextPaymentPartialMessages => Messages}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -40,7 +39,7 @@ class NextPaymentPartialSpec extends ViewBaseSpec {
 
     "there are no payments due and no DD information was retrieved" should {
 
-      lazy val view = nextPaymentPartial(hybridUser = false, None, 0, isOverdue = false, None)
+      lazy val view = nextPaymentPartial(hybridUser = false, None, 0, isOverdue = false, isError = false, None)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the correct heading" in {
@@ -69,7 +68,7 @@ class NextPaymentPartialSpec extends ViewBaseSpec {
 
     "there is one payment and it is not overdue" should {
 
-      lazy val view = nextPaymentPartial(hybridUser = false, Some(LocalDate.parse("2018-01-01")), 1, isOverdue = false, None)
+      lazy val view = nextPaymentPartial(hybridUser = false, Some(LocalDate.parse("2018-01-01")), 1, isOverdue = false, isError = false, None)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the date of the payment correctly" in {
@@ -79,7 +78,7 @@ class NextPaymentPartialSpec extends ViewBaseSpec {
 
     "there is one payment that is overdue" should {
 
-      lazy val view = nextPaymentPartial(hybridUser = false, Some(LocalDate.parse("2018-01-01")), 1, isOverdue = true, None)
+      lazy val view = nextPaymentPartial(hybridUser = false, Some(LocalDate.parse("2018-01-01")), 1, isOverdue = true, isError = false, None)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the overdue label next to the payment date" in {
@@ -89,7 +88,7 @@ class NextPaymentPartialSpec extends ViewBaseSpec {
 
     "there is more than one payment" should {
 
-      lazy val view = nextPaymentPartial(hybridUser = false, Some(LocalDate.parse("2018-01-01")), 10, isOverdue = false, None)
+      lazy val view = nextPaymentPartial(hybridUser = false, Some(LocalDate.parse("2018-01-01")), 10, isOverdue = false, isError = false, None)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the correct title" in {
@@ -101,9 +100,23 @@ class NextPaymentPartialSpec extends ViewBaseSpec {
       }
     }
 
+    "there is no payments returned due to Financial API failure" should {
+
+      lazy val view = nextPaymentPartial(hybridUser = false, Some(LocalDate.parse("2018-01-01")), 1, isOverdue = false, isError = true, None)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "display the correct title" in {
+        elementText(Selectors.heading) shouldBe Messages.heading
+      }
+
+      "display the error message" in {
+        elementText(Selectors.content) shouldBe Messages.errorMessage
+      }
+    }
+
     "the user is hybrid" should {
 
-      lazy val view = nextPaymentPartial(hybridUser = true, None, 0, isOverdue = false, None)
+      lazy val view = nextPaymentPartial(hybridUser = true, None, 0, isOverdue = false, isError = false, None)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not exist" in {
@@ -113,7 +126,7 @@ class NextPaymentPartialSpec extends ViewBaseSpec {
 
     "the client has a direct debit set up" should {
 
-      lazy val view = nextPaymentPartial(hybridUser = false, Some(LocalDate.parse("2018-01-01")), 1, isOverdue = false, Some(true))
+      lazy val view = nextPaymentPartial(hybridUser = false, Some(LocalDate.parse("2018-01-01")), 1, isOverdue = false, isError = false, Some(true))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the DD set up label" which {
@@ -130,7 +143,7 @@ class NextPaymentPartialSpec extends ViewBaseSpec {
 
     "the client does not have a direct debit set up" should {
 
-      lazy val view = nextPaymentPartial(hybridUser = false, Some(LocalDate.parse("2018-01-01")), 1, isOverdue = false, Some(false))
+      lazy val view = nextPaymentPartial(hybridUser = false, Some(LocalDate.parse("2018-01-01")), 1, isOverdue = false, isError = false, Some(false))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the DD is not set up label" which {
