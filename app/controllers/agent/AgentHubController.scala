@@ -23,11 +23,10 @@ import connectors.httpParsers.ResponseHttpParser.HttpResult
 import controllers.BaseController
 import controllers.predicates.AuthoriseAsAgentWithClient
 import models.penalties.PenaltiesSummary
-import models.{Charge, CustomerDetails, HubViewModel, User}
+import models.{CustomerDetails, HubViewModel, User, VatDetailsDataModel}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{CustomerDetailsService, DateService, FinancialDataService, PenaltiesService}
 import views.html.agent.AgentHubView
-
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -45,7 +44,7 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
   def show: Action[AnyContent] = authenticate.async { implicit user =>
     for {
       customerDetails <- customerDetailsService.getCustomerDetails(user.vrn)
-      payments <- if (userIsHybrid(customerDetails)) Future.successful(Seq()) else retrievePayments
+      payments <- if (userIsHybrid(customerDetails)) Future.successful(VatDetailsDataModel(Seq(), isError = false)) else retrievePayments
       penaltiesInformation <- penaltiesService.getPenaltiesInformation(user.vrn)
     } yield {
       customerDetails match {
@@ -66,7 +65,7 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
     }
   }
 
-  def constructViewModel(details: CustomerDetails, payments: Seq[Charge],
+  def constructViewModel(details: CustomerDetails, paymentsModel: VatDetailsDataModel,
                          penaltiesInformation: Option[PenaltiesSummary])(implicit user: User[_]): HubViewModel = {
 
     val showBlueBox: Boolean = user.session.get(SessionKeys.viewedDDInterrupt).contains("blueBox")
@@ -75,13 +74,13 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
       case Some("false") => Some(false)
       case _ => None
     }
-    val nextPaymentDate = payments.headOption.map(payment => payment.dueDate)
-    val paymentsNumber  = payments.length
+    val nextPaymentDate = paymentsModel.payments.headOption.map(payment => payment.dueDate)
+    val paymentsNumber  = paymentsModel.payments.length
     val isOverdue       =
       if(paymentsNumber > 1) {
         false
       } else {
-        payments.headOption.fold(false) {
+        paymentsModel.payments.headOption.fold(false) {
           payment => payment.dueDate.isBefore(dateService.now()) && !payment.ddCollectionInProgress
         }
       }
@@ -94,16 +93,17 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
       showBlueBox,
       nextPaymentDate,
       isOverdue,
+      paymentsModel.isError,
       paymentsNumber,
       hasDDSetup,
       shouldShowPenaltiesTile
     )
   }
 
-  private def retrievePayments(implicit user: User[_]): Future[Seq[Charge]] =
+  private def retrievePayments(implicit user: User[_]): Future[VatDetailsDataModel] =
     financialDataService.getPayment(user.vrn) map {
-      case Right(payments) => payments
-      case Left (_) => Seq()
+      case Right(payments) => VatDetailsDataModel(payments, isError = false)
+      case Left(_) => VatDetailsDataModel(Seq(), isError = true)
     }
 
   private def userIsHybrid(accountDetails: HttpResult[CustomerDetails]): Boolean =

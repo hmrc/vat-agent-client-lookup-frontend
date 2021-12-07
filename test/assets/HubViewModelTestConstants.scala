@@ -17,7 +17,6 @@
 package assets
 
 import java.time.LocalDate
-
 import assets.BaseTestConstants._
 import models.{CustomerDetails, HubViewModel}
 
@@ -30,6 +29,7 @@ object HubViewModelTestConstants {
     showBlueBox = false,
     Some(LocalDate.parse("2020-01-01")),
     isOverdue = false,
+    isError = false,
     payments = 1,
     directDebitSetup = None,
     shouldShowPenaltiesTile = hasAnyPenalties

@@ -24,15 +24,17 @@
   nextPaymentDate: Option[LocalDate],
   payments: Int,
   isOverdue: Boolean,
+  isError: Boolean,
   directDebitSetup: Option[Boolean]
 )(implicit messages: Messages, appConfig: AppConfig)
 
 @hasMultiple = @{ payments > 1  }
 
 @paragraphContent = @{
-  (nextPaymentDate, payments) match {
-    case (Some(date), 1) => displayDate(date)
-    case (Some(date), _) => messages("nextPaymentPartial.multiple", payments)
+  (nextPaymentDate, payments, isError) match {
+    case (Some(date), 1, false) => displayDate(date)
+    case (Some(date), _, false) => messages("nextPaymentPartial.multiple", payments)
+    case (_, _, true) => messages("nextPaymentPartial.error")
     case _ => messages("nextPaymentPartial.noPayments")
   }
 }

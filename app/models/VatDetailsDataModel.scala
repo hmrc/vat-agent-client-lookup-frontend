@@ -14,17 +14,8 @@
  * limitations under the License.
  */
 
-package messages.partials
+package models
 
-object NextPaymentPartialMessages {
-  val heading: String = "Next payment due"
-  val headingPayments: String = "Payments due"
-  val noPayments: String = "No payments due right now"
-  val payments: String = "You have 10 payments due"
-  val linkText: String = "Check what you owe"
-  val date: String = "1 January 2018"
-  val overdue: String = "overdue"
-  val ddSetUp: String = "Direct Debit is set up"
-  val ddNotSetUp: String = "No Direct Debit set up"
-  val errorMessage: String = "Sorry, there is a problem with the service. Try again later."
-}
+case class VatDetailsDataModel(payments: Seq[Charge],
+                               isError: Boolean)
+

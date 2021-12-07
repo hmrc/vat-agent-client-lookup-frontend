@@ -24,6 +24,7 @@ case class HubViewModel(details: CustomerDetails,
                         showBlueBox: Boolean,
                         nextPaymentDate: Option[LocalDate],
                         isOverdue: Boolean,
+                        isError: Boolean,
                         payments: Int,
                         directDebitSetup: Option[Boolean],
                         shouldShowPenaltiesTile: Boolean)
