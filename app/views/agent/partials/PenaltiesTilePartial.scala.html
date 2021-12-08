@@ -18,15 +18,14 @@
 
 @this()
 
-@(shouldTileBeDisplayed: Boolean)(implicit messages: Messages, appConfig: AppConfig)
+@()(implicit messages: Messages, appConfig: AppConfig)
 
-@if(shouldTileBeDisplayed) {
-    <div class="govuk-grid-column-one-third" id="penalties-tile">
-        <h3 id="penalties-heading" class="govuk-heading-s govuk-!-margin-bottom-1">
-            <a id="penalties-link" href="@{appConfig.penaltiesFrontendUrl}" class="govuk-link">
-                @messages("penaltiesTile.heading")
-            </a>
-        </h3>
-        <p class="govuk-body" id="penalties-tile-content">@messages("penaltiesTile.content")</p>
-    </div>
-}
+<div class="govuk-grid-column-one-third" id="penalties-tile">
+    <h3 id="penalties-heading" class="govuk-heading-s govuk-!-margin-bottom-1">
+        <a id="penalties-link" href="@{appConfig.penaltiesFrontendUrl}" class="govuk-link">
+            @messages("penaltiesTile.heading")
+        </a>
+    </h3>
+    <p class="govuk-body" id="penalties-tile-content">@messages("penaltiesTile.content")</p>
+</div>
+

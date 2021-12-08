@@ -55,7 +55,7 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
             if(details.deregistration.isDefined && details.deregistration.flatMap(_.effectDateOfCancellation).isEmpty) {
               logger.warn("[AgentHubController][show] - 'deregistration' contained no 'effectDateOfCancellation'")
             }
-            val optPenaltiesSummary: Option[PenaltiesSummary] = penaltiesInformation.flatMap(_.fold(_ => None, Some(_)))
+            val optPenaltiesSummary: Option[PenaltiesSummary] = penaltiesInformation.fold(_ => None, Some(_))
             Ok(agentHubView(constructViewModel(details, payments, optPenaltiesSummary)))
           }
         case Left(error) =>
@@ -84,7 +84,6 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
           payment => payment.dueDate.isBefore(dateService.now()) && !payment.ddCollectionInProgress
         }
       }
-    val shouldShowPenaltiesTile: Boolean = penaltiesInformation.fold(false)(penalties => penalties.hasAnyPenaltyData)
 
     HubViewModel(
       details,
@@ -96,7 +95,7 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
       paymentsModel.isError,
       paymentsNumber,
       hasDDSetup,
-      shouldShowPenaltiesTile
+      penaltiesInformation
     )
   }
 

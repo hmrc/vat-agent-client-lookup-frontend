@@ -29,3 +29,7 @@ case class UnexpectedError(status: Int, message: String) extends Error
 case object Migration         extends Error
 case object NotSignedUp       extends Error
 case object DirectDebitError  extends Error
+
+case object PenaltiesFeatureSwitchError extends Error {
+  val message: String = "A feature switch is preventing the API call"
+}

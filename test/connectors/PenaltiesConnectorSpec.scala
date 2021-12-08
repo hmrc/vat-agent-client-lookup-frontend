@@ -18,6 +18,7 @@ package connectors
 
 import assets.PenaltiesConstants.penaltiesSummaryAsModel
 import mocks.MockHttp
+import models.errors.PenaltiesFeatureSwitchError
 import play.api.test.Helpers._
 import utils.TestUtil
 
@@ -30,14 +31,14 @@ class PenaltiesConnectorSpec extends TestUtil with MockHttp {
       "return 200 and a PenaltiesSummary model" in {
         mockConfig.features.penaltiesServiceFeature(true)
         setupMockHttpGet(s"/vat/penalties/summary/123")(Right(penaltiesSummaryAsModel))
-        await(connector.getPenaltiesDataForVRN("123")) shouldBe Some(Right(penaltiesSummaryAsModel))
+        await(connector.getPenaltiesDataForVRN("123")) shouldBe Right(penaltiesSummaryAsModel)
       }
     }
 
     "when the feature switch is disabled" should {
-      "return None" in {
+      "return the penalties feature switch error" in {
         mockConfig.features.penaltiesServiceFeature(false)
-        await(connector.getPenaltiesDataForVRN("123")) shouldBe None
+        await(connector.getPenaltiesDataForVRN("123")) shouldBe Left(PenaltiesFeatureSwitchError)
       }
     }
   }

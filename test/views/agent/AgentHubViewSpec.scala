@@ -19,8 +19,10 @@ package views.agent
 import assets.BaseTestConstants.vrn
 import assets.CustomerDetailsTestConstants._
 import assets.HubViewModelTestConstants.{hubViewModel, hubViewModelBlueBox}
+import assets.PenaltiesConstants.{penaltiesSummaryAsModel, penaltiesSummaryAsModelNoPenalties}
 import assets.messages.partials._
 import assets.messages.{AgentHubMessages => Messages}
+import messages.PenaltiesMessages.{multiplePenaltiesBannerLinkText, penaltiesBannerHeading}
 import messages.partials.{NextPaymentPartialMessages, PenaltiesTileMessages}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -188,12 +190,55 @@ class AgentHubViewSpec extends ViewBaseSpec {
     }
 
     "the user is an agent for a client who has penalties" should {
-      lazy val view = injectedView(hubViewModel(customerDetailsAllInfo, hasAnyPenalties = true))(messages,mockConfig,user)
+      lazy val view = injectedView(hubViewModel(customerDetailsAllInfo, penalties = Some(penaltiesSummaryAsModel)))(messages,mockConfig,user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'penalties tile' partial" in {
         elementText("#penalties-tile > h3") shouldBe PenaltiesTileMessages.title
         elementText("#penalties-tile > p") shouldBe PenaltiesTileMessages.description
+      }
+
+      "display the Penalties notification banner" which {
+
+        lazy val penaltiesBanner = element(".govuk-notification-banner")
+
+
+        "has the correct heading" in {
+          penaltiesBanner.select("#govuk-notification-banner-title-penalties-banner").text shouldBe penaltiesBannerHeading
+        }
+
+        "has content relating to the number of penalties the user has" in {
+          penaltiesBanner.select(".govuk-notification-banner__content > div").text shouldBe
+            "Penalty amount to pay: £54.32 Estimated further penalty amount: £123.45 Total penalty points: 3"
+        }
+
+        "has a link to the penalties service" which {
+
+          "has the correct text" in {
+            penaltiesBanner.select("a").text shouldBe multiplePenaltiesBannerLinkText
+          }
+
+          "has the correct link destination" in {
+            penaltiesBanner.select("a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
+          }
+        }
+      }
+    }
+
+    "the user has no penalties" should {
+
+      lazy val view = injectedView(hubViewModel(customerDetailsAllInfo, penalties = Some(penaltiesSummaryAsModelNoPenalties)))(messages,mockConfig,user)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      lazy val penaltiesBanner = "#govuk-notification-banner-penalties-banner"
+      lazy val penaltiesSection = "#view-penalties-details"
+
+      "not display the penalties and appeal section" in {
+        elementExtinct(penaltiesSection)
+      }
+
+      "not display the penalties notification banner" in {
+        elementExtinct(penaltiesBanner)
       }
     }
   }

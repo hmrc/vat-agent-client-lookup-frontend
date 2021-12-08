@@ -14,18 +14,12 @@
  * limitations under the License.
  */
 
-package services
+package messages
 
-import connectors.PenaltiesConnector
-import connectors.httpParsers.ResponseHttpParser.HttpResult
-import models.penalties.PenaltiesSummary
-import uk.gov.hmrc.http.HeaderCarrier
+object PenaltiesMessages {
 
-import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+  val penaltiesBannerHeading = "Late submission and late payment penalties"
+  val singlePenaltyBanerLinkText = "Find out why your client has a penalty"
+  val multiplePenaltiesBannerLinkText = "Find out why your client has penalties"
 
-class PenaltiesService @Inject()(penaltiesConnector: PenaltiesConnector){
-  def getPenaltiesInformation(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[PenaltiesSummary]] = {
-    penaltiesConnector.getPenaltiesDataForVRN(vrn)
-  }
 }

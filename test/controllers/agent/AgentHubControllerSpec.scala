@@ -24,6 +24,7 @@ import controllers.ControllerBaseSpec
 import mocks.services._
 import models.HubViewModel
 import models.errors.UnexpectedError
+import models.penalties.PenaltiesSummary
 import org.jsoup.Jsoup
 import play.api.mvc.Result
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, status}
@@ -62,7 +63,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           mockCustomerDetailsSuccess(customerDetailsAllInfo)
           setupMockDateService(staticDate)
           mockPaymentResponse(paymentResponse)
-          mockPenaltiesResponse(penaltiesSummaryNoResponse)
+          mockPenaltiesResponse(penaltiesSummaryNoPenaltiesResponse)
 
           val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
@@ -77,7 +78,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           mockCustomerDetailsSuccess(customerDetailsAllPending.copy(missingTrader = true))
           setupMockDateService(staticDate)
           mockPaymentResponse(paymentResponse)
-          mockPenaltiesResponse(penaltiesSummaryNoResponse)
+          mockPenaltiesResponse(penaltiesSummaryNoPenaltiesResponse)
 
           val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
@@ -94,7 +95,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
         mockCustomerDetailsSuccess(customerDetailsFnameOnly)
         setupMockDateService(staticDate)
         mockPaymentResponse(paymentResponse)
-        mockPenaltiesResponse(penaltiesSummaryNoResponse)
+        mockPenaltiesResponse(penaltiesSummaryNoPenaltiesResponse)
 
         val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
@@ -136,6 +137,23 @@ class AgentHubControllerSpec extends ControllerBaseSpec
       }
     }
 
+    "the penalties call returns a 404 status" should {
+
+      "render the AgentHubPage" in {
+        mockAgentAuthorised()
+        mockCustomerDetailsSuccess(customerDetailsFnameOnly)
+        setupMockDateService(staticDate)
+        mockPaymentResponse(paymentResponse)
+        mockPenaltiesResponse(penaltiesSummaryNotFoundResponse)
+
+        val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
+
+        status(result) shouldBe OK
+        messages(Jsoup.parse(contentAsString(result)).select("h1").text) shouldBe "Your client’s VAT details"
+        messages(Jsoup.parse(contentAsString(result)).select("#penalties-heading").text) shouldBe ""
+      }
+    }
+
     "the penalties call fails" should {
 
       "render the AgentHubPage" in {
@@ -143,7 +161,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
         mockCustomerDetailsSuccess(customerDetailsFnameOnly)
         setupMockDateService(staticDate)
         mockPaymentResponse(paymentResponse)
-        mockPenaltiesResponse(Some(Left(UnexpectedError(500, ""))))
+        mockPenaltiesResponse(Left(UnexpectedError(500, "")))
 
         val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
@@ -160,7 +178,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
         mockCustomerDetailsError(BaseTestConstants.unexpectedError)
         setupMockDateService(staticDate)
         mockPaymentResponse(paymentResponse)
-        mockPenaltiesResponse(penaltiesSummaryNoResponse)
+        mockPenaltiesResponse(penaltiesSummaryNoPenaltiesResponse)
 
         val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
@@ -175,7 +193,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
         mockAgentAuthorised()
         mockCustomerDetailsSuccess(customerDetailsHybrid)
         setupMockDateService(staticDate)
-        mockPenaltiesResponse(penaltiesSummaryNoResponse)
+        mockPenaltiesResponse(penaltiesSummaryNotFoundResponse)
 
         val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
         status(result) shouldBe OK
@@ -215,8 +233,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           isOverdue = true,
           isError = false,
           payments = 1,
-          directDebitSetup = None,
-          shouldShowPenaltiesTile = false
+          directDebitSetup = None
         )
 
         val result = controller.constructViewModel(customerDetailsAllInfo, onePaymentModelOverdue, None)(userWithBlueBox)
@@ -236,8 +253,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           isOverdue = false,
           isError = false,
           payments = 2,
-          directDebitSetup = None,
-          shouldShowPenaltiesTile = false
+          directDebitSetup = None
         )
 
         val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelOneOverdue, None)(userWithBlueBox)
@@ -257,8 +273,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           isOverdue = false,
           isError = false,
           payments = 2,
-          directDebitSetup = None,
-          shouldShowPenaltiesTile = false
+          directDebitSetup = None
         )
 
         val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoneOverdue, None)(userWithBlueBox)
@@ -278,8 +293,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           isOverdue = false,
           isError = false,
           payments = 0,
-          directDebitSetup = None,
-          shouldShowPenaltiesTile = false
+          directDebitSetup = None
         )
 
         val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoPayments, None)(userWithBlueBox)
@@ -299,8 +313,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           isOverdue = false,
           isError = false,
           payments = 2,
-          directDebitSetup = Some(true),
-          shouldShowPenaltiesTile = false
+          directDebitSetup = Some(true)
         )
 
         val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoneOverdue, None)(userHasDDSetup)
@@ -320,8 +333,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           isOverdue = false,
           isError = false,
           payments = 2,
-          directDebitSetup = Some(false),
-          shouldShowPenaltiesTile = false
+          directDebitSetup = Some(false)
         )
 
         val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoneOverdue, None)(userHasDDNotSetup)
@@ -342,7 +354,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           isError = false,
           payments = 2,
           directDebitSetup = None,
-          shouldShowPenaltiesTile = true
+          penaltiesSummary = Some(penaltiesSummaryAsModel)
         )
 
         val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoneOverdue, Some(penaltiesSummaryAsModel))(userWithBlueBox)
@@ -363,7 +375,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           isError = false,
           payments = 2,
           directDebitSetup = None,
-          shouldShowPenaltiesTile = false
+          penaltiesSummary = Some(PenaltiesSummary(0, 0, 0, 0, 0, false))
         )
 
         val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoneOverdue, Some(penaltiesSummaryAsModelNoPenalties))(userWithBlueBox)
@@ -385,7 +397,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           isError = false,
           payments = 2,
           directDebitSetup = None,
-          shouldShowPenaltiesTile = false
+          penaltiesSummary = None
         )
 
         val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoneOverdue, None)(userWithBlueBox)

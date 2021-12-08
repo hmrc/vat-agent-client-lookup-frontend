@@ -29,7 +29,7 @@ class PenaltiesTilePartialSpec extends ViewBaseSpec {
   "PenaltiesTilePartial view" when {
 
     "true is provided to the partial" when {
-      lazy val view = penaltiesTilePartial(shouldTileBeDisplayed = true)(messages, mockConfig)
+      lazy val view = penaltiesTilePartial()(messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct title of ${PenaltiesTileMessages.title}" in {

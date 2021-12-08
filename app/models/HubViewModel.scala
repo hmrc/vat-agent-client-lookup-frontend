@@ -16,6 +16,8 @@
 
 package models
 
+import models.penalties.PenaltiesSummary
+
 import java.time.LocalDate
 
 case class HubViewModel(details: CustomerDetails,
@@ -27,4 +29,4 @@ case class HubViewModel(details: CustomerDetails,
                         isError: Boolean,
                         payments: Int,
                         directDebitSetup: Option[Boolean],
-                        shouldShowPenaltiesTile: Boolean)
+                        penaltiesSummary: Option[PenaltiesSummary] = None)
