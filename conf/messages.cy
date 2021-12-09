@@ -197,3 +197,14 @@ ddNotificationBanner.title = Pwysig
 ddNotificationBanner.p1 = Mae CThEM wedi gorfod canslo rhai cytundebau Debyd Uniongyrchol TAW.
 ddNotificationBanner.p2 = Os yw’ch cleient yn talu drwy Ddebyd Uniongyrchol, gofynnwch iddo wirio bod ei fandad yn dal i fod ar waith.
 ddNotificationBanner.p3 = Os yw eisoes wedi gwirio bod ei fandad yn dal i fod ar waith, nid oes angen iddo wneud hyn eto.
+
+penaltiesTile.heading = Cosbau ac apeliadau
+penaltiesTile.content = Bwrw golwg dros gosbau eich cleient, apelio yn erbyn cosb a gweld statws unrhyw apeliadau presennol.
+
+penaltiesBanner.heading = Cosbau am gyflwyno’n hwyr ac am dalu’n hwyr
+penaltiesBanner.totalPoints = Cyfanswm y pwyntiau cosb: {0}
+penaltiesBanner.crystalisedPenalty = Swm y gosb sydd i’w dalu: £{0}
+penaltiesBanner.estimatedPenaltyWithoutCrystalisedPenalty = Amcangyfrif o swm y gosb: £{0}
+penaltiesBanner.estimatedPenaltyWithCrystalisedPenalty = Amcangyfrif o swm y gosb bellach: £{0}
+penaltiesBanner.linkSingular = Cael gwybod pam mae gan eich cleient gosb
+penaltiesBanner.linkPlural = Cael gwybod pam mae gan eich cleient gosbau
