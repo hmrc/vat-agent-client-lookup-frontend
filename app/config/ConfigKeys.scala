@@ -80,6 +80,9 @@ object ConfigKeys {
   val agentServicesHost: String = "agent-services.host"
   val agentServicesUrl: String = "agent-services.url"
 
+  val agentClientHost: String = "agent-client-services.host"
+  val agentClientServicesUrl: String = "agent-services.url"
+
   val signUpServiceHost: String = "vat-sign-up-frontend.host"
   val signUpServiceUrl: String = "vat-sign-up-frontend.url"
 

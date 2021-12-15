@@ -60,11 +60,11 @@ class NotAuthorisedForClientViewSpec extends ViewBaseSpec {
     "have a link in the paragraph" which {
 
       "has the correct link text" in {
-        elementText(Selectors.agentServicesLink) shouldBe Messages.agentServicesAccount
+        elementText(Selectors.agentServicesLink) shouldBe Messages.clientAuthorise
       }
 
       "has the correct link location" in {
-        element(Selectors.agentServicesLink).attr("href") shouldBe mockConfig.agentServicesUrl
+        element(Selectors.agentServicesLink).attr("href") shouldBe mockConfig.agentClientServicesUrl
       }
     }
 
@@ -82,12 +82,11 @@ class NotAuthorisedForClientViewSpec extends ViewBaseSpec {
     "have a Sign out button" which {
 
       "has the correct text" in {
-        elementText(Selectors.button) shouldBe BaseMessages.signOut
+        elementText(Selectors.button) shouldBe BaseMessages.agentAccount
       }
 
       "have the correct link location" in {
-        element(Selectors.button).attr("href") shouldBe
-          controllers.routes.SignOutController.signOut(feedbackOnSignOut = true).url
+        element(Selectors.button).attr("href") shouldBe mockConfig.agentServicesUrl
       }
     }
   }

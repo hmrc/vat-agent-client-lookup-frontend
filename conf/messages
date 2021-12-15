@@ -21,9 +21,10 @@ unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to
 unauthorised.agent.setUpAccount = set up an agent services account
 
-unauthorised.agentForClient.title = You cannot manage this client’s VAT details
-unauthorised.agentForClient.forMoreInformation = For more information,
-unauthorised.agentForClient.agentServicesAccount = visit your Agent Services Account
+unauthorised.agentForClient.title = You’re not authorised to manage this client’s VAT details
+unauthorised.agentForClient.forMoreInformation = You can
+unauthorised.agentForClient.clientAuthorise = ask your client to authorise you
+unauthorised.agentForClient.agentServicesAccount = Go to your agent services account
 
 common.confirmAndContinue = Confirm and continue
 common.agentService = Your client’s VAT details
