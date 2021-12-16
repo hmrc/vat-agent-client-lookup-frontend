@@ -64,7 +64,7 @@ class NotAuthorisedForClientViewSpec extends ViewBaseSpec {
       }
 
       "has the correct link location" in {
-        element(Selectors.agentServicesLink).attr("href") shouldBe mockConfig.agentClientServicesUrl
+        element(Selectors.agentServicesLink).attr("href") shouldBe mockConfig.agentInvitationsFrontendUrl
       }
     }
 

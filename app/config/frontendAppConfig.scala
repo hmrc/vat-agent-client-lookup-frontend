@@ -72,8 +72,7 @@ trait AppConfig {
   val financialTransactionsBaseUrl: String
   val contactFormServiceIdentifier: String
   val penaltiesUrl: String => String
-  val agentClientServicesHost: String
-  val agentClientServicesUrl: String
+  val agentInvitationsFrontendUrl: String
 }
 
 @Singleton
@@ -154,8 +153,8 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override val agentServicesHost: String = sc.getString(ConfigKeys.agentServicesHost)
   override val agentServicesUrl: String = agentServicesHost + sc.getString(ConfigKeys.agentServicesUrl)
 
-  override val agentClientServicesHost: String = sc.getString(ConfigKeys.agentClientHost)
-  override val agentClientServicesUrl: String = agentClientServicesHost + sc.getString(ConfigKeys.agentClientServicesUrl)
+  override val agentInvitationsFrontendUrl: String = sc.getString(ConfigKeys.agentInvitationsFrontendHost) +
+    sc.getString(ConfigKeys.agentInvitationsFrontendUrl)
 
   override lazy val staticDateValue: String = sc.getString(Keys.staticDateValue)
 
