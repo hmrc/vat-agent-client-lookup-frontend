@@ -26,6 +26,7 @@ object BaseMessages {
   val confirmAndContinue = "Confirm and continue"
   val saveAndContinue = "Save and continue"
   val signOut = "Sign out"
+  val agentAccount = "Go to your agent services account"
   val finish = "Finish"
   val back = "Back"
   val errorHeading = "You have one or more errors"

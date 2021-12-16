@@ -33,13 +33,13 @@
 
   <p class="govuk-body">
     @messages("unauthorised.agentForClient.forMoreInformation")
-    <a class="govuk-link" href="@appConfig.agentServicesUrl">
-      @messages("unauthorised.agentForClient.agentServicesAccount")</a>@messages("common.fullStop")
+    <a class="govuk-link" href="@appConfig.agentInvitationsFrontendUrl">
+      @messages("unauthorised.agentForClient.clientAuthorise")</a>@messages("common.fullStop")
   </p>
 
     @govukButton(Button(
-        href = Some(controllers.routes.SignOutController.signOut(feedbackOnSignOut = true).url),
-        content = Text(messages("base.signOut"))
+        href = Some(appConfig.agentServicesUrl),
+        content = Text(messages("unauthorised.agentForClient.agentServicesAccount"))
         ))
 
 }

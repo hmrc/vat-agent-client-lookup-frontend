@@ -18,7 +18,7 @@ package assets.messages
 
 object AgentUnauthorisedForClientPageMessages {
 
-  val title = "You cannot manage this client’s VAT details"
-  val agentServicesAccount = "visit your Agent Services Account"
-  val information = s"For more information, $agentServicesAccount."
+  val title = "You’re not authorised to manage this client’s VAT details"
+  val clientAuthorise = "ask your client to authorise you"
+  val information = s"You can $clientAuthorise."
 }
