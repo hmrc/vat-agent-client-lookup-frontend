@@ -41,6 +41,28 @@
   <p id="noti-p3" class="govuk-body">@messages("ddNotificationBanner.p3")</p>
 }
 
+@rowOne(hasPenaltiesTile: Boolean) = {
+    @clientDetailsPartial()
+    @vatCertificatePartial()
+    @if(hasPenaltiesTile) {
+        @penaltiesTilePartial()
+    } else {
+        @signUpPartial(model.details.mandationStatus, model.vrn)
+        @optOutForMTDVATPartial(model.details.mandationStatus)
+    }
+}
+
+@rowTwo(hasPenaltiesTile: Boolean) = {
+    @if(hasPenaltiesTile) {
+        @signUpPartial(model.details.mandationStatus, model.vrn)
+        @optOutForMTDVATPartial(model.details.mandationStatus)
+        @registrationPartial(model.details, model.currentDate)
+    } else {
+        @registrationPartial(model.details, model.currentDate)
+    }
+}
+
+
 @blueBox = {
   @if(model.showBlueBox) {
     @govukNotificationBanner(NotificationBanner(
@@ -103,13 +125,10 @@
   ))
 
   <div class="govuk-grid-row">
-    @clientDetailsPartial()
-    @vatCertificatePartial()
-    @if(model.penaltiesSummary.fold(false)(_.hasAnyPenaltyData)){
-        @penaltiesTilePartial()
-    }
-    @signUpPartial(model.details.mandationStatus, model.vrn)
-    @optOutForMTDVATPartial(model.details.mandationStatus)
-    @registrationPartial(model.details, model.currentDate)
+    @rowOne(model.penaltiesSummary.fold(false)(_.hasAnyPenaltyData))
+  </div>
+
+<div class="govuk-grid-row">
+    @rowTwo(model.penaltiesSummary.fold(false)(_.hasAnyPenaltyData))
   </div>
 }
