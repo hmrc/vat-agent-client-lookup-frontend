@@ -75,7 +75,6 @@ class AgentUnauthorisedForClientControllerSpec extends ControllerBaseSpec with M
       }
 
       "remove the client vrn from session" in {
-        session(result).get(SessionKeys.clientVRNDeprecated) shouldBe None
         session(result).get(SessionKeys.clientVRN) shouldBe None
       }
     }

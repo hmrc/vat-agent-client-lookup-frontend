@@ -53,14 +53,12 @@ trait TestUtil extends AnyWordSpecLike with Matchers with GuiceOneAppPerSuite wi
 
   lazy val fakeRequestWithVrnAndRedirectUrl: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest().withSession(
-      SessionKeys.clientVRNDeprecated -> vrn,
       SessionKeys.clientVRN -> vrn,
       SessionKeys.redirectUrl -> "/homepage"
     )
 
   lazy val fakeRequestWithMtdVatAgentData: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest().withSession(
-      SessionKeys.clientVRNDeprecated -> vrn,
       SessionKeys.clientVRN -> vrn,
       SessionKeys.redirectUrl -> "/homepage",
       SessionKeys.clientName -> "l'biz",

@@ -25,7 +25,7 @@ import play.api.test.Helpers.{INTERNAL_SERVER_ERROR, UNAUTHORIZED}
 trait BasePageISpec extends IntegrationBaseSpec {
 
   def formatSessionVrn: Option[String] => Map[String, String] =
-    _.fold(Map.empty[String, String])(x => Map(SessionKeys.clientVRNDeprecated -> x))
+    _.fold(Map.empty[String, String])(x => Map(SessionKeys.clientVRN -> x))
   def formatPreference: Option[String] => Map[String, String] =
     _.fold(Map.empty[String, String])(x => Map(SessionKeys.preference -> x))
   def formatNotificationsEmail: Option[String] => Map[String, String] =

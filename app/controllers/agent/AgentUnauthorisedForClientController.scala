@@ -38,13 +38,13 @@ class AgentUnauthorisedForClientController @Inject()(authenticate: AuthoriseAsAg
 
   def show(redirectUrl: String = ""): Action[AnyContent] = authenticate {
     implicit agent => {
-      agent.session.get(SessionKeys.clientVRNDeprecated) match {
+      agent.session.get(SessionKeys.clientVRN) match {
         case Some(vrn) =>
           auditService.extendedAudit(
             AuthenticateAgentAuditModel(agent.arn, vrn, isAuthorisedForClient = false),
             Some(controllers.agent.routes.ConfirmClientVrnController.show.url)
           )
-          Ok(notAuthorisedForClientView()).removingFromSession(SessionKeys.clientVRNDeprecated, SessionKeys.clientVRN)
+          Ok(notAuthorisedForClientView()).removingFromSession(SessionKeys.clientVRN)
 
         case _ =>
           val redirectLink = extractRedirectUrl(redirectUrl).getOrElse("")

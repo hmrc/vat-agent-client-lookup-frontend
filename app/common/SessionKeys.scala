@@ -18,7 +18,6 @@ package common
 
 object SessionKeys {
 
-  val clientVRNDeprecated: String = "CLIENT_VRN"
   val clientVRN: String = "mtdVatvcClientVrn"
 
   val verifiedEmail: String = "mtdVatvcVerifiedAgentEmail"
