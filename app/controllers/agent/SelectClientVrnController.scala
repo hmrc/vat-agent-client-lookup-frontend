@@ -50,7 +50,7 @@ class SelectClientVrnController @Inject()(authenticate: AuthoriseAsAgentOnly,
           logger.debug("[SelectClientVrnController][submit] Success")
           Redirect(controllers.agent.routes.ConfirmClientVrnController.show)
             .removingFromSession(SessionKeys.clientMandationStatus)
-            .addingToSession(SessionKeys.clientVRNDeprecated -> data.vrn, SessionKeys.clientVRN -> data.vrn)
+            .addingToSession(SessionKeys.clientVRN -> data.vrn)
         }
       )
   }

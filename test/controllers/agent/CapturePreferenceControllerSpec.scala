@@ -59,7 +59,6 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
 
             lazy val result = {
               target.show("newRedirectUrl")(request.withSession(
-                SessionKeys.clientVRNDeprecated -> "999999999",
                 SessionKeys.clientVRN -> "999999999",
                 SessionKeys.redirectUrl -> testRedirectUrl,
                 SessionKeys.preference -> yes
@@ -84,7 +83,6 @@ class CapturePreferenceControllerSpec extends ControllerBaseSpec with MockAuditi
 
             lazy val result = {
               target.show("newRedirectUrl")(request.withSession(
-                SessionKeys.clientVRNDeprecated -> "999999999",
                 SessionKeys.clientVRN -> "999999999",
                 SessionKeys.redirectUrl -> testRedirectUrl
               ))
