@@ -47,7 +47,7 @@ unauthorised.agent.title = Ni allwch ddefnyddio’r gwasanaeth hwn eto
 unauthorised.agent.useThisService = I ddefnyddio’r gwasanaeth hwn, bydd angen i chi
 unauthorised.agent.setUpAccount = agor cyfrif gwasanaethau asiantau
 
-unauthorised.agentForClient.title = Nid ydych wedi'ch awdurdodi i reoli manylion TAW y cleient hwn
+unauthorised.agentForClient.title = Nid ydych wedi’ch awdurdodi i reoli manylion TAW y cleient hwn
 unauthorised.agentForClient.forMoreInformation = Gallwch
 unauthorised.agentForClient.clientAuthorise = ofyn i’ch cleient eich awdurdodi
 unauthorised.agentForClient.agentServicesAccount = Mynd i’ch cyfrif gwasanaethau asiant
