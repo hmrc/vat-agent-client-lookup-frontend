@@ -36,7 +36,6 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val agentSignUpUrl = "guidance/agent-sign-up"
   override val submitVatReturnsUrl = "guidance/submit-vat-returns"
   override val feedbackSurveyUrl: String = "/survey"
-  override val accessibilityLinkUrl: String = "/accessibility-statement"
 
   override val signInUrl: String = "/sign-in"
   override val signInContinueBaseUrl: String = "/agent-client-lookup-frontend"
