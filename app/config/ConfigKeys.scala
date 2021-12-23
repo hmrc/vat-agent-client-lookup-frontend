@@ -64,7 +64,6 @@ object ConfigKeys {
   val vatWhatYouOweEndpoint: String = "vat-summary-frontend.endpoints.what-you-owe"
   val paymentHistoryEndpoint: String = "vat-summary-frontend.endpoints.payment-history"
   val vatCertificateEndpoint: String = "vat-summary-frontend.endpoints.vat-certificate"
-  val vatSummaryAccessibilityUrl: String = "vat-summary-frontend.endpoints.accessibilityUrl"
 
   val viewVatReturnsFrontendHost: String = "view-vat-returns-frontend.host"
   val submittedReturnsEndpoint: String = "view-vat-returns-frontend.endpoints.submitted-returns"

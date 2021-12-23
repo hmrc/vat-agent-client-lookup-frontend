@@ -114,6 +114,6 @@
   headBlock = Some(head),
   headerBlock = header,
   beforeContentBlock = Some(beforeContentHtml),
-  footerBlock = hmrcStandardFooter(accessibilityStatementUrl = Some(appConfig.accessibilityLinkUrl)),
+  footerBlock = hmrcStandardFooter(),
   bodyEndBlock = Some(scripts)
 )(fullContent)

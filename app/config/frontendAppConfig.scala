@@ -57,7 +57,6 @@ trait AppConfig {
   val submittedReturnsUrl: String
   val returnDeadlinesUrl: String
   val classicServicesSignInUrl: String
-  val accessibilityLinkUrl: String
   val cancelRegistrationUrl: String
   val vat7FormUrl: String
   val optOutMtdVatUrl: String
@@ -143,8 +142,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override lazy val paymentHistoryUrl: String = sc.getString(Keys.vatSummaryFrontendHost) + sc.getString(Keys.paymentHistoryEndpoint)
   override lazy val submittedReturnsUrl: String = sc.getString(Keys.viewVatReturnsFrontendHost) + sc.getString(Keys.submittedReturnsEndpoint)
   override lazy val returnDeadlinesUrl: String = sc.getString(Keys.viewVatReturnsFrontendHost) + sc.getString(Keys.returnDeadlinesEndpoint)
-
-  override val accessibilityLinkUrl: String = sc.getString(ConfigKeys.vatSummaryFrontendHost) + sc.getString(ConfigKeys.vatSummaryAccessibilityUrl)
 
   override val cancelRegistrationUrl: String = sc.getString(ConfigKeys.deregisterVatFrontendHost) + sc.getString(ConfigKeys.deregisterVatFrontendUrl)
 
