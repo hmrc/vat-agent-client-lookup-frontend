@@ -20,7 +20,7 @@ object RegistrationPartialMessages {
 
   val cancelRegistrationTitle: String = "Cancel VAT registration"
   val cancelRegistrationContent: String =
-    "Cancel your client’s VAT registration if you’re closing the business, transferring ownership or do not need to be VAT registered."
+    "Cancel your client’s VAT registration if the business is closing, transferring ownership or does not need to be VAT registered."
 
   val cancelRegistrationTitleVatGroup: String = "Cancel VAT registration (opens in a new window or tab)"
   val cancelRegistrationContentVatGroup: String =

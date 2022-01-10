@@ -19,6 +19,6 @@ package assets.messages.partials
 object OptOutForMTDVATMessages {
 
   val title = "Opt out of Making Tax Digital for VAT"
-  val description = "You cannot opt out if your client’s taxable turnover has been above £85,000 since 1 April 2019."
+  val description = "Your client cannot opt out if the taxable turnover has been above £85,000 since 1 April 2019."
 
 }

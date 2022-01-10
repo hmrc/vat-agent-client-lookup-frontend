@@ -60,7 +60,7 @@ VatCertificateCard.info = View and print your client’s VAT certificate.
 VatCertificateCard.link = View VAT certificate
 
 optOutCard.heading = Opt out of Making Tax Digital for VAT
-optOutCard.content = You cannot opt out if your client’s taxable turnover has been above £85,000 since 1 April 2019.
+optOutCard.content = Your client cannot opt out if the taxable turnover has been above £85,000 since 1 April 2019.
 
 penaltiesTile.heading = Penalties and appeals
 penaltiesTile.content = View your client’s penalties, make an appeal against a penalty and see the status of any current appeals.
@@ -112,7 +112,7 @@ notSignedUp.paragraph2Text2 = to submit VAT Returns and manage your client’s b
 notSignedUp.paragraph2Link = sign out and use your existing HMRC online services account
 
 registrationPartial.cancelRegistration.title = Cancel VAT registration
-registrationPartial.cancelRegistration.content = Cancel your client’s VAT registration if you’re closing the business, transferring ownership or do not need to be VAT registered.
+registrationPartial.cancelRegistration.content = Cancel your client’s VAT registration if the business is closing, transferring ownership or does not need to be VAT registered.
 registrationPartial.historicDeregistration.title = Your client’s VAT registration
 registrationPartial.historicDeregistration.content = Your client’s VAT registration was cancelled on {0}.
 registrationPartial.historicDeregistration.link = VAT online services for agents (opens in new tab).

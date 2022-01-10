@@ -86,7 +86,7 @@ VatCertificateCard.info = Bwrw golwg dros dystysgrif TAW eich cleient a’i harg
 VatCertificateCard.link = Bwrw golwg dros y dystysgrif TAW
 
 optOutCard.heading = Optio allan o’r cynllun Troi Treth yn Ddigidol ar gyfer TAW
-optOutCard.content = Ni allwch optio allan os yw trosiant trethadwy eich cleient wedi bod dros £85,000 ar unrhyw adeg ers 1 Ebrill 2019.
+optOutCard.content = Ni all eich cleient optio allan os yw’r trosiant trethadwy wedi bod dros £85,000 ers 1 Ebrill 2019.
 
 sessionTimeout.title = Mae’ch sesiwn wedi’i therfynu
 sessionTimeout.helpOne = I reoli’ch cyfrif TAW, bydd yn rhaid i chi
@@ -135,7 +135,7 @@ notSignedUp.paragraph2Text2 = gyflwyno Ffurflenni TAW a rheoli manylion busnes e
 notSignedUp.paragraph2Link = allgofnodi a defnyddio’ch cyfrif Gwasanaethau Ar-lein CThEM presennol
 
 registrationPartial.cancelRegistration.title = Canslo cofrestriad TAW
-registrationPartial.cancelRegistration.content = Canslo cofrestriad TAW eich cleient os ydych yn cau’r busnes, yn trosglwyddo perchnogaeth neu os nad oes angen i’r cleient fod wedi cofrestru ar gyfer TAW.
+registrationPartial.cancelRegistration.content = Canslwch gofrestriad TAW eich cleient os yw’r busnes yn cau, yn trosglwyddo perchnogaeth neu os nad oes angen i’r busnes fod wedi cofrestru ar gyfer TAW.
 registrationPartial.historicDeregistration.title = Cofrestriad TAW eich cleient
 registrationPartial.historicDeregistration.content = Cafodd cofrestriad TAW eich cleient ei ganslo ar {0}.
 registrationPartial.historicDeregistration.link = Gwasanaethau TAW ar-lein ar gyfer asiantau (yn agor ffenestr neu dab newydd).
