@@ -52,9 +52,6 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
           if (details.missingTrader && !details.hasPendingPPOB) {
             Redirect(appConfig.manageVatMissingTraderUrl)
           } else {
-            if(details.deregistration.isDefined && details.deregistration.flatMap(_.effectDateOfCancellation).isEmpty) {
-              logger.warn("[AgentHubController][show] - 'deregistration' contained no 'effectDateOfCancellation'")
-            }
             val optPenaltiesSummary: Option[PenaltiesSummary] = penaltiesInformation.fold(_ => None, Some(_))
             Ok(agentHubView(constructViewModel(details, payments, optPenaltiesSummary)))
           }
