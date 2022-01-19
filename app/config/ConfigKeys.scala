@@ -21,6 +21,7 @@ object ConfigKeys {
   val assetsVersion: String = "assets.version"
 
   val contactFrontendHost: String = "contact-frontend.host"
+  val contactFrontendIdentifier: String = "contact-frontend.serviceId"
 
   val govUkSetupAgentServices: String = "govuk.guidance.setupAgentServices.url"
   val agentSignUpUrl: String = "govuk.guidance.agentSignUp.url"
