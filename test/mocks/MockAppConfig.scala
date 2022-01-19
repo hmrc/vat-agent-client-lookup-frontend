@@ -28,7 +28,6 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
 
   override val features: Features = new Features(runModeConfiguration)
   override val environmentHost: String = "localhost"
-  override val contactHost = ""
   override val assetsPrefix = ""
   override val reportAProblemPartialUrl = ""
   override val reportAProblemNonJSUrl = ""
@@ -89,7 +88,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
 
   override val gtmContainer: String = "x"
   override val financialTransactionsBaseUrl: String = "http://myHost:9999"
-  override val contactFormServiceIdentifier: String = "VATVC"
+
   override val penaltiesUrl: String => String = (vrn: String) => s"/vat/penalties/summary/$vrn"
   override val penaltiesFrontendUrl: String = "/vat-through-software/representative/test-only/penalties-stub"
 }
