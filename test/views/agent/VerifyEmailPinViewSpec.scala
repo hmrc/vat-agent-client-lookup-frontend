@@ -106,8 +106,15 @@ class VerifyEmailPinViewSpec extends ViewBaseSpec {
       }
     }
 
-    "have a button with the correct text" in {
-      elementText(".govuk-button") shouldBe "Continue"
+    "have a continue button" which {
+
+      "has the correct text" in {
+        elementText(".govuk-button") shouldBe "Continue"
+      }
+
+      "has the prevent double click attribute" in {
+        element(".govuk-button").hasAttr("data-prevent-double-click") shouldBe true
+      }
     }
   }
 
