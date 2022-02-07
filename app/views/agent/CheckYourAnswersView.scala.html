@@ -18,7 +18,8 @@
 
 @this(mainTemplate: MainTemplate,
       govukSummaryList: GovukSummaryList,
-      govukButton: GovukButton)
+      govukButton: GovukButton,
+      formWithCSRF: FormWithCSRF)
 
 @(email: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
@@ -50,8 +51,10 @@
         )
     ))
 
-    @govukButton(Button(
-      content = Text(messages("common.confirmAndContinue")),
-      href = Some(controllers.agent.routes.ConfirmEmailController.isEmailVerified.url)
-    ))
+    @formWithCSRF(action = controllers.agent.routes.ConfirmEmailController.isEmailVerified) {
+        @govukButton(Button(
+            content = Text(messages("common.confirmAndContinue")),
+            preventDoubleClick = true
+        ))
+    }
 }
