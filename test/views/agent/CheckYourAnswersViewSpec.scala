@@ -72,10 +72,18 @@ class CheckYourAnswersViewSpec extends ViewBaseSpec {
       }
     }
 
+    "have a form with the correct action" in {
+      element("form").attr("action") shouldBe "/vat-through-software/representative/is-email-verified"
+    }
+
     "have a continue button" which {
 
       "has the correct text" in {
         elementText(Selectors.continueButton) shouldBe "Confirm and continue"
+      }
+
+      "has the prevent double click attribute" in {
+        element(Selectors.continueButton).hasAttr("data-prevent-double-click") shouldBe true
       }
     }
   }
