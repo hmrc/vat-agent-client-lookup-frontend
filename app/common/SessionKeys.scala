@@ -29,4 +29,5 @@ object SessionKeys {
   val mtdVatAgentMandationStatus: String = "mtdVatAgentMandationStatus"
   val viewedDDInterrupt: String = "vatViewChangeHasViewedDDInterrupt"
   val mtdVatAgentDDMandateFound: String = "mtdVatAgentDDMandateFound"
+  val insolventWithoutAccessKey: String = "insolventWithoutAccess"
 }

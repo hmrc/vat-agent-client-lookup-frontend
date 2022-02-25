@@ -47,8 +47,9 @@ class ConfirmClientVrnController @Inject()(authenticate: AuthoriseAsAgentWithCli
   def show: Action[AnyContent] = authenticate.async {
     implicit user =>
       customerDetailsService.getCustomerDetails(user.vrn) map {
-        case Right(customerDetails) if customerDetails.isInsolvent =>
-          logger.debug("[ConfirmClientVrnController][show] - Client is insolvent, rendering UnauthorisedForClient page")
+        case Right(customerDetails) if customerDetails.isInsolventWithoutAccess =>
+          logger.debug("[ConfirmClientVrnController][show] - " +
+            "Client is insolvent without access, rendering UnauthorisedForClient page")
           Redirect(controllers.agent.routes.AgentUnauthorisedForClientController.show())
         case Right(customerDetails) =>
           auditService.extendedAudit(
@@ -60,8 +61,8 @@ class ConfirmClientVrnController @Inject()(authenticate: AuthoriseAsAgentWithCli
             Some(controllers.agent.routes.ConfirmClientVrnController.show.url)
           )
 
-          Ok(confirmClientVrnView(user.vrn, customerDetails))
-            .addingToSession(SessionKeys.clientName -> customerDetails.clientName)
+          Ok(confirmClientVrnView(user.vrn, customerDetails)).addingToSession(
+            SessionKeys.clientName -> customerDetails.clientName, SessionKeys.insolventWithoutAccessKey -> "false")
 
         case Left(Migration) => PreconditionFailed(accountMigrationView())
         case Left(NotSignedUp) => NotFound(notSignedUpView())
@@ -75,8 +76,8 @@ class ConfirmClientVrnController @Inject()(authenticate: AuthoriseAsAgentWithCli
     implicit user =>
       val redirectUrl = user.session.get(SessionKeys.redirectUrl).getOrElse("")
 
-      Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectUrl))
-        .removingFromSession(SessionKeys.clientVRN, SessionKeys.viewedDDInterrupt, SessionKeys.clientName)
+      Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectUrl)).removingFromSession(
+        SessionKeys.clientVRN, SessionKeys.viewedDDInterrupt, SessionKeys.clientName, SessionKeys.insolventWithoutAccessKey)
   }
 
   def redirect: Action[AnyContent] = (authenticate andThen ddInterrupt) {

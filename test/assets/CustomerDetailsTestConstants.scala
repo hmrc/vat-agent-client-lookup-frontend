@@ -52,7 +52,9 @@ object CustomerDetailsTestConstants {
       "lastName" -> lastName,
       "organisationName" -> orgName,
       "tradingName" -> tradingName,
-      "isInsolvent" -> false,
+      "isInsolvent" -> true,
+      "continueToTrade" -> true,
+      "insolvencyType" -> "07",
       "isPartialMigration" -> isPartialMigration,
       "customerMigratedToETMPDate" -> "2018-03-03"
     ),
@@ -70,7 +72,9 @@ object CustomerDetailsTestConstants {
       "lastName" -> lastName,
       "organisationName" -> orgName,
       "tradingName" -> tradingName,
-      "isInsolvent" -> false,
+      "isInsolvent" -> true,
+      "continueToTrade" -> true,
+      "insolvencyType" -> "07",
       "isPartialMigration" -> isPartialMigration,
       "customerMigratedToETMPDate" -> "2018-03-03"
     ),
@@ -94,7 +98,9 @@ object CustomerDetailsTestConstants {
     Some(validParty),
     mandationStatus,
     Some(Deregistration(Some(LocalDate.parse("2019-01-01")))),
-    isInsolvent = false,
+    isInsolvent = true,
+    continueToTrade = Some(true),
+    insolvencyType = Some("07"),
     isHybridUser = isPartialMigration,
     Some(migratedToETMPDate),
     None,
@@ -109,7 +115,9 @@ object CustomerDetailsTestConstants {
     Some(vatGroup),
     mandationStatus,
     Some(Deregistration(Some(LocalDate.parse("2019-01-01")))),
-    isInsolvent = false,
+    isInsolvent = true,
+    continueToTrade = Some(true),
+    insolvencyType = Some("07"),
     isHybridUser = isPartialMigration,
     Some(migratedToETMPDate),
     None,
@@ -125,6 +133,8 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None,
     isInsolvent = false,
+    None,
+    None,
     isHybridUser = isPartialMigration,
     None,
     None,
@@ -140,6 +150,8 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None,
     isInsolvent = false,
+    None,
+    None,
     isHybridUser = isPartialMigration,
     None
   )
@@ -153,6 +165,8 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None,
     isInsolvent = false,
+    None,
+    None,
     isHybridUser = isPartialMigration,
     None
   )
@@ -166,6 +180,8 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None,
     isInsolvent = false,
+    None,
+    None,
     isHybridUser = isPartialMigration,
     None
   )
@@ -179,6 +195,8 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None,
     isInsolvent = false,
+    None,
+    None,
     isHybridUser = isPartialMigration,
     None
   )
@@ -192,6 +210,8 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None,
     isInsolvent = false,
+    None,
+    None,
     isHybridUser = isPartialMigration,
     None
   )
@@ -205,6 +225,8 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None,
     isInsolvent = false,
+    None,
+    None,
     isHybridUser = isPartialMigration,
     Some(migratedToETMPDate)
   )
@@ -218,6 +240,8 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None,
     isInsolvent = false,
+    None,
+    None,
     isHybridUser = isPartialMigration,
     Some(migratedToETMPDate)
   )
@@ -231,6 +255,8 @@ object CustomerDetailsTestConstants {
     nonDigital,
     None,
     isInsolvent = false,
+    None,
+    None,
     isHybridUser = isPartialMigration,
     Some(migratedToETMPDate)
   )
@@ -244,6 +270,8 @@ object CustomerDetailsTestConstants {
     nonMTDfB,
     Some(Deregistration(Some(LocalDate.parse("2019-01-01")))),
     isInsolvent = false,
+    None,
+    None,
     isHybridUser = isPartialMigration,
     Some(migratedToETMPDate)
   )
@@ -262,6 +290,8 @@ object CustomerDetailsTestConstants {
     nonMTDfB,
     Some(Deregistration(Some(LocalDate.parse("2020-01-01")))),
     isInsolvent = false,
+    None,
+    None,
     isHybridUser = isPartialMigration,
     Some(migratedToETMPDate)
   )
@@ -275,6 +305,8 @@ object CustomerDetailsTestConstants {
     nonMTDfB,
     Some(Deregistration(Some(LocalDate.parse("2020-01-01")))),
     isInsolvent = false,
+    None,
+    None,
     isHybridUser = isPartialMigration,
     Some(migratedToETMPDate)
   )
@@ -288,10 +320,12 @@ object CustomerDetailsTestConstants {
     mandationStatus,
     None,
     isInsolvent = false,
+    None,
+    None,
     isHybridUser = isPartialMigration,
     None
   )
 
-  val customerDetailsInsolvent: CustomerDetails = customerDetailsAllInfo.copy(isInsolvent = true)
+  val customerDetailsInsolvent: CustomerDetails = customerDetailsAllInfo.copy(insolvencyType = Some("08"))
   val customerDetailsHybrid: CustomerDetails = customerDetailsAllInfo.copy(isHybridUser = true, missingTrader = false)
 }
