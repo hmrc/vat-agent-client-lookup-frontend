@@ -101,4 +101,59 @@ class CustomerDetailsSpec extends AnyWordSpecLike with Matchers {
       }
     }
   }
+
+  "Calling .isInsolventWithoutAccess" when {
+
+    "the user is insolvent and not continuing to trade" should {
+
+      val model = customerDetailsNoInfo.copy(isInsolvent = true, continueToTrade = Some(false))
+
+      "return true if there is no insolvency type" in {
+        model.isInsolventWithoutAccess shouldBe true
+      }
+
+      "return false if the insolvency type is exempt" in {
+        model.exemptInsolvencyTypes.foreach { iType =>
+          model.copy(insolvencyType = Some(iType)).isInsolventWithoutAccess shouldBe false
+        }
+      }
+
+      "return true if the insolvency type is blocked" in {
+        model.blockedInsolvencyTypes.foreach { iType =>
+          model.copy(insolvencyType = Some(iType)).isInsolventWithoutAccess shouldBe true
+        }
+      }
+    }
+
+    "the user is insolvent and is continuing to trade" should {
+
+      val model = customerDetailsNoInfo.copy(isInsolvent = true, continueToTrade = Some(true))
+
+      "return false if there is no insolvency type" in {
+        model.isInsolventWithoutAccess shouldBe false
+      }
+
+      "return false if the insolvency type is exempt" in {
+        model.exemptInsolvencyTypes.foreach { iType =>
+          model.copy(insolvencyType = Some(iType)).isInsolventWithoutAccess shouldBe false
+        }
+      }
+
+      "return true if the insolvency type is blocked" in {
+        model.blockedInsolvencyTypes.foreach { iType =>
+          model.copy(insolvencyType = Some(iType)).isInsolventWithoutAccess shouldBe true
+        }
+      }
+    }
+
+    "the user is not insolvent" should {
+
+      "return false, regardless of the continueToTrade flag or insolvency type" in {
+        customerDetailsNoInfo.isInsolventWithoutAccess shouldBe false
+        customerDetailsNoInfo.copy(continueToTrade = Some(false)).isInsolventWithoutAccess shouldBe false
+        customerDetailsNoInfo.copy(continueToTrade = Some(true)).isInsolventWithoutAccess shouldBe false
+        customerDetailsNoInfo.copy(insolvencyType = Some("08")).isInsolventWithoutAccess shouldBe false
+      }
+    }
+  }
 }

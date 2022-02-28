@@ -120,6 +120,10 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
               "add the client name to the session" in {
                 session(result).get(SessionKeys.clientName) shouldBe Some(customerDetailsOrganisation.clientName)
               }
+
+              "add the insolvency access status to the session" in {
+                session(result).get(SessionKeys.insolventWithoutAccessKey) shouldBe Some("false")
+              }
             }
           }
 
@@ -218,6 +222,9 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           lazy val result = TestConfirmClientVrnController.changeClient(
             request.withSession(
               SessionKeys.clientVRN-> vrn,
+              SessionKeys.clientName-> "MyClient",
+              SessionKeys.viewedDDInterrupt-> "true",
+              SessionKeys.insolventWithoutAccessKey-> "false",
               SessionKeys.redirectUrl -> "/homepage",
               SessionKeys.notificationsEmail -> "an.email@host.com"
             )
@@ -233,12 +240,20 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
               Some(controllers.agent.routes.SelectClientVrnController.show("/homepage").url)
           }
 
-          "remove the client VRN" in {
+          "remove the client VRN from the session" in {
             session(result).get(SessionKeys.clientVRN) shouldBe None
           }
 
-          "remove the client name" in {
+          "remove the client name from the session" in {
             session(result).get(SessionKeys.clientName) shouldBe None
+          }
+
+          "remove the DD interrupt status from the session" in {
+            session(result).get(SessionKeys.viewedDDInterrupt) shouldBe None
+          }
+
+          "remove the insolvency access status from the session" in {
+            session(result).get(SessionKeys.insolventWithoutAccessKey) shouldBe None
           }
 
           "retain the agent email" in {

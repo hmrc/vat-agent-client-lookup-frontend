@@ -30,6 +30,8 @@ case class CustomerDetails(firstName: Option[String],
                            mandationStatus: String,
                            deregistration: Option[Deregistration],
                            isInsolvent: Boolean,
+                           continueToTrade: Option[Boolean],
+                           insolvencyType: Option[String],
                            isHybridUser: Boolean,
                            customerMigratedToETMPDate: Option[String],
                            changeIndicators: Option[ChangeIndicators] = None,
@@ -54,6 +56,16 @@ case class CustomerDetails(firstName: Option[String],
   }
 
   val hasPendingPPOB: Boolean = changeIndicators.fold(false)(_.PPOBDetails)
+
+  val exemptInsolvencyTypes = Seq("07", "12", "14")
+  val blockedInsolvencyTypes = Seq("01", "02", "03", "06", "08", "09", "10", "13", "15")
+
+  val isInsolventWithoutAccess: Boolean = (isInsolvent, insolvencyType) match {
+    case (true, Some(inType)) if exemptInsolvencyTypes.contains(inType) => false
+    case (true, Some(inType)) if blockedInsolvencyTypes.contains(inType) => true
+    case (true, _) if continueToTrade.contains(false) => true
+    case _ => false
+  }
 }
 
 object CustomerDetails {
@@ -66,6 +78,8 @@ object CustomerDetails {
   private val mandationStatusPath = __ \ "mandationStatus"
   private val deregistrationPath = __ \ "deregistration"
   private val isInsolventPath = __ \ "customerDetails" \ "isInsolvent"
+  private val continueToTradePath = __ \ "customerDetails" \ "continueToTrade"
+  private val insolvencyTypePath = __ \ "customerDetails" \ "insolvencyType"
   private val changeIndicatorsPath = __ \ "changeIndicators"
   private val missingTraderPath = __ \ "missingTrader"
   private val isPartialMigrationPath = __ \ "customerDetails"\ "isPartialMigration"
@@ -80,6 +94,8 @@ object CustomerDetails {
     mandationStatusPath.read[String] and
     deregistrationPath.readNullable[Deregistration] and
     isInsolventPath.read[Boolean] and
+    continueToTradePath.readNullable[Boolean] and
+    insolvencyTypePath.readNullable[String] and
     isPartialMigrationPath.read[Boolean] and
     migratedToETMPDatePath.readNullable[String] and
     changeIndicatorsPath.readNullable[ChangeIndicators] and
