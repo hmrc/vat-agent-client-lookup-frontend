@@ -98,6 +98,10 @@ class SelectClientVrnViewSpec extends ViewBaseSpec {
       "have the correct error notification text above the input box" in {
         elementText("#vrn-error") shouldBe s"Error: ${viewMessages.formErrorInvalidVrn}"
       }
+
+      "retain the value that the user has entered " in {
+        element(".govuk-input").attr("value") shouldBe "9"
+      }
     }
   }
 }
