@@ -51,6 +51,7 @@
         classes = "govuk-label--l",
         content = Text(messages("clientsVrn.heading"))
       ),
+      value = form.data.get("vrn"),
       hint = Some(Hint(
         content = Text(messages("clientsVrn.p1"))
       )),
