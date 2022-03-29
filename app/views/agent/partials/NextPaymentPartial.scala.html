@@ -54,6 +54,13 @@
   }
 }
 
+@overdueNotification = {
+    @govukTag(Tag(
+        content = Text(messages("nextPaymentPartial.overdue")),
+        classes = "govuk-tag--red"
+    ))
+}
+
 @if(!hybridUser) {
 
   <div class="tile tile-no-border">
@@ -68,7 +75,7 @@
       @displayDDNotification
       <p class="govuk-body" id="next-payment-paragraph">
         @paragraphContent
-        @if(isOverdue) { <strong id="overdue" class="task-overdue">@messages("nextPaymentPartial.overdue")</strong> }
+        @if(isOverdue) { @overdueNotification }
       </p>
 
       <p class="govuk-body">

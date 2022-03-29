@@ -31,6 +31,7 @@ class NextPaymentPartialSpec extends ViewBaseSpec {
     val content = "#next-payment-paragraph"
     val link = "#what-you-owe-link"
     val ddLabel = ".govuk-tag"
+    val overdueLabel = ".govuk-tag--red"
   }
 
   val nextPaymentPartial: NextPaymentPartial = inject[NextPaymentPartial]
@@ -64,6 +65,10 @@ class NextPaymentPartialSpec extends ViewBaseSpec {
       "not display a DD label" in {
         elementExtinct(Selectors.ddLabel)
       }
+
+      "not display the overdue flag" in {
+        elementExtinct(Selectors.overdueLabel)
+      }
     }
 
     "there is one payment and it is not overdue" should {
@@ -73,6 +78,10 @@ class NextPaymentPartialSpec extends ViewBaseSpec {
 
       "display the date of the payment correctly" in {
         elementText(Selectors.content) shouldBe Messages.date
+      }
+
+      "not display the overdue flag" in {
+        elementExtinct(Selectors.overdueLabel)
       }
     }
 
@@ -97,6 +106,10 @@ class NextPaymentPartialSpec extends ViewBaseSpec {
 
       "display the message with the correct number of payments" in {
         elementText(Selectors.content) shouldBe Messages.payments
+      }
+
+      "not display the overdue flag" in {
+        elementExtinct(Selectors.overdueLabel)
       }
     }
 
