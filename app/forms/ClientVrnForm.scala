@@ -27,7 +27,9 @@ object ClientVrnForm {
 
   val form: Form[ClientVrnModel] = Form(
     mapping(
-      "vrn" -> text.verifying(
+      "vrn" -> text
+        .transform[String](x => x.replace(" ", ""), x => x)
+        .verifying(
           StopOnFirstFail(
             constraint[String]("clientVrnForm.error.missing", _.nonEmpty),
             constraint[String]("clientVrnForm.error.invalid", VatReferenceChecker.isValid)

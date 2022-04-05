@@ -110,6 +110,20 @@ class ClientVrnFormSpec extends TestUtil {
     }
   }
 
+  "Binding a form with a valid VRN with spaces in it" should {
+
+    val data = Map("vrn" -> "999 96 92 02  ")
+    val form = ClientVrnForm.form.bind(data)
+
+    "result in a form with no errors" in {
+      form.hasErrors shouldBe false
+    }
+
+    "generate the correct model" in {
+      form.value shouldBe Some(ClientVrnModel("999969202"))
+    }
+  }
+
   "A form built from a valid model" should {
 
     "generate the correct mapping" in {
