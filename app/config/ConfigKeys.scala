@@ -52,9 +52,6 @@ object ConfigKeys {
 
   val emailVerificationBaseUrl: String = "email-verification"
 
-  val optOutMtdVatHost: String = "vat-opt-out-frontend.host"
-  val optOutMtdVatUrl: String = "vat-opt-out-frontend.url"
-
   val emailVerificationFeature: String = "features.emailVerification.enabled"
   val useStaticDateFeature: String = "features.useStaticDate.enabled"
   val directDebitInterruptFeature: String = "features.directDebitInterrupt.enabled"

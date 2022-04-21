@@ -85,9 +85,6 @@ clientDetailsCard.link = Bwrw golwg dros y manylion busnes
 VatCertificateCard.info = Bwrw golwg dros dystysgrif TAW eich cleient a’i hargraffu.
 VatCertificateCard.link = Bwrw golwg dros y dystysgrif TAW
 
-optOutCard.heading = Optio allan o’r cynllun Troi Treth yn Ddigidol ar gyfer TAW
-optOutCard.content = Ni all eich cleient optio allan os yw’r trosiant trethadwy wedi bod dros £85,000 ers 1 Ebrill 2019.
-
 sessionTimeout.title = Mae’ch sesiwn wedi’i therfynu
 sessionTimeout.helpOne = I reoli’ch cyfrif TAW, bydd yn rhaid i chi
 sessionTimeout.helpTwo = fewngofnodi

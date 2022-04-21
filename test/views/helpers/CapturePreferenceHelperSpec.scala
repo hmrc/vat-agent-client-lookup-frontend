@@ -38,7 +38,7 @@ class CapturePreferenceHelperSpec extends ViewBaseSpec {
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] =
         FakeRequest("GET", "").withSession(SessionKeys.verifiedEmail -> "exampleemail@email.com")
       lazy val testUser: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn, active = true)(testGetRequest)
-      lazy val view: Html = capturePreferenceHelper("Heading", mockConfig.optOutMtdVatUrl)(testUser)
+      lazy val view: Html = capturePreferenceHelper("Heading", mockConfig.manageVatCustomerDetailsUrl)(testUser)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the correct heading" in {
@@ -46,7 +46,7 @@ class CapturePreferenceHelperSpec extends ViewBaseSpec {
       }
 
       "link to the redirect location" in {
-        element("a").attr("href") shouldBe mockConfig.optOutMtdVatUrl
+        element("a").attr("href") shouldBe mockConfig.manageVatCustomerDetailsUrl
       }
     }
 
@@ -55,7 +55,7 @@ class CapturePreferenceHelperSpec extends ViewBaseSpec {
       lazy implicit val testGetRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "")
         .withSession(SessionKeys.preference -> "no")
       lazy val testUser: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn, active = true)(testGetRequest)
-      lazy val view: Html = capturePreferenceHelper("Heading", mockConfig.optOutMtdVatUrl)(testUser)
+      lazy val view: Html = capturePreferenceHelper("Heading", mockConfig.manageVatCustomerDetailsUrl)(testUser)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the correct heading" in {
@@ -63,13 +63,13 @@ class CapturePreferenceHelperSpec extends ViewBaseSpec {
       }
 
       "link to the redirect location" in {
-        element("a").attr("href") shouldBe mockConfig.optOutMtdVatUrl
+        element("a").attr("href") shouldBe mockConfig.manageVatCustomerDetailsUrl
       }
     }
 
     "the agent has not entered a contact preference" should {
 
-      lazy val view: Html = capturePreferenceHelper("Heading", mockConfig.optOutMtdVatUrl)(user)
+      lazy val view: Html = capturePreferenceHelper("Heading", mockConfig.manageVatCustomerDetailsUrl)(user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the correct heading" in {
@@ -79,7 +79,7 @@ class CapturePreferenceHelperSpec extends ViewBaseSpec {
       "link to the capture preference page" in {
         element("a").attr("href") shouldBe
           controllers.agent.routes.CapturePreferenceController.show().url +
-            s"?altRedirectUrl=%2F${mockConfig.optOutMtdVatUrl.substring(1)}"
+            s"?altRedirectUrl=%2F${mockConfig.manageVatCustomerDetailsUrl.substring(1)}"
       }
     }
 
