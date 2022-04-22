@@ -92,10 +92,6 @@ class AgentHubViewSpec extends ViewBaseSpec {
         elementText("#certificate-link") shouldBe VatCertificatePartialMessages.linkText
       }
 
-      "display the Opt Out partial" in {
-        elementText("#opt-out > h3") shouldBe OptOutForMTDVATMessages.title
-      }
-
       "display the Cancel VAT registration partial" in {
         elementText("#cancel-vat > h3") shouldBe RegistrationPartialMessages.cancelRegistrationTitle
       }
@@ -136,10 +132,6 @@ class AgentHubViewSpec extends ViewBaseSpec {
       lazy val view = injectedView(hubViewModel(customerDetailsOptedOut))(messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "not display the opt-out partial" in {
-        elementExtinct("#opt-out")
-      }
-
       "display the sign-up partial" in {
         elementText("#sign-up-heading") shouldBe SignUpPartialMessages.signUpLinkText
       }
@@ -159,10 +151,6 @@ class AgentHubViewSpec extends ViewBaseSpec {
 
       lazy val view = injectedView(hubViewModel(customerDetailsNonDigital))(messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
-
-      "not display the opt-out partial" in {
-        elementExtinct("#opt-out")
-      }
 
       "display the sign-up partial" in {
         elementText("#sign-up-heading") shouldBe SignUpPartialMessages.signUpLinkText

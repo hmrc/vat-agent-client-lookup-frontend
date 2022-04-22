@@ -68,8 +68,6 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
 
   override val cancelRegistrationUrl: String = "/deregisterUrl"
 
-  override val optOutMtdVatUrl: String = "/optOutMtdVatUrl"
-
   override val agentServicesHost = ""
   override val agentServicesUrl = "/agent-service-account"
 
