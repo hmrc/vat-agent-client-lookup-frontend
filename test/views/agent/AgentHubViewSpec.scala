@@ -101,6 +101,27 @@ class AgentHubViewSpec extends ViewBaseSpec {
       }
     }
 
+    "the user has mandation status 3" should {
+
+      lazy val view = injectedView(hubViewModel(customerDetailsOptedOut))(messages,mockConfig,user)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "display the sign up to MTD alert banner" in {
+        element("#mtd-sign-up-banner")
+      }
+
+    }
+
+    "has a different mandation status than 3" should {
+
+      lazy val view = injectedView(hubViewModel(customerDetailsFnameOnly))(messages,mockConfig,user)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "not display the sign up to MTD alert banner" in {
+        elementExtinct("#mtd-sign-up-banner")
+      }
+    }
+
     "the user has the blueBox value in session" should {
 
       lazy val view = injectedView(hubViewModelBlueBox(customerDetailsFnameOnly))(messages,mockConfig,user)

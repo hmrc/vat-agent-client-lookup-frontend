@@ -206,3 +206,8 @@ penaltiesBanner.estimatedPenaltyWithoutCrystalisedPenalty = Amcangyfrif o swm y 
 penaltiesBanner.estimatedPenaltyWithCrystalisedPenalty = Amcangyfrif o swm y gosb bellach: £{0}
 penaltiesBanner.linkSingular = Cael gwybod pam mae gan eich cleient gosb
 penaltiesBanner.linkPlural = Cael gwybod pam mae gan eich cleient gosbau
+
+signUpForMTDBanner.title = Pwysig
+signUpForMTDBanner.heading = Newidiodd y ffordd i gyflwyno ffurflenni TAW ar 1 Ebrill oherwydd Troi Treth yn Ddigidol
+signUpForMTDBanner.paragraphText = Ni allwch ddefnyddio’r gwasanaeth hwn i gyflwyno datganiadau ar gyfer cyfnodau cyfrifyddu sy’n dechrau ar ôl 1 Ebrill 2022. Yn lle hynny, rhaid cadw cofnodion digidol a rhaid cyflwyno ffurflenni gan ddefnyddio meddalwedd sy’n gydnaws â CThEM
+signUpForMTDBanner.linkText = Darganfod pryd i gofrestru a dechrau defnyddio Troi Treth yn Ddigidol ar gyfer TAW (yn agor tab newydd)
