@@ -17,6 +17,7 @@
 @import config.AppConfig
 @import views.html.agent.partials._
 @import views.html.helpers.PenaltiesBanner
+@import views.html.helpers.MTDSignupNotificationBanner
 
 @this(mainTemplate: MainTemplate,
       clientDetailsPartial: ClientDetailsPartial,
@@ -30,7 +31,8 @@
       nextPaymentPartial: NextPaymentPartial,
       nextReturnPartial: NextReturnPartial,
       historyPartial: HistoryPartial,
-      penaltiesBanner: PenaltiesBanner)
+      penaltiesBanner: PenaltiesBanner,
+      mtdSignupNotificationBanner: MTDSignupNotificationBanner)
 
 @(model: HubViewModel)(implicit messages: Messages, appConfig: AppConfig, user: User[_])
 
@@ -92,6 +94,8 @@
   @model.penaltiesSummary.map { summary =>
     @penaltiesBanner(summary)
   }
+
+  @mtdSignupNotificationBanner(model.details.mandationStatus)
 
   <div class="flex-container govuk-grid-row">
     @nextPaymentPartial(model.details.isHybridUser, model.nextPaymentDate, model.payments, model.isOverdue, model.isError, model.directDebitSetup)
