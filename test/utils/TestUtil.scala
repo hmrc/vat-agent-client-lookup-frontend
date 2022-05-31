@@ -58,7 +58,15 @@ trait TestUtil extends AnyWordSpecLike with Matchers with GuiceOneAppPerSuite wi
     )
 
   lazy val fakeRequestWithMtdVatAgentData: FakeRequest[AnyContentAsEmpty.type] =
-    FakeRequest("POST","/").withSession(
+    FakeRequest().withSession(
+      SessionKeys.clientVRN -> vrn,
+      SessionKeys.redirectUrl -> "/homepage",
+      SessionKeys.clientName -> "l'biz",
+      SessionKeys.mtdVatAgentMandationStatus -> nonMTDfB
+    )
+
+  lazy val postFakeRequestWithMtdVatAgentData: FakeRequest[AnyContentAsEmpty.type] =
+    FakeRequest("POST","").withSession(
       SessionKeys.clientVRN -> vrn,
       SessionKeys.redirectUrl -> "/homepage",
       SessionKeys.clientName -> "l'biz",

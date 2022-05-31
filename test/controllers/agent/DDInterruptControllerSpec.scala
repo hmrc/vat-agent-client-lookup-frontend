@@ -245,7 +245,7 @@ class DDInterruptControllerSpec extends ControllerBaseSpec with MockDateService 
 
             lazy val result = {
               mockAgentAuthorised()
-              controller.submit(fakeRequestWithMtdVatAgentData.withFormUrlEncodedBody(("checkbox", "true")))
+              controller.submit(postFakeRequestWithMtdVatAgentData.withFormUrlEncodedBody(("checkbox", "true")))
             }
 
             "return 303" in {
