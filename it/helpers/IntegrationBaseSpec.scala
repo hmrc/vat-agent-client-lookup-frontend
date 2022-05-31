@@ -40,12 +40,15 @@ trait IntegrationBaseSpec extends TestSuite with CustomMatchers with GuiceOneSer
   val mockHost: String = WireMockHelper.host
   val mockPort: String = WireMockHelper.wmPort.toString
   val appContextRoute: String = "/vat-through-software/representative"
+  val authToken : String = "authToken"
 
   lazy val mockAppConfig: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
   lazy val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
   implicit lazy val messages: Messages = MessagesImpl(Lang("en-GB"), messagesApi)
 
   implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
+
+  def authSession: Map[String, String] = Map(authToken -> "mock-bearer-token")
 
   override def beforeEach() {
     mockAppConfig.features.emailVerificationEnabled(true)
@@ -140,11 +143,11 @@ trait IntegrationBaseSpec extends TestSuite with CustomMatchers with GuiceOneSer
   }
 
   def get(path: String, additionalCookies: Map[String, String] = Map.empty): WSResponse = await(
-    buildRequest(path, additionalCookies).get()
+    buildRequest(path, additionalCookies ++ authSession).get()
   )
 
   def post(path: String, additionalCookies: Map[String, String] = Map.empty)(body: Map[String, Seq[String]]): WSResponse = await(
-    buildRequest(path, additionalCookies).post(body)
+    buildRequest(path, additionalCookies ++ authSession).post(body)
   )
 
   def postJSValueBody(path: String, additionalCookies: Map[String, String] = Map.empty)(body: JsValue): WSResponse = await(

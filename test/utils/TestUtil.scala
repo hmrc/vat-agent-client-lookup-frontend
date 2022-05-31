@@ -47,7 +47,7 @@ trait TestUtil extends AnyWordSpecLike with Matchers with GuiceOneAppPerSuite wi
   implicit lazy val mockConfig: MockAppConfig = new MockAppConfig(app.configuration)
   implicit lazy val serviceErrorHandler: ErrorHandler = inject[ErrorHandler]
 
-  lazy implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+  lazy implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("POST","/")
   lazy val language: Lang = mockConfig.languageMap("english")
 
 
@@ -59,6 +59,14 @@ trait TestUtil extends AnyWordSpecLike with Matchers with GuiceOneAppPerSuite wi
 
   lazy val fakeRequestWithMtdVatAgentData: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest().withSession(
+      SessionKeys.clientVRN -> vrn,
+      SessionKeys.redirectUrl -> "/homepage",
+      SessionKeys.clientName -> "l'biz",
+      SessionKeys.mtdVatAgentMandationStatus -> nonMTDfB
+    )
+
+  lazy val postFakeRequestWithMtdVatAgentData: FakeRequest[AnyContentAsEmpty.type] =
+    FakeRequest("POST","").withSession(
       SessionKeys.clientVRN -> vrn,
       SessionKeys.redirectUrl -> "/homepage",
       SessionKeys.clientName -> "l'biz",
