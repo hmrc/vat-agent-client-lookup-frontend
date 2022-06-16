@@ -21,12 +21,20 @@ import java.time.LocalDate
 
 import play.api.libs.functional.syntax.{toAlternativeOps, toFunctionalBuilderOps}
 
-case class Charge(dueDate: LocalDate,
-                  ddCollectionInProgress: Boolean)
+case class Charge(chargeType: String,
+                  outstandingAmount: BigDecimal,
+                  dueDate: LocalDate,
+                  ddCollectionInProgress: Boolean) {
+
+  val isPaymentOnAccount: Boolean = chargeType == "Payment on account"
+
+}
 
 object Charge {
 
   implicit val reads: Reads[Charge] = (
+    (JsPath \ "chargeType").read[String] and
+    (JsPath \ "outstandingAmount").read[BigDecimal] and
     (JsPath \ "items")(0).\("dueDate").read[LocalDate] and
     (JsPath \ "items")(0).\("DDcollectionInProgress").read[Boolean].or(Reads.pure(false))
   ) (Charge.apply _)

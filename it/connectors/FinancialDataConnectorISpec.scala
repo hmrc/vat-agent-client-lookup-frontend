@@ -64,10 +64,12 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
     "the endpoint returns a successful payment response" should {
 
       "parse the JSON response and return a Payment model" in {
+        val debitOutstanding = 10000
+        val creditOutstanding = 500
         FinancialDataStub.getPaymentSuccess(vrn)
         val expected = Right(Seq(
-          Charge(LocalDate.parse("2018-09-13"), ddCollectionInProgress = false),
-          Charge(LocalDate.parse("2018-12-11"), ddCollectionInProgress = false)
+          Charge("ReturnDebitCharge", debitOutstanding, LocalDate.parse("2018-09-13"), ddCollectionInProgress = false),
+          Charge("ReturnCreditCharge", creditOutstanding, LocalDate.parse("2018-12-11"), ddCollectionInProgress = false)
         ))
         val result: HttpResult[Seq[Charge]] = await(financialDataConnector.getPaymentsDue(vrn))
 

@@ -27,6 +27,10 @@ import java.time.LocalDate
 
 class FinancialDataHttpParserSpec extends TestUtil {
 
+  val chargeType: String = "VAT Return Debit Charge"
+  val outstandingAmountJson: Double = 1500.00
+  val outstandingAmount: BigDecimal = 1500
+
   "ChargeReads" when {
 
     "the http response status is OK with valid Json" should {
@@ -34,40 +38,43 @@ class FinancialDataHttpParserSpec extends TestUtil {
       val responseJson = Json.obj(
         "financialTransactions" -> Json.arr(
           Json.obj(
-            "chargeType" -> "VAT Return Debit Charge",
+            "chargeType" -> chargeType,
             "items" -> Json.arr(
               Json.obj(
                 "dueDate" -> "2020-01-01",
                 "DDcollectionInProgress" -> true
               )
             ),
+            "outstandingAmount" -> outstandingAmountJson,
             "chargeReference" -> "XD002750002155"
           ),
           Json.obj(
-            "chargeType" -> "VAT Return Debit Charge",
+            "chargeType" -> chargeType,
             "items" -> Json.arr(
               Json.obj(
                 "dueDate" -> "2020-02-02"
               )
             ),
+            "outstandingAmount" -> outstandingAmountJson,
             "chargeReference" -> "XD002750002155"
           ),
           Json.obj(
-            "chargeType" -> "VAT Return Debit Charge",
+            "chargeType" -> chargeType,
             "items" -> Json.arr(
               Json.obj(
                 "dueDate" -> "2020-03-03"
               )
             ),
+            "outstandingAmount" -> outstandingAmountJson,
             "chargeReference" -> "XD002750002155"
           )
         )
       )
 
       val expectedModel = Seq(
-        Charge(LocalDate.parse("2020-01-01"), ddCollectionInProgress = true),
-        Charge(LocalDate.parse("2020-02-02"), ddCollectionInProgress = false),
-        Charge(LocalDate.parse("2020-03-03"), ddCollectionInProgress = false)
+        Charge(chargeType, outstandingAmount, LocalDate.parse("2020-01-01"), ddCollectionInProgress = true),
+        Charge(chargeType, outstandingAmount, LocalDate.parse("2020-02-02"), ddCollectionInProgress = false),
+        Charge(chargeType, outstandingAmount, LocalDate.parse("2020-03-03"), ddCollectionInProgress = false)
       )
 
       "return a collection of charges" in {
