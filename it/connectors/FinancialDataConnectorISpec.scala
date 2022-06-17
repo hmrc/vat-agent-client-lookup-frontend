@@ -66,11 +66,23 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
       "parse the JSON response and return a Payment model" in {
         val debitOutstanding = 10000
         val creditOutstanding = 500
-        FinancialDataStub.getPaymentSuccess(vrn)
+        FinancialDataStub.getValidPayments
         val expected = Right(Seq(
-          Charge("ReturnDebitCharge", debitOutstanding, LocalDate.parse("2018-09-13"), ddCollectionInProgress = false),
-          Charge("ReturnCreditCharge", creditOutstanding, LocalDate.parse("2018-12-11"), ddCollectionInProgress = false)
+          Charge("VAT Return Debit Charge", debitOutstanding, LocalDate.parse("2018-09-13"), ddCollectionInProgress = false),
+          Charge("VAT OA Debit Charge", creditOutstanding, LocalDate.parse("2018-12-11"), ddCollectionInProgress = false)
         ))
+        val result: HttpResult[Seq[Charge]] = await(financialDataConnector.getPaymentsDue(vrn))
+
+        result shouldBe expected
+      }
+
+    }
+
+    "the endpoint returns a response with a unrecognised charge types" should {
+
+      "parse the JSON and return a model without those charges" in {
+        FinancialDataStub.getInvalidPayments
+        val expected = Right(Seq())
         val result: HttpResult[Seq[Charge]] = await(financialDataConnector.getPaymentsDue(vrn))
 
         result shouldBe expected

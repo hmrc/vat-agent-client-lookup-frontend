@@ -28,6 +28,7 @@ import java.time.LocalDate
 class FinancialDataHttpParserSpec extends TestUtil {
 
   val chargeType: String = "VAT Return Debit Charge"
+  val poaCharge: String = "Payment on account"
   val outstandingAmountJson: Double = 1500.00
   val outstandingAmount: BigDecimal = 1500
 
@@ -67,6 +68,16 @@ class FinancialDataHttpParserSpec extends TestUtil {
             ),
             "outstandingAmount" -> outstandingAmountJson,
             "chargeReference" -> "XD002750002155"
+          ),
+          Json.obj(
+            "chargeType" -> poaCharge,
+            "items" -> Json.arr(
+              Json.obj(
+                "dueDate" -> "2020-03-03"
+              )
+            ),
+            "outstandingAmount" -> outstandingAmountJson,
+            "chargeReference" -> "XD002750002155"
           )
         )
       )
@@ -77,7 +88,7 @@ class FinancialDataHttpParserSpec extends TestUtil {
         Charge(chargeType, outstandingAmount, LocalDate.parse("2020-03-03"), ddCollectionInProgress = false)
       )
 
-      "return a collection of charges" in {
+      "return a collection of charges with 'Payment on account' filtered out" in {
         ChargeReads.read("", "", HttpResponse(Status.OK, responseJson.toString())) shouldBe Right(expectedModel)
       }
     }

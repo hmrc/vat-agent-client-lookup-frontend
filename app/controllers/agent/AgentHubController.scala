@@ -98,7 +98,7 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
 
   private def retrievePayments(implicit user: User[_]): Future[VatDetailsDataModel] =
     financialDataService.getPayment(user.vrn) map {
-      case Right(payments) => VatDetailsDataModel(payments.filterNot(_.isPaymentOnAccount), isError = false)
+      case Right(payments) => VatDetailsDataModel(payments, isError = false)
       case Left(_) => VatDetailsDataModel(Seq(), isError = true)
     }
 

@@ -32,27 +32,27 @@ object FinancialDataConstants {
 
   val ddFailureResponse = Left(models.errors.UnexpectedError(500, "problems"))
 
-  val blankChargeType = ""
+  val validChargeType = "VAT Repayment Supplement Rec"
   val outstanding = 200.00
 
   val paymentResponse: HttpResult[Seq[Charge]] =
-    Right(Seq(Charge(blankChargeType, outstanding, LocalDate.parse("2018-01-01"), ddCollectionInProgress = false)))
+    Right(Seq(Charge(validChargeType, outstanding, LocalDate.parse("2018-01-01"), ddCollectionInProgress = false)))
 
-  val paymentOverdue = Charge(blankChargeType, outstanding, LocalDate.parse("2018-01-01"), ddCollectionInProgress = false)
+  val paymentOverdue = Charge(validChargeType, outstanding, LocalDate.parse("2018-01-01"), ddCollectionInProgress = false)
 
   val paymentsOverdue =
     Seq(
-      Charge(blankChargeType, outstanding, LocalDate.parse("2018-01-01"), ddCollectionInProgress = false),
-      Charge(blankChargeType, outstanding, LocalDate.parse("2020-01-01"), ddCollectionInProgress = false)
+      Charge(validChargeType, outstanding, LocalDate.parse("2018-01-01"), ddCollectionInProgress = false),
+      Charge(validChargeType, outstanding, LocalDate.parse("2020-01-01"), ddCollectionInProgress = false)
     )
   val paymentsNotOverdue =
     Seq(
-      Charge(blankChargeType, outstanding, LocalDate.parse("2020-01-01"), ddCollectionInProgress = false),
-      Charge(blankChargeType, outstanding, LocalDate.parse("2020-01-01"), ddCollectionInProgress = false)
+      Charge(validChargeType, outstanding, LocalDate.parse("2020-01-01"), ddCollectionInProgress = false),
+      Charge(validChargeType, outstanding, LocalDate.parse("2020-01-01"), ddCollectionInProgress = false)
     )
 
   val paymentNoOutstandingAmount = Seq(Charge(
-    chargeType = "",
+    chargeType = validChargeType,
     outstandingAmount = 0,
     dueDate = LocalDate.parse("2020-01-01"),
     ddCollectionInProgress = false

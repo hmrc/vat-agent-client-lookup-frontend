@@ -20,6 +20,7 @@ import connectors.httpParsers.ResponseHttpParser.HttpResult
 import models.{Charge, DirectDebit}
 import models.errors.UnexpectedError
 import play.api.http.Status.{NOT_FOUND, OK}
+import play.api.libs.json.{JsArray, JsObject, JsValue, Json}
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 import utils.LoggerUtil
 
@@ -42,7 +43,7 @@ object FinancialDataHttpParser extends LoggerUtil {
   implicit object ChargeReads extends HttpReads[HttpResult[Seq[Charge]]] {
     override def read(method: String, url: String, response: HttpResponse): HttpResult[Seq[Charge]] = {
       response.status match {
-        case OK => Right((response.json \ "financialTransactions").as[Seq[Charge]])
+        case OK => Right((removeInvalidChargeTypes(response.json) \ "financialTransactions").as[Seq[Charge]])
         case NOT_FOUND => Right(Seq())
         case status =>
           logger.warn(
@@ -52,6 +53,18 @@ object FinancialDataHttpParser extends LoggerUtil {
           Left(UnexpectedError(status, response.body))
       }
     }
+  }
+
+  private def removeInvalidChargeTypes(json: JsValue): JsObject = {
+    val validChargeTypes = Charge.validChargeTypes
+    val charges = (json \ "financialTransactions").as[JsArray].value
+
+    val vatReturnCharges = charges.filter { charge =>
+      val chargeType = (charge \ "chargeType").as[String]
+      validChargeTypes.map(_.toUpperCase).contains(chargeType.toUpperCase)
+    }
+
+    Json.obj("financialTransactions" -> JsArray(vatReturnCharges))
   }
 
 }
