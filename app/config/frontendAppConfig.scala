@@ -19,7 +19,7 @@ package config
 import javax.inject.{Inject, Singleton}
 import config.features.Features
 import config.{ConfigKeys => Keys}
-import play.api.{Configuration, Environment}
+import play.api.Configuration
 import play.api.i18n.Lang
 import play.api.mvc.Call
 import uk.gov.hmrc.play.bootstrap.binders.SafeRedirectUrl
@@ -72,7 +72,7 @@ trait AppConfig {
 }
 
 @Singleton
-class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, environment: Environment, sc: ServicesConfig) extends AppConfig {
+class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: ServicesConfig) extends AppConfig {
 
   override lazy val selfLookup: String = sc.baseUrl("selfLookup")
 
@@ -105,7 +105,8 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override lazy val feedbackSignOutUrl: String = s"$governmentGatewayHost/bas-gateway/sign-out-without-state?continue=$feedbackSurveyUrl"
   override lazy val unauthorisedSignOutUrl: String = s"$governmentGatewayHost/bas-gateway/sign-out-without-state?continue=$signInContinueUrl"
 
-  override lazy val classicServicesSignInUrl: String = s"$governmentGatewayHost/bas-gateway/sign-out-without-state?continue=${sc.getString(Keys.classicServicesSignIn)}"
+  override lazy val classicServicesSignInUrl: String =
+    s"$governmentGatewayHost/bas-gateway/sign-out-without-state?continue=${sc.getString(Keys.classicServicesSignIn)}"
 
   override def routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchToLanguage(lang)
 

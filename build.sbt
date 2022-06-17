@@ -17,7 +17,6 @@
 import sbt._
 import uk.gov.hmrc.DefaultBuildSettings._
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
-import play.core.PlayVersion
 import play.sbt.routes.RoutesKeys
 import sbt.Tests.{Group, SubProcess}
 
@@ -26,40 +25,26 @@ val appName = "vat-agent-client-lookup-frontend"
 resolvers += "hmrc-releases-local" at "https://artefacts.tax.service.gov.uk/artifactory/hmrc-releases-local"
 
 val bootstrapPlayVersion       = "5.24.0"
-val playFrontendHmrc           = "3.11.0-play-28"
-val playPartialsVersion        = "8.3.0-play-28"
-val playLanguageVersion        = "5.2.0-play-28"
-val scalaTestPlusVersion       = "5.1.0"
-val scalatestVersion           = "3.1.4"
-val pegdownVersion             = "1.6.0"
+val playFrontendHmrc           = "3.21.0-play-28"
 val jsoupVersion               = "1.13.1"
 val mockitoVersion             = "3.1.2.0"
 val scalaMockVersion           = "3.6.0"
-val wiremockVersion            = "2.26.3"
 val referenceCheckerVersion    = "2.5.1"
 val playJodaVersion            = "2.9.2"
-val flexmarkVersion            = "0.36.8"
 
 val compile = Seq(
   ws,
   "uk.gov.hmrc" %% "bootstrap-frontend-play-28" % bootstrapPlayVersion,
   "uk.gov.hmrc" %% "play-frontend-hmrc" % playFrontendHmrc,
-  "uk.gov.hmrc" %% "play-partials" % playPartialsVersion,
-  "uk.gov.hmrc" %% "play-language" % playLanguageVersion,
   "uk.gov.hmrc" %% "reference-checker" % referenceCheckerVersion,
   "com.typesafe.play" %% "play-json-joda" % playJodaVersion
 )
 
 def test(scope: String = "test,it"): Seq[ModuleID] = Seq(
-  "org.scalatest" %% "scalatest" % scalatestVersion % scope,
-  "org.scalatestplus.play" %% "scalatestplus-play" % scalaTestPlusVersion % scope,
+  "uk.gov.hmrc" %% "bootstrap-test-play-28" % bootstrapPlayVersion % scope,
   "org.scalamock" %% "scalamock-scalatest-support" % scalaMockVersion % scope,
-  "org.pegdown" % "pegdown" % pegdownVersion % scope,
   "org.jsoup" % "jsoup" % jsoupVersion % scope,
-  "com.typesafe.play" %% "play-test" % PlayVersion.current % scope,
-  "org.scalatestplus" %% "mockito-3-3" % mockitoVersion % scope,
-  "com.github.tomakehurst" % "wiremock-jre8" % wiremockVersion % scope,
-  "com.vladsch.flexmark" % "flexmark-all" % flexmarkVersion % scope
+  "org.scalatestplus" %% "mockito-3-3" % mockitoVersion % scope
 )
 
 RoutesKeys.routesImport := Seq.empty
