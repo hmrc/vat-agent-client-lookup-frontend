@@ -26,7 +26,7 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.when
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockFinancialDataService extends TestUtil {
 
@@ -37,6 +37,6 @@ trait MockFinancialDataService extends TestUtil {
       .thenReturn(Future.successful(response))
 
   def mockPaymentResponse(response: HttpResult[Seq[Charge]]): OngoingStubbing[Future[HttpResult[Seq[Charge]]]] =
-    when(mockFinancialDataService.getPayment(ArgumentMatchers.any())(ArgumentMatchers.any[HeaderCarrier]))
+    when(mockFinancialDataService.getPayment(ArgumentMatchers.any())(ArgumentMatchers.any[HeaderCarrier], ArgumentMatchers.any[ExecutionContext]))
       .thenReturn(Future.successful(response))
 }

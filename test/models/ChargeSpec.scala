@@ -26,6 +26,7 @@ class ChargeSpec extends AnyWordSpecLike with Matchers {
   val startDate = "2017-01-01"
   val endDate = "2017-03-01"
   val dueDate = "2017-03-08"
+  val outstandingAmount = 9999
 
   "Financial Transactions JSON should parse to Charge model correctly" when {
 
@@ -41,12 +42,12 @@ class ChargeSpec extends AnyWordSpecLike with Matchers {
               "dueDate" -> dueDate
             )
           ),
-          "outstandingAmount" -> 9999,
+          "outstandingAmount" -> outstandingAmount,
           "periodKey" -> "#001",
           "chargeReference" -> "XD002750002155"
         )
       )
-      val paymentWithOnePaymentDue = Seq(Charge(LocalDate.parse(dueDate), ddCollectionInProgress = false))
+      val paymentWithOnePaymentDue = Seq(Charge("VAT Return Debit Charge", outstandingAmount, LocalDate.parse(dueDate), ddCollectionInProgress = false))
       paymentJson.as[Seq[Charge]] shouldBe paymentWithOnePaymentDue
     }
 
@@ -62,7 +63,7 @@ class ChargeSpec extends AnyWordSpecLike with Matchers {
               "dueDate" -> dueDate
             )
           ),
-          "outstandingAmount" -> 9999,
+          "outstandingAmount" -> outstandingAmount,
           "periodKey" -> "#001",
           "chargeReference" -> "XD002750002155"
         ),
@@ -75,7 +76,7 @@ class ChargeSpec extends AnyWordSpecLike with Matchers {
               "dueDate" -> "2017-03-15"
             )
           ),
-          "outstandingAmount" -> 9999,
+          "outstandingAmount" -> outstandingAmount,
           "periodKey" -> "#001",
           "chargeReference" -> "XD002750002155"
         ),
@@ -88,16 +89,16 @@ class ChargeSpec extends AnyWordSpecLike with Matchers {
               "dueDate" -> "2017-03-20"
             )
           ),
-          "outstandingAmount" -> 9999,
+          "outstandingAmount" -> outstandingAmount,
           "periodKey" -> "#001",
           "chargeReference" -> "XD002750002155"
         )
       )
 
       val paymentsWithFewPaymentDue = Seq(
-        Charge(LocalDate.parse(dueDate), ddCollectionInProgress = false),
-        Charge(LocalDate.parse("2017-03-15"), ddCollectionInProgress = false),
-        Charge(LocalDate.parse("2017-03-20"), ddCollectionInProgress = false)
+        Charge("VAT Return Debit Charge", outstandingAmount, LocalDate.parse(dueDate), ddCollectionInProgress = false),
+        Charge("VAT Return Debit Charge", outstandingAmount, LocalDate.parse("2017-03-15"), ddCollectionInProgress = false),
+        Charge("VAT Return Debit Charge", outstandingAmount, LocalDate.parse("2017-03-20"), ddCollectionInProgress = false)
       )
 
       paymentsJson.as[Seq[Charge]] shouldBe paymentsWithFewPaymentDue
@@ -122,12 +123,14 @@ class ChargeSpec extends AnyWordSpecLike with Matchers {
               "paymentAmount" -> 20
             )
           ),
-          "outstandingAmount" -> 9999,
+          "outstandingAmount" -> outstandingAmount,
           "periodKey" -> "#001",
           "chargeReference" -> "XD002750002155"
         )
       )
-      val partialPayment = Seq(Charge(LocalDate.parse(dueDate), ddCollectionInProgress = true))
+      val partialPayment = Seq(
+        Charge("VAT Return Debit Charge", outstandingAmount, LocalDate.parse(dueDate), ddCollectionInProgress = true)
+      )
       partialPaymentJson.as[Seq[Charge]] shouldBe partialPayment
     }
   }

@@ -17,7 +17,7 @@
 package services
 
 import connectors.FinancialDataConnector
-import models.{Charge, DirectDebit}
+import models.DirectDebit
 import models.errors.UnexpectedError
 import org.mockito.Mockito.when
 import org.scalatest.matchers.should.Matchers
@@ -26,15 +26,19 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.http.HeaderCarrier
-import java.time.LocalDate
-import scala.concurrent.Future
 
-class FinancialDataServiceSpec extends AnyWordSpecLike with Matchers with MockitoSugar {
+import assets.FinancialDataConstants.{paymentNoOutstandingAmount, paymentsNotOverdue}
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+
+import scala.concurrent.{ExecutionContext, Future}
+
+class FinancialDataServiceSpec extends AnyWordSpecLike with Matchers with MockitoSugar with GuiceOneAppPerSuite {
 
   val mockConnector: FinancialDataConnector = mock[FinancialDataConnector]
   val service = new FinancialDataService(mockConnector)
   val vrn = "999999999"
   implicit val hc: HeaderCarrier = HeaderCarrier()
+  implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
 
   "DirectDebitService should return the result of the connector call" when {
 
@@ -50,13 +54,27 @@ class FinancialDataServiceSpec extends AnyWordSpecLike with Matchers with Mockit
     }
   }
 
-  "PaymentService should return the result of the connector call" when {
+  "PaymentService" when {
 
-    "there is a successful response" in {
-      val response = Right(Seq(Charge(LocalDate.parse("2019-09-13"), ddCollectionInProgress = false)))
+    "there is a successful response with outstanding amounts" should {
 
-      when(mockConnector.getPaymentsDue(vrn)(hc)).thenReturn(Future.successful(response))
-      await(service.getPayment(vrn)) shouldBe response
+      "return the result of the connector call" in {
+        val response = Right(paymentsNotOverdue)
+
+        when(mockConnector.getPaymentsDue(vrn)(hc)).thenReturn(Future.successful(response))
+        await(service.getPayment(vrn)) shouldBe response
+      }
+    }
+
+    "one of the charges has an outstanding amount of 0" should {
+
+      "return all charges except that one" in {
+        val response = Right(paymentsNotOverdue ++ paymentNoOutstandingAmount)
+        val result = Right(paymentsNotOverdue)
+
+        when(mockConnector.getPaymentsDue(vrn)(hc)).thenReturn(Future.successful(response))
+        await(service.getPayment(vrn)) shouldBe result
+      }
     }
 
     "there is an error response" in {
