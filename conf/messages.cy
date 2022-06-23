@@ -8,6 +8,12 @@ common.error = Gwall:
 common.error.heading = Mae problem wedi codi
 common.error.prefixTitle = Gwall: {0}
 common.differentClient = Gwneud newidiadau ar gyfer cleient gwahanol
+common.confirmAndContinue = Cadarnhau ac yn eich blaen
+common.agentService = Manylion TAW eich cleient
+common.errorSummary.heading = Mae gennych un neu fwy o wallau
+common.continue = Yn eich blaen
+common.fullStop = .
+common.warning = Rhybudd
 
 standardError.title = Mae problem gyda’r gwasanaeth
 standardError.heading = Mae’n ddrwg gennym – mae problem gyda’r gwasanaeth
@@ -38,13 +44,6 @@ unauthorised.agentForClient.title = Nid ydych wedi’ch awdurdodi i reoli manyli
 unauthorised.agentForClient.forMoreInformation = Gallwch
 unauthorised.agentForClient.clientAuthorise = ofyn i’ch cleient eich awdurdodi
 unauthorised.agentForClient.agentServicesAccount = Mynd i’ch cyfrif gwasanaethau asiant
-
-common.confirmAndContinue = Cadarnhau ac yn eich blaen
-common.agentService = Manylion TAW eich cleient
-common.errorSummary.heading = Mae gennych un neu fwy o wallau
-common.continue = Yn eich blaen
-common.fullStop = .
-common.warning = Rhybudd
 
 confirmClientVrn.title = Cadarnhau manylion eich cleient
 confirmClientVrn.heading = Cadarnhau manylion eich cleient
@@ -148,12 +147,6 @@ nextReturnPartial.optedOut.link = Cyflwyno Ffurflen TAW
 paymentHistory.heading = Hanes
 paymentHistory.viewPastPayments = Bwrw golwg dros daliadau blaenorol
 paymentHistory.viewPastReturns = Bwrw golwg dros Ffurflenni TAW blaenorol
-
-vatReturnsPartial.heading = Ffurflenni TAW
-vatReturnsPartial.paragraphMandated = Bwrw golwg dros Ffurflenni TAW eich cleient a gyflwynwyd.
-vatReturnsPartial.paragraphNonMandated = Cyflwyno Ffurflenni TAW eich cleient a bwrw golwg dros y Ffurflenni TAW a gyflwynwyd.
-vatReturnsPartial.viewReturnsLink = Bwrw golwg dros y Ffurflenni TAW a gyflwynwyd
-vatReturnsPartial.submitReturnLink = Cyflwyno Ffurflen TAW
 
 agentHub.heading = Manylion TAW eich cleient
 agentHub.vrn = Rhif cofrestru TAW: {0}
