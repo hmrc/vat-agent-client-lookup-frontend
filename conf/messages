@@ -8,6 +8,12 @@ common.error = Error:
 common.error.heading = There is a problem
 common.error.prefixTitle = Error: {0}
 common.differentClient = Make changes for a different client
+common.confirmAndContinue = Confirm and continue
+common.agentService = Your client’s VAT details
+common.errorSummary.heading = You have one or more errors
+common.continue = Continue
+common.fullStop = .
+common.warning = Warning
 
 standardError.title = There is a problem with the service
 standardError.heading = Sorry, there is a problem with the service
@@ -39,13 +45,6 @@ unauthorised.agentForClient.forMoreInformation = You can
 unauthorised.agentForClient.clientAuthorise = ask your client to authorise you
 unauthorised.agentForClient.agentServicesAccount = Go to your agent services account
 
-common.confirmAndContinue = Confirm and continue
-common.agentService = Your client’s VAT details
-common.errorSummary.heading = You have one or more errors
-common.continue = Continue
-common.fullStop = .
-common.warning = Warning
-
 confirmClientVrn.title = Confirm your client’s details
 confirmClientVrn.heading = Confirm your client’s details
 confirmClientVrn.name = Client name
@@ -71,9 +70,6 @@ clientDetailsCard.link = View business details
 
 VatCertificateCard.info = View and print your client’s VAT certificate.
 VatCertificateCard.link = View VAT certificate
-
-penaltiesTile.heading = Penalties and appeals
-penaltiesTile.content = View your client’s penalties, make an appeal against a penalty and see the status of any current appeals.
 
 sessionTimeout.title = Your session has timed out
 sessionTimeout.helpOne = To manage your VAT account, you’ll have to
@@ -179,6 +175,9 @@ ddNotificationBanner.title = Important
 ddNotificationBanner.p1 = HMRC has had to cancel some VAT Direct Debit agreements.
 ddNotificationBanner.p2 = If your client pays by Direct Debit, ask them to check that their mandate is still in place.
 ddNotificationBanner.p3 = If they have already done this they do not need to do it again.
+
+penaltiesTile.heading = Penalties and appeals
+penaltiesTile.content = View your client’s penalties, make an appeal against a penalty and see the status of any current appeals.
 
 penaltiesBanner.heading = Late submission and late payment penalties
 penaltiesBanner.totalPoints = Total penalty points: {0}
