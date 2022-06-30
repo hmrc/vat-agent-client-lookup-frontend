@@ -34,17 +34,17 @@ val playJodaVersion            = "2.9.2"
 
 val compile = Seq(
   ws,
-  "uk.gov.hmrc" %% "bootstrap-frontend-play-28" % bootstrapPlayVersion,
-  "uk.gov.hmrc" %% "play-frontend-hmrc" % playFrontendHmrc,
-  "uk.gov.hmrc" %% "reference-checker" % referenceCheckerVersion,
-  "com.typesafe.play" %% "play-json-joda" % playJodaVersion
+  "uk.gov.hmrc"       %% "bootstrap-frontend-play-28" % bootstrapPlayVersion,
+  "uk.gov.hmrc"       %% "play-frontend-hmrc"         % playFrontendHmrc,
+  "uk.gov.hmrc"       %% "reference-checker"          % referenceCheckerVersion,
+  "com.typesafe.play" %% "play-json-joda"             % playJodaVersion
 )
 
 def test(scope: String = "test,it"): Seq[ModuleID] = Seq(
-  "uk.gov.hmrc" %% "bootstrap-test-play-28" % bootstrapPlayVersion % scope,
-  "org.scalamock" %% "scalamock-scalatest-support" % scalaMockVersion % scope,
-  "org.jsoup" % "jsoup" % jsoupVersion % scope,
-  "org.scalatestplus" %% "mockito-3-3" % mockitoVersion % scope
+  "uk.gov.hmrc"       %% "bootstrap-test-play-28"       % bootstrapPlayVersion  % scope,
+  "org.scalamock"     %% "scalamock-scalatest-support"  % scalaMockVersion      % scope,
+  "org.jsoup"         % "jsoup"                         % jsoupVersion          % scope,
+  "org.scalatestplus" %% "mockito-3-3"                  % mockitoVersion        % scope
 )
 
 RoutesKeys.routesImport := Seq.empty

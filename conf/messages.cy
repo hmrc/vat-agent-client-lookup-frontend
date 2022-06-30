@@ -181,9 +181,9 @@ penaltiesTile.content = Bwrw golwg dros gosbau eich cleient, apelio yn erbyn cos
 
 penaltiesBanner.heading = Cosbau am gyflwyno’n hwyr ac am dalu’n hwyr
 penaltiesBanner.totalPoints = Cyfanswm y pwyntiau cosb: {0}
-penaltiesBanner.crystalisedPenalty = Swm y gosb sydd i’w dalu: £{0}
-penaltiesBanner.estimatedPenaltyWithoutCrystalisedPenalty = Amcangyfrif o swm y gosb: £{0}
-penaltiesBanner.estimatedPenaltyWithCrystalisedPenalty = Amcangyfrif o swm y gosb bellach: £{0}
+penaltiesBanner.crystalisedPenalty = Swm y gosb sydd i’w dalu:
+penaltiesBanner.estimatedPenaltyWithoutCrystalisedPenalty = Amcangyfrif o swm y gosb:
+penaltiesBanner.estimatedPenaltyWithCrystalisedPenalty = Amcangyfrif o swm y gosb bellach:
 penaltiesBanner.linkSingular = Cael gwybod pam mae gan eich cleient gosb
 penaltiesBanner.linkPlural = Cael gwybod pam mae gan eich cleient gosbau
 

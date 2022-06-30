@@ -181,9 +181,9 @@ penaltiesTile.content = View your client’s penalties, make an appeal against a
 
 penaltiesBanner.heading = Late submission and late payment penalties
 penaltiesBanner.totalPoints = Total penalty points: {0}
-penaltiesBanner.crystalisedPenalty = Penalty amount to pay: £{0}
-penaltiesBanner.estimatedPenaltyWithoutCrystalisedPenalty = Estimated penalty amount: £{0}
-penaltiesBanner.estimatedPenaltyWithCrystalisedPenalty = Estimated further penalty amount: £{0}
+penaltiesBanner.crystalisedPenalty = Penalty amount to pay:
+penaltiesBanner.estimatedPenaltyWithoutCrystalisedPenalty = Estimated penalty amount:
+penaltiesBanner.estimatedPenaltyWithCrystalisedPenalty = Estimated further penalty amount:
 penaltiesBanner.linkSingular = Find out why your client has a penalty
 penaltiesBanner.linkPlural = Find out why your client has penalties
 
