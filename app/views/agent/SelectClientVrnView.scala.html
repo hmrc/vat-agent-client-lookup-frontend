@@ -46,6 +46,7 @@
     @govukInput(Input(
       id = "vrn",
       name = "vrn",
+      inputmode = Some("numeric"),
       label = Label(
         isPageHeading = true,
         classes = "govuk-label--l",
@@ -58,7 +59,9 @@
       errorMessage = form("vrn").error.map { err =>
         ErrorMessage(content = Text(messages(err.message)))
       },
-      classes = "govuk-input--width-10"
+      classes = "govuk-input--width-10",
+      pattern = Some("[0-9]*"),
+      spellcheck = Some(false)
     ))
 
     @govukButton(Button(
