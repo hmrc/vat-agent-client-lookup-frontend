@@ -84,7 +84,16 @@ object Charge {
     "VAT POA Instalments",
     "Unallocated payment",
     "Refund",
-    "VAT Return 1st LPP"
+    "VAT Return 1st LPP",
+    "VAT Return LPI",
+    "VAT Return 1st LPP LPI",
+    "VAT Return 2nd LPP LPI",
+    "VAT Central Assessment LPI",
+    "VAT CA 1st LPP LPI",
+    "VAT CA 2nd LPP LPI",
+    "VAT Officer's Assessment LPI",
+    "VAT OA 1st LPP LPI",
+    "VAT OA 2nd LPP LPI"
   )
 
   implicit val reads: Reads[Charge] = (
