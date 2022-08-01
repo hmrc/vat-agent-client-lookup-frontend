@@ -83,7 +83,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
           status(result) shouldBe OK
-          messages(Jsoup.parse(contentAsString(result)).select("h1").text) shouldBe "Your client’s VAT details"
+          Jsoup.parse(contentAsString(result)).select("h1").text shouldBe "Your client’s VAT details"
         }
       }
     }
@@ -100,7 +100,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
         val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
         status(result) shouldBe OK
-        messages(Jsoup.parse(contentAsString(result)).select("h1").text) shouldBe "Your client’s VAT details"
+        Jsoup.parse(contentAsString(result)).select("h1").text shouldBe "Your client’s VAT details"
       }
     }
 
@@ -116,7 +116,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
         val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
         status(result) shouldBe OK
-        messages(Jsoup.parse(contentAsString(result)).select("#penalties-heading").text) shouldBe "Penalties and appeals"
+        Jsoup.parse(contentAsString(result)).select("#penalties-heading").text shouldBe "Penalties and appeals"
       }
     }
 
@@ -132,8 +132,24 @@ class AgentHubControllerSpec extends ControllerBaseSpec
         val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
         status(result) shouldBe OK
-        messages(Jsoup.parse(contentAsString(result)).select("h1").text) shouldBe "Your client’s VAT details"
-        messages(Jsoup.parse(contentAsString(result)).select("#penalties-heading").text) shouldBe ""
+        Jsoup.parse(contentAsString(result)).select("h1").text shouldBe "Your client’s VAT details"
+        Jsoup.parse(contentAsString(result)).select("#penalties-heading").text shouldBe ""
+      }
+    }
+
+    "the customer has some payments, including 1 payment on account" should {
+
+      "render the correct number of payments on the next payment tile" in {
+        mockAgentAuthorised()
+        mockCustomerDetailsSuccess(customerDetailsFnameOnly)
+        setupMockDateService(staticDate)
+        mockPaymentResponse(paymentOnAccountResponse)
+        mockPenaltiesResponse(penaltiesSummaryNoPenaltiesResponse)
+
+        val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
+
+        status(result) shouldBe OK
+        Jsoup.parse(contentAsString(result)).select("#next-payment-paragraph").text should include("2")
       }
     }
 
@@ -149,8 +165,8 @@ class AgentHubControllerSpec extends ControllerBaseSpec
         val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
         status(result) shouldBe OK
-        messages(Jsoup.parse(contentAsString(result)).select("h1").text) shouldBe "Your client’s VAT details"
-        messages(Jsoup.parse(contentAsString(result)).select("#penalties-heading").text) shouldBe ""
+        Jsoup.parse(contentAsString(result)).select("h1").text shouldBe "Your client’s VAT details"
+        Jsoup.parse(contentAsString(result)).select("#penalties-heading").text shouldBe ""
       }
     }
 
@@ -166,8 +182,8 @@ class AgentHubControllerSpec extends ControllerBaseSpec
         val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
         status(result) shouldBe OK
-        messages(Jsoup.parse(contentAsString(result)).select("h1").text) shouldBe "Your client’s VAT details"
-        messages(Jsoup.parse(contentAsString(result)).select("#penalties-heading").text) shouldBe ""
+        Jsoup.parse(contentAsString(result)).select("h1").text shouldBe "Your client’s VAT details"
+        Jsoup.parse(contentAsString(result)).select("#penalties-heading").text shouldBe ""
       }
     }
 
@@ -197,7 +213,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
 
         val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
         status(result) shouldBe OK
-        messages(Jsoup.parse(contentAsString(result)).select("h1").text) shouldBe "Your client’s VAT details"
+        Jsoup.parse(contentAsString(result)).select("h1").text shouldBe "Your client’s VAT details"
       }
     }
   }
