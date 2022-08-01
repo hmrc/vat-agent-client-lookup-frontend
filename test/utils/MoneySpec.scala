@@ -18,7 +18,6 @@ package utils
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
-import utils.{MoneyPounds, RenderableMoneyMessage}
 
 class MoneySpec extends AnyWordSpecLike with Matchers  {
 
