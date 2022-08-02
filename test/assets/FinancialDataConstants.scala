@@ -38,6 +38,7 @@ object FinancialDataConstants {
   val paymentResponse: HttpResult[Seq[Charge]] =
     Right(Seq(Charge(validChargeType, outstanding, LocalDate.parse("2018-01-01"), ddCollectionInProgress = false)))
 
+
   val paymentOverdue = Charge(validChargeType, outstanding, LocalDate.parse("2018-01-01"), ddCollectionInProgress = false)
 
   val paymentsOverdue =
@@ -58,15 +59,14 @@ object FinancialDataConstants {
     ddCollectionInProgress = false
   ))
 
-  val paymentsInclOnAccount =
-    Seq(
-      paymentsNotOverdue,
-      Charge(
+  val paymentsInclOnAccount: Seq[Charge] =
+    paymentsNotOverdue ++ Seq(Charge(
         chargeType = "Payment on account",
         outstandingAmount = 200.00,
         dueDate = LocalDate.parse("2020-01-01"),
         ddCollectionInProgress = false
     ))
+  val paymentOnAccountResponse: HttpResult[Seq[Charge]] = Right(paymentsInclOnAccount)
 
   val onePaymentModelOverdue: VatDetailsDataModel = VatDetailsDataModel(
     payments = Seq(paymentOverdue), isError = false
@@ -75,6 +75,6 @@ object FinancialDataConstants {
   val paymentsModelOneOverdue: VatDetailsDataModel = VatDetailsDataModel(paymentsOverdue, isError = false)
   val paymentsModelNoneOverdue: VatDetailsDataModel = VatDetailsDataModel(paymentsNotOverdue, isError = false)
   val paymentsModelNoPayments: VatDetailsDataModel = VatDetailsDataModel(Seq(), isError = false)
-
+  val paymentsModel1OnAccount: VatDetailsDataModel = VatDetailsDataModel(paymentsInclOnAccount, isError = false)
 
 }

@@ -78,17 +78,6 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
 
     }
 
-    "the endpoint returns a response with a unrecognised charge types" should {
-
-      "parse the JSON and return a model without those charges" in {
-        FinancialDataStub.getInvalidPayments
-        val expected = Right(Seq())
-        val result: HttpResult[Seq[Charge]] = await(financialDataConnector.getPaymentsDue(vrn))
-
-        result shouldBe expected
-      }
-    }
-
     "the endpoint returns a failure response" should {
 
       "return an UnexpectedError model containing the response body" in {
