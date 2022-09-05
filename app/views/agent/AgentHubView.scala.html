@@ -27,7 +27,6 @@
       penaltiesTilePartial: PenaltiesTilePartial,
       govukBreadcrumbs: GovukBreadcrumbs,
       govukInsetText : GovukInsetText,
-      govukNotificationBanner: GovukNotificationBanner,
       nextPaymentPartial: NextPaymentPartial,
       nextReturnPartial: NextReturnPartial,
       historyPartial: HistoryPartial,
@@ -35,12 +34,6 @@
       mtdSignupNotificationBanner: MTDSignupNotificationBanner)
 
 @(model: HubViewModel)(implicit messages: Messages, appConfig: AppConfig, user: User[_])
-
-@notificationBannerContent = {
-  <h3 id="noti-p1" class="govuk-heading-l govuk-notification-banner__heading">@messages("ddNotificationBanner.p1")</h3>
-  <p id="noti-p2" class="govuk-body">@messages("ddNotificationBanner.p2")</p>
-  <p id="noti-p3" class="govuk-body">@messages("ddNotificationBanner.p3")</p>
-}
 
 @tiles(hasPenaltiesTile: Boolean) = {
     @clientDetailsPartial()
@@ -50,16 +43,6 @@
     }
     @signUpPartial(model.details.mandationStatus, model.vrn)
     @registrationPartial(model.details, model.currentDate)
-}
-
-@blueBox = {
-  @if(model.showBlueBox) {
-    @govukNotificationBanner(NotificationBanner(
-      title = Text(messages("ddNotificationBanner.title")),
-      content = HtmlContent(notificationBannerContent),
-      classes = "govuk-notification-banner__heading"
-    ))
-  }
 }
 
 @breadcrumbLinks = {
@@ -79,8 +62,6 @@
   backLinkContent = Some(breadcrumbLinks),
   isTwoThirdsWidth = false,
   headerLink = false) {
-
-  @blueBox
 
   <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">@messages("agentHub.heading")</h1>
   <span class="govuk-caption-m">@messages("agentHub.vrn", model.vrn)</span>

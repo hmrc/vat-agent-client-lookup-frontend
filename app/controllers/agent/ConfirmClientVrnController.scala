@@ -21,7 +21,7 @@ import audit.models.{AuthenticateAgentAuditModel, GetClientBusinessNameAuditMode
 import common.SessionKeys
 import config.{AppConfig, ErrorHandler}
 import controllers.BaseController
-import controllers.predicates.{AuthoriseAsAgentWithClient, DDInterruptPredicate}
+import controllers.predicates.AuthoriseAsAgentWithClient
 import javax.inject.{Inject, Singleton}
 import models.errors._
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -33,7 +33,6 @@ import scala.concurrent.ExecutionContext
 
 @Singleton
 class ConfirmClientVrnController @Inject()(authenticate: AuthoriseAsAgentWithClient,
-                                           ddInterrupt: DDInterruptPredicate,
                                            customerDetailsService: CustomerDetailsService,
                                            errorHandler: ErrorHandler,
                                            auditService: AuditService,
@@ -80,7 +79,7 @@ class ConfirmClientVrnController @Inject()(authenticate: AuthoriseAsAgentWithCli
         SessionKeys.clientVRN, SessionKeys.viewedDDInterrupt, SessionKeys.clientName, SessionKeys.insolventWithoutAccessKey)
   }
 
-  def redirect: Action[AnyContent] = (authenticate andThen ddInterrupt) {
+  def redirect: Action[AnyContent] = (authenticate) {
 
     implicit user =>
 
