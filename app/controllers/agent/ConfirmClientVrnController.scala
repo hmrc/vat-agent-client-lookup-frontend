@@ -22,10 +22,11 @@ import common.SessionKeys
 import config.{AppConfig, ErrorHandler}
 import controllers.BaseController
 import controllers.predicates.AuthoriseAsAgentWithClient
+
 import javax.inject.{Inject, Singleton}
 import models.errors._
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.CustomerDetailsService
+import services.{CustomerDetailsService, FinancialDataService}
 import views.html.agent.ConfirmClientVrnView
 import views.html.errors.{AccountMigrationView, NotSignedUpView}
 
@@ -36,6 +37,7 @@ class ConfirmClientVrnController @Inject()(authenticate: AuthoriseAsAgentWithCli
                                            customerDetailsService: CustomerDetailsService,
                                            errorHandler: ErrorHandler,
                                            auditService: AuditService,
+                                           directDebitService: FinancialDataService,
                                            mcc: MessagesControllerComponents,
                                            confirmClientVrnView: ConfirmClientVrnView,
                                            accountMigrationView: AccountMigrationView,
@@ -45,29 +47,34 @@ class ConfirmClientVrnController @Inject()(authenticate: AuthoriseAsAgentWithCli
 
   def show: Action[AnyContent] = authenticate.async {
     implicit user =>
-      customerDetailsService.getCustomerDetails(user.vrn) map {
-        case Right(customerDetails) if customerDetails.isInsolventWithoutAccess =>
-          logger.debug("[ConfirmClientVrnController][show] - " +
-            "Client is insolvent without access, rendering UnauthorisedForClient page")
-          Redirect(controllers.agent.routes.AgentUnauthorisedForClientController.show())
-        case Right(customerDetails) =>
-          auditService.extendedAudit(
-            AuthenticateAgentAuditModel(user.arn.get, user.vrn, isAuthorisedForClient = true),
-            Some(controllers.agent.routes.ConfirmClientVrnController.show.url)
-          )
-          auditService.extendedAudit(
-            GetClientBusinessNameAuditModel(user.arn.get, user.vrn, customerDetails.clientName),
-            Some(controllers.agent.routes.ConfirmClientVrnController.show.url)
-          )
+      directDebitService.getDirectDebit(user.vrn).flatMap { ddResult =>
+        val hasDDSetup: String = ddResult.fold(_ => "", result => result.directDebitMandateFound.toString)
+        customerDetailsService.getCustomerDetails(user.vrn) map {
+          case Right(customerDetails) if customerDetails.isInsolventWithoutAccess =>
+            logger.debug("[ConfirmClientVrnController][show] - " +
+              "Client is insolvent without access, rendering UnauthorisedForClient page")
+            Redirect(controllers.agent.routes.AgentUnauthorisedForClientController.show())
+              .addingToSession(SessionKeys.mtdVatAgentDDMandateFound -> hasDDSetup)
+          case Right(customerDetails) =>
+            auditService.extendedAudit(
+              AuthenticateAgentAuditModel(user.arn.get, user.vrn, isAuthorisedForClient = true),
+              Some(controllers.agent.routes.ConfirmClientVrnController.show.url)
+            )
+            auditService.extendedAudit(
+              GetClientBusinessNameAuditModel(user.arn.get, user.vrn, customerDetails.clientName),
+              Some(controllers.agent.routes.ConfirmClientVrnController.show.url)
+            )
 
-          Ok(confirmClientVrnView(user.vrn, customerDetails)).addingToSession(
-            SessionKeys.clientName -> customerDetails.clientName, SessionKeys.insolventWithoutAccessKey -> "false")
+            Ok(confirmClientVrnView(user.vrn, customerDetails)).addingToSession(
+              SessionKeys.clientName -> customerDetails.clientName, SessionKeys.insolventWithoutAccessKey -> "false",
+              SessionKeys.mtdVatAgentDDMandateFound -> hasDDSetup)
 
-        case Left(Migration) => PreconditionFailed(accountMigrationView())
-        case Left(NotSignedUp) => NotFound(notSignedUpView())
-        case _ =>
-          logger.warn("[ConfirmClientVrnController][show] Error returned from GetCustomerDetails")
-          errorHandler.showInternalServerError
+          case Left(Migration) => PreconditionFailed(accountMigrationView())
+          case Left(NotSignedUp) => NotFound(notSignedUpView())
+          case _ =>
+            logger.warn("[ConfirmClientVrnController][show] Error returned from GetCustomerDetails")
+            errorHandler.showInternalServerError
+        }
       }
   }
 
