@@ -27,7 +27,6 @@ object HubViewModelTestConstants {
     customerDetails,
     vrn,
     LocalDate.parse("2019-01-01"),
-    showBlueBox = false,
     Some(LocalDate.parse("2020-01-01")),
     isOverdue = false,
     isError = false,
@@ -35,8 +34,4 @@ object HubViewModelTestConstants {
     directDebitSetup = None,
     penaltiesSummary = penalties
   )
-
-  def hubViewModelBlueBox(customerDetails: CustomerDetails): HubViewModel =
-    hubViewModel(customerDetails).copy(showBlueBox = true)
-
 }

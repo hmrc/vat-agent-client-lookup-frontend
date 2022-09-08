@@ -18,7 +18,7 @@ package views.agent
 
 import assets.BaseTestConstants.vrn
 import assets.CustomerDetailsTestConstants._
-import assets.HubViewModelTestConstants.{hubViewModel, hubViewModelBlueBox}
+import assets.HubViewModelTestConstants.hubViewModel
 import assets.PenaltiesConstants.{penaltiesSummaryAsModel, penaltiesSummaryAsModelNoPenalties}
 import assets.messages.partials._
 import assets.messages.{AgentHubMessages => Messages}
@@ -119,32 +119,6 @@ class AgentHubViewSpec extends ViewBaseSpec {
 
       "not display the sign up to MTD alert banner" in {
         elementExtinct("#mtd-sign-up-banner")
-      }
-    }
-
-    "the user has the blueBox value in session" should {
-
-      lazy val view = injectedView(hubViewModelBlueBox(customerDetailsFnameOnly))(messages,mockConfig,user)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
-
-      "have a notification banner" that {
-
-        "has the correct title" in {
-          elementText("#govuk-notification-banner-title") shouldBe Messages.notificationBannerTitle
-        }
-
-        "has the correct first sentence" in {
-          elementText("#noti-p1") shouldBe Messages.notificationBannerP1
-        }
-
-        "has the correct second sentence" in {
-          elementText("#noti-p2") shouldBe Messages.notificationBannerP2
-        }
-
-        "has the correct third sentence" in {
-          elementText("#noti-p3") shouldBe Messages.notificationBannerP3
-        }
-
       }
     }
 
