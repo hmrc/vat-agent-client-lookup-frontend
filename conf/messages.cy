@@ -162,11 +162,6 @@ signUpPartial.Body = Mae’n rhaid i’ch cleient gofrestru ar gyfer y Cynllun T
 passcode.error.empty = Nodwch y cod cadarnhau
 passcode.error.invalid = Nodwch y cod cadarnhau sy’n 6 chymeriad
 
-ddNotificationBanner.title = Pwysig
-ddNotificationBanner.p1 = Mae CThEM wedi gorfod canslo rhai cytundebau Debyd Uniongyrchol TAW.
-ddNotificationBanner.p2 = Os yw’ch cleient yn talu drwy Ddebyd Uniongyrchol, gofynnwch iddo wirio bod ei fandad yn dal i fod ar waith.
-ddNotificationBanner.p3 = Os yw eisoes wedi gwirio bod ei fandad yn dal i fod ar waith, nid oes angen iddo wneud hyn eto.
-
 penaltiesTile.heading = Cosbau ac apeliadau
 penaltiesTile.content = Bwrw golwg dros gosbau eich cleient, apelio yn erbyn cosb a gweld statws unrhyw apeliadau presennol.
 

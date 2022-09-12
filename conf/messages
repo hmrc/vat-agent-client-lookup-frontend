@@ -162,11 +162,6 @@ signUpPartial.Body = If your client is not exempt from VAT and their taxable tur
 passcode.error.empty = Enter the confirmation code
 passcode.error.invalid = Enter the 6 character confirmation code
 
-ddNotificationBanner.title = Important
-ddNotificationBanner.p1 = HMRC has had to cancel some VAT Direct Debit agreements.
-ddNotificationBanner.p2 = If your client pays by Direct Debit, ask them to check that their mandate is still in place.
-ddNotificationBanner.p3 = If they have already done this they do not need to do it again.
-
 penaltiesTile.heading = Penalties and appeals
 penaltiesTile.content = View your client’s penalties, make an appeal against a penalty and see the status of any current appeals.
 
