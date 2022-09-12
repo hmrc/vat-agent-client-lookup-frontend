@@ -19,7 +19,6 @@ package common
 object SessionKeys {
 
   val clientVRN: String = "mtdVatvcClientVrn"
-
   val verifiedEmail: String = "mtdVatvcVerifiedAgentEmail"
   val clientName: String = "mtdVatvcAgentClientName"
   val clientMandationStatus: String = "mtdVatMandationStatus"
@@ -27,7 +26,6 @@ object SessionKeys {
   val preference: String = "vatAgentLookupEmailPreference"
   val notificationsEmail: String = "vatAgentLookupNotificationsPreferenceEmail"
   val mtdVatAgentMandationStatus: String = "mtdVatAgentMandationStatus"
-  val viewedDDInterrupt: String = "vatViewChangeHasViewedDDInterrupt"
   val mtdVatAgentDDMandateFound: String = "mtdVatAgentDDMandateFound"
   val insolventWithoutAccessKey: String = "insolventWithoutAccess"
 }

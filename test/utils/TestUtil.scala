@@ -37,7 +37,6 @@ trait TestUtil extends AnyWordSpecLike with Matchers with GuiceOneAppPerSuite wi
 
   override def beforeEach(): Unit = {
     mockConfig.features.useStaticDateFeature(true)
-    mockConfig.features.directDebitInterruptFeature(true)
   }
 
   lazy val mcc: MessagesControllerComponents = inject[MessagesControllerComponents]

@@ -162,15 +162,6 @@ signUpPartial.Body = Mae’n rhaid i’ch cleient gofrestru ar gyfer y Cynllun T
 passcode.error.empty = Nodwch y cod cadarnhau
 passcode.error.invalid = Nodwch y cod cadarnhau sy’n 6 chymeriad
 
-directDebitInterrupt.title = Mae angen i’ch cleient drefnu Debyd Uniongyrchol newydd
-directDebitInterrupt.clientMigrated = Mae’ch cleient wedi cael ei symud i system ar-lein newydd CThEM ac mae ei Ddebyd Uniongyrchol bellach wedi’i ganslo.
-directDebitInterrupt.toSetUp = I drefnu Debyd Uniongyrchol newydd, bydd angen
-directDebitInterrupt.yourClient = i’ch cleient
-directDebitInterrupt.needToLogIn = fewngofnodi i Gyfrif Treth Busnes ar-lein neu bydd angen creu un. Unwaith y bydd eich cleient yn mewngofnodi i’w Gyfrif Treth Busnes, bydd cyfarwyddiadau’n eu harwain drwy’r broses o sefydlu Debyd Uniongyrchol newydd ar gyfer ei Bil TAW.
-directDebitInterrupt.iWillInform = Byddaf yn rhoi gwybod i’m cleient am y newid hwn
-directDebitInterrupt.continue = Yn eich blaen i gyfrif TAW eich cleient
-directDebitInterrupt.formError = Ticiwch y blwch i gadarnhau y byddwch yn rhoi gwybod i’ch cleient am y newid hwn
-
 ddNotificationBanner.title = Pwysig
 ddNotificationBanner.p1 = Mae CThEM wedi gorfod canslo rhai cytundebau Debyd Uniongyrchol TAW.
 ddNotificationBanner.p2 = Os yw’ch cleient yn talu drwy Ddebyd Uniongyrchol, gofynnwch iddo wirio bod ei fandad yn dal i fod ar waith.

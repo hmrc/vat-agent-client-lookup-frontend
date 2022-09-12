@@ -41,7 +41,6 @@ class FeatureSwitchItems @Inject() () {
     Seq(
       formCheckBoxItem(form, ConfigKeys.emailVerificationFeature, "Email Verification"),
       formCheckBoxItem(form, ConfigKeys.useStaticDateFeature, "Use Static Date (2018-05-01)"),
-      formCheckBoxItem(form, ConfigKeys.directDebitInterruptFeature, "Direct Debit Interrupt Screen"),
       formCheckBoxItem(form, ConfigKeys.penaltiesServiceFeature, "Penalties service features")
     )
   }

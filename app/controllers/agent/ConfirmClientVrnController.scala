@@ -83,7 +83,7 @@ class ConfirmClientVrnController @Inject()(authenticate: AuthoriseAsAgentWithCli
       val redirectUrl = user.session.get(SessionKeys.redirectUrl).getOrElse("")
 
       Redirect(controllers.agent.routes.SelectClientVrnController.show(redirectUrl)).removingFromSession(
-        SessionKeys.clientVRN, SessionKeys.viewedDDInterrupt, SessionKeys.clientName, SessionKeys.insolventWithoutAccessKey)
+        SessionKeys.clientVRN, SessionKeys.clientName, SessionKeys.insolventWithoutAccessKey)
   }
 
   def redirect: Action[AnyContent] = (authenticate) {

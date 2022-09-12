@@ -234,7 +234,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
             request.withSession(
               SessionKeys.clientVRN-> vrn,
               SessionKeys.clientName-> "MyClient",
-              SessionKeys.viewedDDInterrupt-> "true",
               SessionKeys.insolventWithoutAccessKey-> "false",
               SessionKeys.redirectUrl -> "/homepage",
               SessionKeys.notificationsEmail -> "an.email@host.com"
@@ -257,10 +256,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
 
           "remove the client name from the session" in {
             session(result).get(SessionKeys.clientName) shouldBe None
-          }
-
-          "remove the DD interrupt status from the session" in {
-            session(result).get(SessionKeys.viewedDDInterrupt) shouldBe None
           }
 
           "remove the insolvency access status from the session" in {
@@ -323,7 +318,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           lazy val result = {
             TestConfirmClientVrnController.redirect(FakeRequest().withSession(
               SessionKeys.clientVRN -> vrn,
-              SessionKeys.viewedDDInterrupt -> "true",
               SessionKeys.redirectUrl -> "/vat-through-software/account/change-something-about-vat",
               SessionKeys.preference -> "no",
               SessionKeys.notificationsEmail -> "an.email@host.com"
@@ -354,7 +348,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           lazy val result = {
             TestConfirmClientVrnController.redirect(FakeRequest().withSession(
               SessionKeys.preference -> "yes",
-              SessionKeys.viewedDDInterrupt -> "true",
               SessionKeys.clientVRN -> vrn,
               SessionKeys.redirectUrl -> "/vat-through-software/account/change-something-about-vat",
               SessionKeys.verifiedEmail -> "an.email@host.com"
@@ -386,7 +379,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
             TestConfirmClientVrnController.redirect(FakeRequest().withSession(
               SessionKeys.preference -> "yes",
               SessionKeys.clientVRN -> vrn,
-              SessionKeys.viewedDDInterrupt -> "true",
               SessionKeys.redirectUrl -> "/vat-through-software/account/change-something-about-vat"
             ))
           }
@@ -408,7 +400,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           lazy val result = {
             TestConfirmClientVrnController.redirect(FakeRequest().withSession(
               SessionKeys.clientVRN -> vrn,
-              SessionKeys.viewedDDInterrupt -> "true",
               SessionKeys.redirectUrl -> "/vat-through-software/account/change-something-about-vat"
             ))
           }
@@ -429,7 +420,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           lazy val result = {
             TestConfirmClientVrnController.redirect(FakeRequest().withSession(
               SessionKeys.clientVRN -> vrn,
-              SessionKeys.viewedDDInterrupt -> "true",
               SessionKeys.redirectUrl -> "/random-place"
             ))
           }
@@ -450,7 +440,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           lazy val result = {
             TestConfirmClientVrnController.redirect(FakeRequest().withSession(
               SessionKeys.clientVRN -> vrn,
-              SessionKeys.viewedDDInterrupt -> "true",
               SessionKeys.redirectUrl -> ""
             ))
           }
@@ -473,7 +462,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
       lazy val result = {
         TestConfirmClientVrnController.redirect(FakeRequest().withSession(
           SessionKeys.clientVRN -> vrn,
-          SessionKeys.viewedDDInterrupt -> "true",
           SessionKeys.notificationsEmail -> "an.email@host.com"
         ))
       }

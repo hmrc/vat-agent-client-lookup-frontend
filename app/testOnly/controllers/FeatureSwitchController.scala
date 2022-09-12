@@ -32,7 +32,6 @@ class FeatureSwitchController @Inject()(featureSwitchView: FeatureSwitch, mcc: M
       FeatureSwitchModel(
         emailVerificationEnabled = appConfig.features.emailVerificationEnabled(),
         useStaticDateFeature = appConfig.features.useStaticDateFeature(),
-        directDebitInterruptFeature = appConfig.features.directDebitInterruptFeature(),
         penaltiesServiceFeature = appConfig.features.penaltiesServiceFeature()
       )
     )))
@@ -48,7 +47,6 @@ class FeatureSwitchController @Inject()(featureSwitchView: FeatureSwitch, mcc: M
   def handleSuccess(model: FeatureSwitchModel): Result = {
     appConfig.features.emailVerificationEnabled(model.emailVerificationEnabled)
     appConfig.features.useStaticDateFeature(model.useStaticDateFeature)
-    appConfig.features.directDebitInterruptFeature(model.directDebitInterruptFeature)
     appConfig.features.penaltiesServiceFeature(model.penaltiesServiceFeature)
     Redirect(routes.FeatureSwitchController.featureSwitch)
   }
