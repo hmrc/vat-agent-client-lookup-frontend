@@ -23,7 +23,6 @@ import java.time.LocalDate
 case class HubViewModel(details: CustomerDetails,
                         vrn: String,
                         currentDate: LocalDate,
-                        showBlueBox: Boolean,
                         nextPaymentDate: Option[LocalDate],
                         isOverdue: Boolean,
                         isError: Boolean,

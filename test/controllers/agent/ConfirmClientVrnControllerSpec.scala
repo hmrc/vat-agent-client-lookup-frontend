@@ -19,12 +19,13 @@ package controllers.agent
 import assets.BaseTestConstants
 import assets.BaseTestConstants.{arn, vrn}
 import assets.CustomerDetailsTestConstants._
+import assets.FinancialDataConstants.ddNoMandateFound
 import assets.messages.{ConfirmClientVrnPageMessages => Messages}
 import audit.mocks.MockAuditingService
 import audit.models.{AuthenticateAgentAuditModel, GetClientBusinessNameAuditModel}
 import common.SessionKeys
 import controllers.ControllerBaseSpec
-import mocks.services.MockCustomerDetailsService
+import mocks.services.{MockCustomerDetailsService, MockFinancialDataService}
 import models.errors.{Migration, NotSignedUp}
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
@@ -38,14 +39,15 @@ import views.html.errors.{AccountMigrationView, NotSignedUpView}
 
 import scala.concurrent.ExecutionContext
 
-class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustomerDetailsService with MockAuditingService {
+class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustomerDetailsService
+  with MockFinancialDataService with MockAuditingService {
 
   object TestConfirmClientVrnController extends ConfirmClientVrnController(
     mockAuthAsAgentWithClient,
-    mockDDPredicate,
     mockCustomerDetailsService,
     serviceErrorHandler,
     mockAuditingService,
+    mockFinancialDataService,
     mcc,
     inject[ConfirmClientVrnView],
     inject[AccountMigrationView],
@@ -67,6 +69,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
               lazy val result = {
                 mockAgentAuthorised()
                 mockCustomerDetailsSuccess(customerDetailsInsolvent)
+                mockDirectDebitResponse(ddNoMandateFound)
                 TestConfirmClientVrnController.show(fakeRequestWithVrnAndRedirectUrl)
               }
 
@@ -87,6 +90,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
               "return 200" in {
                 mockAgentAuthorised()
                 mockCustomerDetailsSuccess(customerDetailsOrganisation)
+                mockDirectDebitResponse(ddNoMandateFound)
                 status(result) shouldBe Status.OK
 
                 verify(mockAuditingService)
@@ -124,6 +128,10 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
               "add the insolvency access status to the session" in {
                 session(result).get(SessionKeys.insolventWithoutAccessKey) shouldBe Some("false")
               }
+
+              "add the 'mtdVatAgentDDMandateFound' key to the session" in {
+                session(result).get(SessionKeys.mtdVatAgentDDMandateFound) shouldBe Some("false")
+              }
             }
           }
 
@@ -134,6 +142,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
             "return 412" in {
               mockAgentAuthorised()
               mockCustomerDetailsError(Migration)
+              mockDirectDebitResponse(ddNoMandateFound)
               status(result) shouldBe Status.PRECONDITION_FAILED
             }
 
@@ -155,6 +164,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
             "return 404" in {
               mockAgentAuthorised()
               mockCustomerDetailsError(NotSignedUp)
+              mockDirectDebitResponse(ddNoMandateFound)
               status(result) shouldBe Status.NOT_FOUND
             }
 
@@ -176,6 +186,7 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
             "return 500" in {
               mockAgentAuthorised()
               mockCustomerDetailsError(BaseTestConstants.unexpectedError)
+              mockDirectDebitResponse(ddNoMandateFound)
               status(result) shouldBe Status.INTERNAL_SERVER_ERROR
             }
 
@@ -223,7 +234,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
             request.withSession(
               SessionKeys.clientVRN-> vrn,
               SessionKeys.clientName-> "MyClient",
-              SessionKeys.viewedDDInterrupt-> "true",
               SessionKeys.insolventWithoutAccessKey-> "false",
               SessionKeys.redirectUrl -> "/homepage",
               SessionKeys.notificationsEmail -> "an.email@host.com"
@@ -246,10 +256,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
 
           "remove the client name from the session" in {
             session(result).get(SessionKeys.clientName) shouldBe None
-          }
-
-          "remove the DD interrupt status from the session" in {
-            session(result).get(SessionKeys.viewedDDInterrupt) shouldBe None
           }
 
           "remove the insolvency access status from the session" in {
@@ -312,7 +318,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           lazy val result = {
             TestConfirmClientVrnController.redirect(FakeRequest().withSession(
               SessionKeys.clientVRN -> vrn,
-              SessionKeys.viewedDDInterrupt -> "true",
               SessionKeys.redirectUrl -> "/vat-through-software/account/change-something-about-vat",
               SessionKeys.preference -> "no",
               SessionKeys.notificationsEmail -> "an.email@host.com"
@@ -343,7 +348,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           lazy val result = {
             TestConfirmClientVrnController.redirect(FakeRequest().withSession(
               SessionKeys.preference -> "yes",
-              SessionKeys.viewedDDInterrupt -> "true",
               SessionKeys.clientVRN -> vrn,
               SessionKeys.redirectUrl -> "/vat-through-software/account/change-something-about-vat",
               SessionKeys.verifiedEmail -> "an.email@host.com"
@@ -375,7 +379,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
             TestConfirmClientVrnController.redirect(FakeRequest().withSession(
               SessionKeys.preference -> "yes",
               SessionKeys.clientVRN -> vrn,
-              SessionKeys.viewedDDInterrupt -> "true",
               SessionKeys.redirectUrl -> "/vat-through-software/account/change-something-about-vat"
             ))
           }
@@ -397,7 +400,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           lazy val result = {
             TestConfirmClientVrnController.redirect(FakeRequest().withSession(
               SessionKeys.clientVRN -> vrn,
-              SessionKeys.viewedDDInterrupt -> "true",
               SessionKeys.redirectUrl -> "/vat-through-software/account/change-something-about-vat"
             ))
           }
@@ -418,7 +420,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           lazy val result = {
             TestConfirmClientVrnController.redirect(FakeRequest().withSession(
               SessionKeys.clientVRN -> vrn,
-              SessionKeys.viewedDDInterrupt -> "true",
               SessionKeys.redirectUrl -> "/random-place"
             ))
           }
@@ -439,7 +440,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
           lazy val result = {
             TestConfirmClientVrnController.redirect(FakeRequest().withSession(
               SessionKeys.clientVRN -> vrn,
-              SessionKeys.viewedDDInterrupt -> "true",
               SessionKeys.redirectUrl -> ""
             ))
           }
@@ -462,7 +462,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
       lazy val result = {
         TestConfirmClientVrnController.redirect(FakeRequest().withSession(
           SessionKeys.clientVRN -> vrn,
-          SessionKeys.viewedDDInterrupt -> "true",
           SessionKeys.notificationsEmail -> "an.email@host.com"
         ))
       }
@@ -475,26 +474,6 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
 
       "redirect to WhatToDo controller" in {
         redirectLocation(result) shouldBe Some(controllers.agent.routes.AgentHubController.show.url)
-      }
-    }
-
-    "the DD interrupt value is not in session" should {
-
-      lazy val result = {
-        TestConfirmClientVrnController.redirect(FakeRequest().withSession(
-          SessionKeys.clientVRN -> vrn,
-          SessionKeys.notificationsEmail -> "an.email@host.com"
-        ))
-      }
-
-      "return status SEE_OTHER (303)" in {
-        mockAgentAuthorised()
-        mockCustomerDetailsSuccess(customerDetailsOrganisation)
-        status(result) shouldBe Status.SEE_OTHER
-      }
-
-      "redirect to the DD interrupt controller" in {
-        redirectLocation(result) shouldBe Some(controllers.agent.routes.DDInterruptController.show.url)
       }
     }
   }

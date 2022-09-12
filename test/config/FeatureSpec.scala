@@ -25,7 +25,6 @@ class FeatureSpec extends TestUtil {
   val allFeatures: Seq[Feature] = Seq(
     features.penaltiesServiceFeature,
     features.useStaticDateFeature,
-    features.directDebitInterruptFeature,
     features.emailVerificationEnabled
   )
   override def beforeEach(): Unit = {

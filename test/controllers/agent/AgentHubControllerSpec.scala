@@ -244,7 +244,6 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           customerDetailsAllInfo,
           BaseTestConstants.vrn,
           LocalDate.parse("2018-05-01"),
-          showBlueBox = true,
           Some(LocalDate.parse("2018-01-01")),
           isOverdue = true,
           isError = false,
@@ -252,7 +251,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           directDebitSetup = None
         )
 
-        val result = controller.constructViewModel(customerDetailsAllInfo, onePaymentModelOverdue, None)(userWithBlueBox)
+        val result = controller.constructViewModel(customerDetailsAllInfo, onePaymentModelOverdue, None)(user)
         result shouldBe expected
       }
 
@@ -264,7 +263,6 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           customerDetailsAllInfo,
           BaseTestConstants.vrn,
           LocalDate.parse("2018-05-01"),
-          showBlueBox = true,
           Some(LocalDate.parse("2018-01-01")),
           isOverdue = false,
           isError = false,
@@ -272,7 +270,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           directDebitSetup = None
         )
 
-        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelOneOverdue, None)(userWithBlueBox)
+        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelOneOverdue, None)(user)
         result shouldBe expected
       }
 
@@ -284,7 +282,6 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           customerDetailsAllInfo,
           BaseTestConstants.vrn,
           LocalDate.parse("2018-05-01"),
-          showBlueBox = true,
           Some(LocalDate.parse("2020-01-01")),
           isOverdue = false,
           isError = false,
@@ -292,7 +289,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           directDebitSetup = None
         )
 
-        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoneOverdue, None)(userWithBlueBox)
+        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoneOverdue, None)(user)
         result shouldBe expected
       }
 
@@ -304,7 +301,6 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           customerDetailsAllInfo,
           BaseTestConstants.vrn,
           LocalDate.parse("2018-05-01"),
-          showBlueBox = true,
           None,
           isOverdue = false,
           isError = false,
@@ -312,7 +308,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           directDebitSetup = None
         )
 
-        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoPayments, None)(userWithBlueBox)
+        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoPayments, None)(user)
         result shouldBe expected
       }
 
@@ -324,7 +320,6 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           customerDetailsAllInfo,
           BaseTestConstants.vrn,
           LocalDate.parse("2018-05-01"),
-          showBlueBox = false,
           Some(LocalDate.parse("2020-01-01")),
           isOverdue = false,
           isError = false,
@@ -344,7 +339,6 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           customerDetailsAllInfo,
           BaseTestConstants.vrn,
           LocalDate.parse("2018-05-01"),
-          showBlueBox = false,
           Some(LocalDate.parse("2020-01-01")),
           isOverdue = false,
           isError = false,
@@ -364,7 +358,6 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           customerDetailsAllInfo,
           BaseTestConstants.vrn,
           LocalDate.parse("2018-05-01"),
-          showBlueBox = true,
           Some(LocalDate.parse("2020-01-01")),
           isOverdue = false,
           isError = false,
@@ -373,7 +366,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           penaltiesSummary = Some(penaltiesSummaryAsModel)
         )
 
-        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoneOverdue, Some(penaltiesSummaryAsModel))(userWithBlueBox)
+        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoneOverdue, Some(penaltiesSummaryAsModel))(user)
         result shouldBe expected
       }
 
@@ -385,7 +378,6 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           customerDetailsAllInfo,
           BaseTestConstants.vrn,
           LocalDate.parse("2018-05-01"),
-          showBlueBox = true,
           Some(LocalDate.parse("2020-01-01")),
           isOverdue = false,
           isError = false,
@@ -394,7 +386,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           penaltiesSummary = Some(PenaltiesSummary(0, 0, 0, 0, 0, false))
         )
 
-        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoneOverdue, Some(penaltiesSummaryAsModelNoPenalties))(userWithBlueBox)
+        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoneOverdue, Some(penaltiesSummaryAsModelNoPenalties))(user)
         result shouldBe expected
       }
 
@@ -407,7 +399,6 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           customerDetailsAllInfo,
           BaseTestConstants.vrn,
           LocalDate.parse("2018-05-01"),
-          showBlueBox = true,
           Some(LocalDate.parse("2020-01-01")),
           isOverdue = false,
           isError = false,
@@ -416,7 +407,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           penaltiesSummary = None
         )
 
-        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoneOverdue, None)(userWithBlueBox)
+        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoneOverdue, None)(user)
         result shouldBe expected
       }
     }

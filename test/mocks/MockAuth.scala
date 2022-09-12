@@ -64,8 +64,6 @@ trait MockAuth extends TestUtil with MockitoSugar {
       ec
     )
 
-  val mockDDPredicate: DDInterruptPredicate = new DDInterruptPredicate(ec)
-
   val mockAgentOnlyAuthPredicate: AuthoriseAsAgentOnly =
     new AuthoriseAsAgentOnly(
       mockEnrolmentsAuthService,

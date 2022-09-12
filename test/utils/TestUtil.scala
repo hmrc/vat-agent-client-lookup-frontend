@@ -37,7 +37,6 @@ trait TestUtil extends AnyWordSpecLike with Matchers with GuiceOneAppPerSuite wi
 
   override def beforeEach(): Unit = {
     mockConfig.features.useStaticDateFeature(true)
-    mockConfig.features.directDebitInterruptFeature(true)
   }
 
   lazy val mcc: MessagesControllerComponents = inject[MessagesControllerComponents]
@@ -73,17 +72,11 @@ trait TestUtil extends AnyWordSpecLike with Matchers with GuiceOneAppPerSuite wi
       SessionKeys.mtdVatAgentMandationStatus -> nonMTDfB
     )
 
-  lazy val fakeRequestWithBlueBoxSession: FakeRequest[AnyContentAsEmpty.type] =
-    FakeRequest().withSession(SessionKeys.viewedDDInterrupt -> "blueBox")
-
   lazy val fakeRequestDDSetup: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest().withSession(SessionKeys.mtdVatAgentDDMandateFound -> "true")
 
   lazy val fakeRequestDDNotSetup: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest().withSession(SessionKeys.mtdVatAgentDDMandateFound -> "false")
-
-  lazy val userWithBlueBox: User[AnyContentAsEmpty.type] =
-    User[AnyContentAsEmpty.type](vrn, active = true)(fakeRequestWithBlueBoxSession)
 
   lazy val userHasDDSetup: User[AnyContentAsEmpty.type] =
     User[AnyContentAsEmpty.type](vrn, active = true)(fakeRequestDDSetup)

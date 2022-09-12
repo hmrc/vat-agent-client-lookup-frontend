@@ -18,5 +18,4 @@ package models
 
 case class FeatureSwitchModel(emailVerificationEnabled: Boolean,
                               useStaticDateFeature: Boolean,
-                              directDebitInterruptFeature: Boolean,
                               penaltiesServiceFeature: Boolean)

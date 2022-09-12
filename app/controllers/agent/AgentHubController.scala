@@ -65,7 +65,6 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
   def constructViewModel(details: CustomerDetails, paymentsModel: VatDetailsDataModel,
                          penaltiesInformation: Option[PenaltiesSummary])(implicit user: User[_]): HubViewModel = {
 
-    val showBlueBox: Boolean = user.session.get(SessionKeys.viewedDDInterrupt).contains("blueBox")
     val hasDDSetup: Option[Boolean] = user.session.get(SessionKeys.mtdVatAgentDDMandateFound) match {
       case Some("true") => Some(true)
       case Some("false") => Some(false)
@@ -86,7 +85,6 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
       details,
       user.vrn,
       dateService.now(),
-      showBlueBox,
       nextPaymentDate,
       isOverdue,
       paymentsModel.isError,
