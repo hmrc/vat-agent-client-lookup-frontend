@@ -22,8 +22,6 @@ import sbt.Tests.{Group, SubProcess}
 
 val appName = "vat-agent-client-lookup-frontend"
 
-resolvers += "hmrc-releases-local" at "https://artefacts.tax.service.gov.uk/artifactory/hmrc-releases-local"
-
 val bootstrapPlayVersion       = "7.4.0"
 val playFrontendHmrc           = "3.28.0-play-28"
 val jsoupVersion               = "1.15.3"
