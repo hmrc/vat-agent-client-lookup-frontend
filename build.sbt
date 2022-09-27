@@ -22,11 +22,9 @@ import sbt.Tests.{Group, SubProcess}
 
 val appName = "vat-agent-client-lookup-frontend"
 
-resolvers += "hmrc-releases-local" at "https://artefacts.tax.service.gov.uk/artifactory/hmrc-releases-local"
-
-val bootstrapPlayVersion       = "5.24.0"
-val playFrontendHmrc           = "3.21.0-play-28"
-val jsoupVersion               = "1.13.1"
+val bootstrapPlayVersion       = "7.4.0"
+val playFrontendHmrc           = "3.28.0-play-28"
+val jsoupVersion               = "1.15.3"
 val mockitoVersion             = "3.1.2.0"
 val scalaMockVersion           = "3.6.0"
 val referenceCheckerVersion    = "2.5.1"
@@ -98,9 +96,9 @@ lazy val microservice = Project(appName, file("."))
   .settings(publishingSettings: _*)
   .settings(defaultSettings(): _*)
   .settings(
-    Keys.fork in Test := true,
-    javaOptions in Test += "-Dlogger.resource=logback-test.xml",
-    scalaVersion := "2.12.15",
+    Test / Keys.fork := true,
+    Test / javaOptions += "-Dlogger.resource=logback-test.xml",
+    scalaVersion := "2.12.16",
     majorVersion := 0,
     libraryDependencies ++= appDependencies,
     retrieveManaged := true,
@@ -109,9 +107,9 @@ lazy val microservice = Project(appName, file("."))
   .configs(IntegrationTest)
   .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
   .settings(
-    Keys.fork in IntegrationTest := false,
-    unmanagedSourceDirectories in IntegrationTest := (baseDirectory in IntegrationTest) (base => Seq(base / "it")).value,
+    IntegrationTest / Keys.fork := false,
+    IntegrationTest / unmanagedSourceDirectories := (IntegrationTest / baseDirectory) (base => Seq(base / "it")).value,
     addTestReportOption(IntegrationTest, "int-test-reports"),
-    testGrouping in IntegrationTest := oneForkedJvmPerTest((definedTests in IntegrationTest).value),
-    parallelExecution in IntegrationTest := false)
+    IntegrationTest / testGrouping := oneForkedJvmPerTest((IntegrationTest / definedTests).value),
+    IntegrationTest / parallelExecution := false)
 
