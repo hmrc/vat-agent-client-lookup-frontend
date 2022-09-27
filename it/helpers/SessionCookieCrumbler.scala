@@ -40,9 +40,9 @@ object SessionCookieCrumbler {
         throw new RuntimeException("Cookie MAC didn't match content, this should never happen")
       }
       val Regex = """(.*)=(.*)""".r
-      map.split("&").view.map {
+      map.split("&").map {
         case Regex(k, v) => Map(k -> v)
-      }.view.reduce(_ ++ _)
+      }.reduce(_ ++ _)
     }
 
     decode(decrypted)
