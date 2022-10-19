@@ -136,7 +136,7 @@ nextPaymentPartial.multiple = You have {0} payments due
 nextPaymentPartial.noPayments = No payments due right now
 nextPaymentPartial.error = Sorry, there is a problem with the service. Try again later.
 nextPaymentPartial.overdue = overdue
-nextPaymentPartial.link = Check what you owe
+nextPaymentPartial.link = Check what your client owes
 nextPaymentPartial.directDebitSetup = Direct Debit is set up
 nextPaymentPartial.noDirectDebitSetup = No Direct Debit set up
 
