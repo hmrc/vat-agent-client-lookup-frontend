@@ -136,7 +136,7 @@ nextPaymentPartial.multiple = Mae gennych {0} o daliadau’n ddyledus
 nextPaymentPartial.noPayments = Nid oes taliadau’n ddyledus nawr
 nextPaymentPartial.error = Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth. Rhowch gynnig arall arni yn nes ymlaen.
 nextPaymentPartial.overdue = hwyr
-nextPaymentPartial.link = Gwirio’r hyn sydd arnoch
+nextPaymentPartial.link = Gwirio’r hyn sydd ar eich cleient
 nextPaymentPartial.directDebitSetup = Debyd Uniongyrchol wedi’i sefydlu
 nextPaymentPartial.noDirectDebitSetup = Dim Debyd Uniongyrchol wedi’i sefydlu
 
