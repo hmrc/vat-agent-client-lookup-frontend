@@ -36,13 +36,13 @@
 @(model: HubViewModel)(implicit messages: Messages, appConfig: AppConfig, user: User[_])
 
 @tiles(hasPenaltiesTile: Boolean) = {
-    @clientDetailsPartial()
-    @vatCertificatePartial()
-    @if(hasPenaltiesTile) {
-        @penaltiesTilePartial()
-    }
-    @signUpPartial(model.details.mandationStatus, model.vrn)
-    @registrationPartial(model.details, model.currentDate)
+  @clientDetailsPartial()
+  @vatCertificatePartial()
+  @if(hasPenaltiesTile) {
+    @penaltiesTilePartial()
+  }
+  @signUpPartial(model.details.mandationStatus, model.vrn)
+  @registrationPartial(model.details, model.currentDate)
 }
 
 @breadcrumbLinks = {
