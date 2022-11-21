@@ -19,7 +19,14 @@ package messages
 object PenaltiesMessages {
 
   val penaltiesBannerHeading = "Late submission and late payment penalties"
-  val singlePenaltyBanerLinkText = "Find out why your client has a penalty"
+  val singlePenaltyBannerLinkText = "Find out why your client has a penalty"
   val multiplePenaltiesBannerLinkText = "Find out why your client has penalties"
+
+  val penaltiesComingBannerTitle = "Important"
+  val penaltiesComingBannerHeading = "VAT penalties and interest are changing"
+  val penaltiesComingBannerParaOne = "From January 2023, we’re launching a new penalty system to replace Default Surcharge."
+  val penaltiesComingBannerParaTwo = "The change affects late returns and late payments for VAT periods starting on or after 1 January 2023."
+  val penaltiesComingBannerParaThree = "We’re also changing how to calculate interest on late payments and repayment returns."
+  val penaltiesComingBannerLinkText = "Read the guidance on GOV.UK to find out more (opens in a new tab)."
 
 }

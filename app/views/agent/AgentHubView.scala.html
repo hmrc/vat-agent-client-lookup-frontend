@@ -16,8 +16,7 @@
 
 @import config.AppConfig
 @import views.html.agent.partials._
-@import views.html.helpers.PenaltiesBanner
-@import views.html.helpers.MTDSignupNotificationBanner
+@import views.html.helpers._
 
 @this(mainTemplate: MainTemplate,
       clientDetailsPartial: ClientDetailsPartial,
@@ -72,9 +71,7 @@
     </a>
   </span>
 
-  @model.penaltiesSummary.map { summary =>
-    @penaltiesBanner(summary)
-  }
+  @penaltiesBanner(model.penaltiesSummary)
 
   @mtdSignupNotificationBanner(model.details.mandationStatus)
 
