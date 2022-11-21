@@ -177,3 +177,10 @@ signUpForMTDBanner.title = Pwysig
 signUpForMTDBanner.heading = Newidiodd y ffordd o gyflwyno Ffurflenni TAW ar 1 Ebrill oherwydd Troi Treth yn Ddigidol
 signUpForMTDBanner.paragraphText = Ni allwch ddefnyddio’r gwasanaeth hwn i gyflwyno datganiadau ar gyfer cyfnodau cyfrifyddu sy’n dechrau ar ôl 1 Ebrill 2022. Yn lle hynny, rhaid cadw cofnodion digidol a rhaid cyflwyno Ffurflenni gan ddefnyddio meddalwedd sy’n gydnaws â CThEM
 signUpForMTDBanner.linkText = Darganfod pryd i gofrestru a dechrau defnyddio Troi Treth yn Ddigidol ar gyfer TAW (yn agor tab newydd)
+
+penaltiesComingBanner.title = Pwysig
+penaltiesComingBanner.heading = Mae cosbau a thaliadau llog a godir ar TAW yn newid
+penaltiesComingBanner.paraOne = Ym mis Ionawr 2023, rydym yn lansio system gosb newydd i ddisodli’r Gordal Diffygdalu.
+penaltiesComingBanner.paraTwo = Mae’r newid yn effeithio ar Ffurflenni TAW a thaliadau sy’n cael eu cyflwyno’n hwyr ar gyfer cyfnodau TAW sy’n dechrau ar neu ar ôl 1 Ionawr 2023.
+penaltiesComingBanner.paraThree = Rydym hefyd yn newid sut rydym yn cyfrifo llog ar daliadau hwyr a ffurflenni ad-dalu.
+penaltiesComingBanner.linkText = Darllenwch yr arweiniad ar GOV.UK i gael rhagor o wybodaeth (yn agor tab newydd).
