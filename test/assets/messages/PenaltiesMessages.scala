@@ -26,7 +26,7 @@ object PenaltiesMessages {
   val penaltiesComingBannerHeading = "VAT penalties and interest are changing"
   val penaltiesComingBannerParaOne = "From January 2023, we’re launching a new penalty system to replace Default Surcharge."
   val penaltiesComingBannerParaTwo = "The change affects late returns and late payments for VAT periods starting on or after 1 January 2023."
-  val penaltiesComingBannerParaThree = "We’re also changing how to calculate interest on late payments and repayment returns."
+  val penaltiesComingBannerParaThree = "We’re also changing how we calculate interest on late payments and repayment returns."
   val penaltiesComingBannerLinkText = "Read the guidance on GOV.UK to find out more (opens in a new tab)."
 
 }
