@@ -22,7 +22,7 @@ import assets.HubViewModelTestConstants.hubViewModel
 import assets.PenaltiesConstants.{penaltiesSummaryAsModel, penaltiesSummaryAsModelNoPenalties}
 import assets.messages.partials._
 import assets.messages.{AgentHubMessages => Messages}
-import messages.PenaltiesMessages.{multiplePenaltiesBannerLinkText, penaltiesBannerHeading}
+import messages.PenaltiesMessages._
 import messages.partials.{NextPaymentPartialMessages, PenaltiesTileMessages}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -185,7 +185,6 @@ class AgentHubViewSpec extends ViewBaseSpec {
 
         lazy val penaltiesBanner = element(".govuk-notification-banner")
 
-
         "has the correct heading" in {
           penaltiesBanner.select("#govuk-notification-banner-title-penalties-banner").text shouldBe penaltiesBannerHeading
         }
@@ -206,6 +205,20 @@ class AgentHubViewSpec extends ViewBaseSpec {
           }
         }
       }
+
+      "not display the penalties coming banner heading" in {
+        elementExtinct("#penalties-coming-banner-heading")
+      }
+
+      "not display the penalties coming banner content" in {
+        elementExtinct("#penalties-coming-first-para")
+        elementExtinct("#penalties-coming-second-para")
+        elementExtinct("#penalties-coming-third-para")
+      }
+
+      "not display the penalties coming banner link" in {
+        elementExtinct("#penalties-coming-link")
+      }
     }
 
     "the user has no penalties" should {
@@ -213,17 +226,53 @@ class AgentHubViewSpec extends ViewBaseSpec {
       lazy val view = injectedView(hubViewModel(customerDetailsAllInfo, penalties = Some(penaltiesSummaryAsModelNoPenalties)))(messages,mockConfig,user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      lazy val penaltiesBanner = "#govuk-notification-banner-penalties-banner"
       lazy val penaltiesSection = "#view-penalties-details"
 
       "not display the penalties and appeal section" in {
         elementExtinct(penaltiesSection)
       }
 
-      "not display the penalties notification banner" in {
-        elementExtinct(penaltiesBanner)
+      "not display any penalty information" in {
+        elementExtinct("#crystalised-penalties-content")
+        elementExtinct("#estimated-penalties-content")
+        elementExtinct("#crystalised-and-estimated-penalties-content")
+        elementExtinct("#penalty-points-content")
+      }
+
+      "not display a link to the penalties service" in {
+        elementExtinct("#penalties-service-link")
+      }
+
+      "display the penalties coming banner" which {
+
+        "have the correct heading" in {
+          elementText(".govuk-notification-banner__heading") shouldBe penaltiesComingBannerHeading
+        }
+
+        "have the correct first paragraph" in {
+          elementText("#penalties-coming-first-para") shouldBe penaltiesComingBannerParaOne
+        }
+
+        "have the correct second paragraph" in {
+          elementText("#penalties-coming-second-para") shouldBe penaltiesComingBannerParaTwo
+        }
+
+        "have the correct third paragraph" in {
+          elementText("#penalties-coming-third-para") shouldBe penaltiesComingBannerParaThree
+        }
+
+        "have the correct link" which {
+
+          "has the correct link text" in {
+            elementText("#penalties-coming-link") shouldBe penaltiesComingBannerLinkText
+          }
+
+          "has the correct link location" in {
+            element("#penalties-coming-link").attr("href") shouldBe
+              "https://www.gov.uk/guidance/prepare-for-upcoming-changes-to-vat-penalties-and-vat-interest-charges"
+          }
+        }
       }
     }
   }
-
 }

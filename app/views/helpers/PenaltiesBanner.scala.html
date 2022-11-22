@@ -20,33 +20,33 @@
 @this(govukNotificationBanner: GovukNotificationBanner,
       displayMoney: DisplayMoney)
 
-@(penaltiesSummary: PenaltiesSummary)(implicit messages: Messages, appConfig: config.AppConfig)
+@(summary: Option[PenaltiesSummary])(implicit messages: Messages, appConfig: config.AppConfig)
 
-@bannerContent = {
+@bannerContentIfPenalties(penaltiesSummary: PenaltiesSummary) = {
   <div class="govuk-!-margin-bottom-3">
   @if(penaltiesSummary.noOfCrystalisedPenalties > 0) {
-    <div>
+    <div id="crystalised-penalties-content">
       @messages("penaltiesBanner.crystalisedPenalty")
       @displayMoney(penaltiesSummary.crystalisedPenaltyAmountDue)
     </div>
     }
   @if(penaltiesSummary.noOfEstimatedPenalties > 0 && penaltiesSummary.noOfCrystalisedPenalties == 0) {
-    <div>
+    <div id="estimated-penalties-content">
       @messages("penaltiesBanner.estimatedPenaltyWithoutCrystalisedPenalty")
       @displayMoney(penaltiesSummary.estimatedPenaltyAmount)
     </div>
   }
   @if(penaltiesSummary.noOfEstimatedPenalties > 0 && penaltiesSummary.noOfCrystalisedPenalties > 0) {
-    <div>
+    <div id="crystalised-and-estimated-penalties-content">
       @messages("penaltiesBanner.estimatedPenaltyWithCrystalisedPenalty")
       @displayMoney(penaltiesSummary.estimatedPenaltyAmount)
     </div>
   }
   @if(penaltiesSummary.noOfPoints > 0) {
-    <div>@messages("penaltiesBanner.totalPoints", penaltiesSummary.noOfPoints)</div>
+    <div id="penalty-points-content">@messages("penaltiesBanner.totalPoints", penaltiesSummary.noOfPoints)</div>
   }
   </div>
-  <a class="govuk-link" href="@appConfig.penaltiesFrontendUrl">
+  <a class="govuk-link" id="penalties-service-link" href="@appConfig.penaltiesFrontendUrl">
   @if(penaltiesSummary.hasMultiplePenalties) {
     @messages("penaltiesBanner.linkPlural")
   } else {
@@ -55,10 +55,30 @@
   </a>
 }
 
-@if(penaltiesSummary.hasActivePenalties) {
-  @govukNotificationBanner(NotificationBanner(
-    title = Text(messages("penaltiesBanner.heading")),
-    content = HtmlContent(bannerContent),
-    titleId = Some("govuk-notification-banner-title-penalties-banner")
-  ))
+@noPenaltiesBannerContent = {
+<div class="govuk-notification-banner__heading" id="penalties-coming-banner-heading">
+    @messages("penaltiesComingBanner.heading")
+</div>
+<div class="govuk-body" id="penalties-coming-banner-content">
+    <p class="govuk-body" id="penalties-coming-first-para">@messages("penaltiesComingBanner.paraOne")</p>
+    <p class="govuk-body" id="penalties-coming-second-para">@messages("penaltiesComingBanner.paraTwo")</p>
+    <p class="govuk-body" id="penalties-coming-third-para">@messages("penaltiesComingBanner.paraThree")</p>
+    <a class="govuk-notification-banner__link" rel="noreferrer noopener" target="_blank" id="penalties-coming-link"
+       href="https://www.gov.uk/guidance/prepare-for-upcoming-changes-to-vat-penalties-and-vat-interest-charges">@messages("penaltiesComingBanner.linkText")</a>
+</div>
+}
+
+@summary match {
+    case Some(content) if content.hasActivePenalties => {
+        @govukNotificationBanner(NotificationBanner(
+            title = Text(messages("penaltiesBanner.heading")),
+            content = HtmlContent(bannerContentIfPenalties(content)),
+            titleId = Some("govuk-notification-banner-title-penalties-banner")
+        ))}
+    case _ => {
+        @govukNotificationBanner(NotificationBanner(
+            title = Text(messages("penaltiesComingBanner.title")),
+            content = HtmlContent(noPenaltiesBannerContent),
+            titleId = Some("govuk-notification-banner-title-penalties-coming-banner")
+        ))}
 }
