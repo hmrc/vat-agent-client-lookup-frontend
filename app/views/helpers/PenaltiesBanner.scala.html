@@ -68,31 +68,17 @@
 </div>
 }
 
-@bannerContent = @{
-    summary match {
-        case Some(content) if content.hasActivePenalties => bannerContentIfPenalties(content)
-        case _ => noPenaltiesBannerContent
-    }
-}
-
-@bannerTitle = @{
-    summary match {
-        case Some(content) if content.hasActivePenalties => messages("penaltiesBanner.heading")
-        case _ => messages("penaltiesComingBanner.title")
-    }
-}
-
 @summary match {
     case Some(content) if content.hasActivePenalties => {
         @govukNotificationBanner(NotificationBanner(
-            title = HtmlContent(bannerTitle),
-            content = HtmlContent(bannerContent),
+            title = Text(messages("penaltiesBanner.heading")),
+            content = HtmlContent(bannerContentIfPenalties(content)),
             titleId = Some("govuk-notification-banner-title-penalties-banner")
         ))}
     case _ => {
         @govukNotificationBanner(NotificationBanner(
-            title = HtmlContent(bannerTitle),
-            content = HtmlContent(bannerContent),
+            title = Text(messages("penaltiesComingBanner.title")),
+            content = HtmlContent(noPenaltiesBannerContent),
             titleId = Some("govuk-notification-banner-title-penalties-coming-banner")
         ))}
 }
