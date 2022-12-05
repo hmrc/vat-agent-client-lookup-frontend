@@ -19,7 +19,7 @@ package helpers
 import play.api.http.SecretConfiguration
 import play.api.libs.crypto.DefaultCookieSigner
 import play.api.libs.ws.{WSCookie, WSResponse}
-import uk.gov.hmrc.crypto.{SymmetricCryptoFactory, Crypted}
+import uk.gov.hmrc.crypto.{Crypted, SymmetricCryptoFactory}
 
 object SessionCookieCrumbler {
   private val cookieKey = "gvBoGdgzqG1AarzF1LY0zQ=="

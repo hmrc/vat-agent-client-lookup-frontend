@@ -18,10 +18,12 @@ package controllers
 
 import javax.inject.Inject
 import config.AppConfig
+import play.api.i18n.I18nSupport.ResultWithMessagesApi
 import play.api.i18n.Lang
 import play.api.mvc._
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
-class LanguageController @Inject()(val appConfig: AppConfig, mcc: MessagesControllerComponents) extends BaseController(mcc) {
+class LanguageController @Inject()(val appConfig: AppConfig, mcc: MessagesControllerComponents) extends FrontendController(mcc) {
 
   def langToCall: String => Call = appConfig.routeToSwitchLanguage
 
