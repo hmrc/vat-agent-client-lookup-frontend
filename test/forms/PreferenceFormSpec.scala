@@ -180,7 +180,7 @@ class PreferenceFormSpec extends TestUtil {
       "validate that email does not exceed max length" in {
         val exceed = preferenceForm.bind(Map(yesNo -> yes, email -> ("a" * (maxLength + 1)))).errors
         exceed should contain(FormError("email", emailLengthError))
-        exceed.seq.size shouldBe 1
+        exceed.size shouldBe 1
       }
 
       "validate that email allows max length" in {

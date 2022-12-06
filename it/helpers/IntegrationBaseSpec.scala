@@ -50,7 +50,7 @@ trait IntegrationBaseSpec extends TestSuite with CustomMatchers with GuiceOneSer
 
   def authSession: Map[String, String] = Map(authToken -> "mock-bearer-token")
 
-  override def beforeEach() {
+  override def beforeEach(): Unit = {
     mockAppConfig.features.emailVerificationEnabled(true)
     super.beforeEach()
   }
@@ -62,7 +62,7 @@ trait IntegrationBaseSpec extends TestSuite with CustomMatchers with GuiceOneSer
     def agent: Agent = new Agent()
   }
 
-  def given: PreconditionBuilder = new PreconditionBuilder
+  def `given`: PreconditionBuilder = new PreconditionBuilder
 
   class User()(implicit builder: PreconditionBuilder) {
     def isAuthenticated: PreconditionBuilder = {

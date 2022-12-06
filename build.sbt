@@ -22,25 +22,25 @@ import sbt.Tests.{Group, SubProcess}
 
 val appName = "vat-agent-client-lookup-frontend"
 
-val bootstrapPlayVersion       = "7.8.0"
-val playFrontendHmrc           = "3.32.0-play-28"
+val bootstrapPlayVersion       = "7.12.0"
+val playFrontendHmrc           = "3.34.0-play-28"
 val jsoupVersion               = "1.15.3"
 val mockitoVersion             = "3.1.2.0"
-val scalaMockVersion           = "3.6.0"
-val referenceCheckerVersion    = "2.5.1"
+val scalaMockVersion           = "5.2.0"
+val referenceCheckerVersion    = "8.1.0-play-28"
 val playJodaVersion            = "2.9.2"
 
 val compile = Seq(
   ws,
   "uk.gov.hmrc"       %% "bootstrap-frontend-play-28" % bootstrapPlayVersion,
   "uk.gov.hmrc"       %% "play-frontend-hmrc"         % playFrontendHmrc,
-  "uk.gov.hmrc"       %% "reference-checker"          % referenceCheckerVersion,
+  "uk.gov.hmrc"       %% "domain"                     % referenceCheckerVersion,
   "com.typesafe.play" %% "play-json-joda"             % playJodaVersion
 )
 
 def test(scope: String = "test,it"): Seq[ModuleID] = Seq(
   "uk.gov.hmrc"       %% "bootstrap-test-play-28"       % bootstrapPlayVersion  % scope,
-  "org.scalamock"     %% "scalamock-scalatest-support"  % scalaMockVersion      % scope,
+  "org.scalamock"     %% "scalamock"                    % scalaMockVersion      % scope,
   "org.jsoup"         % "jsoup"                         % jsoupVersion          % scope,
   "org.scalatestplus" %% "mockito-3-3"                  % mockitoVersion        % scope
 )
@@ -98,7 +98,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     Test / Keys.fork := true,
     Test / javaOptions += "-Dlogger.resource=logback-test.xml",
-    scalaVersion := "2.12.16",
+    scalaVersion := "2.13.8",
     majorVersion := 0,
     libraryDependencies ++= appDependencies,
     retrieveManaged := true,
