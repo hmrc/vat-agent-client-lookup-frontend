@@ -156,9 +156,6 @@ agentHub.manageVat = Rheoli TAW
 
 breadcrumb.agentServices = Cyfrif Gwasanaethau Asiant
 
-signUpPartial.LinkText = Cofrestru ar gyfer Troi Treth yn Ddigidol ar gyfer TAW
-signUpPartial.Body = Mae’n rhaid i’ch cleient gofrestru ar gyfer y Cynllun Troi Treth yn Ddigidol ar gyfer TAW os nad yw wedi’i eithrio rhag TAW, a bod ei drosiant trethadwy dros y trothwy, sef £85,000.
-
 passcode.error.empty = Nodwch y cod cadarnhau
 passcode.error.invalid = Nodwch y cod cadarnhau sy’n 6 chymeriad
 
@@ -172,11 +169,6 @@ penaltiesBanner.estimatedPenaltyWithoutCrystalisedPenalty = Amcangyfrif o swm y 
 penaltiesBanner.estimatedPenaltyWithCrystalisedPenalty = Amcangyfrif o swm y gosb bellach:
 penaltiesBanner.linkSingular = Cael gwybod pam mae gan eich cleient gosb
 penaltiesBanner.linkPlural = Cael gwybod pam mae gan eich cleient gosbau
-
-signUpForMTDBanner.title = Pwysig
-signUpForMTDBanner.heading = Newidiodd y ffordd o gyflwyno Ffurflenni TAW ar 1 Ebrill oherwydd Troi Treth yn Ddigidol
-signUpForMTDBanner.paragraphText = Ni allwch ddefnyddio’r gwasanaeth hwn i gyflwyno datganiadau ar gyfer cyfnodau cyfrifyddu sy’n dechrau ar ôl 1 Ebrill 2022. Yn lle hynny, rhaid cadw cofnodion digidol a rhaid cyflwyno Ffurflenni gan ddefnyddio meddalwedd sy’n gydnaws â CThEM
-signUpForMTDBanner.linkText = Darganfod pryd i gofrestru a dechrau defnyddio Troi Treth yn Ddigidol ar gyfer TAW (yn agor tab newydd)
 
 penaltiesComingBanner.title = Pwysig
 penaltiesComingBanner.heading = Mae cosbau a thaliadau llog a godir ar TAW yn newid

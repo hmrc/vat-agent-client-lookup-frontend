@@ -24,7 +24,6 @@ object ConfigKeys {
   val contactFrontendIdentifier: String = "contact-frontend.serviceId"
 
   val govUkSetupAgentServices: String = "govuk.guidance.setupAgentServices.url"
-  val agentSignUpUrl: String = "govuk.guidance.agentSignUp.url"
   val submitVatReturnsUrl: String = "govuk.guidance.submitVatReturns.url"
   val onlineAgentServicesUrl: String = "govuk.guidance.onlineAgentServices.url"
   val difficultiesPayingUrl: String = "govuk.guidance.difficultiesPaying.url"
@@ -78,9 +77,6 @@ object ConfigKeys {
 
   val agentInvitationsFrontendHost: String = "agent-invitations-frontend.host"
   val agentInvitationsFrontendUrl: String = "agent-invitations-frontend.url"
-
-  val signUpServiceHost: String = "vat-sign-up-frontend.host"
-  val signUpServiceUrl: String = "vat-sign-up-frontend.url"
 
   val gtmContainer: String = "tracking-consent-frontend.gtm.container"
 

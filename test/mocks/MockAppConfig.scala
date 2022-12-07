@@ -32,7 +32,6 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val reportAProblemPartialUrl = ""
   override val reportAProblemNonJSUrl = ""
   override val agentServicesGovUkGuidance = "guidance/get-an-hmrc-agent-services-account"
-  override val agentSignUpUrl = "guidance/agent-sign-up"
   override val submitVatReturnsUrl = "guidance/submit-vat-returns"
   override val feedbackSurveyUrl: String = "/survey"
 
@@ -74,9 +73,6 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val agentInvitationsFrontendUrl = "/invitations/agents/client-type"
 
   override val staticDateValue = "2018-05-01"
-
-  override val signUpServiceHost: String = ""
-  override val signUpServiceUrl: String => String = vatNumber => s"/vat-through-software/sign-up/client/vat-number/$vatNumber"
 
   override val vat7FormUrl: String = "https://www.gov.uk/government/publications/vat-application-to-cancel-your-vat-registration-vat7"
 

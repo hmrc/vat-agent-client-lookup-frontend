@@ -21,7 +21,6 @@
 @this(mainTemplate: MainTemplate,
       clientDetailsPartial: ClientDetailsPartial,
       registrationPartial: RegistrationPartial,
-      signUpPartial: SignUpPartial,
       vatCertificatePartial: VatCertificatePartial,
       penaltiesTilePartial: PenaltiesTilePartial,
       govukBreadcrumbs: GovukBreadcrumbs,
@@ -29,8 +28,7 @@
       nextPaymentPartial: NextPaymentPartial,
       nextReturnPartial: NextReturnPartial,
       historyPartial: HistoryPartial,
-      penaltiesBanner: PenaltiesBanner,
-      mtdSignupNotificationBanner: MTDSignupNotificationBanner)
+      penaltiesBanner: PenaltiesBanner)
 
 @(model: HubViewModel)(implicit messages: Messages, appConfig: AppConfig, user: User[_])
 
@@ -40,7 +38,6 @@
   @if(hasPenaltiesTile) {
     @penaltiesTilePartial()
   }
-  @signUpPartial(model.details.mandationStatus, model.vrn)
   @registrationPartial(model.details, model.currentDate)
 }
 
@@ -72,8 +69,6 @@
   </span>
 
   @penaltiesBanner(model.penaltiesSummary)
-
-  @mtdSignupNotificationBanner(model.details.mandationStatus)
 
   <div class="flex-container govuk-grid-row">
     @nextPaymentPartial(model.details.isHybridUser, model.nextPaymentDate, model.payments, model.isOverdue, model.isError, model.directDebitSetup)

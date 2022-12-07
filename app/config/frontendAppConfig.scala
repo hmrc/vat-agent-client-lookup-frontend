@@ -45,7 +45,6 @@ trait AppConfig {
   val feedbackUrl: String
   val selfLookup: String
   val emailVerificationBaseUrl: String
-  val agentSignUpUrl: String
   val submitVatReturnsUrl: String
   val onlineAgentServicesUrl: String
   val features: Features
@@ -61,8 +60,6 @@ trait AppConfig {
   val agentServicesHost: String
   val agentServicesUrl: String
   val staticDateValue: String
-  val signUpServiceHost: String
-  val signUpServiceUrl: String => String
   val manageVatMissingTraderUrl: String
   val difficultiesPayingUrl: String
   val gtmContainer: String
@@ -127,7 +124,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
   override lazy val feedbackUrl: String = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier" +
     s"&backUrl=${SafeRedirectUrl(selfLookup + controllers.agent.routes.SelectClientVrnController.show().url).encodedUrl}"
 
-  override lazy val agentSignUpUrl: String = sc.getString(Keys.agentSignUpUrl)
   override lazy val submitVatReturnsUrl: String = sc.getString(Keys.submitVatReturnsUrl)
   override lazy val onlineAgentServicesUrl: String = sc.getString(Keys.onlineAgentServicesUrl)
 
@@ -151,9 +147,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
     sc.getString(ConfigKeys.agentInvitationsFrontendUrl)
 
   override lazy val staticDateValue: String = sc.getString(Keys.staticDateValue)
-
-  override lazy val signUpServiceHost: String = sc.getString(Keys.signUpServiceHost)
-  override lazy val signUpServiceUrl: String => String = vatNumber =>  signUpServiceHost + sc.getString(Keys.signUpServiceUrl) + s"$vatNumber"
 
   override val manageVatMissingTraderUrl: String = manageVatBase + sc.getString(ConfigKeys.manageVatMissingTraderUrl)
 
