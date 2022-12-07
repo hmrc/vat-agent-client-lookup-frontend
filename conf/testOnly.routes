@@ -16,6 +16,5 @@ POST       /vat-through-software/representative/test-only/feature-switch    test
 
 GET        /vat-through-software/representative/test-only/passcode          testOnly.controllers.RetrievePasscodeController.getPasscode
 GET        /vat-through-software/representative/test-only/penalties-stub    testOnly.controllers.PenaltiesController.show()
-GET        /vat-through-software/representative/test-only/vat-sign-up/:vrn  testOnly.controllers.VatSignUpController.show(vrn)
 
 ->         /                                                                prod.Routes

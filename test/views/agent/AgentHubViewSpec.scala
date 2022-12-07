@@ -96,40 +96,6 @@ class AgentHubViewSpec extends ViewBaseSpec {
         elementText("#cancel-vat > h3") shouldBe RegistrationPartialMessages.cancelRegistrationTitle
       }
 
-      "not display the sign-up partial" in {
-        elementExtinct("#sign-up-partial")
-      }
-    }
-
-    "the user has mandation status 3" should {
-
-      lazy val view = injectedView(hubViewModel(customerDetailsOptedOut))(messages,mockConfig,user)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
-
-      "display the sign up to MTD alert banner" in {
-        element("#mtd-sign-up-banner")
-      }
-
-    }
-
-    "has a different mandation status than 3" should {
-
-      lazy val view = injectedView(hubViewModel(customerDetailsFnameOnly))(messages,mockConfig,user)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
-
-      "not display the sign up to MTD alert banner" in {
-        elementExtinct("#mtd-sign-up-banner")
-      }
-    }
-
-    "the user is an agent for an opted out client" should {
-
-      lazy val view = injectedView(hubViewModel(customerDetailsOptedOut))(messages, mockConfig, user)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
-
-      "display the sign-up partial" in {
-        elementText("#sign-up-heading") shouldBe SignUpPartialMessages.signUpLinkText
-      }
     }
 
     "the user is an agent for a hybrid user" should {
@@ -139,16 +105,6 @@ class AgentHubViewSpec extends ViewBaseSpec {
 
       "not display the Next Payment partial" in {
         elementExtinct("#next-payment")
-      }
-    }
-
-    "the user is an agent for a 'Non-Digital' client" should {
-
-      lazy val view = injectedView(hubViewModel(customerDetailsNonDigital))(messages, mockConfig, user)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
-
-      "display the sign-up partial" in {
-        elementText("#sign-up-heading") shouldBe SignUpPartialMessages.signUpLinkText
       }
     }
 

@@ -156,9 +156,6 @@ agentHub.manageVat = Manage VAT
 
 breadcrumb.agentServices = Agent Services Account
 
-signUpPartial.LinkText = Sign up for Making Tax Digital for VAT
-signUpPartial.Body = If your client is not exempt from VAT and their taxable turnover exceeds the threshold, they must sign up to Making Tax Digital for VAT.
-
 passcode.error.empty = Enter the confirmation code
 passcode.error.invalid = Enter the 6 character confirmation code
 
@@ -172,11 +169,6 @@ penaltiesBanner.estimatedPenaltyWithoutCrystalisedPenalty = Estimated penalty am
 penaltiesBanner.estimatedPenaltyWithCrystalisedPenalty = Estimated further penalty amount:
 penaltiesBanner.linkSingular = Find out why your client has a penalty
 penaltiesBanner.linkPlural = Find out why your client has penalties
-
-signUpForMTDBanner.title = Important
-signUpForMTDBanner.heading = The way to submit VAT returns changed on 1 April due to Making Tax Digital
-signUpForMTDBanner.paragraphText = You cannot use this service to submit returns for accounting periods starting after 1 April 2022. Instead, digital records must be kept and returns must be submitted using HMRC compatible software.
-signUpForMTDBanner.linkText = Find out when to sign up and start using Making Tax Digital for VAT (opens in a new tab)
 
 penaltiesComingBanner.title = Important
 penaltiesComingBanner.heading = VAT penalties and interest are changing
