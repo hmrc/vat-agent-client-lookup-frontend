@@ -20,10 +20,6 @@ In order to run this microservice, you must have SBT installed. You should then 
 
 `./run.sh`
 
-or, to use the testOnly routes as well:
-
-`sbt 'run 9149 -Dlogger.resource=logback-test.xml -Dapplication.router=testOnly.Routes'`
-
 ## Testing
 
 Use the following command to run unit and integration tests and to get a coverage report:
