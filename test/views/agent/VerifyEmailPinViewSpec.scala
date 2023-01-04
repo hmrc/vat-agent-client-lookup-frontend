@@ -138,7 +138,7 @@ class VerifyEmailPinViewSpec extends ViewBaseSpec {
       }
 
       "has a link to the input with the error" in {
-        element("#content > div.govuk-error-summary > div > ul > li > a").attr("href") shouldBe "#passcode"
+        element(".govuk-error-summary__body > ul > li > a").attr("href") shouldBe "#passcode"
       }
     }
 

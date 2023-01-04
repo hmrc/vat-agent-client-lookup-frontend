@@ -23,18 +23,18 @@ import sbt.Tests.{Group, SubProcess}
 val appName = "vat-agent-client-lookup-frontend"
 
 val bootstrapPlayVersion       = "7.12.0"
-val playFrontendHmrc           = "3.34.0-play-28"
+val playFrontendHmrc           = "5.4.0-play-28"
 val jsoupVersion               = "1.15.3"
 val mockitoVersion             = "3.1.2.0"
 val scalaMockVersion           = "5.2.0"
-val referenceCheckerVersion    = "8.1.0-play-28"
+val domainVersion    = "8.1.0-play-28"
 val playJodaVersion            = "2.9.2"
 
 val compile = Seq(
   ws,
   "uk.gov.hmrc"       %% "bootstrap-frontend-play-28" % bootstrapPlayVersion,
   "uk.gov.hmrc"       %% "play-frontend-hmrc"         % playFrontendHmrc,
-  "uk.gov.hmrc"       %% "domain"                     % referenceCheckerVersion,
+  "uk.gov.hmrc"       %% "domain"                     % domainVersion,
   "com.typesafe.play" %% "play-json-joda"             % playJodaVersion
 )
 

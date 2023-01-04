@@ -171,8 +171,8 @@ class SelectClientVrnPageSpec extends BasePageISpec {
               //Error Summary
               isElementVisible("#content > div")(isVisible = true),
               isElementVisible(".govuk-error-summary")(isVisible = true),
-              elementText("#content > div > div > ul > li > a")("Enter a VAT number in the correct format"),
-              elementWithLinkTo("#content > div > div > ul > li > a")("#vrn"),
+              elementText(".govuk-error-summary__body")("Enter a VAT number in the correct format"),
+              elementWithLinkTo(".govuk-error-summary__body > ul > li > a")("#vrn"),
 
               //Error against Input Label
               isElementVisible("#vrn-error")(isVisible = true),

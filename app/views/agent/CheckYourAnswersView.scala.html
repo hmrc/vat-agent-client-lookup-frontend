@@ -54,7 +54,7 @@
     @formWithCSRF(action = controllers.agent.routes.ConfirmEmailController.isEmailVerified) {
         @govukButton(Button(
             content = Text(messages("common.confirmAndContinue")),
-            preventDoubleClick = true
+            preventDoubleClick = Some(true)
         ))
     }
 }

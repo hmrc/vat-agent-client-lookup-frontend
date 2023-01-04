@@ -141,7 +141,7 @@ class VerifyEmailPinPageSpec extends BasePageISpec {
             isElementVisible(".govuk-error-summary")(isVisible = true),
             isElementVisible(".govuk-error-summary__body")(isVisible = true),
             elementText(".govuk-error-summary__body")("Enter the 6 character confirmation code"),
-            elementWithLinkTo("#content > div.govuk-error-summary > div > ul > li > a")("#passcode"),
+            elementWithLinkTo(".govuk-error-summary__body > ul > li > a")("#passcode"),
 
             //Error against Input Label
             isElementVisible(".govuk-error-message")(isVisible = true),
