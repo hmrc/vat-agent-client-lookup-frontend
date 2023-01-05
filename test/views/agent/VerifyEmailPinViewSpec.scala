@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -138,7 +138,7 @@ class VerifyEmailPinViewSpec extends ViewBaseSpec {
       }
 
       "has a link to the input with the error" in {
-        element("#content > div.govuk-error-summary > div > ul > li > a").attr("href") shouldBe "#passcode"
+        element(".govuk-error-summary__body > ul > li > a").attr("href") shouldBe "#passcode"
       }
     }
 
