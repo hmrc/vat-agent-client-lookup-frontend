@@ -224,8 +224,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
           }
 
           "has the correct link location" in {
-            element("#penalties-coming-link").attr("href") shouldBe
-              "https://www.gov.uk/guidance/prepare-for-upcoming-changes-to-vat-penalties-and-vat-interest-charges"
+            element("#penalties-coming-link").attr("href") shouldBe mockConfig.penaltiesChangesUrl
           }
         }
       }
