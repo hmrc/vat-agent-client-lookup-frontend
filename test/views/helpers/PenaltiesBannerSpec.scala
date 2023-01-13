@@ -79,7 +79,7 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
         }
 
         "has the correct link location" in {
-          element(Selectors.penaltiesComingLink).attr("href") shouldBe "https://www.gov.uk/government/collections/vat-penalties-and-interest"
+          element(Selectors.penaltiesComingLink).attr("href") shouldBe mockConfig.penaltiesChangesUrl
         }
       }
 
@@ -129,8 +129,7 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
           }
 
           "has the correct link location" in {
-            element(Selectors.penaltiesComingLink).attr("href") shouldBe
-              "https://www.gov.uk/government/collections/vat-penalties-and-interest"
+            element(Selectors.penaltiesComingLink).attr("href") shouldBe mockConfig.penaltiesChangesUrl
           }
         }
 

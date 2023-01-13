@@ -47,6 +47,8 @@ trait AppConfig {
   val emailVerificationBaseUrl: String
   val submitVatReturnsUrl: String
   val onlineAgentServicesUrl: String
+  val penaltiesChangesUrl: String
+  val notSignedUpUrl: String
   val features: Features
   val vatCertificateUrl: String
   val penaltiesFrontendUrl: String
@@ -126,6 +128,8 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
 
   override lazy val submitVatReturnsUrl: String = sc.getString(Keys.submitVatReturnsUrl)
   override lazy val onlineAgentServicesUrl: String = sc.getString(Keys.onlineAgentServicesUrl)
+  override lazy val penaltiesChangesUrl: String = sc.getString(Keys.penaltiesChangesUrl)
+  override lazy val notSignedUpUrl: String = sc.getString(Keys.notSignedUpUrl)
 
   override lazy val emailVerificationBaseUrl: String = sc.baseUrl(Keys.emailVerificationBaseUrl)
 

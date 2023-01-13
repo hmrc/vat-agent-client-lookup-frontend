@@ -224,8 +224,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
           }
 
           "has the correct link location" in {
-            element("#penalties-coming-link").attr("href") shouldBe
-              "https://www.gov.uk/government/collections/vat-penalties-and-interest"
+            element("#penalties-coming-link").attr("href") shouldBe mockConfig.penaltiesChangesUrl
           }
         }
       }

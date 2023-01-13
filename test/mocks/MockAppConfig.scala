@@ -60,6 +60,8 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val whatYouOweUrl: String = "/what-you-owe"
   override val paymentHistoryUrl: String = "/payment-history"
   override val onlineAgentServicesUrl: String = "/onlineAgentServices"
+  override val penaltiesChangesUrl: String = "/government/collections/vat-penalties-and-interest"
+  override val notSignedUpUrl: String = "/making-tax-digital-for-vat-as-an-agent-step-by-step"
   override val submittedReturnsUrl: String = "/submitted-returns"
   override val returnDeadlinesUrl: String = "/vat-through-software/vat-returns/return-deadlines"
 
@@ -74,7 +76,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
 
   override val staticDateValue = "2018-05-01"
 
-  override val vat7FormUrl: String = "https://www.gov.uk/government/publications/vat-application-to-cancel-your-vat-registration-vat7"
+  override val vat7FormUrl: String = "/publications/vat-application-to-cancel-your-vat-registration-vat7"
 
   override val manageVatMissingTraderUrl: String = "/vat-through-software/account/missing-trader"
 
