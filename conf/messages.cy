@@ -115,7 +115,7 @@ notSignedUp.paragraph1Text = Os ydych am wneud newidiadau i fanylion eich cleien
 notSignedUp.paragraph1Link = ei gofrestru ar gyfer Troi Treth yn Ddigidol ar gyfer TAW (yn agor tab newydd).
 notSignedUp.paragraph2Text1 = Gallwch
 notSignedUp.paragraph2Text2 = gyflwyno Ffurflenni TAW a rheoli manylion busnes eich cleient.
-notSignedUp.paragraph2Link = allgofnodi a defnyddio’ch cyfrif Gwasanaethau Ar-lein CThEM presennol
+notSignedUp.paragraph2Link = allgofnodi a defnyddio’ch cyfrif Gwasanaethau Ar-lein CThEF presennol
 
 registrationPartial.cancelRegistration.title = Canslo cofrestriad TAW
 registrationPartial.cancelRegistration.content = Canslwch gofrestriad TAW eich cleient os yw’r busnes yn cau, yn trosglwyddo perchnogaeth neu os nad oes angen i’r busnes fod wedi cofrestru ar gyfer TAW.
