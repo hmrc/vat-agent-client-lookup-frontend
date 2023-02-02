@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import sbt._
-import uk.gov.hmrc.DefaultBuildSettings._
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import play.sbt.routes.RoutesKeys
 import sbt.Tests.{Group, SubProcess}
+import sbt._
+import uk.gov.hmrc.DefaultBuildSettings._
+
 
 val appName = "vat-agent-client-lookup-frontend"
 
-val bootstrapPlayVersion       = "7.12.0"
-val playFrontendHmrc           = "5.4.0-play-28"
+val bootstrapPlayVersion       = "7.13.0"
+val playFrontendHmrc           = "6.3.0-play-28"
 val jsoupVersion               = "1.15.3"
 val mockitoVersion             = "3.1.2.0"
 val scalaMockVersion           = "5.2.0"
@@ -93,7 +93,6 @@ lazy val microservice = Project(appName, file("."))
   .settings(playSettings : _*)
   .settings(coverageSettings: _*)
   .settings(scalaSettings: _*)
-  .settings(publishingSettings: _*)
   .settings(defaultSettings(): _*)
   .settings(
     Test / Keys.fork := true,
