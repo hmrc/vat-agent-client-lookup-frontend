@@ -18,6 +18,7 @@ package utils
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import scala.language.implicitConversions
 
 trait ImplicitDateFormatter {
 

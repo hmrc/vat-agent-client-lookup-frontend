@@ -36,7 +36,7 @@ class DisplayDateSpec extends ViewBaseSpec {
       lazy val document: Document = Jsoup.parse(template.body)
 
       "render the date with year" in {
-        document.body().text() shouldEqual "1 January 2017"
+        document.body().text() shouldEqual "1\u00a0January\u00a02017"
       }
     }
 
@@ -46,7 +46,7 @@ class DisplayDateSpec extends ViewBaseSpec {
       lazy val document: Document = Jsoup.parse(template.body)
 
       "render the date without year" in {
-        document.body().text() shouldEqual "1 January"
+        document.body().text() shouldEqual "1\u00a0January"
       }
     }
 
