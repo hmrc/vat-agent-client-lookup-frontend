@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import play.sbt.routes.RoutesKeys
 import sbt.Tests.{Group, SubProcess}
 import sbt._
 import uk.gov.hmrc.DefaultBuildSettings._
@@ -22,8 +21,8 @@ import uk.gov.hmrc.DefaultBuildSettings._
 
 val appName = "vat-agent-client-lookup-frontend"
 
-val bootstrapPlayVersion       = "7.13.0"
-val playFrontendHmrc           = "6.3.0-play-28"
+val bootstrapPlayVersion       = "7.14.0"
+val playFrontendHmrc           = "6.7.0-play-28"
 val jsoupVersion               = "1.15.3"
 val mockitoVersion             = "3.1.2.0"
 val scalaMockVersion           = "5.2.0"
@@ -41,11 +40,8 @@ val compile = Seq(
 def test(scope: String = "test,it"): Seq[ModuleID] = Seq(
   "uk.gov.hmrc"       %% "bootstrap-test-play-28"       % bootstrapPlayVersion  % scope,
   "org.scalamock"     %% "scalamock"                    % scalaMockVersion      % scope,
-  "org.jsoup"         % "jsoup"                         % jsoupVersion          % scope,
   "org.scalatestplus" %% "mockito-3-3"                  % mockitoVersion        % scope
 )
-
-RoutesKeys.routesImport := Seq.empty
 
 lazy val coverageSettings: Seq[Setting[_]] = {
   import scoverage.ScoverageKeys
@@ -101,7 +97,9 @@ lazy val microservice = Project(appName, file("."))
     majorVersion := 0,
     libraryDependencies ++= appDependencies,
     retrieveManaged := true,
-    routesGenerator := InjectedRoutesGenerator
+    routesGenerator := InjectedRoutesGenerator,
+      routesImport := Seq.empty,
+        scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-Wconf:cat=unused-imports&site=.*views.html.*:s")
   )
   .configs(IntegrationTest)
   .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
