@@ -18,7 +18,7 @@ package messages.partials
 
 object PenaltiesTileMessages {
 
-  val title = "Penalties and appeals"
+  val title = "Penalties for late VAT Returns and payments"
   val description = "View your client’s penalties, make an appeal against a penalty and see the status of any current appeals."
 
 }
