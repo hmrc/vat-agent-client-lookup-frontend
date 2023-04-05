@@ -159,7 +159,7 @@ breadcrumb.agentServices = Agent Services Account
 passcode.error.empty = Enter the confirmation code
 passcode.error.invalid = Enter the 6 character confirmation code
 
-penaltiesTile.heading = Penalties and appeals
+penaltiesTile.heading = Penalties for late VAT Returns and payments
 penaltiesTile.content = View your client’s penalties, make an appeal against a penalty and see the status of any current appeals.
 
 penaltiesBanner.heading = Late submission and late payment penalties

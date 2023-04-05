@@ -116,7 +116,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
         val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
         status(result) shouldBe OK
-        Jsoup.parse(contentAsString(result)).select("#penalties-heading").text shouldBe "Penalties and appeals"
+        Jsoup.parse(contentAsString(result)).select("#penalties-heading").text shouldBe "Penalties for late VAT Returns and payments"
       }
     }
 

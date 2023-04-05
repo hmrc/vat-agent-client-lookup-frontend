@@ -159,7 +159,7 @@ breadcrumb.agentServices = Cyfrif Gwasanaethau Asiant
 passcode.error.empty = Nodwch y cod cadarnhau
 passcode.error.invalid = Nodwch y cod cadarnhau sy’n 6 chymeriad
 
-penaltiesTile.heading = Cosbau ac apeliadau
+penaltiesTile.heading = Cosbau yn sgil Ffurflenni TAW a thaliadau hwyr
 penaltiesTile.content = Bwrw golwg dros gosbau eich cleient, apelio yn erbyn cosb a gweld statws unrhyw apeliadau presennol.
 
 penaltiesBanner.heading = Cosbau am gyflwyno’n hwyr ac am dalu’n hwyr
