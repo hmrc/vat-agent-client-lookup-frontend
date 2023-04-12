@@ -16,6 +16,9 @@
 
 package controllers.agent
 
+import audit.AuditService
+import audit.models.AgentOverviewPageViewAuditModel
+
 import javax.inject.{Inject, Singleton}
 import common.SessionKeys
 import config.{AppConfig, ErrorHandler}
@@ -27,6 +30,7 @@ import models.{CustomerDetails, HubViewModel, User, VatDetailsDataModel}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{CustomerDetailsService, DateService, FinancialDataService, PenaltiesService}
 import views.html.agent.AgentHubView
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -36,6 +40,7 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
                                    dateService: DateService,
                                    financialDataService: FinancialDataService,
                                    penaltiesService: PenaltiesService,
+                                   auditService: AuditService,
                                    mcc: MessagesControllerComponents,
                                    agentHubView: AgentHubView)
                                   (implicit appConfig: AppConfig,
@@ -49,6 +54,7 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
     } yield {
       customerDetails match {
         case Right(details) =>
+          auditService.extendedAudit(AgentOverviewPageViewAuditModel(user, payments), Some(routes.AgentHubController.show.url))
           if (details.missingTrader && !details.hasPendingPPOB) {
             Redirect(appConfig.manageVatMissingTraderUrl)
           } else {

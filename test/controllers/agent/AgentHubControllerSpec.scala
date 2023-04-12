@@ -17,19 +17,23 @@
 package controllers.agent
 
 import assets.BaseTestConstants
+import assets.BaseTestConstants.{arn, vrn}
 import assets.CustomerDetailsTestConstants._
 import assets.FinancialDataConstants._
 import assets.PenaltiesConstants._
+import audit.mocks.MockAuditingService
+import audit.models.AgentOverviewPageViewAuditModel
 import controllers.ControllerBaseSpec
 import mocks.services._
-import models.HubViewModel
+import models.{HubViewModel, User, VatDetailsDataModel}
 import models.errors.UnexpectedError
 import models.penalties.PenaltiesSummary
 import org.jsoup.Jsoup
-import play.api.mvc.Result
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, status}
+import play.api.mvc.{AnyContentAsEmpty, Result}
+import play.api.test.Helpers.{await, contentAsString, defaultAwaitTimeout, status}
 import play.mvc.Http.Status._
 import views.html.agent.AgentHubView
+
 import java.time.LocalDate
 import scala.concurrent.Future
 
@@ -37,7 +41,8 @@ class AgentHubControllerSpec extends ControllerBaseSpec
                               with MockCustomerDetailsService
                               with MockDateService
                               with MockFinancialDataService
-                              with MockPenaltiesService {
+                              with MockPenaltiesService
+                              with MockAuditingService {
 
   lazy val controller = new AgentHubController(
     mockAuthAsAgentWithClient,
@@ -46,11 +51,14 @@ class AgentHubControllerSpec extends ControllerBaseSpec
     mockDateService,
     mockFinancialDataService,
     mockPenaltiesService,
+    mockAuditingService,
     mcc,
     inject[AgentHubView]
   )
 
   val staticDate: LocalDate = LocalDate.parse("2018-05-01")
+  lazy val agentUser: User[AnyContentAsEmpty.type] =
+    User[AnyContentAsEmpty.type](vrn, active = true, Some(arn))(fakeRequestWithVrnAndRedirectUrl)
 
   "AgentHubController.show()" when {
 
@@ -90,17 +98,27 @@ class AgentHubControllerSpec extends ControllerBaseSpec
 
     "the customer isn't a missing trader" should {
 
-      "render the AgentHubPage" in {
+      def result: Future[Result] = {
         mockAgentAuthorised()
         mockCustomerDetailsSuccess(customerDetailsFnameOnly)
         setupMockDateService(staticDate)
         mockPaymentResponse(paymentResponse)
         mockPenaltiesResponse(penaltiesSummaryNoPenaltiesResponse)
 
-        val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
+        controller.show()(fakeRequestWithVrnAndRedirectUrl)
+      }
 
+      "render the AgentHubPage" in {
         status(result) shouldBe OK
         Jsoup.parse(contentAsString(result)).select("h1").text shouldBe "Your client’s VAT details"
+      }
+
+      "audit the correct data in the AgentOverviewPageView audit event" in {
+        await(result)
+        verifyExtendedAudit(
+          AgentOverviewPageViewAuditModel(agentUser, VatDetailsDataModel(paymentResponse.toOption.get, isError = false)),
+          Some(routes.AgentHubController.show.url)
+        )
       }
     }
 
@@ -139,17 +157,27 @@ class AgentHubControllerSpec extends ControllerBaseSpec
 
     "the customer has some payments, including 1 payment on account" should {
 
-      "render the correct number of payments on the next payment tile" in {
+      def result: Future[Result] = {
         mockAgentAuthorised()
         mockCustomerDetailsSuccess(customerDetailsFnameOnly)
         setupMockDateService(staticDate)
         mockPaymentResponse(paymentOnAccountResponse)
         mockPenaltiesResponse(penaltiesSummaryNoPenaltiesResponse)
 
-        val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
+        controller.show()(fakeRequestWithVrnAndRedirectUrl)
+      }
 
+      "render the correct number of payments on the next payment tile" in {
         status(result) shouldBe OK
         Jsoup.parse(contentAsString(result)).select("#next-payment-paragraph").text should include("2")
+      }
+
+      "audit the correct data in the AgentOverviewPageView audit event" in {
+        await(result)
+        verifyExtendedAudit(
+          AgentOverviewPageViewAuditModel(agentUser, VatDetailsDataModel(paymentsNotOverdue, isError = false)),
+          Some(routes.AgentHubController.show.url)
+        )
       }
     }
 
@@ -220,15 +248,25 @@ class AgentHubControllerSpec extends ControllerBaseSpec
 
   "the payments call fails" should {
 
-    "render the AgentHubPage" in {
+    def result: Future[Result] = {
       mockAgentAuthorised()
       mockCustomerDetailsSuccess(customerDetailsFnameOnly)
       setupMockDateService(staticDate)
       mockPaymentResponse(Left(UnexpectedError(500, "")))
 
-      val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
+      controller.show()(fakeRequestWithVrnAndRedirectUrl)
+    }
 
+    "render the AgentHubPage" in {
       status(result) shouldBe OK
+    }
+
+    "audit the correct data in the AgentOverviewPageView audit event" in {
+      await(result)
+      verifyExtendedAudit(
+        AgentOverviewPageViewAuditModel(agentUser, VatDetailsDataModel(Seq(), isError = true)),
+        Some(routes.AgentHubController.show.url)
+      )
     }
   }
 
@@ -383,7 +421,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           isError = false,
           payments = 2,
           directDebitSetup = None,
-          penaltiesSummary = Some(PenaltiesSummary(0, 0, 0, 0, 0, false))
+          penaltiesSummary = Some(PenaltiesSummary(0, 0, 0, 0, 0, hasAnyPenaltyData = false))
         )
 
         val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoneOverdue, Some(penaltiesSummaryAsModelNoPenalties))(user)

@@ -18,7 +18,6 @@ package audit
 
 import javax.inject.{Inject, Singleton}
 import audit.models.ExtendedAuditModel
-import org.joda.time.DateTime
 import play.api.http.HeaderNames
 import play.api.libs.json._
 import uk.gov.hmrc.http.HeaderCarrier
@@ -33,8 +32,6 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class AuditService @Inject()(auditConnector: AuditConnector) extends LoggerUtil {
 
-  implicit val dateTimeJsReader: Reads[DateTime] = JodaReads.jodaDateReads("yyyyMMddHHmmss")
-  implicit val dateTimeWriter: Writes[DateTime] = JodaWrites.jodaDateWrites("dd/MM/yyyy HH:mm:ss")
   val appName: String = "vat-agent-client-lookup-frontend"
 
   val referrer: HeaderCarrier => String = _.extraHeaders.find(_._1 == HeaderNames.REFERER).map(_._2).getOrElse("-")
