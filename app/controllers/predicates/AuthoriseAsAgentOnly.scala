@@ -69,7 +69,7 @@ class AuthoriseAsAgentOnly @Inject()(enrolmentsAuthService: EnrolmentsAuthServic
         logger.warn("[AuthoriseAsAgentOnly][invokeBlock] - Authorisation Exception, rendering Technical Difficulties view")
         errorHandler.showInternalServerError
       case error: UpstreamErrorResponse =>
-        logger.debug(s"[AuthoriseAsAgentOnly][invokeBlock] - Upstream error response received: ${error.message}")
+        logger.warn(s"[AuthoriseAsAgentOnly][invokeBlock] - Upstream error response received: ${error.message}")
         errorHandler.showInternalServerError
     }
   }

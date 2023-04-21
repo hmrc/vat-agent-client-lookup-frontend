@@ -69,7 +69,7 @@ class AuthoriseAsAgentWithClient @Inject()(enrolmentsAuthService: EnrolmentsAuth
             logger.debug("[AuthoriseAsAgentWithClient][invokeBlock] - Agent does not have delegated authority for Client")
             Redirect(controllers.agent.routes.AgentUnauthorisedForClientController.show())
           case error: UpstreamErrorResponse =>
-            logger.debug(s"[AuthoriseAsAgentWithClient][invokeBlock] - Upstream error response received: ${error.message}")
+            logger.warn(s"[AuthoriseAsAgentWithClient][invokeBlock] - Upstream error response received: ${error.message}")
             serviceErrorHandler.showInternalServerError
         }
       case _ =>
