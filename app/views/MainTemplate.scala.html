@@ -14,10 +14,7 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
-
 @this(govukTemplate: GovukTemplate,
-      standardBetaBanner: StandardBetaBanner,
       hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
       hmrcLanguageSelect: HmrcLanguageSelect,
       hmrcTimeoutDialog: HmrcTimeoutDialog,
@@ -77,7 +74,6 @@
     serviceName = Some(navTitle),
     serviceUrl = if(headerLink) Some(controllers.agent.routes.AgentHubController.show.url) else None,
     signOutUrl = if(showSignOut) Some(routes.SignOutController.signOut(feedbackOnSignOut).url) else None,
-    phaseBanner = Some(standardBetaBanner(url = appConfig.feedbackUrl)),
     displayHmrcBanner = false
   )
 }
