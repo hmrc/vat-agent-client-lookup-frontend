@@ -23,6 +23,7 @@ import play.api.http.Status
 import play.api.mvc.Results.Ok
 import play.api.mvc.{Action, AnyContent}
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, status}
+import uk.gov.hmrc.http.UpstreamErrorResponse
 
 import scala.concurrent.Future
 
@@ -30,6 +31,10 @@ class AuthoriseAsAgentOnlySpec extends ControllerBaseSpec {
 
   def target: Action[AnyContent] = mockAgentOnlyAuthPredicate.async {
     Future.successful(Ok("test"))
+  }
+
+  def error: Action[AnyContent] = mockAgentOnlyAuthPredicate.async {
+    Future.failed(UpstreamErrorResponse("Something went terribly wrong!!!", 500))
   }
 
   "The AuthoriseAsAgentOnlySpec" when {
@@ -62,6 +67,15 @@ class AuthoriseAsAgentOnlySpec extends ControllerBaseSpec {
 
         "render the Unauthorised Agent page" in {
           messages(Jsoup.parse(contentAsString(result)).select("h1").text) shouldBe AgentUnauthorisedPageMessages.title
+        }
+      }
+
+      "there is an upstream error response" should {
+
+        "return 500 (Internal server error)" in {
+          mockAgentAuthorised()
+          val result = error(request)
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
     }
@@ -98,6 +112,15 @@ class AuthoriseAsAgentOnlySpec extends ControllerBaseSpec {
       "return 500 (Internal server error)" in {
         mockUnauthorised()
         val result = target(request)
+        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+      }
+    }
+
+    "there is an upstream error response" should {
+
+      "return 500 (Internal server error)" in {
+        mockIndividualAuthorised()
+        val result = error(request)
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }
     }

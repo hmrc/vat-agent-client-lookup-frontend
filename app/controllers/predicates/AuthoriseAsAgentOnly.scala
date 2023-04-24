@@ -18,6 +18,7 @@ package controllers.predicates
 
 import common.EnrolmentKeys
 import config.{AppConfig, ErrorHandler}
+
 import javax.inject.{Inject, Singleton}
 import models.Agent
 import play.api.mvc._
@@ -25,6 +26,7 @@ import services.EnrolmentsAuthService
 import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolments, NoActiveSession}
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
+import uk.gov.hmrc.http.UpstreamErrorResponse
 import views.html.errors.SessionTimeoutView
 import views.html.errors.agent.UnauthorisedNoEnrolmentView
 
@@ -65,6 +67,9 @@ class AuthoriseAsAgentOnly @Inject()(enrolmentsAuthService: EnrolmentsAuthServic
         Unauthorized(sessionTimeoutView())
       case _: AuthorisationException =>
         logger.warn("[AuthoriseAsAgentOnly][invokeBlock] - Authorisation Exception, rendering Technical Difficulties view")
+        errorHandler.showInternalServerError
+      case error: UpstreamErrorResponse =>
+        logger.warn(s"[AuthoriseAsAgentOnly][invokeBlock] - Upstream error response received: ${error.message}")
         errorHandler.showInternalServerError
     }
   }

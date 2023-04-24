@@ -26,6 +26,7 @@ import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import uk.gov.hmrc.auth.core._
 import services.EnrolmentsAuthService
+import uk.gov.hmrc.http.UpstreamErrorResponse
 import views.html.errors.SessionTimeoutView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -67,6 +68,9 @@ class AuthoriseAsAgentWithClient @Inject()(enrolmentsAuthService: EnrolmentsAuth
           case _: AuthorisationException =>
             logger.debug("[AuthoriseAsAgentWithClient][invokeBlock] - Agent does not have delegated authority for Client")
             Redirect(controllers.agent.routes.AgentUnauthorisedForClientController.show())
+          case error: UpstreamErrorResponse =>
+            logger.warn(s"[AuthoriseAsAgentWithClient][invokeBlock] - Upstream error response received: ${error.message}")
+            serviceErrorHandler.showInternalServerError
         }
       case _ =>
         logger.debug("[AuthoriseAsAgentWithClient][invokeBlock] - No Client VRN in session, redirecting to Select Client page")

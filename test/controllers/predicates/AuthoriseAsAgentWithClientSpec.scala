@@ -21,6 +21,7 @@ import play.api.http.Status
 import play.api.mvc.Results.Ok
 import play.api.mvc.{Action, AnyContent}
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.UpstreamErrorResponse
 
 import scala.concurrent.Future
 
@@ -30,6 +31,11 @@ class AuthoriseAsAgentWithClientSpec extends MockAuth {
     mockAuthAsAgentWithClient.async {
       implicit user =>
         Future.successful(Ok(s"test ${user.vrn}"))
+    }
+
+  def error: Action[AnyContent] =
+    mockAuthAsAgentWithClient.async {
+      Future.failed(UpstreamErrorResponse("Something went terribly wrong!!!", 500))
     }
 
   "The AuthoriseAsAgentWithClientSpec" when {
@@ -77,6 +83,15 @@ class AuthoriseAsAgentWithClientSpec extends MockAuth {
 
       s"redirect location to ${controllers.agent.routes.AgentUnauthorisedForClientController.show().url}" in {
         redirectLocation(result) shouldBe Some(controllers.agent.routes.AgentUnauthorisedForClientController.show().url)
+      }
+    }
+
+    "there is an upstream error response" should {
+
+      "return 500 (Internal server error)" in {
+        mockAgentAuthorised()
+        val result = error(fakeRequestWithVrnAndRedirectUrl)
+        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }
     }
   }
