@@ -21,7 +21,6 @@ import connectors.httpParsers.ResponseHttpParser.HttpResult
 import models.penalties.PenaltiesSummary
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import connectors.httpParsers.PenaltiesHttpParser.PenaltiesReads
-import models.errors.PenaltiesFeatureSwitchError
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,10 +29,6 @@ class PenaltiesConnector @Inject()(httpClient: HttpClient,
                                    appConfig: AppConfig) {
 
   def getPenaltiesDataForVRN(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[PenaltiesSummary]] = {
-    if (appConfig.features.penaltiesServiceFeature()) {
       httpClient.GET(appConfig.penaltiesUrl(vrn))
-    } else {
-      Future.successful(Left(PenaltiesFeatureSwitchError))
-    }
   }
 }
