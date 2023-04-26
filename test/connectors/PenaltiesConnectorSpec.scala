@@ -26,11 +26,10 @@ class PenaltiesConnectorSpec extends TestUtil with MockHttp {
   val connector: PenaltiesConnector = new PenaltiesConnector(mockHttp, mockConfig)
 
   "Calling the penalties service" when {
-    "the feature switch is enabled" should {
+
       "return 200 and a PenaltiesSummary model" in {
         setupMockHttpGet(s"/vat/penalties/summary/123")(Right(penaltiesSummaryAsModel))
         await(connector.getPenaltiesDataForVRN("123")) shouldBe Right(penaltiesSummaryAsModel)
-      }
     }
 
   }

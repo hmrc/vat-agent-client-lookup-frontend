@@ -16,7 +16,6 @@
 
 package connectors
 
-import config.AppConfig
 import helpers.IntegrationBaseSpec
 import models.penalties.PenaltiesSummary
 import play.api.libs.json.Json
@@ -27,7 +26,6 @@ import uk.gov.hmrc.http.HeaderCarrier
 class PenaltiesConnectorISpec extends IntegrationBaseSpec {
 
   private trait Test {
-    val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
     val connector: PenaltiesConnector = app.injector.instanceOf[PenaltiesConnector]
     implicit val hc: HeaderCarrier = HeaderCarrier()
   }
