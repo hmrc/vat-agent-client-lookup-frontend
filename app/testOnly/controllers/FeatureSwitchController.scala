@@ -31,8 +31,7 @@ class FeatureSwitchController @Inject()(featureSwitchView: FeatureSwitch, mcc: M
     Ok(featureSwitchView(FeatureSwitchForm.form.fill(
       FeatureSwitchModel(
         emailVerificationEnabled = appConfig.features.emailVerificationEnabled(),
-        useStaticDateFeature = appConfig.features.useStaticDateFeature(),
-        penaltiesServiceFeature = appConfig.features.penaltiesServiceFeature()
+        useStaticDateFeature = appConfig.features.useStaticDateFeature()
       )
     )))
   }
@@ -47,7 +46,6 @@ class FeatureSwitchController @Inject()(featureSwitchView: FeatureSwitch, mcc: M
   def handleSuccess(model: FeatureSwitchModel): Result = {
     appConfig.features.emailVerificationEnabled(model.emailVerificationEnabled)
     appConfig.features.useStaticDateFeature(model.useStaticDateFeature)
-    appConfig.features.penaltiesServiceFeature(model.penaltiesServiceFeature)
     Redirect(routes.FeatureSwitchController.featureSwitch)
   }
 }

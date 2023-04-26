@@ -17,5 +17,4 @@
 package models
 
 case class FeatureSwitchModel(emailVerificationEnabled: Boolean,
-                              useStaticDateFeature: Boolean,
-                              penaltiesServiceFeature: Boolean)
+                              useStaticDateFeature: Boolean)

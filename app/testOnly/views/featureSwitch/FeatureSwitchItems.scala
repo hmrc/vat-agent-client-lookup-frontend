@@ -40,8 +40,7 @@ class FeatureSwitchItems @Inject() () {
   def items(form: Form[FeatureSwitchModel]): Seq[CheckboxItem] = {
     Seq(
       formCheckBoxItem(form, ConfigKeys.emailVerificationFeature, "Email Verification"),
-      formCheckBoxItem(form, ConfigKeys.useStaticDateFeature, "Use Static Date (2018-05-01)"),
-      formCheckBoxItem(form, ConfigKeys.penaltiesServiceFeature, "Penalties service features")
+      formCheckBoxItem(form, ConfigKeys.useStaticDateFeature, "Use Static Date (2018-05-01)")
     )
   }
 }

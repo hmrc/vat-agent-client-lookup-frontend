@@ -16,9 +16,7 @@
 
 package connectors
 
-import config.AppConfig
 import helpers.IntegrationBaseSpec
-import models.errors.PenaltiesFeatureSwitchError
 import models.penalties.PenaltiesSummary
 import play.api.libs.json.Json
 import play.api.test.Helpers._
@@ -28,15 +26,13 @@ import uk.gov.hmrc.http.HeaderCarrier
 class PenaltiesConnectorISpec extends IntegrationBaseSpec {
 
   private trait Test {
-    val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
     val connector: PenaltiesConnector = app.injector.instanceOf[PenaltiesConnector]
     implicit val hc: HeaderCarrier = HeaderCarrier()
   }
 
-  "calling getPenaltiesDataForVRN" when {
-    "when the feature switch is enabled" should {
+  "calling getPenaltiesDataForVRN" should {
+
       "return a successful response and PenaltySummary model from the penalties API" in new Test {
-        appConfig.features.penaltiesServiceFeature(true)
 
         val responseBody = Json.parse(
           """
@@ -64,7 +60,6 @@ class PenaltiesConnectorISpec extends IntegrationBaseSpec {
       }
 
       "return an Empty PenaltiesSummary model when given an invalid vrn" in new Test {
-        appConfig.features.penaltiesServiceFeature(true)
         val responseBody = Json.parse(
           """
             |{
@@ -78,20 +73,6 @@ class PenaltiesConnectorISpec extends IntegrationBaseSpec {
         val result = await(connector.getPenaltiesDataForVRN("123"))
         result shouldBe Right(expectedContent)
       }
-    }
 
-    "when the feature switch is disabled" should {
-      "return the penalties feature switch error" in new Test {
-        appConfig.features.penaltiesServiceFeature(false)
-        val responseBody = Json.parse(
-          """
-            |{
-            |}
-            |""".stripMargin)
-        PenaltiesStub.stubPenaltiesSummary(OK, responseBody, "123")
-        val result = await(connector.getPenaltiesDataForVRN("123"))
-        result shouldBe Left(PenaltiesFeatureSwitchError)
-      }
-    }
   }
 }

@@ -23,7 +23,6 @@ import utils.TestUtil
 class FeatureSpec extends TestUtil {
   private val features = new Features(app.injector.instanceOf[Configuration])
   val allFeatures: Seq[Feature] = Seq(
-    features.penaltiesServiceFeature,
     features.useStaticDateFeature,
     features.emailVerificationEnabled
   )
