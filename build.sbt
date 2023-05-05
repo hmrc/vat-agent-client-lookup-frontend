@@ -25,7 +25,7 @@ val bootstrapPlayVersion       = "7.15.0"
 val playFrontendHmrc           = "7.7.0-play-28"
 val mockitoVersion             = "3.1.2.0"
 val scalaMockVersion           = "5.2.0"
-val domainVersion              = "8.2.0-play-28"
+val domainVersion              = "8.3.0-play-28"
 
 val compile = Seq(
   ws,
