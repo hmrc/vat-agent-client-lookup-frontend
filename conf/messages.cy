@@ -58,7 +58,7 @@ clientsVrn.label = Beth yw rhif TAW eich cleient?
 clientVrnForm.error.missing = Nodwch rif TAW eich cleient
 clientVrnForm.error.invalid = Nodwch rif TAW yn y fformat cywir
 
-checkYourAnswers.title = Gwiriwch eich atebion
+checkYourAnswers.title = Gwirio’ch ateb
 checkYourAnswers.vatBusinessDetails = Manylion busnes TAW
 checkYourAnswers.change = Newid
 checkYourAnswers.email = Cyfeiriad e-bost

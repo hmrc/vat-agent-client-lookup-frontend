@@ -42,11 +42,11 @@ class CheckYourAnswersViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct title" in {
-      document.title() shouldBe "Check your answers - Your client’s VAT details - GOV.UK"
+      document.title() shouldBe "Check your answer - Your client’s VAT details - GOV.UK"
     }
 
     "have the correct heading" in {
-      elementText(Selectors.heading) shouldBe "Check your answers"
+      elementText(Selectors.heading) shouldBe "Check your answer"
     }
 
     "have the correct subheading" in {
