@@ -58,7 +58,7 @@ clientsVrn.label = What is your client’s VAT number?
 clientVrnForm.error.missing = Enter your client’s VAT number
 clientVrnForm.error.invalid = Enter a VAT number in the correct format
 
-checkYourAnswers.title = Check your answers
+checkYourAnswers.title = Check your answer
 checkYourAnswers.vatBusinessDetails = VAT business details
 checkYourAnswers.change = Change
 checkYourAnswers.email = Email address

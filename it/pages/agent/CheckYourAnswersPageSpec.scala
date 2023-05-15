@@ -65,7 +65,7 @@ class CheckYourAnswersPageSpec extends BasePageISpec {
 
             res should have(
               httpStatus(OK),
-              elementText("h1")("Check your answers")
+              elementText("h1")("Check your answer")
             )
           }
         }
