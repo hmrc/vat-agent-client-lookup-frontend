@@ -29,6 +29,7 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 import assets.BaseTestConstants._
 import common.SessionKeys
+import play.api.mvc.Request
 import views.html.errors.agent.NotAuthorisedForClientView
 
 import scala.concurrent.ExecutionContext
@@ -61,7 +62,8 @@ class AgentUnauthorisedForClientControllerSpec extends ControllerBaseSpec with M
             ArgumentMatchers.eq[Option[String]](Some(controllers.agent.routes.ConfirmClientVrnController.show.url))
           )(
             ArgumentMatchers.any[HeaderCarrier],
-            ArgumentMatchers.any[ExecutionContext]
+            ArgumentMatchers.any[ExecutionContext],
+            ArgumentMatchers.any[Request[_]]
           )
       }
 

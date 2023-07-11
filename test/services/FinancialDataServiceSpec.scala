@@ -26,9 +26,10 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.http.HeaderCarrier
-
 import assets.FinancialDataConstants.{paymentNoOutstandingAmount, paymentsNotOverdue}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.mvc.Request
+import play.api.test.FakeRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -39,6 +40,7 @@ class FinancialDataServiceSpec extends AnyWordSpecLike with Matchers with Mockit
   val vrn = "999999999"
   implicit val hc: HeaderCarrier = HeaderCarrier()
   implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
+  implicit val request: Request[_] = FakeRequest()
 
   "DirectDebitService should return the result of the connector call" when {
 

@@ -24,8 +24,9 @@ import config.{AppConfig, ErrorHandler}
 import controllers.BaseController
 import controllers.predicates.{AuthoriseAsAgentOnly, PreferencePredicate}
 import models.Agent
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, RequestHeader, Result}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, RequestHeader, Result}
 import services.EmailVerificationService
+import utils.LoggingUtil
 import views.html.agent.CheckYourAnswersView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -39,7 +40,7 @@ class ConfirmEmailController @Inject()(authenticate: AuthoriseAsAgentOnly,
                                        mcc: MessagesControllerComponents,
                                        confirmEmailView: CheckYourAnswersView)
                                       (implicit executionContext: ExecutionContext,
-                                       appConfig: AppConfig) extends BaseController(mcc) {
+                                       appConfig: AppConfig) extends BaseController(mcc) with LoggingUtil {
 
   def show: Action[AnyContent] = (authenticate andThen preferenceCheck) { implicit agent =>
     agent.session.get(SessionKeys.notificationsEmail) match {
@@ -57,17 +58,19 @@ class ConfirmEmailController @Inject()(authenticate: AuthoriseAsAgentOnly,
           case Some(true) =>
             handleRedirect(agent, email)
           case Some(false) =>
+            warnLog("[ConfirmEmailController][isEmailVerified] - email not verified")
             Redirect(routes.VerifyEmailPinController.requestPasscode)
           case _ =>
+            errorLog("[ConfirmEmailController][isEmailVerified] - could not get the email verification state")
             errorHandler.showInternalServerError
         }
       case _ =>
-        logger.info("[ConfirmEmailController][updateNotificationPreference] no email address found in session")
+        errorLog("[ConfirmEmailController][updateNotificationPreference] no email address found in session")
         Future.successful(Redirect(routes.CapturePreferenceController.show()))
     }
   }
 
-  private def handleRedirect(agent: Agent[AnyContent], email: String)(implicit rh: RequestHeader): Result = {
+  private def handleRedirect(agent: Agent[AnyContent], email: String)(implicit rh: RequestHeader, request: Request[_]): Result = {
     val redirectUrl = agent.session.get(SessionKeys.redirectUrl).getOrElse(appConfig.manageVatCustomerDetailsUrl)
 
     auditService.extendedAudit(

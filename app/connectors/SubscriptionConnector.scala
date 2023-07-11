@@ -23,19 +23,19 @@ import connectors.httpParsers.ResponseHttpParser.HttpResult
 import models.CustomerDetails
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpClient
-import utils.LoggerUtil
+import utils.LoggingUtil
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class SubscriptionConnector @Inject()(http: HttpClient,
-                                      config: AppConfig) extends LoggerUtil {
+                                      config: AppConfig) extends LoggingUtil {
 
   private[connectors] def getCustomerDetailsUrl(vrn: String) = s"${config.vatSubscriptionUrl}/vat-subscription/$vrn/full-information"
 
   def getCustomerDetails(id: String)(implicit headerCarrier: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[CustomerDetails]] = {
     val url = getCustomerDetailsUrl(id)
-    logger.debug(s"[CustomerDetailsConnector][getCustomerDetails]: Calling getCustomerDetails with URL - $url")
+    debug(s"[CustomerDetailsConnector][getCustomerDetails]: Calling getCustomerDetails with URL - $url")
     http.GET(url)(CustomerDetailsReads, headerCarrier, ec)
   }
 }

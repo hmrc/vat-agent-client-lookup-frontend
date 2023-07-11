@@ -20,7 +20,7 @@ import common.MandationStatus
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import uk.gov.hmrc.http.InternalServerException
-import utils.LoggerUtil
+import utils.LoggingUtil
 
 case class CustomerDetails(firstName: Option[String],
                            lastName: Option[String],
@@ -35,7 +35,7 @@ case class CustomerDetails(firstName: Option[String],
                            isHybridUser: Boolean,
                            customerMigratedToETMPDate: Option[String],
                            changeIndicators: Option[ChangeIndicators] = None,
-                           missingTrader: Boolean = false) extends LoggerUtil {
+                           missingTrader: Boolean = false) extends LoggingUtil {
 
   val userName: Option[String] = {
     val name = s"${firstName.getOrElse("")} ${lastName.getOrElse("")}".trim
@@ -51,7 +51,7 @@ case class CustomerDetails(firstName: Option[String],
     case (_, Some(oName), _) => oName
     case (_, _, Some(uName)) => uName
     case (_, _, _) =>
-      logger.warn("[CustomerDetails][clientName] - No entity name was returned by the API")
+      logger.error("[CustomerDetails][clientName] - No entity name was returned by the API")
       throw new InternalServerException("No entity name was returned by the API")
   }
 

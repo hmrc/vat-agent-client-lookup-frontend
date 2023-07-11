@@ -27,6 +27,7 @@ import javax.inject.{Inject, Singleton}
 import models.errors._
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{CustomerDetailsService, FinancialDataService}
+import utils.LoggingUtil
 import views.html.agent.ConfirmClientVrnView
 import views.html.errors.{AccountMigrationView, NotSignedUpView}
 
@@ -43,7 +44,7 @@ class ConfirmClientVrnController @Inject()(authenticate: AuthoriseAsAgentWithCli
                                            accountMigrationView: AccountMigrationView,
                                            notSignedUpView: NotSignedUpView)
                                           (implicit appConfig: AppConfig,
-                                           executionContext: ExecutionContext) extends BaseController(mcc) {
+                                           executionContext: ExecutionContext) extends BaseController(mcc) with LoggingUtil {
 
   def show: Action[AnyContent] = authenticate.async {
     implicit user =>
@@ -51,7 +52,7 @@ class ConfirmClientVrnController @Inject()(authenticate: AuthoriseAsAgentWithCli
         val hasDDSetup: String = ddResult.fold(_ => "", result => result.directDebitMandateFound.toString)
         customerDetailsService.getCustomerDetails(user.vrn) map {
           case Right(customerDetails) if customerDetails.isInsolventWithoutAccess =>
-            logger.debug("[ConfirmClientVrnController][show] - " +
+            debug("[ConfirmClientVrnController][show] - " +
               "Client is insolvent without access, rendering UnauthorisedForClient page")
             Redirect(controllers.agent.routes.AgentUnauthorisedForClientController.show())
               .addingToSession(SessionKeys.mtdVatAgentDDMandateFound -> hasDDSetup)
@@ -69,10 +70,14 @@ class ConfirmClientVrnController @Inject()(authenticate: AuthoriseAsAgentWithCli
               SessionKeys.clientName -> customerDetails.clientName, SessionKeys.insolventWithoutAccessKey -> "false",
               SessionKeys.mtdVatAgentDDMandateFound -> hasDDSetup)
 
-          case Left(Migration) => PreconditionFailed(accountMigrationView())
-          case Left(NotSignedUp) => NotFound(notSignedUpView())
+          case Left(Migration) =>
+            errorLog("[ConfirmClientVrnController][show] - could not retrieve customer details, account creation not completed")
+            PreconditionFailed(accountMigrationView())
+          case Left(NotSignedUp) =>
+            errorLog("[ConfirmClientVrnController][show] - user not signed up, could not retrieve customer details")
+            NotFound(notSignedUpView())
           case _ =>
-            logger.warn("[ConfirmClientVrnController][show] Error returned from GetCustomerDetails")
+            errorLog("[ConfirmClientVrnController][show] Error returned from GetCustomerDetails")
             errorHandler.showInternalServerError
         }
       }
@@ -105,7 +110,7 @@ class ConfirmClientVrnController @Inject()(authenticate: AuthoriseAsAgentWithCli
           }
 
         case Some("") | None =>
-          logger.debug("[ConfirmClientVrnController][redirect] Redirect url not provided. " +
+          debug("[ConfirmClientVrnController][redirect] Redirect url not provided. " +
             "Redirecting to 'Agent Hub' page.")
           Redirect(controllers.agent.routes.AgentHubController.show)
 

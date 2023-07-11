@@ -20,26 +20,28 @@ import connectors.httpParsers.ResponseHttpParser.HttpResult
 import models.errors.UnexpectedError
 import play.api.http.Status.{CONFLICT, CREATED}
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
-import utils.LoggerUtil
+import utils.LoggingUtil
 
-object RequestPasscodeHttpParser extends LoggerUtil {
+object RequestPasscodeHttpParser extends LoggingUtil {
 
   implicit object RequestPasscodeHttpReads extends HttpReads[HttpResult[EmailVerificationPasscodeRequest]] {
-    override def read(method: String, url: String, response: HttpResponse): HttpResult[EmailVerificationPasscodeRequest] =
+    override def read(method: String, url: String, response: HttpResponse): HttpResult[EmailVerificationPasscodeRequest] = {
+      implicit val res: HttpResponse = response
       response.status match {
         case CREATED =>
-          logger.debug("[RequestPasscodeHttpParser][RequestPasscodeHttpReads][read] - Email passcode request sent successfully")
+          debug("[RequestPasscodeHttpParser][RequestPasscodeHttpReads][read] - Email passcode request sent successfully")
           Right(EmailVerificationPasscodeRequestSent)
         case CONFLICT =>
-          logger.debug("[RequestPasscodeHttpParser][RequestPasscodeHttpReads][read] - Email already verified")
+          debug("[RequestPasscodeHttpParser][RequestPasscodeHttpReads][read] - Email already verified")
           Right(EmailIsAlreadyVerified)
         case status =>
-          logger.warn(
+          errorLogRes(
             "[RequestPasscodeHttpParser][RequestPasscodeHttpReads][read] - " +
               s"Failed to create email verification passcode. Received status: $status, Response body: ${response.body}"
           )
           Left(UnexpectedError(status, response.body))
       }
+    }
   }
 
   sealed trait EmailVerificationPasscodeRequest
