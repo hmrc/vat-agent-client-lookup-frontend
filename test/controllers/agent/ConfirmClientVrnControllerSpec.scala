@@ -31,6 +31,7 @@ import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.verify
 import play.api.http.Status
+import play.api.mvc.Request
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
@@ -99,7 +100,8 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
                     ArgumentMatchers.eq[Option[String]](Some(controllers.agent.routes.ConfirmClientVrnController.show.url))
                   )(
                     ArgumentMatchers.any[HeaderCarrier],
-                    ArgumentMatchers.any[ExecutionContext]
+                    ArgumentMatchers.any[ExecutionContext],
+                    ArgumentMatchers.any[Request[_]]
                   )
 
                 verify(mockAuditingService)
@@ -108,7 +110,8 @@ class ConfirmClientVrnControllerSpec extends ControllerBaseSpec with MockCustome
                     ArgumentMatchers.eq[Option[String]](Some(controllers.agent.routes.ConfirmClientVrnController.show.url))
                   )(
                     ArgumentMatchers.any[HeaderCarrier],
-                    ArgumentMatchers.any[ExecutionContext]
+                    ArgumentMatchers.any[ExecutionContext],
+                    ArgumentMatchers.any[Request[_]]
                   )
               }
 

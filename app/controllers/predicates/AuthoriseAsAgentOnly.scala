@@ -27,6 +27,7 @@ import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolments, NoActiveSessio
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.http.UpstreamErrorResponse
+import utils.LoggingUtil
 import views.html.errors.SessionTimeoutView
 import views.html.errors.agent.UnauthorisedNoEnrolmentView
 
@@ -39,7 +40,7 @@ class AuthoriseAsAgentOnly @Inject()(enrolmentsAuthService: EnrolmentsAuthServic
                                      unauthorisedNoEnrolmentView: UnauthorisedNoEnrolmentView,
                                      sessionTimeoutView: SessionTimeoutView,
                                      implicit val appConfig: AppConfig)
-  extends AuthBasePredicate(mcc) with ActionBuilder[Agent, AnyContent] with ActionFunction[Request, Agent] {
+  extends AuthBasePredicate(mcc) with ActionBuilder[Agent, AnyContent] with ActionFunction[Request, Agent] with LoggingUtil {
 
   override val parser: BodyParser[AnyContent] = mcc.parsers.defaultBodyParser
   override implicit protected val executionContext: ExecutionContext = mcc.executionContext
@@ -52,35 +53,35 @@ class AuthoriseAsAgentOnly @Inject()(enrolmentsAuthService: EnrolmentsAuthServic
       case Some(affinityGroup) ~ allEnrolments =>
         (isAgent(affinityGroup), allEnrolments) match {
           case (true, _) =>
-            logger.debug("[AuthoriseAsAgentOnly][invokeBlock] - Is an Agent, checking HMRC-AS-AGENT enrolment")
+            infoLog("[AuthoriseAsAgentOnly][invokeBlock] - Is an Agent, checking HMRC-AS-AGENT enrolment")
             checkAgentEnrolment(allEnrolments, block)
           case (_, _) =>
-            logger.debug("[AuthoriseAsAgentOnly][invokeBlock] - Is NOT an Agent, rendering Technical Difficulties view")
+            errorLog("[AuthoriseAsAgentOnly][invokeBlock] - Is NOT an Agent, rendering Technical Difficulties view")
             Future.successful(errorHandler.showInternalServerError)
         }
       case _ =>
-        logger.warn("[AuthoriseAsAgentOnly][invokeBlock] - Missing affinity group")
+        errorLog("[AuthoriseAsAgentOnly][invokeBlock] - Missing affinity group")
         Future.successful(errorHandler.showInternalServerError)
     } recover {
       case _: NoActiveSession =>
-        logger.debug("[AuthoriseAsAgentOnly][invokeBlock] - No Active Session, rendering Session Timeout view")
+        warnLog("[AuthoriseAsAgentOnly][invokeBlock] - No Active Session, rendering Session Timeout view")
         Unauthorized(sessionTimeoutView())
       case _: AuthorisationException =>
-        logger.warn("[AuthoriseAsAgentOnly][invokeBlock] - Authorisation Exception, rendering Technical Difficulties view")
+        errorLog("[AuthoriseAsAgentOnly][invokeBlock] - Authorisation Exception, rendering Technical Difficulties view")
         errorHandler.showInternalServerError
       case error: UpstreamErrorResponse =>
-        logger.warn(s"[AuthoriseAsAgentOnly][invokeBlock] - Upstream error response received: ${error.message}")
+        errorLog(s"[AuthoriseAsAgentOnly][invokeBlock] - Upstream error response received: ${error.message}")
         errorHandler.showInternalServerError
     }
   }
 
   private def checkAgentEnrolment[A](enrolments: Enrolments, block: Agent[A] => Future[Result])(implicit request: Request[A]) =
     if (enrolments.enrolments.exists(_.key == EnrolmentKeys.agentEnrolmentId)) {
-      logger.debug("[AuthoriseAsAgentOnly][checkAgentEnrolment] - Authenticated as agent")
+      debug("[AuthoriseAsAgentOnly][checkAgentEnrolment] - Authenticated as agent")
       block(Agent(enrolments))
     }
     else {
-      logger.debug(s"[AuthoriseAsAgentOnly][checkAgentEnrolment] - Agent without HMRC-AS-AGENT enrolment. Enrolments: $enrolments")
+      errorLog(s"[AuthoriseAsAgentOnly][checkAgentEnrolment] - Agent without HMRC-AS-AGENT enrolment. Enrolments: $enrolments")
       Future.successful(Forbidden(unauthorisedNoEnrolmentView()))
     }
 }

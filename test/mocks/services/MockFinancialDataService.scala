@@ -24,6 +24,7 @@ import connectors.httpParsers.ResponseHttpParser.HttpResult
 import models.{Charge, DirectDebit}
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.when
+import play.api.mvc.Request
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -37,6 +38,6 @@ trait MockFinancialDataService extends TestUtil {
       .thenReturn(Future.successful(response))
 
   def mockPaymentResponse(response: HttpResult[Seq[Charge]]): OngoingStubbing[Future[HttpResult[Seq[Charge]]]] =
-    when(mockFinancialDataService.getPayment(ArgumentMatchers.any())(ArgumentMatchers.any[HeaderCarrier], ArgumentMatchers.any[ExecutionContext]))
+    when(mockFinancialDataService.getPayment(ArgumentMatchers.any())(ArgumentMatchers.any[HeaderCarrier], ArgumentMatchers.any[ExecutionContext], ArgumentMatchers.any[Request[_]]))
       .thenReturn(Future.successful(response))
 }

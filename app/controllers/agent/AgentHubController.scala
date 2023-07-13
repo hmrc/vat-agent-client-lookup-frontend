@@ -29,6 +29,7 @@ import models.penalties.PenaltiesSummary
 import models.{CustomerDetails, HubViewModel, User, VatDetailsDataModel}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{CustomerDetailsService, DateService, FinancialDataService, PenaltiesService}
+import utils.LoggingUtil
 import views.html.agent.AgentHubView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -44,7 +45,7 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
                                    mcc: MessagesControllerComponents,
                                    agentHubView: AgentHubView)
                                   (implicit appConfig: AppConfig,
-                                   executionContext: ExecutionContext) extends BaseController(mcc) {
+                                   executionContext: ExecutionContext) extends BaseController(mcc) with LoggingUtil {
 
   def show: Action[AnyContent] = authenticate.async { implicit user =>
     for {
@@ -62,7 +63,7 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
             Ok(agentHubView(constructViewModel(details, payments, optPenaltiesSummary)))
           }
         case Left(error) =>
-          logger.warn(s"[AgentHubController][show] - received an error from CustomerDetailsService: $error")
+          errorLog(s"[AgentHubController][show] - received an error from CustomerDetailsService: $error")
           serviceErrorHandler.showInternalServerError
       }
     }

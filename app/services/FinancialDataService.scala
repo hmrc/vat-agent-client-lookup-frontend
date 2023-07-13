@@ -19,21 +19,25 @@ package services
 import connectors.FinancialDataConnector
 import connectors.httpParsers.ResponseHttpParser.HttpResult
 import models.{Charge, DirectDebit}
+import play.api.mvc.Request
 import uk.gov.hmrc.http.HeaderCarrier
-import javax.inject.{Inject, Singleton}
+import utils.LoggingUtil
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class FinancialDataService @Inject()(financialDataConnector: FinancialDataConnector) {
+class FinancialDataService @Inject()(financialDataConnector: FinancialDataConnector) extends LoggingUtil{
 
   def getDirectDebit(vrn: String)(implicit hc: HeaderCarrier): Future[HttpResult[DirectDebit]] =
     financialDataConnector.getDirectDebit(vrn)
 
-  def getPayment(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[Seq[Charge]]] = {
+  def getPayment(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext, request: Request[_]): Future[HttpResult[Seq[Charge]]] = {
     financialDataConnector.getPaymentsDue(vrn) map {
       case Right(payments) => Right(payments.filter(_.outstandingAmount > 0))
-      case Left(error) => Left(error)
+      case Left(error) =>
+        errorLog(s"[FinancialDataService][getPayment] - $error was thrown while attempting to retrieve due payments")
+        Left(error)
     }
   }
 }

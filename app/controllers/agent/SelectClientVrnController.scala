@@ -21,15 +21,17 @@ import config.AppConfig
 import controllers.BaseController
 import controllers.predicates.AuthoriseAsAgentOnly
 import forms.ClientVrnForm
+
 import javax.inject.{Inject, Singleton}
 import play.api.mvc._
+import utils.LoggingUtil
 import views.html.agent.SelectClientVrnView
 
 @Singleton
 class SelectClientVrnController @Inject()(authenticate: AuthoriseAsAgentOnly,
                                           mcc: MessagesControllerComponents,
                                           selectClientVrnView: SelectClientVrnView)
-                                         (implicit appConfig: AppConfig) extends BaseController(mcc) {
+                                         (implicit appConfig: AppConfig) extends BaseController(mcc) with LoggingUtil {
 
   def show(redirectUrl: String): Action[AnyContent] = authenticate { implicit agent =>
 
@@ -43,11 +45,11 @@ class SelectClientVrnController @Inject()(authenticate: AuthoriseAsAgentOnly,
     implicit agent =>
       ClientVrnForm.form.bindFromRequest().fold(
         error => {
-          logger.debug("[SelectClientVrnController][submit] Error")
+          debug("[SelectClientVrnController][submit] Error")
           BadRequest(selectClientVrnView(error))
         },
         data => {
-          logger.debug("[SelectClientVrnController][submit] Success")
+          debug("[SelectClientVrnController][submit] Success")
           Redirect(controllers.agent.routes.ConfirmClientVrnController.show)
             .removingFromSession(SessionKeys.clientMandationStatus)
             .addingToSession(SessionKeys.clientVRN -> data.vrn)

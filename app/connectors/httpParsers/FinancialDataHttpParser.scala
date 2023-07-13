@@ -21,16 +21,17 @@ import models.errors.UnexpectedError
 import models.{Charge, DirectDebit}
 import play.api.http.Status.{NOT_FOUND, OK}
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
-import utils.LoggerUtil
+import utils.LoggingUtil
 
-object FinancialDataHttpParser extends LoggerUtil {
+object FinancialDataHttpParser extends LoggingUtil {
 
   implicit object DirectDebitReads extends HttpReads[HttpResult[DirectDebit]] {
     override def read(method: String, url: String, response: HttpResponse): HttpResult[DirectDebit] = {
+      implicit val res: HttpResponse = response
       response.status match {
         case OK => Right(response.json.as[DirectDebit])
         case status =>
-          logger.warn(
+          errorLogRes(
             "[FinancialDataHttpParser][DirectDebitReads][read] - " +
               s"Unexpected Response, Status $status returned, with response: ${response.body}"
           )
@@ -41,11 +42,12 @@ object FinancialDataHttpParser extends LoggerUtil {
 
   implicit object ChargeReads extends HttpReads[HttpResult[Seq[Charge]]] {
     override def read(method: String, url: String, response: HttpResponse): HttpResult[Seq[Charge]] = {
+      implicit val res: HttpResponse = response
       response.status match {
         case OK => Right((response.json \ "financialTransactions").as[Seq[Charge]])
         case NOT_FOUND => Right(Seq())
         case status =>
-          logger.warn(
+          errorLogRes(
             "[FinancialDataHttpParser][ChargeReads][read] - " +
               s"Unexpected Response, Status $status returned, with response: ${response.body}"
           )

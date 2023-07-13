@@ -20,26 +20,28 @@ import connectors.httpParsers.ResponseHttpParser.HttpResult
 import models.errors.UnexpectedError
 import play.api.http.Status._
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
-import utils.LoggerUtil
+import utils.LoggingUtil
 
-object GetEmailVerificationStateHttpParser extends LoggerUtil {
+object GetEmailVerificationStateHttpParser extends LoggingUtil {
 
   implicit object GetEmailVerificationStateHttpReads extends HttpReads[HttpResult[EmailVerificationState]] {
-    override def read(method: String, url: String, response: HttpResponse): HttpResult[EmailVerificationState] =
+    override def read(method: String, url: String, response: HttpResponse): HttpResult[EmailVerificationState] = {
+      implicit val res: HttpResponse = response
       response.status match {
         case OK => Right(EmailVerified)
         case NOT_FOUND =>
-          logger.debug(
+          warnLogRes(
             "[GetEmailVerificationStateHttpParser][GetEmailVerificationStateHttpReads][read] - Email not verified"
           )
           Right(EmailNotVerified)
         case status =>
-          logger.warn(
+          warnLogRes(
             "[GetEmailVerificationStateHttpParser][GetEmailVerificationStateHttpReads][read] - " +
               s"Unexpected Response, Status $status returned, with response: ${response.body}"
           )
           Left(UnexpectedError(status, response.body))
       }
+    }
   }
 
   sealed trait EmailVerificationState

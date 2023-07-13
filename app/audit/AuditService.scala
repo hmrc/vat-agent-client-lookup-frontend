@@ -20,26 +20,27 @@ import javax.inject.{Inject, Singleton}
 import audit.models.ExtendedAuditModel
 import play.api.http.HeaderNames
 import play.api.libs.json._
+import play.api.mvc.Request
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.AuditExtensions
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.http.connector.AuditResult.{Disabled, Failure, Success}
 import uk.gov.hmrc.play.audit.model.ExtendedDataEvent
-import utils.LoggerUtil
+import utils.LoggingUtil
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AuditService @Inject()(auditConnector: AuditConnector) extends LoggerUtil {
+class AuditService @Inject()(auditConnector: AuditConnector) extends LoggingUtil {
 
   val appName: String = "vat-agent-client-lookup-frontend"
 
   val referrer: HeaderCarrier => String = _.extraHeaders.find(_._1 == HeaderNames.REFERER).map(_._2).getOrElse("-")
 
   def extendedAudit(auditModel: ExtendedAuditModel, path: Option[String] = None)
-                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Unit = {
+                   (implicit hc: HeaderCarrier, ec: ExecutionContext, request: Request[_]): Unit = {
     val extendedDataEvent = toExtendedDataEvent(appName, auditModel, path.fold(referrer(hc))(x => x))
-    logger.debug(s"Splunk Audit Event:\n\n $extendedDataEvent")
+    debug(s"Splunk Audit Event:\n\n $extendedDataEvent")
     handleAuditResult(auditConnector.sendExtendedEvent(extendedDataEvent))
   }
 
@@ -57,12 +58,12 @@ class AuditService @Inject()(auditConnector: AuditConnector) extends LoggerUtil 
     )
   }
 
-  private def handleAuditResult(auditResult: Future[AuditResult])(implicit ec: ExecutionContext): Unit = auditResult.map {
+  private def handleAuditResult(auditResult: Future[AuditResult])(implicit ec: ExecutionContext, request: Request[_]): Unit = auditResult.map {
     case Success =>
-      logger.debug("Splunk Audit Successful")
+      debug("Splunk Audit Successful")
     case Failure(err, _) =>
-      logger.debug(s"Splunk Audit Error, message: $err")
+      errorLog(s"Splunk Audit Error, message: $err")
     case Disabled =>
-      logger.debug(s"Auditing Disabled")
+      debug(s"Auditing Disabled")
   }
 }

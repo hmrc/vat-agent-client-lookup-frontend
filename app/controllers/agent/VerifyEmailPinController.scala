@@ -26,6 +26,7 @@ import forms.PasscodeForm
 import models.Agent
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.EmailVerificationService
+import utils.LoggingUtil
 import views.html.agent.VerifyEmailPinView
 import views.html.errors.agent.IncorrectPasscodeView
 
@@ -40,7 +41,7 @@ class VerifyEmailPinController @Inject()(emailVerificationService: EmailVerifica
                                          verifyEmailPinView: VerifyEmailPinView,
                                          incorrectPasscodeView: IncorrectPasscodeView)
                                         (implicit executionContext: ExecutionContext,
-                                         appConfig: AppConfig) extends BaseController(mcc) {
+                                         appConfig: AppConfig) extends BaseController(mcc) with LoggingUtil {
 
   def extractSessionEmail(implicit agent: Agent[AnyContent]): Option[String] =
     agent.session.get(SessionKeys.notificationsEmail).filter(_.nonEmpty)
@@ -50,6 +51,7 @@ class VerifyEmailPinController @Inject()(emailVerificationService: EmailVerifica
       case Some(email) =>
         Ok(verifyEmailPinView(email, PasscodeForm.form))
       case _ =>
+        warnLog("[VerifyEmailPinController][show] - could not retrieve email from sessions")
         Redirect(routes.CapturePreferenceController.show())
     }
   }}
@@ -61,17 +63,23 @@ class VerifyEmailPinController @Inject()(emailVerificationService: EmailVerifica
     extractSessionEmail(agent) match {
       case Some(email) =>
         emailVerificationService.createEmailPasscodeRequest(email, langCookieValue) map {
-          case Some(true) => Redirect(routes.VerifyEmailPinController.show)
+          case Some(true) =>
+            infoLog("[VerifyEmailPinController][requestPasscode] - the email verification passcode was successfully sent")
+            Redirect(routes.VerifyEmailPinController.show)
           case Some(false) =>
-            logger.debug(
+            warnLog(
               "[VerifyEmailPinController][requestPasscode] - " +
                 "Unable to send email verification request. Service responded with 'already verified'"
             )
             Redirect(agent.session.get(SessionKeys.redirectUrl).getOrElse(appConfig.manageVatCustomerDetailsUrl))
               .addingToSession(SessionKeys.verifiedEmail -> email)
-          case _ => errorHandler.showInternalServerError
+          case _ =>
+            errorLog("[VerifyEmailPinController][requestPasscode] - an unexpected error occured while sending a verification passcode to the email")
+            errorHandler.showInternalServerError
         }
-      case _ => Future.successful(Redirect(routes.CapturePreferenceController.show()))
+      case _ =>
+        warnLog("[VerifyEmailPinController][requestPasscode] - could not retrieve email from session")
+        Future.successful(Redirect(routes.CapturePreferenceController.show()))
     }
   }}
 
@@ -80,26 +88,36 @@ class VerifyEmailPinController @Inject()(emailVerificationService: EmailVerifica
       case Some(email) =>
         PasscodeForm.form.bindFromRequest().fold(
           error => {
-            logger.debug(s"[VerifyEmailPinController][submit] Error submitting form: $error")
+            warnLog(s"[VerifyEmailPinController][submit] Error submitting form: $error")
             Future.successful(BadRequest(verifyEmailPinView(email, error)))
           },
           passcode => {
             emailVerificationService.verifyPasscode(email, passcode).map {
               case Right(SuccessfullyVerified) | Right(AlreadyVerified) =>
+                infoLog("[VerifyEmailPinController][submit] - successfully verified email address")
                 Redirect(agent.session.get(SessionKeys.redirectUrl).getOrElse(appConfig.manageVatCustomerDetailsUrl))
                   .addingToSession(SessionKeys.verifiedEmail -> email)
-              case Right(TooManyAttempts) => BadRequest(incorrectPasscodeView("incorrectPasscode.tooManyAttempts"))
-              case Right(PasscodeNotFound) => BadRequest(incorrectPasscodeView("incorrectPasscode.expired"))
+              case Right(TooManyAttempts) =>
+                warnLog("[VerifyEmailPinController][submit] - failed to verify the email address; the user attempted to verify the email with the same code multiple times")
+                BadRequest(incorrectPasscodeView("incorrectPasscode.tooManyAttempts"))
+              case Right(PasscodeNotFound) =>
+                warnLog("[VerifyEmailPinController][submit] - failed to verify the email address; the verification code has expired")
+                BadRequest(incorrectPasscodeView("incorrectPasscode.expired"))
               case Right(IncorrectPasscode) =>
+                warnLog("[VerifyEmailPinController][submit] - failed to verify the email address; the verification code is incorrect")
                 BadRequest(verifyEmailPinView(
                   email,
                   PasscodeForm.form.withError("passcode", "passcode.error.invalid")
                 ))
-              case _ => errorHandler.showInternalServerError
+              case _ =>
+                errorLog("[VerifyEmailPinController][submit] - an unexpected error was received while attempting to verify the email address")
+                errorHandler.showInternalServerError
             }
           }
         )
-      case _ => Future.successful(Redirect(routes.CapturePreferenceController.show()))
+      case _ =>
+        errorLog("[VerifyEmailPinController][requestPasscode] - could not retrieve email from session")
+        Future.successful(Redirect(routes.CapturePreferenceController.show()))
     }
   }}
 

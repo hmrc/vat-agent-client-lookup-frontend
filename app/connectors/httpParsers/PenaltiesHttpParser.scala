@@ -21,27 +21,28 @@ import models.errors.UnexpectedError
 import models.penalties.PenaltiesSummary
 import play.api.http.Status._
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
-import utils.LoggerUtil
+import utils.LoggingUtil
 
-object PenaltiesHttpParser extends LoggerUtil {
+object PenaltiesHttpParser extends LoggingUtil {
 
   implicit object PenaltiesReads extends HttpReads[HttpResult[PenaltiesSummary]] {
     override def read(method: String, url: String, response: HttpResponse): HttpResult[PenaltiesSummary] = {
+      implicit val res: HttpResponse = response
       response.status match {
         case OK => {
-          logger.debug("[PenaltiesHttpParser][read]: Status OK")
+          debug("[PenaltiesHttpParser][read]: Status OK")
           Right(response.json.as[PenaltiesSummary])
         }
         case NOT_FOUND => {
-          logger.debug(s"[PenaltiesHttpParser][read]: Status $NOT_FOUND")
+          warnLogRes(s"[PenaltiesHttpParser][read]: Status $NOT_FOUND")
           Right(PenaltiesSummary.empty)
         }
         case NO_CONTENT => {
-          logger.debug(s"[PenaltiesHttpParser][read]: Status $NO_CONTENT")
+          warnLogRes(s"[PenaltiesHttpParser][read]: Status $NO_CONTENT")
           Right(PenaltiesSummary.empty)
         }
         case status =>
-          logger.warn(s"[PenaltiesHttpParser][PenaltiesReads][read] - Received unexpected error. Response status: $status, Response body: ${response.body}")
+          errorLogRes(s"[PenaltiesHttpParser][PenaltiesReads][read] - Received unexpected error. Response status: $status, Response body: ${response.body}")
           Left(UnexpectedError(status, response.body))
       }
     }
