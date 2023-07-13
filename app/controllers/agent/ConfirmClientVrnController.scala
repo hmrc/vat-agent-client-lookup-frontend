@@ -71,10 +71,10 @@ class ConfirmClientVrnController @Inject()(authenticate: AuthoriseAsAgentWithCli
               SessionKeys.mtdVatAgentDDMandateFound -> hasDDSetup)
 
           case Left(Migration) =>
-            errorLog("[ConfirmClientVrnController][show] - could not retrieve customer details, account creation not completed")
+            warnLog("[ConfirmClientVrnController][show] - could not retrieve customer details, account creation not completed")
             PreconditionFailed(accountMigrationView())
           case Left(NotSignedUp) =>
-            errorLog("[ConfirmClientVrnController][show] - user not signed up, could not retrieve customer details")
+            warnLog("[ConfirmClientVrnController][show] - user not signed up, could not retrieve customer details")
             NotFound(notSignedUpView())
           case _ =>
             errorLog("[ConfirmClientVrnController][show] Error returned from GetCustomerDetails")

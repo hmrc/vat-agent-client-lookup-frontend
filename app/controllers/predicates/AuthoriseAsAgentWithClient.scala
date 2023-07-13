@@ -65,7 +65,7 @@ class AuthoriseAsAgentWithClient @Inject()(enrolmentsAuthService: EnrolmentsAuth
             block(user)
         } recover {
           case _: NoActiveSession =>
-            errorLog("[AuthoriseAsAgentWithClient][invokeBlock] - Agent does not have an active session, rendering Session Timeout")
+            warnLog("[AuthoriseAsAgentWithClient][invokeBlock] - Agent does not have an active session, rendering Session Timeout")
             Unauthorized(sessionTimeoutView())
           case _: AuthorisationException =>
             errorLog("[AuthoriseAsAgentWithClient][invokeBlock] - Agent does not have delegated authority for Client")

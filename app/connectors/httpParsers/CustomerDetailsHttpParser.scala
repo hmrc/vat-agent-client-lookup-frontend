@@ -42,11 +42,11 @@ object CustomerDetailsHttpParser extends LoggingUtil {
           )
 
         case PRECONDITION_FAILED =>
-          errorLogRes(s"[CustomerCircumstancesHttpParser][read]: Status $PRECONDITION_FAILED")
+          warnLogRes(s"[CustomerCircumstancesHttpParser][read]: Status $PRECONDITION_FAILED")
           Left(Migration)
 
         case NOT_FOUND =>
-          errorLogRes(s"[CustomerCircumstancesHttpParser][read]: Status $NOT_FOUND")
+          warnLogRes(s"[CustomerCircumstancesHttpParser][read]: Status $NOT_FOUND")
           Left(NotSignedUp)
 
         case status =>

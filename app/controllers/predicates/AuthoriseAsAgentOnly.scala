@@ -64,7 +64,7 @@ class AuthoriseAsAgentOnly @Inject()(enrolmentsAuthService: EnrolmentsAuthServic
         Future.successful(errorHandler.showInternalServerError)
     } recover {
       case _: NoActiveSession =>
-        errorLog("[AuthoriseAsAgentOnly][invokeBlock] - No Active Session, rendering Session Timeout view")
+        warnLog("[AuthoriseAsAgentOnly][invokeBlock] - No Active Session, rendering Session Timeout view")
         Unauthorized(sessionTimeoutView())
       case _: AuthorisationException =>
         errorLog("[AuthoriseAsAgentOnly][invokeBlock] - Authorisation Exception, rendering Technical Difficulties view")

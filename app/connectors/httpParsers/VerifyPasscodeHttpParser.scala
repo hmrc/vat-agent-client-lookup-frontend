@@ -43,13 +43,13 @@ object VerifyPasscodeHttpParser extends LoggingUtil {
           warnLogRes("[VerifyPasscodeHttpParser][VerifyPasscodeHttpReads][read] - Email is already verified")
           Right(AlreadyVerified)
         case FORBIDDEN =>
-          errorLogRes("[VerifyPasscodeHttpParser][VerifyPasscodeHttpReads][read] - Max attempts per session exceeded")
+          warnLogRes("[VerifyPasscodeHttpParser][VerifyPasscodeHttpReads][read] - Max attempts per session exceeded")
           Right(TooManyAttempts)
         case NOT_FOUND if response.body.contains("PASSCODE_NOT_FOUND") =>
-          errorLogRes("[VerifyPasscodeHttpParser][VerifyPasscodeHttpReads][read] - Passcode not found (or expired) for this email")
+          warnLogRes("[VerifyPasscodeHttpParser][VerifyPasscodeHttpReads][read] - Passcode not found (or expired) for this email")
           Right(PasscodeNotFound)
         case NOT_FOUND if response.body.contains("PASSCODE_MISMATCH") =>
-          errorLogRes("[VerifyPasscodeHttpParser][VerifyPasscodeHttpReads][read] - Incorrect passcode")
+          warnLogRes("[VerifyPasscodeHttpParser][VerifyPasscodeHttpReads][read] - Incorrect passcode")
           Right(IncorrectPasscode)
         case status =>
           errorLogRes(
