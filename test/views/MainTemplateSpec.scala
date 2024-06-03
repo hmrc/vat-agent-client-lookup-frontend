@@ -24,7 +24,7 @@ import views.html.MainTemplate
 class MainTemplateSpec extends ViewBaseSpec {
 
   val injectedView: MainTemplate = inject[MainTemplate]
-  val headerSelector: String = ".hmrc-header__service-name"
+  val headerSelector: String = ".govuk-header__service-name"
 
   "The MainTemplate" should {
 

@@ -30,7 +30,7 @@ class NotAuthorisedForClientViewSpec extends ViewBaseSpec {
   "Rendering the unauthorised for client page" should {
 
     object Selectors {
-      val serviceName = ".hmrc-header__service-name"
+      val serviceName = ".govuk-header__service-name"
       val pageHeading = "#content h1"
       val information = "#content > p:nth-child(2)"
       val agentServicesLink = "#content > p:nth-child(2) > a:nth-child(1)"

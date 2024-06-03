@@ -27,7 +27,7 @@ class SelectClientVrnViewSpec extends ViewBaseSpec {
 
   val injectedView: SelectClientVrnView = inject[SelectClientVrnView]
 
-  val headerName = ".hmrc-header__service-name"
+  val headerName = ".govuk-header__service-name"
   val signOutLink = ".hmrc-sign-out-nav__link"
 
   "Rendering the Select Client VRN page" when {

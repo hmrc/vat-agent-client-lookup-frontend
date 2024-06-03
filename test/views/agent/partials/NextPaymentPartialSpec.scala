@@ -80,6 +80,10 @@ class NextPaymentPartialSpec extends ViewBaseSpec {
         elementText(Selectors.content) shouldBe Messages.date
       }
 
+      "display the date of the payment correctly using non breaking space" in {
+        elementText(Selectors.content).contains(Messages.dateNonBreakingSpace)
+      }
+
       "not display the overdue flag" in {
         elementExtinct(Selectors.overdueLabel)
       }

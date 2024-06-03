@@ -14,33 +14,32 @@
  * limitations under the License.
  */
 
-import sbt.Tests.{Group, SubProcess}
-import sbt._
-import uk.gov.hmrc.DefaultBuildSettings._
+import sbt.*
+import uk.gov.hmrc.DefaultBuildSettings.*
 
 
 val appName = "vat-agent-client-lookup-frontend"
 
-val bootstrapPlayVersion       = "7.15.0"
-val playFrontendHmrc           = "7.7.0-play-28"
-val mockitoVersion             = "3.1.2.0"
-val scalaMockVersion           = "5.2.0"
-val domainVersion              = "8.3.0-play-28"
+val bootstrapPlayVersion       = "8.6.0"
+val playFrontendHmrc           = "9.11.0"
+val mockitoVersion             = "3.2.10.0"
+val scalaMockVersion           = "6.0.0"
+val domainVersion              = "9.0.0"
 
 val compile = Seq(
   ws,
-  "uk.gov.hmrc"       %% "bootstrap-frontend-play-28" % bootstrapPlayVersion,
-  "uk.gov.hmrc"       %% "play-frontend-hmrc"         % playFrontendHmrc,
-  "uk.gov.hmrc"       %% "domain"                     % domainVersion
+  "uk.gov.hmrc"       %% "bootstrap-frontend-play-30" % bootstrapPlayVersion,
+  "uk.gov.hmrc"       %% "play-frontend-hmrc-play-30" % playFrontendHmrc,
+  "uk.gov.hmrc"       %% "domain-play-30"             % domainVersion
 )
 
 def test(scope: String = "test,it"): Seq[ModuleID] = Seq(
-  "uk.gov.hmrc"       %% "bootstrap-test-play-28"       % bootstrapPlayVersion  % scope,
+  "uk.gov.hmrc"       %% "bootstrap-test-play-30"       % bootstrapPlayVersion  % scope,
   "org.scalamock"     %% "scalamock"                    % scalaMockVersion      % scope,
-  "org.scalatestplus" %% "mockito-3-3"                  % mockitoVersion        % scope
+  "org.scalatestplus" %% "mockito-3-4"                  % mockitoVersion        % scope
 )
 
-lazy val coverageSettings: Seq[Setting[_]] = {
+lazy val coverageSettings: Seq[Setting[?]] = {
   import scoverage.ScoverageKeys
 
   val excludedPackages = Seq(
@@ -64,14 +63,7 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 lazy val appDependencies: Seq[ModuleID] = compile ++ test()
 
 lazy val plugins : Seq[Plugins] = Seq.empty
-lazy val playSettings : Seq[Setting[_]] = Seq.empty
-
-def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] = tests map {
-  test =>
-    Group(test.name, Seq(test), SubProcess(
-      ForkOptions().withRunJVMOptions(Vector("-Dtest.name=" + test.name, "-Dlogger.resource=logback-test.xml"))
-    ))
-}
+lazy val playSettings : Seq[Setting[?]] = Seq.empty
 
 TwirlKeys.templateImports ++= Seq(
   "uk.gov.hmrc.govukfrontend.views.html.components._",
@@ -80,17 +72,17 @@ TwirlKeys.templateImports ++= Seq(
 )
 
 lazy val microservice = Project(appName, file("."))
-  .enablePlugins(Seq(play.sbt.PlayScala, SbtDistributablesPlugin) ++ plugins : _*)
+  .enablePlugins((Seq(play.sbt.PlayScala, SbtDistributablesPlugin) ++ plugins) *)
   .disablePlugins(JUnitXmlReportPlugin)
   .settings(PlayKeys.playDefaultPort := 9149)
-  .settings(playSettings : _*)
-  .settings(coverageSettings: _*)
-  .settings(scalaSettings: _*)
-  .settings(defaultSettings(): _*)
+  .settings(playSettings *)
+  .settings(coverageSettings *)
+  .settings(scalaSettings *)
+  .settings(defaultSettings() *)
   .settings(
     Test / Keys.fork := true,
     Test / javaOptions += "-Dlogger.resource=logback-test.xml",
-    scalaVersion := "2.13.8",
+    scalaVersion := "2.13.12",
     majorVersion := 0,
     libraryDependencies ++= appDependencies,
     retrieveManaged := true,
@@ -104,6 +96,5 @@ lazy val microservice = Project(appName, file("."))
     IntegrationTest / Keys.fork := false,
     IntegrationTest / unmanagedSourceDirectories := (IntegrationTest / baseDirectory) (base => Seq(base / "it")).value,
     addTestReportOption(IntegrationTest, "int-test-reports"),
-    IntegrationTest / testGrouping := oneForkedJvmPerTest((IntegrationTest / definedTests).value),
     IntegrationTest / parallelExecution := false)
 
