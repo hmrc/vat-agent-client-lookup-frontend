@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,11 +30,13 @@ object RegistrationPartialMessages {
   val pendingRegistrationContent: String = "The request to cancel your client’s VAT registration is pending."
 
   val historicDeregTitle: String = "Your client’s VAT registration"
-  val historicDeregContent: String  = "Your client’s VAT registration was cancelled on 1\u00a0January\u00a02019."
+  val historicDeregContent: String  = "Your client’s VAT registration was cancelled on 1 January 2019."
+  val historicDeregContentNonBreakingSpace: String  = "Your client’s VAT registration was cancelled on 1\u00a0January\u00a02019."
   val historicDeregLink: String  = "VAT online services for agents (opens in new tab)."
 
   val futureDeregisterTitle: String = "Your client’s VAT registration"
-  val futureDeregisterContent: String = "Your client’s VAT registration will be cancelled on 1\u00a0January\u00a02020."
+  val futureDeregisterContent: String = "Your client’s VAT registration will be cancelled on 1 January 2020."
+  val futureDeregisterContentNonBreakingSpace: String = "Your client’s VAT registration will be cancelled on 1\u00a0January\u00a02020."
   val futureDeregLink: String  = "VAT online services for agents (opens in new tab)."
 
   val noPartyTypeErrorContent: String = "Sorry, there is a problem with the service. Try again later."

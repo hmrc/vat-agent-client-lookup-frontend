@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import config.{ConfigKeys => Keys}
 import play.api.Configuration
 import play.api.i18n.Lang
 import play.api.mvc.Call
-import uk.gov.hmrc.play.bootstrap.binders.SafeRedirectUrl
+import java.net.URLEncoder
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 trait AppConfig {
@@ -97,9 +97,10 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
   override lazy val signInContinueBaseUrl: String = sc.getString(Keys.signInContinueBaseUrl)
   override lazy val signInUrl: String = s"$signInBaseUrl?continue=$signInContinueUrl&origin=$signInOrigin"
   private lazy val signInContinueUrl: String =
-    SafeRedirectUrl(
-      signInContinueBaseUrl + controllers.agent.routes.SelectClientVrnController.show(manageVatCustomerDetailsUrl).url
-    ).encodedUrl
+    URLEncoder.encode(
+      signInContinueBaseUrl + controllers.agent.routes.SelectClientVrnController.show(manageVatCustomerDetailsUrl).url,
+      "UTF-8"
+    )
 
   override lazy val feedbackSignOutUrl: String = s"$governmentGatewayHost/bas-gateway/sign-out-without-state?continue=$feedbackSurveyUrl"
   override lazy val unauthorisedSignOutUrl: String = s"$governmentGatewayHost/bas-gateway/sign-out-without-state?continue=$signInContinueUrl"
@@ -124,7 +125,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
   override lazy val environmentHost: String = sc.getString(Keys.environmentHost)
 
   override lazy val feedbackUrl: String = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier" +
-    s"&backUrl=${SafeRedirectUrl(selfLookup + controllers.agent.routes.SelectClientVrnController.show().url).encodedUrl}"
+    s"&backUrl=${URLEncoder.encode(selfLookup + controllers.agent.routes.SelectClientVrnController.show().url, "UTF-8")}"
 
   override lazy val submitVatReturnsUrl: String = sc.getString(Keys.submitVatReturnsUrl)
   override lazy val onlineAgentServicesUrl: String = sc.getString(Keys.onlineAgentServicesUrl)

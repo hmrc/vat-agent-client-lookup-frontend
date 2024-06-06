@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -174,6 +174,10 @@ class RegistrationPartialSpec extends ViewBaseSpec {
             elementText("p") shouldBe RegistrationPartialMessages.historicDeregContent
           }
 
+          s"have correct content of ${RegistrationPartialMessages.historicDeregContentNonBreakingSpace} using non breaking space" in {
+            elementText("p").contains(RegistrationPartialMessages.historicDeregContentNonBreakingSpace)
+          }
+
           s"have a link to ${mockConfig.onlineAgentServicesUrl}" in {
             element("p > a").attr("href") shouldBe mockConfig.onlineAgentServicesUrl
           }
@@ -195,6 +199,10 @@ class RegistrationPartialSpec extends ViewBaseSpec {
             elementText("p") shouldBe RegistrationPartialMessages.historicDeregContent
           }
 
+          s"have correct content of ${RegistrationPartialMessages.historicDeregContentNonBreakingSpace} using non breaking space" in {
+            elementText("p").contains(RegistrationPartialMessages.historicDeregContentNonBreakingSpace)
+          }
+
           s"have a link to ${mockConfig.onlineAgentServicesUrl}" in {
             element("p > a").attr("href") shouldBe mockConfig.onlineAgentServicesUrl
           }
@@ -214,6 +222,10 @@ class RegistrationPartialSpec extends ViewBaseSpec {
 
           s"have correct content of ${RegistrationPartialMessages.futureDeregisterContent}" in {
             elementText("p") shouldBe RegistrationPartialMessages.futureDeregisterContent
+          }
+
+          s"have correct content of ${RegistrationPartialMessages.futureDeregisterContentNonBreakingSpace} using non breaking space" in {
+            elementText("p").contains(RegistrationPartialMessages.futureDeregisterContentNonBreakingSpace)
           }
 
           s"link with text of ${RegistrationPartialMessages.futureDeregLink}" in {
@@ -239,6 +251,10 @@ class RegistrationPartialSpec extends ViewBaseSpec {
 
           s"have correct content of ${RegistrationPartialMessages.futureDeregisterContent}" in {
             elementText("p") shouldBe RegistrationPartialMessages.futureDeregisterContent
+          }
+
+          s"have correct content of ${RegistrationPartialMessages.futureDeregisterContentNonBreakingSpace} using non breaking space" in {
+            elementText("p").contains(RegistrationPartialMessages.futureDeregisterContentNonBreakingSpace)
           }
 
           s"link with text of ${RegistrationPartialMessages.futureDeregLink}" in {

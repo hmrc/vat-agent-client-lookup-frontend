@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,11 @@ class DisplayDateSpec extends ViewBaseSpec {
       lazy val document: Document = Jsoup.parse(template.body)
 
       "render the date with year" in {
-        document.body().text() shouldEqual "1\u00a0January\u00a02017"
+        document.body().text() shouldEqual "1 January 2017"
+      }
+
+      "uses non breaking spaces to render the date with year" in {
+        document.body().text().contains("1\u00a0January\u00a02017")
       }
     }
 
@@ -46,7 +50,11 @@ class DisplayDateSpec extends ViewBaseSpec {
       lazy val document: Document = Jsoup.parse(template.body)
 
       "render the date without year" in {
-        document.body().text() shouldEqual "1\u00a0January"
+        document.body().text() shouldEqual "1 January"
+      }
+
+      "uses non breaking spaces to render the date without year" in {
+        document.body().text().contains("1\u00a0January")
       }
     }
 

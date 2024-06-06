@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,6 +78,10 @@ class NextPaymentPartialSpec extends ViewBaseSpec {
 
       "display the date of the payment correctly" in {
         elementText(Selectors.content) shouldBe Messages.date
+      }
+
+      "display the date of the payment correctly using non breaking space" in {
+        elementText(Selectors.content).contains(Messages.dateNonBreakingSpace)
       }
 
       "not display the overdue flag" in {

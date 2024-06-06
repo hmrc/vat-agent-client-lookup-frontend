@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ class UnauthorisedNoEnrolmentViewSpec extends ViewBaseSpec {
   "Rendering the unauthorised page" should {
 
     object Selectors {
-      val serviceName = ".hmrc-header__service-name"
+      val serviceName = ".govuk-header__service-name"
       val pageHeading = "#content h1"
       val instructions = "#content p"
       val instructionsLink = "#content p > a"

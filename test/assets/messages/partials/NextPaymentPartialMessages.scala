@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ object NextPaymentPartialMessages {
   val noPayments: String = "No payments due right now"
   val payments: String = "You have 10 payments due"
   val linkText: String = "Check what your client owes"
-  val date: String = "1\u00a0January\u00a02018"
+  val date: String = "1 January 2018"
+  val dateNonBreakingSpace: String = "1\u00a0January\u00a02018"
   val overdue: String = "overdue"
   val ddSetUp: String = "Direct Debit is set up"
   val ddNotSetUp: String = "No Direct Debit set up"
