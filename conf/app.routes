@@ -29,4 +29,4 @@ GET        /send-passcode                               controllers.agent.Verify
 GET        /client-vat-account                          controllers.agent.AgentHubController.show
 
 # Map static resources from the /public folder to the /assets URL path
-GET        /assets/*file              controllers.Assets.at(path="/public", file)
+GET        /assets/*file              controllers.Assets.versioned(path="/public", file)
