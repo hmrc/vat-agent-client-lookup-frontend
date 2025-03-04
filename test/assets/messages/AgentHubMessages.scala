@@ -33,4 +33,6 @@ object AgentHubMessages {
   val notificationBannerP1 = "HMRC has had to cancel some VAT Direct Debit agreements."
   val notificationBannerP2 = "If your client pays by Direct Debit, ask them to check that their mandate is still in place."
   val notificationBannerP3 = "If they have already done this they do not need to do it again."
+  val poalinkText = "Payments on account"
+  val poalinkInfo = "View your client’s payments on account schedule of payments."
 }

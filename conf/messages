@@ -139,6 +139,10 @@ nextPaymentPartial.overdue = overdue
 nextPaymentPartial.link = Check what your client owes
 nextPaymentPartial.directDebitSetup = Direct Debit is set up
 nextPaymentPartial.noDirectDebitSetup = No Direct Debit set up
+nextPaymentPartial.poaActivelink = Check your client’s payments on account schedule
+
+viewPaymentOnAccount.link = Payments on account
+viewPaymentOnAccount.info = View your client’s payments on account schedule of payments.
 
 nextReturnPartial.heading = Next return due
 nextReturnPartial.link = View return deadlines

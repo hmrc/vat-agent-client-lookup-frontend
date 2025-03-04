@@ -139,6 +139,10 @@ nextPaymentPartial.overdue = hwyr
 nextPaymentPartial.link = Gwirio’r hyn sydd ar eich cleient
 nextPaymentPartial.directDebitSetup = Debyd Uniongyrchol wedi’i sefydlu
 nextPaymentPartial.noDirectDebitSetup = Dim Debyd Uniongyrchol wedi’i sefydlu
+nextPaymentPartial.poaActivelink = Gwiriwch yr amserlen ar gyfer taliadau ar gyfrif eich cleient
+
+viewPaymentOnAccount.link = Taliadau ar gyfrif
+viewPaymentOnAccount.info = Bwrw golwg dros yr amserlen ar gyfer taliadau ar gyfrif eich cleient.
 
 nextReturnPartial.heading = Ffurflen TAW nesaf i’w chyflwyno
 nextReturnPartial.link = Bwrw golwg dros ddyddiadau cau ar gyfer Ffurflenni TAW

@@ -25,8 +25,8 @@
   payments: Int,
   isOverdue: Boolean,
   isError: Boolean,
-  directDebitSetup: Option[Boolean]
-)(implicit messages: Messages, appConfig: AppConfig)
+  directDebitSetup: Option[Boolean],
+  isPoaActiveForCustomer: Boolean)(implicit messages: Messages, appConfig: AppConfig)
 
 @hasMultiple = @{ payments > 1  }
 
@@ -81,6 +81,13 @@
       <p class="govuk-body">
         <a class="govuk-link" id="what-you-owe-link" href="@appConfig.whatYouOweUrl">@messages("nextPaymentPartial.link")</a>
       </p>
+
+       @if(appConfig.features.poaActiveFeature() && isPoaActiveForCustomer){
+        <p class="govuk-body">
+            <a class="govuk-link" id="payment-on-account-link" href="@appConfig.vatPaymentOnAccountUrl">@messages("nextPaymentPartial.poaActivelink")</a>
+        </p>
+        }
+
     </div>
   </div>
 }
