@@ -28,4 +28,5 @@ case class HubViewModel(details: CustomerDetails,
                         isError: Boolean,
                         payments: Int,
                         directDebitSetup: Option[Boolean],
-                        penaltiesSummary: Option[PenaltiesSummary] = None)
+                        penaltiesSummary: Option[PenaltiesSummary] = None,
+                        isPoaActiveForCustomer: Boolean = false)

@@ -52,6 +52,7 @@ trait IntegrationBaseSpec extends TestSuite with CustomMatchers with GuiceOneSer
 
   override def beforeEach(): Unit = {
     mockAppConfig.features.emailVerificationEnabled(true)
+    mockAppConfig.features.poaActiveFeature(true)
     super.beforeEach()
   }
 
@@ -124,7 +125,8 @@ trait IntegrationBaseSpec extends TestSuite with CustomMatchers with GuiceOneSer
     "microservice.services.vat-subscription.host" -> mockHost,
     "microservice.services.vat-subscription.port" -> mockPort,
     "penalties.host" -> s"http://$mockHost:$mockPort",
-    "features.emailVerification.enabled" -> "true"
+    "features.emailVerification.enabled" -> "true",
+    "features.poaStandingSchedule.enabled" -> "true"
   )
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder()

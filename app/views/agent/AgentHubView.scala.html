@@ -28,7 +28,9 @@
       nextPaymentPartial: NextPaymentPartial,
       nextReturnPartial: NextReturnPartial,
       historyPartial: HistoryPartial,
-      penaltiesBanner: PenaltiesBanner)
+      penaltiesBanner: PenaltiesBanner,
+      vatPaymentOnAccount: VatPaymentOnAccount
+)
 
 @(model: HubViewModel)(implicit messages: Messages, appConfig: AppConfig, user: User[_])
 
@@ -36,9 +38,12 @@
   @clientDetailsPartial()
   @vatCertificatePartial()
   @if(hasPenaltiesTile) {
-    @penaltiesTilePartial()
+  @penaltiesTilePartial()
   }
   @registrationPartial(model.details, model.currentDate)
+  @if(appConfig.features.poaActiveFeature() && model.isPoaActiveForCustomer){
+  @vatPaymentOnAccount()
+ }
 }
 
 @breadcrumbLinks = {
@@ -71,7 +76,7 @@
   @penaltiesBanner(model.penaltiesSummary)
 
   <div class="flex-container govuk-grid-row">
-    @nextPaymentPartial(model.details.isHybridUser, model.nextPaymentDate, model.payments, model.isOverdue, model.isError, model.directDebitSetup)
+    @nextPaymentPartial(model.details.isHybridUser, model.nextPaymentDate, model.payments, model.isOverdue, model.isError, model.directDebitSetup, model.isPoaActiveForCustomer)
     @nextReturnPartial(model.details.optedIn)
     @historyPartial(model.details.isHybridUser)
   </div>

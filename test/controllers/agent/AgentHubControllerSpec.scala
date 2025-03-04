@@ -23,19 +23,23 @@ import assets.FinancialDataConstants._
 import assets.PenaltiesConstants._
 import audit.mocks.MockAuditingService
 import audit.models.AgentOverviewPageViewAuditModel
+import connectors.httpParsers.ResponseHttpParser
 import controllers.ControllerBaseSpec
 import mocks.services._
-import models.{HubViewModel, User, VatDetailsDataModel}
-import models.errors.UnexpectedError
+import models.{CustomerDetails, HubViewModel, User, VatDetailsDataModel}
+import models.errors.{UnexpectedError}
 import models.penalties.PenaltiesSummary
 import org.jsoup.Jsoup
+import org.mockito.Mockito.when
 import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.Helpers.{await, contentAsString, defaultAwaitTimeout, status}
 import play.mvc.Http.Status._
 import views.html.agent.AgentHubView
+import java.lang.UnknownError
 
 import java.time.LocalDate
 import scala.concurrent.Future
+import scala.runtime.Nothing$
 
 class AgentHubControllerSpec extends ControllerBaseSpec
                               with MockCustomerDetailsService
@@ -450,4 +454,40 @@ class AgentHubControllerSpec extends ControllerBaseSpec
       }
     }
   }
+
+
+  def customerInfoWithDate(date: Option[String]): CustomerDetails =
+  customerDetailsAllInfo.copy(poaActiveUntil = date)
+  val fixedDate: LocalDate = LocalDate.parse("2018-05-01")
+  "retrievePoaActiveForCustomer" should {
+    "return true when poaActiveUntil is today" in {
+      mockDateService.now()
+      val result = controller.retrievePoaActiveForCustomer(Right(customerInfoWithDate(Some(fixedDate.toString))))
+      result shouldBe true
+    }
+
+    "return true when poaActiveUntil is in the future" in {
+      mockDateService.now()
+      val futureDate = fixedDate.plusDays(5).toString
+      val result = controller.retrievePoaActiveForCustomer(Right(customerInfoWithDate(Some(futureDate))))
+      result shouldBe true
+    }
+    "return false when poaActiveUntil is in the past" in {
+      mockDateService.now()
+      val pastDate = fixedDate.minusDays(5).toString
+      val result = controller.retrievePoaActiveForCustomer(Right(customerInfoWithDate(Some(pastDate))))
+      result shouldBe false
+    }
+    "return false when poaActiveUntil is None" in {
+      mockDateService.now()
+      val result = controller.retrievePoaActiveForCustomer(Right(customerInfoWithDate(None)))
+      result shouldBe false
+    }
+    "return false when accountDetails is an error" in {
+      mockDateService.now()
+      val result = controller.retrievePoaActiveForCustomer(Left(UnexpectedError(500, "Internal Server Error")))
+      result shouldBe false
+    }
+  }
+
 }

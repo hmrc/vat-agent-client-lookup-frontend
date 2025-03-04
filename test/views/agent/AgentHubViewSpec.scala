@@ -229,5 +229,38 @@ class AgentHubViewSpec extends ViewBaseSpec {
         }
       }
     }
+
+    "Render VAT Payment on Account section" should {
+
+      lazy val view = injectedView(hubViewModel(customerDetailsAllInfo))(messages, mockConfig, user)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+      "display the VAT Payment on Account section if client has POAActiveUntil and POA Feature is enabled" in {
+        mockConfig.features.poaActiveFeature(true)
+        elementText("#vat-payment-on-account h3") shouldBe Messages.poalinkText
+        element("#poa-link").attr("href") shouldBe mockConfig.vatPaymentOnAccountUrl
+        elementText("#poa-body") shouldBe Messages.poalinkInfo
+      }
+
+      "doesn't display the VAT Payment on Account section if client doesn't have POAActiveUntil and POA Feature is enabled" in {
+        lazy val view = injectedView(hubViewModel(customerDetailsAllInfo).copy(isPoaActiveForCustomer = false))(messages, mockConfig, user)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+        mockConfig.features.poaActiveFeature(true)
+        document.select("#vat-payment-on-account h3") should be(empty)
+        document.select("#poa-link").attr("href") should be(empty)
+        document.select("#poa-body") should be(empty)
+      }
+
+      "doesn't display the VAT Payment on Account section if POA feature is disabled" in {
+        mockConfig.features.poaActiveFeature(false)
+        lazy val view = injectedView(hubViewModel(customerDetailsAllInfo))(messages, mockConfig, user)
+        val renderedView = view.body
+        lazy implicit val document: Document = Jsoup.parse(renderedView)
+        document.select("#vat-payment-on-account h3") should be(empty)
+        document.select("#poa-link").attr("href") should be(empty)
+        document.select("#poa-body") should be(empty)
+      }
+    }
   }
 }
+
+

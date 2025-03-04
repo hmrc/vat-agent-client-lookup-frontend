@@ -24,7 +24,8 @@ class FeatureSpec extends TestUtil {
   private val features = new Features(app.injector.instanceOf[Configuration])
   val allFeatures: Seq[Feature] = Seq(
     features.useStaticDateFeature,
-    features.emailVerificationEnabled
+    features.emailVerificationEnabled,
+    features.poaActiveFeature
   )
   override def beforeEach(): Unit = {
     super.beforeEach()

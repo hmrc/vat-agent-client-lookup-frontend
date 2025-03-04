@@ -76,6 +76,8 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
 
   override val staticDateValue = "2018-05-01"
 
+  override val vatPaymentOnAccountUrl = "/vat-through-software/payments-on-account"
+
   override val vat7FormUrl: String = "/publications/vat-application-to-cancel-your-vat-registration-vat7"
 
   override val manageVatMissingTraderUrl: String = "/vat-through-software/account/missing-trader"

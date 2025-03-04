@@ -55,6 +55,7 @@ object ConfigKeys {
 
   val emailVerificationFeature: String = "features.emailVerification.enabled"
   val useStaticDateFeature: String = "features.useStaticDate.enabled"
+  val poaActiveFeature: String = "features.poaStandingSchedule.enabled"
 
   val staticDateValue: String = "date-service.staticDate.value"
 
@@ -62,6 +63,8 @@ object ConfigKeys {
   val vatWhatYouOweEndpoint: String = "vat-summary-frontend.endpoints.what-you-owe"
   val paymentHistoryEndpoint: String = "vat-summary-frontend.endpoints.payment-history"
   val vatCertificateEndpoint: String = "vat-summary-frontend.endpoints.vat-certificate"
+  val vatPaymentOnAccountHost: String = "payments-on-account.host"
+  val vatPaymentOnAccountEndpoint: String = "payments-on-account.endpointUrl"
 
   val viewVatReturnsFrontendHost: String = "view-vat-returns-frontend.host"
   val submittedReturnsEndpoint: String = "view-vat-returns-frontend.endpoints.submitted-returns"
