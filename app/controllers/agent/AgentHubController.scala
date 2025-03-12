@@ -133,10 +133,10 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
       case Some(poaActiveUntilDate) =>
         val parsedDate = Try(LocalDate.parse(poaActiveUntilDate, formatter)).getOrElse(LocalDate.MIN)
         if (parsedDate.isAfter(currentDate) || parsedDate.isEqual(currentDate)) {
-          logger.warn(s"Date condition met, parsedDate ($parsedDate) is today or in the future")
+          logger.info(s"Date condition met, parsedDate ($parsedDate) is today or in the future")
           true
         } else {
-          logger.warn(s"Date condition failed, parsedDate ($parsedDate) is in the past or not available")
+          logger.info(s"Date condition failed, parsedDate ($parsedDate) is in the past or not available")
           false
         }
       case _ => false
