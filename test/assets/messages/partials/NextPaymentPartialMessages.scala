@@ -22,6 +22,7 @@ object NextPaymentPartialMessages {
   val noPayments: String = "No payments due right now"
   val payments: String = "You have 10 payments due"
   val linkText: String = "Check what your client owes"
+  val poalinkText: String = "Check your client’s payments on account schedule"
   val date: String = "1 January 2018"
   val dateNonBreakingSpace: String = "1\u00a0January\u00a02018"
   val overdue: String = "overdue"

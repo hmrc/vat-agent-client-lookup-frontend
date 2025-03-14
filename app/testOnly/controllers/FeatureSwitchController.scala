@@ -31,7 +31,8 @@ class FeatureSwitchController @Inject()(featureSwitchView: FeatureSwitch, mcc: M
     Ok(featureSwitchView(FeatureSwitchForm.form.fill(
       FeatureSwitchModel(
         emailVerificationEnabled = appConfig.features.emailVerificationEnabled(),
-        useStaticDateFeature = appConfig.features.useStaticDateFeature()
+        useStaticDateFeature = appConfig.features.useStaticDateFeature(),
+        poaActiveFeature = appConfig.features.poaActiveFeature()
       )
     )))
   }

@@ -51,6 +51,7 @@ trait AppConfig {
   val notSignedUpUrl: String
   val features: Features
   val vatCertificateUrl: String
+  val vatPaymentOnAccountUrl: String
   val penaltiesFrontendUrl: String
   val whatYouOweUrl: String
   val paymentHistoryUrl: String
@@ -142,6 +143,8 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
   override lazy val returnDeadlinesUrl: String = sc.getString(Keys.viewVatReturnsFrontendHost) + sc.getString(Keys.returnDeadlinesEndpoint)
 
   override val cancelRegistrationUrl: String = sc.getString(ConfigKeys.deregisterVatFrontendHost) + sc.getString(ConfigKeys.deregisterVatFrontendUrl)
+
+  override lazy val vatPaymentOnAccountUrl: String = sc.getString(Keys.vatPaymentOnAccountHost) + sc.getString(Keys.vatPaymentOnAccountEndpoint)
 
   override val vat7FormUrl: String = sc.getString(ConfigKeys.vat7FormUrl)
 

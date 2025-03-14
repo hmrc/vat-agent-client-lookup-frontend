@@ -32,7 +32,10 @@ import services.{CustomerDetailsService, DateService, FinancialDataService, Pena
 import utils.LoggingUtil
 import views.html.agent.AgentHubView
 
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 @Singleton
 class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
@@ -77,6 +80,7 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
       case Some("false") => Some(false)
       case _ => None
     }
+
     val nextPaymentDate = paymentsModel.payments.headOption.map(payment => payment.dueDate)
     val paymentsNumber  = paymentsModel.payments.length
     val isOverdue       =
@@ -87,6 +91,7 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
           payment => payment.dueDate.isBefore(dateService.now()) && !payment.ddCollectionInProgress
         }
       }
+    val isPoaActiveForCustomer: Boolean = retrievePoaActiveForCustomer(Right(details))
 
     HubViewModel(
       details,
@@ -97,7 +102,8 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
       paymentsModel.isError,
       paymentsNumber,
       hasDDSetup,
-      penaltiesInformation
+      penaltiesInformation,
+      isPoaActiveForCustomer
     )
   }
 
@@ -112,4 +118,28 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
       case Right(model) => model.isHybridUser
       case Left(_) => false
     }
+
+  def retrievePoaActiveForCustomer(accountDetails: HttpResult[CustomerDetails]): Boolean = {
+    accountDetails match {
+      case Right(customerDetails) => isDateEqualsTodayFuture(customerDetails.poaActiveUntil,dateService.now())
+      case _ => false
+    }
+  }
+
+  val dateFormat: String           = "yyyy-MM-dd"
+  val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern(dateFormat)
+  def isDateEqualsTodayFuture(poaActiveUntil: Option[String], currentDate: LocalDate): Boolean = {
+    poaActiveUntil match {
+      case Some(poaActiveUntilDate) =>
+        val parsedDate = Try(LocalDate.parse(poaActiveUntilDate, formatter)).getOrElse(LocalDate.MIN)
+        if (parsedDate.isAfter(currentDate) || parsedDate.isEqual(currentDate)) {
+          logger.info(s"Date condition met, parsedDate ($parsedDate) is today or in the future")
+          true
+        } else {
+          logger.info(s"Date condition failed, parsedDate ($parsedDate) is in the past or not available")
+          false
+        }
+      case _ => false
+    }
+  }
 }

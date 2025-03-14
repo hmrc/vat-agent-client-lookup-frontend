@@ -32,6 +32,7 @@ object HubViewModelTestConstants {
     isError = false,
     payments = 1,
     directDebitSetup = None,
-    penaltiesSummary = penalties
+    penaltiesSummary = penalties,
+    isPoaActiveForCustomer = true
   )
 }

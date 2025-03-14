@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,10 +12,19 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package models
+@import config.AppConfig
 
-case class FeatureSwitchModel(emailVerificationEnabled: Boolean,
-                              useStaticDateFeature: Boolean,
-                              poaActiveFeature: Boolean)
+@this()
+
+@()(implicit messages: Messages, appConfig: AppConfig)
+
+<div id="vat-payment-on-account" class="govuk-grid-column-one-third">
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">
+        <a id="poa-link" href="@{appConfig.vatPaymentOnAccountUrl}" class="govuk-link">
+            @messages("viewPaymentOnAccount.link")
+        </a>
+    </h3>
+    <p id="poa-body" class="govuk-body">@messages("viewPaymentOnAccount.info")</p>
+</div>

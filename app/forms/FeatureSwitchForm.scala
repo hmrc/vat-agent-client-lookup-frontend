@@ -25,7 +25,8 @@ object FeatureSwitchForm {
   val form: Form[FeatureSwitchModel] = Form(
     mapping(
       ConfigKeys.emailVerificationFeature -> boolean,
-      ConfigKeys.useStaticDateFeature -> boolean
+      ConfigKeys.useStaticDateFeature -> boolean,
+      ConfigKeys.poaActiveFeature -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 }

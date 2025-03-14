@@ -28,6 +28,7 @@ case class CustomerDetails(firstName: Option[String],
                            tradingName: Option[String],
                            partyType: Option[String],
                            mandationStatus: String,
+                           poaActiveUntil: Option[String] = None,
                            deregistration: Option[Deregistration],
                            isInsolvent: Boolean,
                            continueToTrade: Option[Boolean],
@@ -76,6 +77,7 @@ object CustomerDetails {
   private val tradingNamePath = __ \ "customerDetails" \ "tradingName"
   private val partyTypePath = __ \ "partyType"
   private val mandationStatusPath = __ \ "mandationStatus"
+  private val poaActiveUntilPath = __ \ "poaActiveUntil"
   private val deregistrationPath = __ \ "deregistration"
   private val isInsolventPath = __ \ "customerDetails" \ "isInsolvent"
   private val continueToTradePath = __ \ "customerDetails" \ "continueToTrade"
@@ -92,6 +94,7 @@ object CustomerDetails {
     tradingNamePath.readNullable[String] and
     partyTypePath.readNullable[String] and
     mandationStatusPath.read[String] and
+    poaActiveUntilPath.readNullable[String] and
     deregistrationPath.readNullable[Deregistration] and
     isInsolventPath.read[Boolean] and
     continueToTradePath.readNullable[Boolean] and
