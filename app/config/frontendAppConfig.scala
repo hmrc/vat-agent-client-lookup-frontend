@@ -144,7 +144,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
 
   override val cancelRegistrationUrl: String = sc.getString(ConfigKeys.deregisterVatFrontendHost) + sc.getString(ConfigKeys.deregisterVatFrontendUrl)
 
-  override lazy val vatPaymentOnAccountUrl: String = sc.getString(Keys.vatPaymentOnAccountHost) + sc.getString(Keys.vatPaymentOnAccountEndpoint)
+  override lazy val vatPaymentOnAccountUrl: String = sc.getString(Keys.viewVatReturnsFrontendHost) + sc.getString(Keys.vatPaymentOnAccountEndpoint)
 
   override val vat7FormUrl: String = sc.getString(ConfigKeys.vat7FormUrl)
 
