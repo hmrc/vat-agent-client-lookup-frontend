@@ -47,6 +47,7 @@ class FeatureSwitchController @Inject()(featureSwitchView: FeatureSwitch, mcc: M
   def handleSuccess(model: FeatureSwitchModel): Result = {
     appConfig.features.emailVerificationEnabled(model.emailVerificationEnabled)
     appConfig.features.useStaticDateFeature(model.useStaticDateFeature)
+    appConfig.features.poaActiveFeature(model.poaActiveFeature)
     Redirect(routes.FeatureSwitchController.featureSwitch)
   }
 }
