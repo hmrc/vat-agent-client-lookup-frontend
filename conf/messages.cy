@@ -158,6 +158,11 @@ agentHub.changeClient = Newid cleient
 agentHub.noDDclient = Ni all asiantau gael at fanylion Debyd Uniongyrchol na thaliadau cleient
 agentHub.manageVat = Rheoli TAW
 
+agentHub.payment_on_account.alert.title=Pwysig
+agentHub.payment_on_account.alert.heading=Newid amserlen ar gyfer taliadau ar gyfrif
+agentHub.payment_on_account.alert.message=Gwnaeth y symiau sy’n ddyledus ar gyfer taliadau ar gyfrif eich cleient newid ar
+agentHub.payment_on_account.alert.link=Gwiriwch ei amserlen am fanylion
+
 breadcrumb.agentServices = Cyfrif Gwasanaethau Asiant
 
 passcode.error.empty = Nodwch y cod cadarnhau

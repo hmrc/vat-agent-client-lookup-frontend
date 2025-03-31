@@ -158,6 +158,11 @@ agentHub.changeClient = Change client
 agentHub.noDDclient = Agents cannot access a client’s Direct Debit or payment details.
 agentHub.manageVat = Manage VAT
 
+agentHub.payment_on_account.alert.title=Important
+agentHub.payment_on_account.alert.heading=Payments on account schedule change
+agentHub.payment_on_account.alert.message=The amounts due for your client’s payments on account were changed on
+agentHub.payment_on_account.alert.link=Check their schedule for details
+
 breadcrumb.agentServices = Agent Services Account
 
 passcode.error.empty = Enter the confirmation code
