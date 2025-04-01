@@ -109,6 +109,24 @@ object CustomerDetailsTestConstants {
     missingTrader = missingTrader
   )
 
+  val customerDetailsWithPoa: CustomerDetails = CustomerDetails(
+    Some(firstName),
+    Some(lastName),
+    Some(orgName),
+    Some(tradingName),
+    Some(validParty),
+    mandationStatus,
+    Some("2020-03-30"),
+    Some(Deregistration(Some(LocalDate.parse("2019-01-01")))),
+    isInsolvent = true,
+    continueToTrade = Some(true),
+    insolvencyType = Some("07"),
+    isHybridUser = isPartialMigration,
+    Some(migratedToETMPDate),
+    None,
+    missingTrader = missingTrader
+  )
+
   val customerDetailsAllInfoVatGroup: CustomerDetails = CustomerDetails(
     Some(firstName),
     Some(lastName),
@@ -344,4 +362,5 @@ object CustomerDetailsTestConstants {
 
   val customerDetailsInsolvent: CustomerDetails = customerDetailsAllInfo.copy(insolvencyType = Some("08"))
   val customerDetailsHybrid: CustomerDetails = customerDetailsAllInfo.copy(isHybridUser = true, missingTrader = false)
+  val customerDetailsWithValidPoaActive: CustomerDetails = customerDetailsHybrid.copy(poaActiveUntil = Some("2025-12-12"))
 }

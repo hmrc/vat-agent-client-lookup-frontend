@@ -26,9 +26,9 @@ import connectors.httpParsers.ResponseHttpParser.HttpResult
 import controllers.BaseController
 import controllers.predicates.AuthoriseAsAgentWithClient
 import models.penalties.PenaltiesSummary
-import models.{CustomerDetails, HubViewModel, User, VatDetailsDataModel}
+import models.{CustomerDetails, HubViewModel, StandingRequest, User, VatDetailsDataModel}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.{CustomerDetailsService, DateService, FinancialDataService, PenaltiesService}
+import services.{CustomerDetailsService, DateService, FinancialDataService, POACheckService, PaymentsOnAccountService, PenaltiesService}
 import utils.LoggingUtil
 import views.html.agent.AgentHubView
 
@@ -46,7 +46,9 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
                                    penaltiesService: PenaltiesService,
                                    auditService: AuditService,
                                    mcc: MessagesControllerComponents,
-                                   agentHubView: AgentHubView)
+                                   agentHubView: AgentHubView,
+                                   paymentsOnAccountService: PaymentsOnAccountService,
+                                   poaCheckService: POACheckService)
                                   (implicit appConfig: AppConfig,
                                    executionContext: ExecutionContext) extends BaseController(mcc) with LoggingUtil {
 
@@ -55,6 +57,7 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
       customerDetails <- customerDetailsService.getCustomerDetails(user.vrn)
       payments <- if (userIsHybrid(customerDetails)) Future.successful(VatDetailsDataModel(Seq(), isError = false)) else retrievePayments
       penaltiesInformation <- penaltiesService.getPenaltiesInformation(user.vrn)
+      standingRequest <- if (!isPoaActiveUser(customerDetails)) Future.successful(None) else paymentsOnAccountService.getPaymentsOnAccounts(user.vrn)
     } yield {
       customerDetails match {
         case Right(details) =>
@@ -63,7 +66,7 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
             Redirect(appConfig.manageVatMissingTraderUrl)
           } else {
             val optPenaltiesSummary: Option[PenaltiesSummary] = penaltiesInformation.fold(_ => None, Some(_))
-            Ok(agentHubView(constructViewModel(details, payments, optPenaltiesSummary)))
+            Ok(agentHubView(constructViewModel(details, payments, optPenaltiesSummary, standingRequest)))
           }
         case Left(error) =>
           errorLog(s"[AgentHubController][show] - received an error from CustomerDetailsService: $error")
@@ -72,8 +75,12 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
     }
   }
 
+  private def isPoaActiveUser(customerInfo: HttpResult[CustomerDetails]) = {
+    appConfig.features.poaActiveFeature() && retrievePoaActiveForCustomer(customerInfo)
+  }
+
   def constructViewModel(details: CustomerDetails, paymentsModel: VatDetailsDataModel,
-                         penaltiesInformation: Option[PenaltiesSummary])(implicit user: User[_]): HubViewModel = {
+                         penaltiesInformation: Option[PenaltiesSummary], standingRequest: Option[StandingRequest])(implicit user: User[_]): HubViewModel = {
 
     val hasDDSetup: Option[Boolean] = user.session.get(SessionKeys.mtdVatAgentDDMandateFound) match {
       case Some("true") => Some(true)
@@ -92,6 +99,7 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
         }
       }
     val isPoaActiveForCustomer: Boolean = retrievePoaActiveForCustomer(Right(details))
+    val poaChangedOn: Option[LocalDate] = poaCheckService.changedOnDateWithInLatestVatPeriod(standingRequest, dateService.now())
 
     HubViewModel(
       details,
@@ -103,7 +111,8 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
       paymentsNumber,
       hasDDSetup,
       penaltiesInformation,
-      isPoaActiveForCustomer
+      isPoaActiveForCustomer,
+      poaChangedOn
     )
   }
 
@@ -128,7 +137,7 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
 
   val dateFormat: String           = "yyyy-MM-dd"
   val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern(dateFormat)
-  def isDateEqualsTodayFuture(poaActiveUntil: Option[String], currentDate: LocalDate): Boolean = {
+  private def isDateEqualsTodayFuture(poaActiveUntil: Option[String], currentDate: LocalDate): Boolean = {
     poaActiveUntil match {
       case Some(poaActiveUntilDate) =>
         val parsedDate = Try(LocalDate.parse(poaActiveUntilDate, formatter)).getOrElse(LocalDate.MIN)

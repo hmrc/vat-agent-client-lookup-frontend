@@ -25,6 +25,8 @@ object UnexpectedError {
 }
 
 case class UnexpectedError(status: Int, message: String) extends Error
+case class ServerSideError(status: Int, message: String) extends Error
+case class BadRequestError(status: Int, message: String) extends Error
 
 case object Migration         extends Error
 case object NotSignedUp       extends Error

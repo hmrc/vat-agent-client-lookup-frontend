@@ -26,8 +26,8 @@ import audit.models.AgentOverviewPageViewAuditModel
 import connectors.httpParsers.ResponseHttpParser
 import controllers.ControllerBaseSpec
 import mocks.services._
-import models.{CustomerDetails, HubViewModel, User, VatDetailsDataModel}
-import models.errors.{UnexpectedError}
+import models.{CustomerDetails, HubViewModel, RequestItem, StandingRequest, StandingRequestDetail, User, VatDetailsDataModel}
+import models.errors.UnexpectedError
 import models.penalties.PenaltiesSummary
 import org.jsoup.Jsoup
 import org.mockito.Mockito.when
@@ -35,8 +35,8 @@ import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.Helpers.{await, contentAsString, defaultAwaitTimeout, status}
 import play.mvc.Http.Status._
 import views.html.agent.AgentHubView
-import java.lang.UnknownError
 
+import java.lang.UnknownError
 import java.time.LocalDate
 import scala.concurrent.Future
 import scala.runtime.Nothing$
@@ -46,7 +46,9 @@ class AgentHubControllerSpec extends ControllerBaseSpec
                               with MockDateService
                               with MockFinancialDataService
                               with MockPenaltiesService
-                              with MockAuditingService {
+                              with MockAuditingService
+                              with MockPaymentsOnAccountService
+                              with MockPoaCheckService {
 
   lazy val controller = new AgentHubController(
     mockAuthAsAgentWithClient,
@@ -57,10 +59,98 @@ class AgentHubControllerSpec extends ControllerBaseSpec
     mockPenaltiesService,
     mockAuditingService,
     mcc,
-    inject[AgentHubView]
+    inject[AgentHubView],
+    mockPaymentsOnAccountService,
+    mockPoaCheckService
   )
 
   val staticDate: LocalDate = LocalDate.parse("2018-05-01")
+  val staticDateForPoa: LocalDate = LocalDate.parse("2020-03-01")
+
+
+  val modelStandingRequestScheduleValid: StandingRequest = StandingRequest(
+    ("2024-07-15"), List(
+      StandingRequestDetail(
+        requestNumber = "20000037272",
+        requestCategory = "3",
+        createdOn = ("2023-11-30"),
+        changedOn = Some("2025-02-20"),
+        requestItems = List(
+          RequestItem(
+            period = "1",
+            periodKey = "25A1",
+            startDate = ("2025-04-01"),
+            endDate = ("2025-06-30"),
+            dueDate = ("2025-06-30"),
+            amount = 22945.23,
+            chargeReference = Some("XD006411191344"),
+            postingDueDate = Some("2025-06-30")
+          ),
+          RequestItem(
+            period = "2",
+            periodKey = "24A2",
+            startDate = ("2024-02-01"),
+            endDate = ("2024-04-30"),
+            dueDate = ("2024-04-30"),
+            amount = 22945.23,
+            chargeReference = Some("XD006411191345"),
+            postingDueDate = Some("2024-04-30")
+          )
+        )
+      ),
+      StandingRequestDetail(
+        requestNumber = "20000037273",
+        requestCategory = "2",
+        createdOn = ("2023-11-30"),
+        changedOn = Some("2025-02-01"),
+        requestItems = List(
+          RequestItem(
+            period = "1",
+            periodKey = "25A1",
+            startDate = ("2025-04-01"),
+            endDate = ("2025-06-30"),
+            dueDate = ("2025-06-30"),
+            amount = 22945.23,
+            chargeReference = Some("XD006411191344"),
+            postingDueDate = Some("2025-06-30")
+          ),
+          RequestItem(
+            period = "2",
+            periodKey = "24A2",
+            startDate = ("2024-02-01"),
+            endDate = ("2024-04-30"),
+            dueDate = ("2024-04-30"),
+            amount = 22945.23,
+            chargeReference = Some("XD006411191345"),
+            postingDueDate = Some("2024-04-30")
+          )
+        )
+      )
+    )
+  )
+  val modelStandingRequestScheduleInValid: StandingRequest = StandingRequest(
+    ("2024-07-15T09:30:47Z"), List(
+      StandingRequestDetail(
+        requestNumber = "20000037272",
+        requestCategory = "2",
+        createdOn = ("2023-11-30"),
+        changedOn = None,
+        requestItems = List(
+          RequestItem(
+            period = "1",
+            periodKey = "25A1",
+            startDate = ("2025-04-01"),
+            endDate = ("2025-06-30"),
+            dueDate = ("2025-06-30"),
+            amount = 22945.23,
+            chargeReference = None,
+            postingDueDate = None
+          )
+        )
+      )
+    )
+  )
+
   lazy val agentUser: User[AnyContentAsEmpty.type] =
     User[AnyContentAsEmpty.type](vrn, active = true, Some(arn))(fakeRequestWithVrnAndRedirectUrl)
 
@@ -91,6 +181,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           setupMockDateService(staticDate)
           mockPaymentResponse(paymentResponse)
           mockPenaltiesResponse(penaltiesSummaryNoPenaltiesResponse)
+          mockChangedOnDateWithInLatestVatPeriod(None)
 
           val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
@@ -108,6 +199,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
         setupMockDateService(staticDate)
         mockPaymentResponse(paymentResponse)
         mockPenaltiesResponse(penaltiesSummaryNoPenaltiesResponse)
+        mockChangedOnDateWithInLatestVatPeriod(None)
 
         controller.show()(fakeRequestWithVrnAndRedirectUrl)
       }
@@ -134,6 +226,8 @@ class AgentHubControllerSpec extends ControllerBaseSpec
         setupMockDateService(staticDate)
         mockPaymentResponse(paymentResponse)
         mockPenaltiesResponse(penaltiesSummaryResponse)
+        mockStandingRequest(None)
+        mockChangedOnDateWithInLatestVatPeriod(None)
 
         val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
 
@@ -248,6 +342,44 @@ class AgentHubControllerSpec extends ControllerBaseSpec
         Jsoup.parse(contentAsString(result)).select("h1").text shouldBe "Your client’s VAT details"
       }
     }
+
+    "the customer has poa active and poa changed on" should {
+      "have poa alert" in {
+        mockAgentAuthorised()
+        mockCustomerDetailsSuccess(customerDetailsWithValidPoaActive)
+        setupMockDateService(staticDate)
+        mockPenaltiesResponse(penaltiesSummaryNotFoundResponse)
+        mockStandingRequest(Some(modelStandingRequestScheduleValid))
+        mockChangedOnDateWithInLatestVatPeriod(Some(LocalDate.parse("2020-01-01")))
+        mockConfig.features.poaActiveFeature(true)
+
+        val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
+        status(result) shouldBe OK
+        val document = Jsoup.parse(contentAsString(result))
+
+        document.select("h1").text shouldBe "Your client’s VAT details"
+        document.select("#poa-alert-information").text shouldBe
+          "The amounts due for your client’s payments on account were changed on 1 January 2020. Check their schedule for details."
+        document.select("#poa-alert-information").select("a[href]").text() shouldBe "Check their schedule for details"
+      }
+
+      "have no poa alert" in {
+        mockAgentAuthorised()
+        mockCustomerDetailsSuccess(customerDetailsWithValidPoaActive)
+        setupMockDateService(staticDate)
+        mockPenaltiesResponse(penaltiesSummaryNotFoundResponse)
+        mockStandingRequest(Some(modelStandingRequestScheduleValid))
+        mockChangedOnDateWithInLatestVatPeriod(None)
+        mockConfig.features.poaActiveFeature(false)
+
+        val result: Future[Result] = controller.show()(fakeRequestWithVrnAndRedirectUrl)
+        status(result) shouldBe OK
+        val document = Jsoup.parse(contentAsString(result))
+
+        document.select("h1").text shouldBe "Your client’s VAT details"
+        document.select("#poa-alert-information").text shouldBe ""
+      }
+    }
   }
 
   "the payments call fails" should {
@@ -281,7 +413,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
       "the user has 1 payment and it is overdue" in {
         mockAgentAuthorised()
         setupMockDateService(staticDate)
-
+        mockChangedOnDateWithInLatestVatPeriod(None)
         val expected = HubViewModel(
           customerDetailsAllInfo,
           BaseTestConstants.vrn,
@@ -293,7 +425,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           directDebitSetup = None
         )
 
-        val result = controller.constructViewModel(customerDetailsAllInfo, onePaymentModelOverdue, None)(user)
+        val result = controller.constructViewModel(customerDetailsAllInfo, onePaymentModelOverdue, None, None)(user)
         result shouldBe expected
       }
 
@@ -312,7 +444,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           directDebitSetup = None
         )
 
-        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelOneOverdue, None)(user)
+        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelOneOverdue, None, None)(user)
         result shouldBe expected
       }
 
@@ -331,7 +463,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           directDebitSetup = None
         )
 
-        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoneOverdue, None)(user)
+        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoneOverdue, None, None)(user)
         result shouldBe expected
       }
 
@@ -350,7 +482,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           directDebitSetup = None
         )
 
-        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoPayments, None)(user)
+        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoPayments, None, None)(user)
         result shouldBe expected
       }
 
@@ -369,7 +501,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           directDebitSetup = Some(true)
         )
 
-        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoneOverdue, None)(userHasDDSetup)
+        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoneOverdue, None, None)(userHasDDSetup)
         result shouldBe expected
       }
 
@@ -388,7 +520,7 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           directDebitSetup = Some(false)
         )
 
-        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoneOverdue, None)(userHasDDNotSetup)
+        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoneOverdue, None, None)(userHasDDNotSetup)
         result shouldBe expected
       }
 
@@ -408,7 +540,8 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           penaltiesSummary = Some(penaltiesSummaryAsModel)
         )
 
-        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoneOverdue, Some(penaltiesSummaryAsModel))(user)
+        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoneOverdue,
+          Some(penaltiesSummaryAsModel), None)(user)
         result shouldBe expected
       }
 
@@ -428,7 +561,8 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           penaltiesSummary = Some(PenaltiesSummary(0, 0, 0, 0, 0, hasAnyPenaltyData = false))
         )
 
-        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoneOverdue, Some(penaltiesSummaryAsModelNoPenalties))(user)
+        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoneOverdue,
+          Some(penaltiesSummaryAsModelNoPenalties), None)(user)
         result shouldBe expected
       }
 
@@ -449,9 +583,62 @@ class AgentHubControllerSpec extends ControllerBaseSpec
           penaltiesSummary = None
         )
 
-        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoneOverdue, None)(user)
+        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelNoneOverdue, None, None)(user)
         result shouldBe expected
       }
+
+      "the user has pao active until and also the changed-on date" in {
+        mockAgentAuthorised()
+        setupMockDateService(staticDate)
+        mockStandingRequest(Some(modelStandingRequestScheduleValid))
+        mockChangedOnDateWithInLatestVatPeriod(Some(LocalDate.parse("2020-01-01")))
+        mockConfig.features.poaActiveFeature(true)
+
+        val expected = HubViewModel(
+          customerDetailsWithPoa,
+          BaseTestConstants.vrn,
+          LocalDate.parse("2018-05-01"),
+          Some(LocalDate.parse("2020-01-01")),
+          isOverdue = false,
+          isError = false,
+          payments = 2,
+          directDebitSetup = None,
+          penaltiesSummary = Some(penaltiesSummaryAsModel),
+          isPoaActiveForCustomer = true,
+          poaChangedOn = Some(LocalDate.parse("2020-01-01"))
+        )
+
+        val result = controller.constructViewModel(customerDetailsWithPoa, paymentsModelNoneOverdue,
+          Some(penaltiesSummaryAsModel), Some(modelStandingRequestScheduleValid))(user)
+        result shouldBe expected
+      }
+
+      "the user has pao active until and but changed-on date condition failed" in {
+        mockAgentAuthorised()
+        setupMockDateService(staticDate)
+        mockStandingRequest(Some(modelStandingRequestScheduleInValid))
+        mockChangedOnDateWithInLatestVatPeriod(None)
+        mockConfig.features.poaActiveFeature(true)
+
+        val expected = HubViewModel(
+          customerDetailsWithPoa,
+          BaseTestConstants.vrn,
+          LocalDate.parse("2018-05-01"),
+          Some(LocalDate.parse("2020-01-01")),
+          isOverdue = false,
+          isError = false,
+          payments = 2,
+          directDebitSetup = None,
+          penaltiesSummary = Some(penaltiesSummaryAsModel),
+          isPoaActiveForCustomer = true,
+          poaChangedOn = None
+        )
+
+        val result = controller.constructViewModel(customerDetailsWithPoa, paymentsModelNoneOverdue,
+          Some(penaltiesSummaryAsModel), Some(modelStandingRequestScheduleInValid))(user)
+        result shouldBe expected
+      }
+
     }
   }
 

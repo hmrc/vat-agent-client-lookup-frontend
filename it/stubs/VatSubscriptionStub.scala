@@ -19,11 +19,12 @@ package stubs
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.WireMockMethods
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK}
-import play.api.libs.json.{JsObject, Json}
+import play.api.libs.json.{JsObject, JsValue, Json}
 
 object VatSubscriptionStub extends WireMockMethods {
 
   private val subscriptionUri: String => String = vrn => s"/vat-subscription/$vrn/full-information"
+  private val standingRequestUri: String => String = vrn => s"/vat-subscription/$vrn/standing-requests"
 
   def getClientDetailsSuccess(vrn: String)(customerDetailsJson: JsObject): StubMapping = {
     when(method = GET, uri = subscriptionUri(vrn))
@@ -33,5 +34,15 @@ object VatSubscriptionStub extends WireMockMethods {
   def getClientDetailsError(vrn: String): StubMapping = {
     when(method = GET, uri = subscriptionUri(vrn))
       .thenReturn(status = INTERNAL_SERVER_ERROR, body = Json.obj("code" -> "OH NO"))
+  }
+
+  def getStandingRequestsSuccess(vrn: String)(standingRequestJson: JsValue): StubMapping = {
+    when(method = GET, uri = standingRequestUri(vrn))
+      .thenReturn(status = OK, body = standingRequestJson)
+  }
+
+  def getStandingRequestsError(vrn: String): StubMapping = {
+    when(method = GET, uri = standingRequestUri(vrn))
+      .thenReturn(status = INTERNAL_SERVER_ERROR, body = Json.obj("code" -> "Error"))
   }
 }

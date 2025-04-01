@@ -17,6 +17,10 @@
 @import config.AppConfig
 @import views.html.agent.partials._
 @import views.html.helpers._
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukNotificationBanner
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import utils.MessageDateFormat
+@import java.time.LocalDate
 
 @this(mainTemplate: MainTemplate,
       clientDetailsPartial: ClientDetailsPartial,
@@ -29,7 +33,8 @@
       nextReturnPartial: NextReturnPartial,
       historyPartial: HistoryPartial,
       penaltiesBanner: PenaltiesBanner,
-      vatPaymentOnAccount: VatPaymentOnAccount
+      vatPaymentOnAccount: VatPaymentOnAccount,
+      govukNotificationBanner: GovukNotificationBanner
 )
 
 @(model: HubViewModel)(implicit messages: Messages, appConfig: AppConfig, user: User[_])
@@ -58,6 +63,15 @@
   ))
 }
 
+@poaAlertContent = {
+  <h3 class="govuk-notification-banner__heading">@messages("agentHub.payment_on_account.alert.heading")</h3>
+
+  <p class="govuk-body" id="poa-alert-information">@messages("agentHub.payment_on_account.alert.message") @MessageDateFormat.formatLong(model.poaChangedOn.get).
+    <a class="govuk-notification-banner__link" href="@{appConfig.vatPaymentOnAccountUrl}" rel="noreferrer noopener">
+        @messages("agentHub.payment_on_account.alert.link")</a>.
+  </p>
+}
+
 @mainTemplate(
   pageTitle = messages("agentHub.heading"),
   backLinkContent = Some(breadcrumbLinks),
@@ -72,6 +86,16 @@
       @messages("agentHub.changeClient")
     </a>
   </span>
+
+  @if(model.poaChangedOn.isDefined) {
+    <div class="govuk-notification-banner govuk-!-margin-bottom-3 govuk-!-margin-top-3" id="vat-gov-banner-poa">
+      @govukNotificationBanner(NotificationBanner(
+      title = Text(messages("agentHub.payment_on_account.alert.title")),
+      content = HtmlContent(poaAlertContent),
+      classes = "govuk-!-margin-top-0 govuk-!-margin-bottom-0 govuk-!-margin-right-0 govuk-!-margin-left-0",
+      titleId = Some("poa-alert-banner")))
+    </div>
+  }
 
   @penaltiesBanner(model.penaltiesSummary)
 
