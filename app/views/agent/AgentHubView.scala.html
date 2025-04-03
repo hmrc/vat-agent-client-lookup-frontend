@@ -64,12 +64,19 @@
 }
 
 @poaAlertContent = {
-  <h3 class="govuk-notification-banner__heading">@messages("agentHub.payment_on_account.alert.heading")</h3>
+  @if(model.poaChangedOn.isDefined) {
+    <h3 class="govuk-notification-banner__heading">@messages("agentHub.payment_on_account.alert.heading")</h3>
 
-  <p class="govuk-body" id="poa-alert-information">@messages("agentHub.payment_on_account.alert.message") @MessageDateFormat.formatLong(model.poaChangedOn.get).
-    <a class="govuk-notification-banner__link" href="@{appConfig.vatPaymentOnAccountUrl}" rel="noreferrer noopener">
+    <p class="govuk-body" id="poa-alert-information">@messages("agentHub.payment_on_account.alert.message") @MessageDateFormat.formatLong(model.poaChangedOn.get).
+      <a class="govuk-notification-banner__link" href="@{appConfig.vatPaymentOnAccountUrl}" rel="noreferrer noopener">
         @messages("agentHub.payment_on_account.alert.link")</a>.
-  </p>
+    </p>
+  }
+}
+
+@poaAlertAndPenaltiesContent = {
+  <div>@poaAlertContent</div>
+  <div>@penaltiesBanner(model.penaltiesSummary, model.poaChangedOn.isDefined)</div>
 }
 
 @mainTemplate(
@@ -91,13 +98,13 @@
     <div class="govuk-notification-banner govuk-!-margin-bottom-3 govuk-!-margin-top-3" id="vat-gov-banner-poa">
       @govukNotificationBanner(NotificationBanner(
       title = Text(messages("agentHub.payment_on_account.alert.title")),
-      content = HtmlContent(poaAlertContent),
+      content = HtmlContent(poaAlertAndPenaltiesContent),
       classes = "govuk-!-margin-top-0 govuk-!-margin-bottom-0 govuk-!-margin-right-0 govuk-!-margin-left-0",
       titleId = Some("poa-alert-banner")))
     </div>
+  } else {
+    @penaltiesBanner(model.penaltiesSummary, model.poaChangedOn.isDefined)
   }
-
-  @penaltiesBanner(model.penaltiesSummary)
 
   <div class="flex-container govuk-grid-row">
     @nextPaymentPartial(model.details.isHybridUser, model.nextPaymentDate, model.payments, model.isOverdue, model.isError, model.directDebitSetup, model.isPoaActiveForCustomer)

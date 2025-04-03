@@ -20,7 +20,7 @@
 @this(govukNotificationBanner: GovukNotificationBanner,
       displayMoney: DisplayMoney)
 
-@(summary: Option[PenaltiesSummary])(implicit messages: Messages, appConfig: config.AppConfig)
+@(summary: Option[PenaltiesSummary], isPoaAlert: Boolean = false)(implicit messages: Messages, appConfig: config.AppConfig)
 
 @bannerContentIfPenalties(penaltiesSummary: PenaltiesSummary) = {
   <div class="govuk-!-margin-bottom-3">
@@ -68,7 +68,8 @@
 </div>
 }
 
-@summary match {
+@if(!isPoaAlert) {
+  @summary match {
     case Some(content) if content.hasActivePenalties => {
         @govukNotificationBanner(NotificationBanner(
             title = Text(messages("penaltiesBanner.heading")),
@@ -81,4 +82,15 @@
             content = HtmlContent(noPenaltiesBannerContent),
             titleId = Some("govuk-notification-banner-title-penalties-coming-banner")
         ))}
+  }
+} else {
+  @summary match {
+    case Some(content) if content.hasActivePenalties => {
+     <h3 class="govuk-notification-banner__heading">@messages("penaltiesBanner.heading")</h3>
+     @bannerContentIfPenalties(content))
+    }
+    case _ => {
+     @noPenaltiesBannerContent
+    }
+  }
 }
