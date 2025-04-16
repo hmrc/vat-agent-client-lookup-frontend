@@ -23,23 +23,19 @@ import assets.FinancialDataConstants._
 import assets.PenaltiesConstants._
 import audit.mocks.MockAuditingService
 import audit.models.AgentOverviewPageViewAuditModel
-import connectors.httpParsers.ResponseHttpParser
 import controllers.ControllerBaseSpec
 import mocks.services._
 import models.{CustomerDetails, HubViewModel, RequestItem, StandingRequest, StandingRequestDetail, User, VatDetailsDataModel}
 import models.errors.UnexpectedError
 import models.penalties.PenaltiesSummary
 import org.jsoup.Jsoup
-import org.mockito.Mockito.when
 import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.Helpers.{await, contentAsString, defaultAwaitTimeout, status}
 import play.mvc.Http.Status._
 import views.html.agent.AgentHubView
 
-import java.lang.UnknownError
 import java.time.LocalDate
 import scala.concurrent.Future
-import scala.runtime.Nothing$
 
 class AgentHubControllerSpec extends ControllerBaseSpec
                               with MockCustomerDetailsService
