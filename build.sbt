@@ -15,16 +15,20 @@
  */
 
 import sbt.*
+import uk.gov.hmrc.DefaultBuildSettings
 import uk.gov.hmrc.DefaultBuildSettings.*
 
 
 val appName = "vat-agent-client-lookup-frontend"
 
-val bootstrapPlayVersion       = "8.6.0"
-val playFrontendHmrc           = "9.11.0"
+ThisBuild / majorVersion := 1
+ThisBuild / scalaVersion := "2.13.16"
+
+val bootstrapPlayVersion       = "9.11.0"
+val playFrontendHmrc           = "12.0.0"
 val mockitoVersion             = "3.2.10.0"
 val scalaMockVersion           = "6.0.0"
-val domainVersion              = "9.0.0"
+val domainVersion              = "11.0.0"
 
 val compile = Seq(
   ws,
@@ -34,9 +38,9 @@ val compile = Seq(
 )
 
 def test(scope: String = "test,it"): Seq[ModuleID] = Seq(
-  "uk.gov.hmrc"       %% "bootstrap-test-play-30"       % bootstrapPlayVersion  % scope,
-  "org.scalamock"     %% "scalamock"                    % scalaMockVersion      % scope,
-  "org.scalatestplus" %% "mockito-3-4"                  % mockitoVersion        % scope
+  "uk.gov.hmrc"       %% "bootstrap-test-play-30"       % bootstrapPlayVersion  % Test,
+  "org.scalamock"     %% "scalamock"                    % scalaMockVersion      % Test,
+  "org.scalatestplus" %% "mockito-3-4"                  % mockitoVersion        % Test
 )
 
 lazy val coverageSettings: Seq[Setting[?]] = {
@@ -82,19 +86,23 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     Test / Keys.fork := true,
     Test / javaOptions += "-Dlogger.resource=logback-test.xml",
-    scalaVersion := "2.13.12",
-    majorVersion := 0,
     libraryDependencies ++= appDependencies,
     retrieveManaged := true,
     routesGenerator := InjectedRoutesGenerator,
       routesImport := Seq.empty,
         scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-Wconf:cat=unused-imports&site=.*views.html.*:s")
   )
-  .configs(IntegrationTest)
+/*  .configs(IntegrationTest)
   .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
   .settings(
     IntegrationTest / Keys.fork := false,
     IntegrationTest / unmanagedSourceDirectories := (IntegrationTest / baseDirectory) (base => Seq(base / "it")).value,
     addTestReportOption(IntegrationTest, "int-test-reports"),
-    IntegrationTest / parallelExecution := false)
+    IntegrationTest / parallelExecution := false)*/
+lazy val it = project
+  .enablePlugins(PlayScala)
+  .dependsOn(microservice % "test->test") // the "test->test" allows reusing test code and test dependencies
+  .disablePlugins(SbtGitVersioning)
+  .settings(DefaultBuildSettings.itSettings())
+Test / javaOptions += "-Dlogger.resource=logback-test.xml"
 

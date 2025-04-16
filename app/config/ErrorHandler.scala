@@ -18,23 +18,30 @@ package config
 
 import javax.inject.Inject
 import play.api.i18n.MessagesApi
-import play.api.mvc.{Request, Result}
+import play.api.mvc.{AnyContent, AnyContentAsEmpty, Request, RequestHeader, Result}
 import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
 import play.api.mvc.Results.InternalServerError
 import views.html.errors.StandardErrorView
 
+import scala.concurrent.{ExecutionContext, Future}
+
 class ErrorHandler @Inject()(val messagesApi: MessagesApi,
                              standardErrorView: StandardErrorView,
-                             implicit val appConfig: AppConfig) extends FrontendErrorHandler {
+                             implicit val appConfig: AppConfig, val ec: ExecutionContext) extends FrontendErrorHandler {
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)
-                                    (implicit request: Request[_]): Html =
-    standardErrorView("standardError.title", "standardError.heading", "standardError.message")
+                                    (implicit request: RequestHeader): Future[Html] = {
+    implicit val req: Request[AnyContent] = Request(request, AnyContentAsEmpty)
+    Future.successful(standardErrorView("standardError.title", "standardError.heading", "standardError.message"))
+  }
 
-  override def notFoundTemplate(implicit request: Request[_]): Html =
-    standardErrorView("notFound.title", "notFound.heading", "notFound.message")
 
-  def showInternalServerError(implicit request: Request[_]): Result =
-    InternalServerError(internalServerErrorTemplate)
+  override def notFoundTemplate(implicit request: RequestHeader): Future[Html] = {
+    implicit val req: Request[AnyContent] = Request(request, AnyContentAsEmpty)
+    Future.successful(standardErrorView("notFound.title", "notFound.heading", "notFound.message"))
+  }
+
+  def showInternalServerError(implicit request: RequestHeader, ec: ExecutionContext): Future[Result] =
+    internalServerErrorTemplate(request).map(InternalServerError(_))
 }
