@@ -79,8 +79,8 @@ object ConfigKeys {
   val agentServicesHost: String = "agent-services.host"
   val agentServicesUrl: String = "agent-services.url"
 
-  val agentInvitationsFrontendHost: String = "agent-invitations-frontend.host"
-  val agentInvitationsFrontendUrl: String = "agent-invitations-frontend.url"
+  val agentInvitationsFrontendHost: String = "agent-client-relationships-frontend.host"
+  val agentInvitationsFrontendUrl: String = "agent-client-relationships-frontend.url"
 
   val gtmContainer: String = "tracking-consent-frontend.gtm.container"
 

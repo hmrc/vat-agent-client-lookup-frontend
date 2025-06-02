@@ -73,7 +73,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val agentServicesHost = ""
   override val agentServicesUrl = "/agent-service-account"
 
-  override val agentInvitationsFrontendUrl = "/invitations/agents/client-type"
+  override val agentInvitationsFrontendUrl = "/agent-client-relationships/authorisation-request/client-type"
 
   override val staticDateValue = "2018-05-01"
 
