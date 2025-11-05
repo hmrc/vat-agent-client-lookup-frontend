@@ -31,7 +31,7 @@
   backLinkContent: Option[Html] = None,
   isTwoThirdsWidth: Boolean = true,
   headerLink: Boolean = true
-)(mainContent: Html)(implicit request : Request[_], messages: Messages, appConfig: config.AppConfig)
+)(mainContent: Html)(implicit request : RequestHeader, messages: Messages, appConfig: config.AppConfig)
 
 @navTitle = @{
   messages("common.agentService", pageTitle, messages("common.agentService"))
