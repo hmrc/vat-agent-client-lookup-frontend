@@ -167,13 +167,13 @@ agentHub.payment_on_account.alert.message=The amounts due for your client’s pa
 agentHub.payment_on_account.alert.link=Check their schedule for details
 
 agentHub.annual_accounting.alert.title=Important
-agentHub.annual_accounting.overdue.heading=Annual accounting payment overdue
+agentHub.annual_accounting.overdue.heading=Your client has an overdue payment
 agentHub.annual_accounting.overdue.message=Making late payments will accrue late payment interest. Your client can be removed from the Annual Accounting Scheme if they miss too many.
 agentHub.annual_accounting.overdue.link=Check what your client owes
 agentHub.annual_accounting.alert.heading=There has been a change to your Annual Accounting payments
 agentHub.annual_accounting.alert.message.prefix=This has happened because the amount that your client owes for each period changed on
 agentHub.annual_accounting.alert.message.suffix=For details,
-agentHub.annual_accounting.alert.link=check your client’s schedule.
+agentHub.annual_accounting.alert.link=check your client’s schedule
 
 breadcrumb.agentServices = Agent Services Account
 

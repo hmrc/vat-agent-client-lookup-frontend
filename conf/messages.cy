@@ -173,7 +173,7 @@ agentHub.annual_accounting.overdue.link=Gwirio’r hyn sydd ar eich cleient
 agentHub.annual_accounting.alert.heading=Mae newid wedi bod i’ch taliadau Cyfrifyddu Blynyddol
 agentHub.annual_accounting.alert.message.prefix=Mae hyn wedi digwydd oherwydd bod y swm y mae’ch cleient yn ei ddyledus ar gyfer pob cyfnod wedi newid ar
 agentHub.annual_accounting.alert.message.suffix=I gael manylion,
-agentHub.annual_accounting.alert.link=gwiriwch amserlen eich cleient.
+agentHub.annual_accounting.alert.link=gwiriwch amserlen eich cleient
 
 breadcrumb.agentServices = Cyfrif Gwasanaethau Asiant
 

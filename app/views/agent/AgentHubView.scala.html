@@ -87,8 +87,8 @@
     <p class="govuk-body" id="aa-overdue-information">
       @messages("agentHub.annual_accounting.overdue.message")<br>
       <a class="govuk-notification-banner__link" href="@{appConfig.whatYouOweUrl}" rel="noreferrer noopener">
-        @messages("agentHub.annual_accounting.overdue.link")
-      </a>.
+        @messages("agentHub.annual_accounting.overdue.link").
+      </a>
     </p>
   }
 }
@@ -99,8 +99,8 @@
     <p class="govuk-body" id="aa-changed-information">
       @messages("agentHub.annual_accounting.alert.message.prefix") @MessageDateFormat.formatLong(model.annualAccountingChangedOn.get). @messages("agentHub.annual_accounting.alert.message.suffix")
       <a class="govuk-notification-banner__link" href="@{appConfig.annualAccountingUrl}" rel="noreferrer noopener">
-        @messages("agentHub.annual_accounting.alert.link")
-      </a>.
+        @messages("agentHub.annual_accounting.alert.link").
+      </a>
     </p>
   }
 }
