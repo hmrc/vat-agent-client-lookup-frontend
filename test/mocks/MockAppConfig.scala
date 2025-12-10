@@ -64,6 +64,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val notSignedUpUrl: String = "/making-tax-digital-for-vat-as-an-agent-step-by-step"
   override val submittedReturnsUrl: String = "/submitted-returns"
   override val returnDeadlinesUrl: String = "/vat-through-software/vat-returns/return-deadlines"
+  override val annualAccountingUrl: String = "/vat-through-software/annual-accounting"
   override val vatPaymentOnAccountUrl = "/vat-through-software/payments-on-account"
 
   override val classicServicesSignInUrl: String = "/classic-services-sign-in"

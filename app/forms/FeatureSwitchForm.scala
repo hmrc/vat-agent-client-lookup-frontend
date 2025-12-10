@@ -26,7 +26,8 @@ object FeatureSwitchForm {
     mapping(
       ConfigKeys.emailVerificationFeature -> boolean,
       ConfigKeys.useStaticDateFeature -> boolean,
-      ConfigKeys.poaActiveFeature -> boolean
+      ConfigKeys.poaActiveFeature -> boolean,
+      ConfigKeys.annualAccountingFeature -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 }

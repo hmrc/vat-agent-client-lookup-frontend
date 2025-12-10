@@ -35,4 +35,6 @@ object AgentHubMessages {
   val notificationBannerP3 = "If they have already done this they do not need to do it again."
   val poalinkText = "Payments on account"
   val poalinkInfo = "View your client’s payments on account schedule of payments."
+  val aaLinkText = "Annual accounting"
+  val aaLinkInfo = "View your client’s annual accounting instalment schedule."
 }

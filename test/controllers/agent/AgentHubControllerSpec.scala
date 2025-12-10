@@ -25,6 +25,8 @@ import audit.mocks.MockAuditingService
 import audit.models.AgentOverviewPageViewAuditModel
 import controllers.ControllerBaseSpec
 import mocks.services._
+import org.mockito.ArgumentMatchers
+import org.mockito.Mockito.when
 import models.{CustomerDetails, HubViewModel, RequestItem, StandingRequest, StandingRequestDetail, User, VatDetailsDataModel}
 import models.errors.UnexpectedError
 import models.penalties.PenaltiesSummary
@@ -44,7 +46,15 @@ class AgentHubControllerSpec extends ControllerBaseSpec
                               with MockPenaltiesService
                               with MockAuditingService
                               with MockPaymentsOnAccountService
-                              with MockPoaCheckService {
+                              with MockPoaCheckService
+                              with MockAnnualAccountingCheckService {
+
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    mockAAChangedOn(None)
+    when(mockPaymentsOnAccountService.getPaymentsOnAccounts(ArgumentMatchers.any())(ArgumentMatchers.any(), ArgumentMatchers.any()))
+      .thenReturn(Future.successful(None))
+  }
 
   lazy val controller = new AgentHubController(
     mockAuthAsAgentWithClient,
@@ -57,7 +67,8 @@ class AgentHubControllerSpec extends ControllerBaseSpec
     mcc,
     inject[AgentHubView],
     mockPaymentsOnAccountService,
-    mockPoaCheckService
+    mockPoaCheckService,
+    mockAnnualAccountingCheckService
   )
 
   val staticDate: LocalDate = LocalDate.parse("2018-05-01")

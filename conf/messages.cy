@@ -144,6 +144,9 @@ nextPaymentPartial.poaActivelink = Gwiriwch yr amserlen ar gyfer taliadau ar gyf
 viewPaymentOnAccount.link = Taliadau ar gyfrif
 viewPaymentOnAccount.info = Bwrw golwg dros yr amserlen ar gyfer taliadau ar gyfrif eich cleient.
 
+viewAnnualAccounting.link = Cyfrif blynyddol
+viewAnnualAccounting.info = Bwrw golwg dros amserlen rhandaliadau cyfrif blynyddol eich cleient.
+
 nextReturnPartial.heading = Ffurflen TAW nesaf i’w chyflwyno
 nextReturnPartial.link = Bwrw golwg dros ddyddiadau cau ar gyfer Ffurflenni TAW
 nextReturnPartial.optedOut.link = Cyflwyno Ffurflen TAW
@@ -162,6 +165,15 @@ agentHub.payment_on_account.alert.title=Pwysig
 agentHub.payment_on_account.alert.heading=Newid amserlen ar gyfer taliadau ar gyfrif
 agentHub.payment_on_account.alert.message=Gwnaeth y symiau sy’n ddyledus ar gyfer taliadau ar gyfrif eich cleient newid ar
 agentHub.payment_on_account.alert.link=Gwiriwch ei amserlen am fanylion
+
+agentHub.annual_accounting.alert.title=Pwysig
+agentHub.annual_accounting.overdue.heading=Mae gan eich cleient daliadau sy’n hwyr
+agentHub.annual_accounting.overdue.message=Bydd gwneud taliadau hwyr yn cronni llog am dalu’n hwyr. Gellir tynnu’ch cleient o’r Cynllun Cyfrifyddu Blynyddol os bydd yn methu gormod.
+agentHub.annual_accounting.overdue.link=Gwirio’r hyn sydd ar eich cleient
+agentHub.annual_accounting.alert.heading=Mae newid wedi bod i’ch taliadau Cyfrifyddu Blynyddol
+agentHub.annual_accounting.alert.message.prefix=Mae hyn wedi digwydd oherwydd bod y swm y mae’ch cleient yn ei ddyledus ar gyfer pob cyfnod wedi newid ar
+agentHub.annual_accounting.alert.message.suffix=I gael manylion,
+agentHub.annual_accounting.alert.link=gwiriwch amserlen eich cleient.
 
 breadcrumb.agentServices = Cyfrif Gwasanaethau Asiant
 
