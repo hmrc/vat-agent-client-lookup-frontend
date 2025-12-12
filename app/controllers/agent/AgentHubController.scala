@@ -133,25 +133,16 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
       val hasYPeriod = standingRequest.exists(_.standingRequests.exists(_.requestItems.exists(_.periodKey.startsWith("Y"))))
       hasType4 || hasYPeriod
     }
-    // Annual Accounting overdue: cross-check AA due dates with transactions when available; else use schedule dates only
-    val aaDueDates: Set[LocalDate] = {
-      val fromType4 = standingRequest.toSeq
-        .flatMap(_.standingRequests.filter(_.requestCategory == models.ChangedOnVatPeriod.RequestCategoryType4))
-        .flatMap(_.requestItems.flatMap(ri => Try(LocalDate.parse(ri.dueDate)).toOption ++ ri.postingDueDate.flatMap(d => Try(LocalDate.parse(d)).toOption)))
-      val fromYPeriods = standingRequest.toSeq
-        .flatMap(_.standingRequests)
-        .flatMap(_.requestItems.filter(_.periodKey.startsWith("Y")))
-        .flatMap(ri => Try(LocalDate.parse(ri.dueDate)).toOption ++ ri.postingDueDate.flatMap(d => Try(LocalDate.parse(d)).toOption))
-      (fromType4 ++ fromYPeriods).toSet
-    }
+    val aaChargeTypes = Set("AAQuarterlyInstalments", "AAMonthlyInstalment")
     val aaOverdueFromTxns: Boolean =
       paymentsModel.payments.exists(ch =>
-        aaDueDates.contains(ch.dueDate) && ch.dueDate.isBefore(now) && ch.outstandingAmount > 0 && !ch.ddCollectionInProgress
+        aaChargeTypes.contains(ch.chargeType) &&
+          ch.dueDate.isBefore(now) &&
+          ch.outstandingAmount > 0 &&
+          !ch.ddCollectionInProgress
       )
-    val aaDatesBeforeNow = aaDueDates.filter(_.isBefore(now)).toSeq.sorted
-    logger.info(s"[AgentHubController][constructViewModel] now=$now, aaDatesBeforeNowCount=${aaDatesBeforeNow.size}, firstBeforeNow=${aaDatesBeforeNow.headOption}")
-    val isAnnualAccountingPaymentOverdue: Boolean =
-      if (paymentsModel.payments.nonEmpty) aaOverdueFromTxns else aaDueDates.exists(_.isBefore(now))
+    logger.info(s"[AgentHubController][constructViewModel] now=$now, aaOverdueFromTxns=$aaOverdueFromTxns")
+    val isAnnualAccountingPaymentOverdue: Boolean = aaOverdueFromTxns
 
     val annualAccountingChangedOn: Option[LocalDate] =
       if (appConfig.features.annualAccountingFeature() && isAnnualAccountingCustomer)
@@ -159,7 +150,7 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
       else None
 
     logger.info(s"[AgentHubController][constructViewModel] isPoaActiveForCustomer=$isPoaActiveForCustomer, poaChangedOn=${poaChangedOn.map(_.toString)}")
-    logger.info(s"[AgentHubController][constructViewModel] isAnnualAccountingCustomer=$isAnnualAccountingCustomer, aaDueDates=${aaDueDates.size}, aaOverdueFromTxns=$aaOverdueFromTxns, isAAPaymentOverdue=$isAnnualAccountingPaymentOverdue, aaChangedOn=${annualAccountingChangedOn.map(_.toString)}")
+    logger.info(s"[AgentHubController][constructViewModel] isAnnualAccountingCustomer=$isAnnualAccountingCustomer, aaOverdueFromTxns=$aaOverdueFromTxns, isAAPaymentOverdue=$isAnnualAccountingPaymentOverdue, aaChangedOn=${annualAccountingChangedOn.map(_.toString)}")
 
     HubViewModel(
       details,

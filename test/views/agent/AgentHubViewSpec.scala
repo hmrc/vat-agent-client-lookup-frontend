@@ -271,7 +271,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
         elementText("#annual-accounting h3") shouldBe Messages.aaLinkText
         element("#aa-link").attr("href") shouldBe mockConfig.annualAccountingUrl
         elementText("#aa-body") shouldBe Messages.aaLinkInfo
-        // Ensure POA tile not shown when AA tile is shown
+
         document.select("#vat-payment-on-account h3") should be(empty)
       }
 
@@ -310,7 +310,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
         implicit val document: Document = Jsoup.parse(view.body)
         elementText("#aa-changed-information") should include(messages("agentHub.annual_accounting.alert.message.prefix"))
         elementText("#aa-changed-information") should include("1 March 2025")
-        document.select("#aa-changed-information a").text shouldBe messages("agentHub.annual_accounting.alert.link")
+        document.select("#aa-changed-information a").text shouldBe messages("agentHub.annual_accounting.alert.link") + "."
         document.select("#aa-changed-information a").attr("href") shouldBe mockConfig.annualAccountingUrl
       }
     }
@@ -322,7 +322,7 @@ class AgentHubViewSpec extends ViewBaseSpec {
           .copy(isAnnualAccountingCustomer = true, isAnnualAccountingPaymentOverdue = true))(messages, mockConfig, user)
         implicit val document: Document = Jsoup.parse(view.body)
         elementText("#aa-overdue-information") should include(messages("agentHub.annual_accounting.overdue.message"))
-        document.select("#aa-overdue-information a").text shouldBe messages("agentHub.annual_accounting.overdue.link")
+        document.select("#aa-overdue-information a").text shouldBe messages("agentHub.annual_accounting.overdue.link") + "."
         document.select("#aa-overdue-information a").attr("href") shouldBe mockConfig.whatYouOweUrl
       }
     }
