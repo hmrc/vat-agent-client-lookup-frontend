@@ -325,6 +325,15 @@ class AgentHubViewSpec extends ViewBaseSpec {
         document.select("#aa-overdue-information a").text shouldBe messages("agentHub.annual_accounting.overdue.link") + "."
         document.select("#aa-overdue-information a").attr("href") shouldBe mockConfig.whatYouOweUrl
       }
+
+      "not display AA overdue content when feature disabled" in {
+        mockConfig.features.annualAccountingFeature(false)
+        val view = injectedView(hubViewModel(customerDetailsAllInfo)
+          .copy(isAnnualAccountingCustomer = true, isAnnualAccountingPaymentOverdue = true))(messages, mockConfig, user)
+        implicit val document: Document = Jsoup.parse(view.body)
+        document.select("#aa-overdue-information") should be(empty)
+        document.select("#vat-gov-banner-alerts") should be(empty)
+      }
     }
     "Render VAT Payment on Account section and Penalties together" should {
 

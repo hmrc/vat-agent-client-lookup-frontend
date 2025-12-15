@@ -82,7 +82,7 @@
 @poaAlertAndPenaltiesContent = { @poaAlertContent }
 
 @aaOverdueContent = {
-  @if(model.isAnnualAccountingPaymentOverdue) {
+  @if(appConfig.features.annualAccountingFeature() && model.isAnnualAccountingPaymentOverdue) {
     <h3 class="govuk-notification-banner__heading">@messages("agentHub.annual_accounting.overdue.heading")</h3>
     <p class="govuk-body" id="aa-overdue-information">
       @messages("agentHub.annual_accounting.overdue.message")<br>
@@ -121,16 +121,18 @@
     </a>
   </span>
 
-  @if(model.isAnnualAccountingPaymentOverdue || model.annualAccountingChangedOn.isDefined || model.poaChangedOn.isDefined) {
-    <div class="govuk-notification-banner govuk-!-margin-bottom-3 govuk-!-margin-top-3" id="vat-gov-banner-alerts">
-      @govukNotificationBanner(NotificationBanner(
-      title = Text(messages("agentHub.annual_accounting.alert.title")),
-      content = HtmlContent(alertsContent),
-      classes = "govuk-!-margin-top-0 govuk-!-margin-bottom-0 govuk-!-margin-right-0 govuk-!-margin-left-0",
-      titleId = Some("aa-alert-banner")))
-    </div>
-  } else {
-    @penaltiesBanner(model.penaltiesSummary, false)
+  @defining(appConfig.features.annualAccountingFeature() && (model.isAnnualAccountingPaymentOverdue || model.annualAccountingChangedOn.isDefined)) { aaAlertsPresent =>
+    @if(aaAlertsPresent || model.poaChangedOn.isDefined) {
+      <div class="govuk-notification-banner govuk-!-margin-bottom-3 govuk-!-margin-top-3" id="vat-gov-banner-alerts">
+        @govukNotificationBanner(NotificationBanner(
+        title = Text(messages("agentHub.annual_accounting.alert.title")),
+        content = HtmlContent(alertsContent),
+        classes = "govuk-!-margin-top-0 govuk-!-margin-bottom-0 govuk-!-margin-right-0 govuk-!-margin-left-0",
+        titleId = Some("aa-alert-banner")))
+      </div>
+    } else {
+      @penaltiesBanner(model.penaltiesSummary, false)
+    }
   }
 
   <div class="flex-container govuk-grid-row">

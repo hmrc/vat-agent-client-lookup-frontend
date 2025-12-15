@@ -142,10 +142,11 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
           !ch.ddCollectionInProgress
       )
     logger.info(s"[AgentHubController][constructViewModel] now=$now, aaOverdueFromTxns=$aaOverdueFromTxns")
-    val isAnnualAccountingPaymentOverdue: Boolean = aaOverdueFromTxns
+    val aaFeatureEnabled = appConfig.features.annualAccountingFeature()
+    val isAnnualAccountingPaymentOverdue: Boolean = aaFeatureEnabled && isAnnualAccountingCustomer && aaOverdueFromTxns
 
     val annualAccountingChangedOn: Option[LocalDate] =
-      if (appConfig.features.annualAccountingFeature() && isAnnualAccountingCustomer)
+      if (aaFeatureEnabled && isAnnualAccountingCustomer)
         annualAccountingCheckService.changedOnDateWithinLast3Months(standingRequest, now)
       else None
 
