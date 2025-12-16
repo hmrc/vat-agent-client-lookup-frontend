@@ -28,7 +28,7 @@ import controllers.predicates.AuthoriseAsAgentWithClient
 import models.penalties.PenaltiesSummary
 import models.{CustomerDetails, HubViewModel, StandingRequest, User, VatDetailsDataModel}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.{CustomerDetailsService, DateService, FinancialDataService, POACheckService, PaymentsOnAccountService, PenaltiesService}
+import services.{CustomerDetailsService, DateService, FinancialDataService, POACheckService, PaymentsOnAccountService, PenaltiesService, AnnualAccountingCheckService}
 import utils.LoggingUtil
 import views.html.agent.AgentHubView
 
@@ -48,16 +48,42 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
                                    mcc: MessagesControllerComponents,
                                    agentHubView: AgentHubView,
                                    paymentsOnAccountService: PaymentsOnAccountService,
-                                   poaCheckService: POACheckService)
+                                   poaCheckService: POACheckService,
+                                   annualAccountingCheckService: AnnualAccountingCheckService)
                                   (implicit appConfig: AppConfig,
                                    executionContext: ExecutionContext) extends BaseController(mcc) with LoggingUtil {
 
   def show: Action[AnyContent] = authenticate.async { implicit user =>
     for {
       customerDetails <- customerDetailsService.getCustomerDetails(user.vrn)
-      payments <- if (userIsHybrid(customerDetails)) Future.successful(VatDetailsDataModel(Seq(), isError = false)) else retrievePayments
-      penaltiesInformation <- penaltiesService.getPenaltiesInformation(user.vrn)
-      standingRequest <- if (!isPoaActiveUser(customerDetails)) Future.successful(None) else paymentsOnAccountService.getPaymentsOnAccounts(user.vrn)
+      payments <- {
+        val hybrid = userIsHybrid(customerDetails)
+        logger.info(s"[AgentHubController][show] userIsHybrid=$hybrid for vrn=${user.vrn}")
+        if (hybrid) {
+          logger.info(s"[AgentHubController][show] Skipping retrievePayments due to hybrid user")
+          Future.successful(VatDetailsDataModel(Seq(), isError = false))
+        } else {
+          logger.info(s"[AgentHubController][show] Calling retrievePayments for vrn=${user.vrn}")
+          retrievePayments
+        }
+      }
+      penaltiesInformation <- {
+        logger.info(s"[AgentHubController][show] Fetching penalties for vrn=${user.vrn}")
+        penaltiesService.getPenaltiesInformation(user.vrn)
+      }
+      standingRequest <-
+        {
+          val poaFlag = appConfig.features.poaActiveFeature()
+          val aaFlag  = appConfig.features.annualAccountingFeature()
+          logger.info(s"[AgentHubController][show] Feature flags: poa=$poaFlag annualAccounting=$aaFlag")
+          if (poaFlag || aaFlag) {
+            logger.info(s"[AgentHubController][show] Fetching standing requests for vrn=${user.vrn}")
+            paymentsOnAccountService.getPaymentsOnAccounts(user.vrn)
+          } else {
+            logger.info(s"[AgentHubController][show] Skipping standing requests fetch (flags off)")
+            Future.successful(None)
+          }
+        }
     } yield {
       customerDetails match {
         case Right(details) =>
@@ -88,6 +114,7 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
       case _ => None
     }
 
+    logger.info(s"[AgentHubController][constructViewModel] Payments count=${paymentsModel.payments.size}")
     val nextPaymentDate = paymentsModel.payments.headOption.map(payment => payment.dueDate)
     val paymentsNumber  = paymentsModel.payments.length
     val isOverdue       =
@@ -99,28 +126,64 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
         }
       }
     val isPoaActiveForCustomer: Boolean = retrievePoaActiveForCustomer(Right(details))
-    val poaChangedOn: Option[LocalDate] = poaCheckService.changedOnDateWithInLatestVatPeriod(standingRequest, dateService.now())
+    val now: LocalDate = dateService.now()
+    val poaChangedOn: Option[LocalDate] = poaCheckService.changedOnDateWithInLatestVatPeriod(standingRequest, now)
+    val aaChargeTypes = Set("AAQuarterlyInstalments", "AAMonthlyInstalment")
+    val aaOverdueFromTxns: Boolean =
+      paymentsModel.payments.exists(ch =>
+        aaChargeTypes.contains(ch.chargeType) &&
+          ch.dueDate.isBefore(now) &&
+          ch.outstandingAmount > 0 &&
+          !ch.ddCollectionInProgress
+      )
+    logger.info(s"[AgentHubController][constructViewModel] now=$now, aaOverdueFromTxns=$aaOverdueFromTxns")
+    val isAnnualAccountingCustomer: Boolean = {
+      val hasType4 = standingRequest.exists(_.standingRequests.exists(_.requestCategory == models.ChangedOnVatPeriod.RequestCategoryType4))
+      val hasYPeriod = standingRequest.exists(_.standingRequests.exists(_.requestItems.exists(_.periodKey.startsWith("Y"))))
+      hasType4 || hasYPeriod || aaOverdueFromTxns
+    }
+    val aaFeatureEnabled = appConfig.features.annualAccountingFeature()
+    val isAnnualAccountingPaymentOverdue: Boolean = aaFeatureEnabled && aaOverdueFromTxns
+
+    val annualAccountingChangedOn: Option[LocalDate] =
+      if (aaFeatureEnabled && isAnnualAccountingCustomer)
+        annualAccountingCheckService.changedOnDateWithinLast3Months(standingRequest, now)
+      else None
+
+    logger.info(s"[AgentHubController][constructViewModel] isPoaActiveForCustomer=$isPoaActiveForCustomer, poaChangedOn=${poaChangedOn.map(_.toString)}")
+    logger.info(s"[AgentHubController][constructViewModel] isAnnualAccountingCustomer=$isAnnualAccountingCustomer, aaOverdueFromTxns=$aaOverdueFromTxns, isAAPaymentOverdue=$isAnnualAccountingPaymentOverdue, aaChangedOn=${annualAccountingChangedOn.map(_.toString)}")
 
     HubViewModel(
       details,
       user.vrn,
-      dateService.now(),
+      now,
       nextPaymentDate,
       isOverdue,
       paymentsModel.isError,
       paymentsNumber,
       hasDDSetup,
       penaltiesInformation,
+      isAnnualAccountingCustomer = isAnnualAccountingCustomer,
+      isAnnualAccountingPaymentOverdue = isAnnualAccountingPaymentOverdue,
+      annualAccountingChangedOn = annualAccountingChangedOn,
       isPoaActiveForCustomer,
       poaChangedOn
     )
   }
 
-  private def retrievePayments(implicit user: User[_]): Future[VatDetailsDataModel] =
+  private def retrievePayments(implicit user: User[_]): Future[VatDetailsDataModel] = {
+    logger.info(s"[AgentHubController][retrievePayments] Fetching payments due for vrn=${user.vrn}")
     financialDataService.getPayment(user.vrn) map {
-      case Right(payments) => VatDetailsDataModel(payments.filterNot(_.chargeType equals "Payment on account"), isError = false)
-      case Left(_) => VatDetailsDataModel(Seq(), isError = true)
+      case Right(payments) =>
+        val filtered = payments.filterNot(_.chargeType equals "Payment on account")
+        logger.info(s"[AgentHubController][retrievePayments] Retrieved payments=${payments.size}, after filter=${filtered.size}")
+        VatDetailsDataModel(filtered, isError = false)
+      case Left(err) =>
+        logger.warn(s"[AgentHubController][retrievePayments] Error retrieving payments: $err")
+        VatDetailsDataModel(Seq(), isError = true)
     }
+  }
+
 
   private def userIsHybrid(accountDetails: HttpResult[CustomerDetails]): Boolean =
     accountDetails match {

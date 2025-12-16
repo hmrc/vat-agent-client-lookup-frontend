@@ -18,7 +18,7 @@ package assets
 
 import java.time.LocalDate
 import connectors.httpParsers.ResponseHttpParser.HttpResult
-import models.{Charge, DirectDebit,VatDetailsDataModel}
+import models.{Charge, DirectDebit, VatDetailsDataModel}
 
 object FinancialDataConstants {
 
@@ -67,6 +67,15 @@ object FinancialDataConstants {
         ddCollectionInProgress = false
     ))
   val paymentOnAccountResponse: HttpResult[Seq[Charge]] = Right(paymentsInclOnAccount)
+
+  val aaOverdueCharge: Charge = Charge(
+    chargeType = "AAQuarterlyInstalments",
+    outstandingAmount = 150.00,
+    dueDate = LocalDate.parse("2018-01-01"),
+    ddCollectionInProgress = false
+  )
+  val paymentsAAOverdue: Seq[Charge] = Seq(aaOverdueCharge)
+  val paymentsModelAAOverdue: VatDetailsDataModel = VatDetailsDataModel(paymentsAAOverdue, isError = false)
 
   val onePaymentModelOverdue: VatDetailsDataModel = VatDetailsDataModel(
     payments = Seq(paymentOverdue), isError = false

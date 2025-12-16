@@ -41,7 +41,8 @@ class FeatureSwitchItems @Inject() () {
     Seq(
       formCheckBoxItem(form, ConfigKeys.emailVerificationFeature, "Email Verification"),
       formCheckBoxItem(form, ConfigKeys.useStaticDateFeature, "Use Static Date (2018-05-01)"),
-      formCheckBoxItem(form, ConfigKeys.poaActiveFeature, "Enable POAStandingSchedule Feature")
+      formCheckBoxItem(form, ConfigKeys.poaActiveFeature, "Enable POAStandingSchedule Feature"),
+      formCheckBoxItem(form, ConfigKeys.annualAccountingFeature, "Enable Annual Accounting Feature")
     )
   }
 }
