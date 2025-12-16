@@ -594,6 +594,30 @@ class AgentHubControllerSpec extends ControllerBaseSpec
         result shouldBe expected
       }
 
+      "the user has annual accounting charges that are overdue" in {
+        mockAgentAuthorised()
+        setupMockDateService(staticDate)
+        mockConfig.features.annualAccountingFeature(true)
+
+        val expected = HubViewModel(
+          customerDetailsAllInfo,
+          BaseTestConstants.vrn,
+          LocalDate.parse("2018-05-01"),
+          Some(LocalDate.parse("2018-01-01")),
+          isOverdue = true,
+          isError = false,
+          payments = 1,
+          directDebitSetup = None,
+          penaltiesSummary = None,
+          isAnnualAccountingCustomer = true,
+          isAnnualAccountingPaymentOverdue = true,
+          annualAccountingChangedOn = None
+        )
+
+        val result = controller.constructViewModel(customerDetailsAllInfo, paymentsModelAAOverdue, None, None)(user)
+        result shouldBe expected
+      }
+
       "the user has pao active until and also the changed-on date" in {
         mockAgentAuthorised()
         setupMockDateService(staticDate)

@@ -128,11 +128,6 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
     val isPoaActiveForCustomer: Boolean = retrievePoaActiveForCustomer(Right(details))
     val now: LocalDate = dateService.now()
     val poaChangedOn: Option[LocalDate] = poaCheckService.changedOnDateWithInLatestVatPeriod(standingRequest, now)
-    val isAnnualAccountingCustomer: Boolean = {
-      val hasType4 = standingRequest.exists(_.standingRequests.exists(_.requestCategory == models.ChangedOnVatPeriod.RequestCategoryType4))
-      val hasYPeriod = standingRequest.exists(_.standingRequests.exists(_.requestItems.exists(_.periodKey.startsWith("Y"))))
-      hasType4 || hasYPeriod
-    }
     val aaChargeTypes = Set("AAQuarterlyInstalments", "AAMonthlyInstalment")
     val aaOverdueFromTxns: Boolean =
       paymentsModel.payments.exists(ch =>
@@ -142,8 +137,13 @@ class AgentHubController @Inject()(authenticate: AuthoriseAsAgentWithClient,
           !ch.ddCollectionInProgress
       )
     logger.info(s"[AgentHubController][constructViewModel] now=$now, aaOverdueFromTxns=$aaOverdueFromTxns")
+    val isAnnualAccountingCustomer: Boolean = {
+      val hasType4 = standingRequest.exists(_.standingRequests.exists(_.requestCategory == models.ChangedOnVatPeriod.RequestCategoryType4))
+      val hasYPeriod = standingRequest.exists(_.standingRequests.exists(_.requestItems.exists(_.periodKey.startsWith("Y"))))
+      hasType4 || hasYPeriod || aaOverdueFromTxns
+    }
     val aaFeatureEnabled = appConfig.features.annualAccountingFeature()
-    val isAnnualAccountingPaymentOverdue: Boolean = aaFeatureEnabled && isAnnualAccountingCustomer && aaOverdueFromTxns
+    val isAnnualAccountingPaymentOverdue: Boolean = aaFeatureEnabled && aaOverdueFromTxns
 
     val annualAccountingChangedOn: Option[LocalDate] =
       if (aaFeatureEnabled && isAnnualAccountingCustomer)
