@@ -83,7 +83,8 @@
   pageTitle = messages("agentHub.heading"),
   backLinkContent = Some(breadcrumbLinks),
   isTwoThirdsWidth = false,
-  headerLink = false) {
+  headerLink = false,
+  urBanner = Some(UserResearchBanner(url = appConfig.urBannerUrl))) {
 
   <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">@messages("agentHub.heading")</h1>
   <span class="govuk-caption-m">@messages("agentHub.vrn", model.vrn)</span>

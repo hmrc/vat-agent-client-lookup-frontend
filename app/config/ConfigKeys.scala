@@ -90,4 +90,6 @@ object ConfigKeys {
   val penaltiesUrl: String = "penalties.url"
   val penaltiesFrontendHost: String = "penalties-frontend.host"
   val penaltiesFrontendUrl: String = "penalties-frontend.endpoints.home"
+
+  val urBannerUrl = "urBanner.url"
 }
