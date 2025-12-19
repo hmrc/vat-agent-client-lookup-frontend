@@ -43,7 +43,8 @@ govukErrorSummary: GovukErrorSummary, govukInsetText : GovukInsetText, govukDeta
 
 @mainTemplate(
   pageTitle = if(pinviewForm.hasErrors) messages("common.error.prefixTitle", messages("pinView.title"))
-              else messages("pinView.title"), backLinkContent = Some(backLink)
+              else messages("pinView.title"), backLinkContent = Some(backLink),
+  urBanner = Some(UserResearchBanner(url = appConfig.urBannerUrl, hideCloseButton = true, language = if(messages.lang.code == "en") En else Cy))
 ){
 
     @if(pinviewForm.hasErrors) {
