@@ -29,5 +29,8 @@ case class HubViewModel(details: CustomerDetails,
                         payments: Int,
                         directDebitSetup: Option[Boolean],
                         penaltiesSummary: Option[PenaltiesSummary] = None,
+                        isAnnualAccountingCustomer: Boolean = false,
+                        isAnnualAccountingPaymentOverdue: Boolean = false,
+                        annualAccountingChangedOn: Option[LocalDate] = None,
                         isPoaActiveForCustomer: Boolean = false,
                         poaChangedOn: Option[LocalDate] = None)

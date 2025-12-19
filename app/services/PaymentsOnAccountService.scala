@@ -34,6 +34,7 @@ class PaymentsOnAccountService @Inject()(standingRequestsConnector: StandingRequ
     standingRequestsConnector.getStandingRequests(vrn).map {
       case Right(standingRequest) =>
         logger.info(s"Successfully retrieved payments on account for $vrn")
+        logger.info(s"Standing request: $standingRequest")
         Some(standingRequest)
       case Left(error) =>
         logger.warn(s"Error retrieving payments on account: ${error}")

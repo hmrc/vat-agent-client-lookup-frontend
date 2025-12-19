@@ -32,7 +32,8 @@ class FeatureSwitchController @Inject()(featureSwitchView: FeatureSwitch, mcc: M
       FeatureSwitchModel(
         emailVerificationEnabled = appConfig.features.emailVerificationEnabled(),
         useStaticDateFeature = appConfig.features.useStaticDateFeature(),
-        poaActiveFeature = appConfig.features.poaActiveFeature()
+        poaActiveFeature = appConfig.features.poaActiveFeature(),
+        annualAccountingFeature = appConfig.features.annualAccountingFeature()
       )
     )))
   }
@@ -48,6 +49,7 @@ class FeatureSwitchController @Inject()(featureSwitchView: FeatureSwitch, mcc: M
     appConfig.features.emailVerificationEnabled(model.emailVerificationEnabled)
     appConfig.features.useStaticDateFeature(model.useStaticDateFeature)
     appConfig.features.poaActiveFeature(model.poaActiveFeature)
+    appConfig.features.annualAccountingFeature(model.annualAccountingFeature)
     Redirect(routes.FeatureSwitchController.featureSwitch)
   }
 }

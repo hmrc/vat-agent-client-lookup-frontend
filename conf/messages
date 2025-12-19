@@ -144,6 +144,9 @@ nextPaymentPartial.poaActivelink = Check your client’s payments on account sch
 viewPaymentOnAccount.link = Payments on account
 viewPaymentOnAccount.info = View your client’s payments on account schedule of payments.
 
+viewAnnualAccounting.link = Annual accounting
+viewAnnualAccounting.info = View your client’s annual accounting instalment schedule.
+
 nextReturnPartial.heading = Next return due
 nextReturnPartial.link = View return deadlines
 nextReturnPartial.optedOut.link = Submit VAT Return
@@ -162,6 +165,15 @@ agentHub.payment_on_account.alert.title=Important
 agentHub.payment_on_account.alert.heading=Payments on account schedule change
 agentHub.payment_on_account.alert.message=The amounts due for your client’s payments on account were changed on
 agentHub.payment_on_account.alert.link=Check their schedule for details
+
+agentHub.annual_accounting.alert.title=Important
+agentHub.annual_accounting.overdue.heading=Your client has an overdue payment
+agentHub.annual_accounting.overdue.message=Making late payments will accrue late payment interest. Your client can be removed from the Annual Accounting Scheme if they miss too many.
+agentHub.annual_accounting.overdue.link=Check what your client owes
+agentHub.annual_accounting.alert.heading=There has been a change to your Annual Accounting payments
+agentHub.annual_accounting.alert.message.prefix=This has happened because the amount that your client owes for each period changed on
+agentHub.annual_accounting.alert.message.suffix=For details,
+agentHub.annual_accounting.alert.link=check your client’s schedule
 
 breadcrumb.agentServices = Agent Services Account
 

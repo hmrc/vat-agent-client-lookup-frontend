@@ -18,4 +18,5 @@ package models
 
 case class FeatureSwitchModel(emailVerificationEnabled: Boolean,
                               useStaticDateFeature: Boolean,
-                              poaActiveFeature: Boolean)
+                              poaActiveFeature: Boolean,
+                              annualAccountingFeature: Boolean)

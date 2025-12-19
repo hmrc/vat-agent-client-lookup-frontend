@@ -28,6 +28,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
 import views.html.agent.AgentHubView
+import java.time.LocalDate
 
 class AgentHubViewSpec extends ViewBaseSpec {
 
@@ -261,6 +262,79 @@ class AgentHubViewSpec extends ViewBaseSpec {
       }
     }
 
+    "Render Annual Accounting section" should {
+      "display the Annual Accounting section if feature enabled and user is AA" in {
+        mockConfig.features.annualAccountingFeature(true)
+        mockConfig.features.poaActiveFeature(true)
+        val view = injectedView(hubViewModel(customerDetailsAllInfo).copy(isAnnualAccountingCustomer = true))(messages, mockConfig, user)
+        implicit val document: Document = Jsoup.parse(view.body)
+        elementText("#annual-accounting h3") shouldBe Messages.aaLinkText
+        element("#aa-link").attr("href") shouldBe mockConfig.annualAccountingUrl
+        elementText("#aa-body") shouldBe Messages.aaLinkInfo
+
+        document.select("#vat-payment-on-account h3") should be(empty)
+      }
+
+      "fall back to POA tile when AA feature enabled but user not AA and POA enabled" in {
+        mockConfig.features.annualAccountingFeature(true)
+        mockConfig.features.poaActiveFeature(true)
+        val view = injectedView(hubViewModel(customerDetailsAllInfo).copy(isAnnualAccountingCustomer = false))(messages, mockConfig, user)
+        implicit val document: Document = Jsoup.parse(view.body)
+        elementText("#vat-payment-on-account h3") shouldBe Messages.poalinkText
+        element("#poa-link").attr("href") shouldBe mockConfig.vatPaymentOnAccountUrl
+        elementText("#poa-body") shouldBe Messages.poalinkInfo
+        document.select("#annual-accounting h3") should be(empty)
+      }
+
+      "not display AA or POA when both features disabled" in {
+        mockConfig.features.annualAccountingFeature(false)
+        mockConfig.features.poaActiveFeature(false)
+        val view = injectedView(hubViewModel(customerDetailsAllInfo).copy(isAnnualAccountingCustomer = true))(messages, mockConfig, user)
+        val renderedView = view.body
+        implicit val document: Document = Jsoup.parse(renderedView)
+        document.select("#annual-accounting h3") should be(empty)
+        document.select("#aa-link").attr("href") should be(empty)
+        document.select("#aa-body") should be(empty)
+        document.select("#vat-payment-on-account h3") should be(empty)
+        document.select("#poa-link").attr("href") should be(empty)
+        document.select("#poa-body") should be(empty)
+      }
+    }
+
+    "Render AA changed notification" should {
+      "display the AA changed content with date and link when feature enabled" in {
+        mockConfig.features.annualAccountingFeature(true)
+        val changedOn = LocalDate.parse("2025-03-01")
+        val view = injectedView(hubViewModel(customerDetailsAllInfo)
+          .copy(isAnnualAccountingCustomer = true, annualAccountingChangedOn = Some(changedOn)))(messages, mockConfig, user)
+        implicit val document: Document = Jsoup.parse(view.body)
+        elementText("#aa-changed-information") should include(messages("agentHub.annual_accounting.alert.message.prefix"))
+        elementText("#aa-changed-information") should include("1 March 2025")
+        document.select("#aa-changed-information a").text shouldBe messages("agentHub.annual_accounting.alert.link") + "."
+        document.select("#aa-changed-information a").attr("href") shouldBe mockConfig.annualAccountingUrl
+      }
+    }
+
+    "Render AA overdue notification" should {
+      "display the AA overdue content with link to what you owe" in {
+        mockConfig.features.annualAccountingFeature(true)
+        val view = injectedView(hubViewModel(customerDetailsAllInfo)
+          .copy(isAnnualAccountingCustomer = true, isAnnualAccountingPaymentOverdue = true))(messages, mockConfig, user)
+        implicit val document: Document = Jsoup.parse(view.body)
+        elementText("#aa-overdue-information") should include(messages("agentHub.annual_accounting.overdue.message"))
+        document.select("#aa-overdue-information a").text shouldBe messages("agentHub.annual_accounting.overdue.link") + "."
+        document.select("#aa-overdue-information a").attr("href") shouldBe mockConfig.whatYouOweUrl
+      }
+
+      "not display AA overdue content when feature disabled" in {
+        mockConfig.features.annualAccountingFeature(false)
+        val view = injectedView(hubViewModel(customerDetailsAllInfo)
+          .copy(isAnnualAccountingCustomer = true, isAnnualAccountingPaymentOverdue = true))(messages, mockConfig, user)
+        implicit val document: Document = Jsoup.parse(view.body)
+        document.select("#aa-overdue-information") should be(empty)
+        document.select("#vat-gov-banner-alerts") should be(empty)
+      }
+    }
     "Render VAT Payment on Account section and Penalties together" should {
 
       lazy val view = injectedView(hubViewModel(customerDetailsAllInfo, penalties = Some(penaltiesSummaryAsModelNoPenalties)))(messages, mockConfig, user)

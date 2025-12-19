@@ -33,6 +33,7 @@ object HubViewModelTestConstants {
     payments = 1,
     directDebitSetup = None,
     penaltiesSummary = penalties,
+    isAnnualAccountingCustomer = false,
     isPoaActiveForCustomer = true
   )
 }
