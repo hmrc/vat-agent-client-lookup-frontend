@@ -20,8 +20,8 @@ import uk.gov.hmrc.DefaultBuildSettings.*
 
 val appName = "vat-agent-client-lookup-frontend"
 
-val bootstrapPlayVersion       = "10.3.0"
-val playFrontendHmrc           = "12.19.0"
+val bootstrapPlayVersion       = "10.4.0"
+val playFrontendHmrc           = "12.22.0"
 val mockitoVersion             = "3.2.10.0"
 val scalaMockVersion           = "7.5.0"
 val domainVersion              = "11.0.0"

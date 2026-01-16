@@ -22,7 +22,10 @@
 
 @(vrn: String, customerDetails: CustomerDetails)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-@mainTemplate(pageTitle = messages("confirmClientVrn.title"), headerLink = false) {
+@mainTemplate(pageTitle = messages("confirmClientVrn.title"),
+    headerLink = false,
+    urBanner = Some(UserResearchBanner(url = appConfig.urBannerUrl, hideCloseButton = true, language = if(messages.lang.code == "en") En else Cy))
+) {
 
   <h1 class="govuk-heading-l">
     @messages("confirmClientVrn.heading")
