@@ -26,4 +26,5 @@ class Features @Inject()(config: Configuration) {
   val useStaticDateFeature = new Feature(ConfigKeys.useStaticDateFeature, config)
   val poaActiveFeature = new Feature(ConfigKeys.poaActiveFeature, config)
   val annualAccountingFeature = new Feature(ConfigKeys.annualAccountingFeature, config)
+  val showUserResearchBannerEnabled = new Feature(ConfigKeys.showUserResearchBannerEnabled, config)
 }

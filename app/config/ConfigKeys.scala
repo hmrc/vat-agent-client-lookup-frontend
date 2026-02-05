@@ -93,5 +93,6 @@ object ConfigKeys {
   val penaltiesFrontendHost: String = "penalties-frontend.host"
   val penaltiesFrontendUrl: String = "penalties-frontend.endpoints.home"
 
+  val showUserResearchBannerEnabled: String = "features.showUserResearchBanner.enabled"
   val urBannerUrl = "urBanner.url"
 }
