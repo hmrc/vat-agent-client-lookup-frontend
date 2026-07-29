@@ -91,4 +91,6 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val penaltiesUrl: String => String = (vrn: String) => s"/vat/penalties/summary/$vrn"
   override val penaltiesFrontendUrl: String = "/vat-through-software/representative/test-only/penalties-stub"
   override val urBannerUrl: String = "url-banner-url"
+
+  override val isServiceNavigationEnabled: Boolean = false
 }
