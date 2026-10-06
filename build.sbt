@@ -20,10 +20,10 @@ import uk.gov.hmrc.DefaultBuildSettings.*
 
 val appName = "vat-agent-client-lookup-frontend"
 
-val bootstrapPlayVersion       = "10.4.0"
-val playFrontendHmrc           = "12.22.0"
+val bootstrapPlayVersion       = "10.7.1"
+val playFrontendHmrc           = "13.13.0"
 val mockitoVersion             = "3.2.10.0"
-val scalaMockVersion           = "7.5.0"
+val scalaMockVersion           = "7.5.5"
 val domainVersion              = "11.0.0"
 
 val compile = Seq(
@@ -82,7 +82,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     Test / Keys.fork := true,
     Test / javaOptions += "-Dlogger.resource=logback-test.xml",
-    scalaVersion := "2.13.17",
+    scalaVersion := "2.13.18",
     majorVersion := 1,
     libraryDependencies ++= appDependencies,
     retrieveManaged := true,
