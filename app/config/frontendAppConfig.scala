@@ -71,7 +71,6 @@ trait AppConfig {
   val penaltiesUrl: String => String
   val agentInvitationsFrontendUrl: String
   val urBannerUrl: String
-  val isServiceNavigationEnabled: Boolean
 }
 
 @Singleton
@@ -171,6 +170,4 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
   override lazy val penaltiesUrl: String => String = vrn => sc.getString(Keys.penaltiesHost) + sc.getString(Keys.penaltiesUrl) + vrn
 
   override val urBannerUrl: String = sc.getString(Keys.urBannerUrl)
-
-  override val isServiceNavigationEnabled: Boolean = sc.getBoolean(ConfigKeys.serviceNavigationFlag)
 }
