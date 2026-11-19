@@ -15,6 +15,7 @@
  *@
 
 @import models.CustomerDetails
+@import views.helpers.UrBannerUtil
 
 @this(mainTemplate: MainTemplate,
       govukButton: GovukButton,
@@ -24,7 +25,7 @@
 
 @mainTemplate(pageTitle = messages("confirmClientVrn.title"),
     headerLink = false,
-    urBanner = Some(UserResearchBanner(url = appConfig.urBannerUrl, hideCloseButton = true, language = if(messages.lang.code == "en") En else Cy))
+    urBanner = Some(UrBannerUtil.getUrBanner())
 ) {
 
   <h1 class="govuk-heading-l">
